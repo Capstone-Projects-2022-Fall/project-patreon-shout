@@ -10,13 +10,11 @@
 </div>
 
 
-## Keywords
+## Project Overview
 
-Section #, as well as any words that quickly give your peers insights into the application like programming language, development platform, type of application, etc.
+This document proposes a web application that allows content creators to have their Patreon posts automatically sent to other social platforms. Non-content creator users of this web application will also be able to see the posts of the Patreon creators they follow. This will improve creator outreach to users of the web application by showing recommended creators to follow.
 
-## Project Abstract
 
-This document proposes a novel application of a text message (SMS or Email) read-out and hands-free call interacted between an Android Smartphone and an infotainment platform (headunit) in a car environment. When a phone receives an SMS or Email, the text message is transferred from the phone to the headunit through a Bluetooth connection. On the headunit, user can control which and when the received SMS or E-mail to be read out through the in-vehicle audio system. The user may press one button on the headunit to activate the hands-free feature to call back the SMS sender.
 
 ## High Level Requirement
 
@@ -50,7 +48,7 @@ Discuss what you need to develop this project. This includes background informat
         <a href="https://github.com/leighflagg">
             <img src="https://avatars.githubusercontent.com/u/77810293?v=4" width="100;" alt="leighflagg"/>
             <br />
-            <sub><b>Null</b></sub>
+            <sub><b>Leigh Flagg</b></sub>
         </a>
     </td></tr>
 </table>
