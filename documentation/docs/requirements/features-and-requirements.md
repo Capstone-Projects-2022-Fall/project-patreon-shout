@@ -23,7 +23,6 @@ sidebar_position: 4
     - Automatically post new Patreon posts to whichever social platforms they indicate
   - Instagram, Twitter, and Discord integrations
 
-
 ## Nonfunctional Requirements
 - Patreon Shout will have an intuitive user-friendly interface.
   - Outputting patreon posts to other social platforms will the be centerpiece of the app
