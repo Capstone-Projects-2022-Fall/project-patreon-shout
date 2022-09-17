@@ -5,18 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.example</groupId>
-    <artifactId>patreon-shout-gateway</artifactId>
+    <artifactId>gateway</artifactId>
     <version>1.0</version>
-    <name>PatreonShout</name>
+    <name>gateway</name>
     <packaging>jar</packaging>
-
-    <!-- Project Properties -->
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.target>8</maven.compiler.target>
-        <maven.compiler.source>8</maven.compiler.source>
-        <junit.version>5.8.1</junit.version>
-    </properties>
 
     <!-- Building Stuff -->
     <build>
@@ -104,20 +96,6 @@
 
     </dependencies>
 
-    <developers>
-        <developer>
-            <name>Ayser Jamshidi</name>
-        </developer>
-        <developer>
-            <name>Alex Sawicki</name>
-        </developer>
-        <developer>
-            <name>Christian Saputro</name>
-        </developer>
-        <developer>
-            <name>Jonah Malriat</name>
-        </developer>
-    </developers>
 
 
 </project>

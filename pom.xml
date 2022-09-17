@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.example</groupId>
+    <artifactId>patreon-shout</artifactId>
+    <version>1.0</version>
+    <name>PatreonShout</name>
+    <packaging>pom</packaging>
+
+    <!-- Project Properties -->
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.target>8</maven.compiler.target>
+        <maven.compiler.source>8</maven.compiler.source>
+        <junit.version>5.8.1</junit.version>
+    </properties>
+
+    <modules>
+        <module>gateway</module>
+    </modules>
+
+    <developers>
+        <developer>
+            <name>Ayser Jamshidi</name>
+        </developer>
+        <developer>
+            <name>Alex Sawicki</name>
+        </developer>
+        <developer>
+            <name>Christian Saputro</name>
+        </developer>
+        <developer>
+            <name>Jonah Malriat</name>
+        </developer>
+    </developers>
+
+
+</project>
