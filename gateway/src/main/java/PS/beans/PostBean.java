@@ -33,4 +33,74 @@ public class PostBean {
 
     @Column(name="creator")
     protected String creator;
+
+
+    public int getPost_id() {
+        return post_id;
+    }
+
+    public void setPost_id(int post_id) {
+        this.post_id = post_id;
+    }
+
+    public String getPublishdate() {
+        return publishdate;
+    }
+
+    public void setPublishdate(String publishdate) {
+        this.publishdate = publishdate;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public boolean isIsprivate() {
+        return isprivate;
+    }
+
+    public void setIsprivate(boolean isprivate) {
+        this.isprivate = isprivate;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
+    @Override
+    public String toString() {
+        return "PostBean{" +
+                "post_id=" + post_id +
+                ", publishdate='" + publishdate + '\'' +
+                ", title='" + title + '\'' +
+                ", url='" + url + '\'' +
+                ", content='" + content + '\'' +
+                ", isprivate=" + isprivate +
+                ", creator='" + creator + '\'' +
+                '}';
+    }
 }
