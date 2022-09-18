@@ -36,7 +36,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>libs/</classpathPrefix>
-                            <mainClass>PS.PSApplication</mainClass>
+                            <mainClass>com.patreonshout.PSApplication</mainClass>
                         </manifest>
                     </archive>
                     <excludes>
@@ -67,7 +67,7 @@
 
                     <archive>
                         <manifest>
-                            <mainClass>PS.PSApplication</mainClass>
+                            <mainClass>com.patreonshout.PSApplication</mainClass>
                             <addDefaultImplementationEntries>false</addDefaultImplementationEntries>
                         </manifest>
                         <manifestEntries>
@@ -133,7 +133,6 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
 
 
 </project>

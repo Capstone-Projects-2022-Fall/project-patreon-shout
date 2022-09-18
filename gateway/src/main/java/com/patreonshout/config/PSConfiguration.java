@@ -1,4 +1,4 @@
-package PS.config;
+package com.patreonshout.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;

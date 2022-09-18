@@ -1,7 +1,7 @@
-package PS.jpa;
+package com.patreonshout.jpa;
 
-import PS.beans.PostBean;
-import PS.config.TestConfig;
+import com.patreonshout.beans.PostBean;
+import com.patreonshout.config.TestConfig;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

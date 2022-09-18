@@ -1,6 +1,6 @@
-package PS.jpa;
+package com.patreonshout.jpa;
 
-import PS.beans.PostBean;
+import com.patreonshout.beans.PostBean;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
