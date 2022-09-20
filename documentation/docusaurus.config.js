@@ -98,9 +98,9 @@ const config = {
     ({
       navbar: {
         /*TODO: Change to your project's title*/
-        title: 'My Site',
+        title: 'PatreonShout',
         logo: {
-          alt: 'My Site Logo',
+          alt: 'PatreonShout Logo',
           src: logo,
         },
         items: [
@@ -124,7 +124,7 @@ const config = {
       },
       footer: {
         logo: {
-          alt: 'My Site Logo',
+          alt: 'PatreonShout Logo',
           src: logo,
         },
         links: [
