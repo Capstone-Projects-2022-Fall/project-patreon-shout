@@ -132,6 +132,14 @@
             <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/club.minnced/discord-webhooks -->
+        <dependency>
+            <groupId>club.minnced</groupId>
+            <artifactId>discord-webhooks</artifactId>
+            <version>0.8.2</version>
+        </dependency>
+
     </dependencies>
 
 
