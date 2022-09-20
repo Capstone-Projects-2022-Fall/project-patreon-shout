@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class getposts {
     public static void main(String[] args) throws IOException {
-        String accessToken = "aMjGNuaBYN9JTkn7S0CRHAJ7LQUHX85MHa5BjetJIyc";
+        String accessToken = "pppp";
 
         PatreonAPI apiClient = new PatreonAPI(accessToken);
         JSONAPIDocument<List<Campaign>> campaignList = apiClient.fetchCampaigns();
