@@ -4,15 +4,4 @@ sidebar_position: 3
 
 # Schedule
 
-```mermaid
-gantt
-dateFormat  YYYY-MM-DD
-title Adding GANTT diagram to mermaid
-excludes weekdays 2014-01-10
-
-section A section
-Completed task            :done,    des1, 2014-01-06,2014-01-08
-Active task               :active,  des2, 2014-01-09, 3d
-Future task               :         des3, after des2, 5d
-Future task2               :         des4, after des3, 5d
-```
+![PS_GanttChart](https://user-images.githubusercontent.com/53412105/191359777-e5a37115-1196-4790-b214-1fb3d5786b6b.png)
