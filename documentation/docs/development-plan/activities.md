@@ -16,8 +16,6 @@ their concerns about Patreon and their content viewing experience that drive our
 application for patrons. The information we gathered will allow us to build prototypes of our application and the steps
 we will take to complete this are listed below.
 
-<br/>
-
 ### Top-Level Design
 
 1. Create backend & database communication
@@ -37,21 +35,19 @@ we will take to complete this are listed below.
 
 ### Detailed Design
 
-1. Create backend & database communication
+1. **Create backend & database communication**
     - Create MySQL database
         - Database will utilize AWS RDS to host a MySQL 8 instance.
         - Database will be used to store usernames, passwords, creator tokens, following creators, patreon posts, social
           platform tokens, webhooks, and patron lists
           CRUD operations to communicate with database
     - CRUD operations to communicate with database
-
-2. Create pipeline between Patreon and a social platform
+2. **Create pipeline between Patreon and a social platform**
     - Get posts from Patreon API
         - Call the Patreon API and save the information received in the database
     - Send posts to Discord using webhooks
         - Send the posts from the database to Discord using a webhook
-
-3. Create web server and layout for UI
+3. **Create web server and layout for UI**
     - Web server
         - Web server will utilize hostinger.com for the following:
             - Domain name
@@ -80,44 +76,37 @@ we will take to complete this are listed below.
         - Secure database password storage
             - Upon sign-in information will be transferred from client(user) to server via TLS 1.3 encryption
             - Password will be encrypted immediately and won’t be stored without encryption
-
-4. Add creator guide
+4. **Add creator guide**
     - Website will have guides for the creator to help them link Patreon to social platforms
     - These guides will include the following:
         - How to get a Patreon creator token
         - How to generate a Discord webhook
         - How to provide Patreon Shout with authorization to post on their account
-
-5. Integrate Patreon
+5. **Integrate Patreon**
     - These things will happen when a user provides a Patreon creator token:
         - Creator token is verified
         - Creator token is used to get user information
             - Following creators is saved and set onto their Patreon Shout profile
         - Social integration selection menu is shown to the user to allow their Patreon posts to be automatically sent
           to other social platforms
-
-6. Integrate Discord
+6. **Integrate Discord**
     - User creates and provides a Discord webhook via a guide provided
     - Whenever a Patreon post is published, a Discord message is sent using the webhook providing the post details
-
-7. Integrate Twitter
+7. **Integrate Twitter**
     - User authenticates and approves authorization via login dialog
     - User provides a template for the message they want to be sent on their Twitter account
     - Whenever a Patreon post is created, a tweet will be published on the user’s Twitter account providing the post
       details
-
-8. Integrate Instagram
+8. **Integrate Instagram**
     - User authenticates and approves permissions via login dialog
     - User provides images they want to send and a caption for the image they provide
     - Whenever a Patreon post is created, the images and caption will be published onto their Instagram account
       providing the post details
-
-9. Create contact page
+9. **Create contact page**
     - User can do the following on the contact page
         - Allow the user to report bugs
         - Submit user contact information as well as a paragraph of text explaining the reason for contact
-
-10. Implement user feed tools
+10. **Implement user feed tools**
     - Search bar
         - This feature lets the user search for posts from their following creators at the top of the screen
     - Post filtering
@@ -125,11 +114,9 @@ we will take to complete this are listed below.
     - Creator lists
         - Replace the main feed with a list of specified creator’s posts
         - There will be a create a list option that will let you search through creators to add to the list
-
-11. Create recommendation tool
+11. **Create recommendation tool**
     - Tool will take keywords from posts and compare them to find content users might be interested in
-
-12. Testing
+12. **Testing**
     - Tests will be done most sprints in different phases. Types of testing are explained below
 
 ### Testing
