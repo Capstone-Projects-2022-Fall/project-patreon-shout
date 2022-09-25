@@ -7,8 +7,8 @@ import java.awt.*;
 import java.io.IOException;
 
 public class PatreonShout {
-    static String webhook = "https://discord.com/api/webhooks/1023406452813078598/-mrW2qVevsaG3hyZa5vdtvZGaLhUr4rxgm7X_yjxPtZMaft67pwZ0-vUMQR7cmTAQVnN";
-    static String token = "aMjGNuaBYN9JTkn7S0CRHAJ7LQUHX85MHa5BjetJIyc";
+    static String webhook = "";
+    static String token = "";
 
     public static void main(String[] args){
 
