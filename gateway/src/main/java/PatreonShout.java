@@ -1,30 +1,33 @@
+import com.patreonshout.output.DiscordSender;
+import com.patreonshout.patreon.PostGetter;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import java.awt.*;
 import java.io.IOException;
 
 public class PatreonShout {
-    static String WebHookURL = "INSERT WEBHOOK URL HERE";
+    static String webhook = "";
+    static String token = "";
 
-    public static void main(String[] args) throws IOException {
-        DiscordWebhook webhook = new DiscordWebhook(WebHookURL);
+    public static void main(String[] args){
 
+        PostGetter getter = new PostGetter(token);
+        DiscordSender sender = new DiscordSender(webhook);
 
-        webhook.setContent("Test");
-        webhook.setUsername("PatreonShout");
-        webhook.setEmbed(new DiscordWebhook.EmbedObject()
-                .setTitle("Title")
-                .setDescription("TESTING123123123")
-                .setColor(Color.RED)
-                .addField("1st Field", "Test1", true)
-                .addField("2nd Field", "Test2", false)
-                .addField("3rd Field", "Test3", false));
+        try {
+            JSONArray posts = getter.getPosts();
 
-        webhook.setEmbed(new DiscordWebhook.EmbedObject()
-                .setTitle("2nd Title")
-                .setDescription("DEEZ")
-                .setColor(Color.GREEN)
-                .addField("Left", "Low", true)
-                .addField("Right", "High", false));
+            for (Object post : posts) {
+                sender.setTitle("post");
+                sender.setDescription(((JSONObject) post).get("id").toString());
 
-        webhook.execute();
+                sender.send();
+            }
+
+            sender.close();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }
