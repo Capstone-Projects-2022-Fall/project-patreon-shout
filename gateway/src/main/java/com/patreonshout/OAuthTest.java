@@ -1,10 +1,8 @@
 package com.patreonshout;
 
-import com.github.jasminb.jsonapi.JSONAPIDocument;
 import com.patreon.PatreonAPI;
 import com.patreon.PatreonOAuth;
-import com.patreon.resources.Campaign;
-import com.patreon.resources.User;
+import com.patreonshout.patreon.endpoints.EndpointWrapper;
 import org.jsoup.HttpStatusException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -14,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/v1")
@@ -42,34 +39,16 @@ public class OAuthTest {
 				String refreshToken = tokens.getRefreshToken();
 
 				PatreonAPI apiClient = new PatreonAPI(accessToken);
-				System.out.println("APIClient successful!");
-				System.out.println("Scope: " + tokens.getScope());
-				System.out.println("Access: " + accessToken);
-				System.out.println("Refresh: " + refreshToken);
-
-				apiClient.fetchUser();
-				// ! Campaigns stuff
-				JSONAPIDocument<List<Campaign>> campaigns = apiClient.fetchCampaigns();
 
 				StringBuilder output = new StringBuilder();
 
-				if (campaigns.get() != null)
-					for (Campaign camp : campaigns.get()) {
-						output.append(camp.getSummary());
-					}
+				output.append("APIClient successful!<br/>")
+						.append("<b>Scope</b>: ").append(tokens.getScope()).append("<br/>")
+						.append("<b>Access</b>: ").append(accessToken).append("<br/>")
+						.append("<b>Refresh</b>: ").append(refreshToken).append("<br/>")
+						.append(EndpointWrapper.fetchUser(accessToken).toString());
 
-				JSONAPIDocument<User> userResponse = apiClient.fetchUser();
-
-				System.out.println("User Response successful!");
-
-				return "Hi!";
-//				User user = userResponse.get();
-
-//				return "Name: " + user.getFullName() +
-//						"<br/>Pledge Count: " + user.getPledges().size() +
-//						"<br/>Campaign Count: " + apiClient.fetchCampaigns().get().size() +
-//						"<br/>Refresh Token: " + refreshToken +
-//						"<br/>Access Token: " + accessToken;
+				return output.toString();
 			} catch (
 					HttpStatusException ex) { // Can occur when retrieving TokensResponse object if code was used already
 				System.out.println("HTTP error fetching URL");
