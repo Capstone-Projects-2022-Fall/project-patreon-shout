@@ -14,19 +14,13 @@ public class WebAccountRepository {
 	private EntityManager em;
 
 	@Transactional
-	public int putAccount(String username, String password) {
+	public void putAccount(String username, String password) {
 		String sql = "insert into webaccounts (username, password) values (:username, :password)";
 		Query q = em.createNativeQuery(sql);
 
 		q.setParameter("username", username);
 		q.setParameter("password", password);
 
-		try {
-			q.executeUpdate();
-		} catch (Exception ex) {
-			return 1;
-		}
-
-		return 0;
+		q.executeUpdate();
 	}
 }

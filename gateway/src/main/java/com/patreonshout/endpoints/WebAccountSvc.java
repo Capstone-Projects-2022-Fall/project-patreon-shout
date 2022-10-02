@@ -9,13 +9,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/v1")
-public class Test {
+public class WebAccountSvc {
 
 	@Autowired
 	WebAccount webAccount;
 
+	// This String object will contain an error message, or be empty if no error occurred
 	@GetMapping("/register")
-	public int Register(
+	public String Register(
 			@RequestParam(name = "user") String username,
 			@RequestParam(name = "pass") String password
 	) {
