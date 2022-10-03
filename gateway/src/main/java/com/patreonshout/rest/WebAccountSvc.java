@@ -1,4 +1,4 @@
-package com.patreonshout.endpoints;
+package com.patreonshout.rest;
 
 import com.patreonshout.interfaces.WebAccountImpl;
 import com.patreonshout.jpa.WebAccount;
