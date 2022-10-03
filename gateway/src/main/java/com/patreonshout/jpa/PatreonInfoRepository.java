@@ -10,6 +10,12 @@ import javax.persistence.Query;
 
 /**
  * Communication between the patreon_info table in the database
+ *
+ * <p>
+ *     Responsibilities:
+ *     1) Add a PatreonInfoBean to the patreon_info database
+ *     2) Return whether the bean was successfully added or not
+ * </p>
  */
 @Repository
 public class PatreonInfoRepository {
@@ -24,7 +30,7 @@ public class PatreonInfoRepository {
      * Inserts a {@link PatreonInfoBean} into the patreon_info database
      *
      * @param pib {@link PatreonInfoBean} to be added to database
-     * @return either "success" or "failure"
+     * @return either "200" - success or "400" - failure
      */
     @Transactional
     public String putPatreonInfo(PatreonInfoBean pib) {
@@ -36,6 +42,6 @@ public class PatreonInfoRepository {
         q.setParameter("scope", pib.getScope());
 
         // 0 means failure in this situation "https://www.ibm.com/docs/en/db2-for-zos/11?topic=sql-jdbc-executeupdate-methods-against-db2-zos-server"
-        return q.executeUpdate() != 0 ? "success" : "failure";
+        return q.executeUpdate() != 0 ? "200" : "400";
     }
 }

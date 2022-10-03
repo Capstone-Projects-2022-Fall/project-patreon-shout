@@ -1,23 +1,24 @@
 package com.patreonshout.rest;
 
 import com.patreonshout.beans.PatreonInfoBean;
+import com.patreonshout.interfaces.PatreonInfoImpl;
 import com.patreonshout.jpa.PatreonInfo;
 import com.patreonshout.utils.JSONUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
- * RESTful Endpoint Implementation
+ * Patreon Info RESTful Endpoint Interface
  *
  * <p>
  *     Responsibilities:
- *     1) Be the layer between the endpoint interface and the processing of the individual endpoint transactions
- *     2) Process preliminary database communication steps
+ *     1) Create, read, update, and delete items from our patreon_info table in our database
+ *     2) Direct communication between the frontend portion of our application with the backend
  * </p>
- *
  */
-@Component
-public class RestCommon {
+@RestController
+public class PatreonInfoSvc implements PatreonInfoImpl {
 
     /**
      * patreonInfo is the wrapper class for {@link com.patreonshout.jpa.PatreonInfoRepository}
@@ -26,20 +27,21 @@ public class RestCommon {
     PatreonInfo patreonInfo;
 
     /**
-     * Initializes a {@link com.patreonshout.beans.PatreonInfoBean} based on the json information provided then sends the
-     * object to patreonInfo for processing
+     * Endpoint to put an object containing a content creator's patreon information to our database
      *
      * @param request is the json request information passed to the endpoint
-     * @return either "success" or "failure"
+     * @return either "200" - success or "400" - failure
      */
-    public String putPatreonInfo(String request) {
+    public String PutPatreonInfo(@RequestBody String request) {
+
         PatreonInfoBean pib = (PatreonInfoBean) JSONUtil.getBeanFromJSON(request, PatreonInfoBean.class);
 
         if (pib == null) {
-            return "failure: cannot map variables to [" + PatreonInfoBean.class.getSimpleName() + "]";
+            return "400";
         }
 
         return patreonInfo.putPatreonInfo(pib);
     }
+
 
 }

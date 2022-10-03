@@ -28,7 +28,7 @@ public class PatreonInfo {
      * is to be added to the database
      *
      * @param pib is the {@link com.patreonshout.beans.PatreonInfoBean} being added to the database
-     * @return either "success" or "failure"
+     * @return either "200" - success or "400" - failure
      */
     public String putPatreonInfo(PatreonInfoBean pib) {
         return patreonInfoRepository.putPatreonInfo(pib);
