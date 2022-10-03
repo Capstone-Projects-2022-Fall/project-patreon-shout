@@ -1,12 +1,14 @@
 package com.patreonshout.interfaces;
 
+import com.patreonshout.beans.PatreonInfoBean;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -33,5 +35,12 @@ public interface PatreonInfoImpl {
                     description = "Patreon Information was not saved",
                     content = {@Content(mediaType = "application/json")})
     })
-    String PutPatreonInfo(@RequestBody String request);
+    String PutPatreonInfo(
+            @RequestBody(
+                    description = "Patreon Info To Add",
+                    required = true,
+                    content = @Content(
+                            schema = @Schema(
+                                    implementation = PatreonInfoBean.class)))
+            String request);
 }
