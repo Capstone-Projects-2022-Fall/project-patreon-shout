@@ -7,12 +7,21 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+/**
+ * Functions that directly interact with the WebAccounts table in the database
+ */
 @Repository
 public class WebAccountRepository {
 
 	@PersistenceContext
 	private EntityManager em;
 
+	/**
+	 * Adds a {@link WebAccount} to the database
+	 *
+	 * @param username Username for the {@link WebAccount}
+	 * @param password Password for the {@link WebAccount}
+	 */
 	@Transactional
 	public void putAccount(String username, String password) {
 		String sql = "insert into webaccounts (username, password) values (:username, :password)";
