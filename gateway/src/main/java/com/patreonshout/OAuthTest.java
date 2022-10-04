@@ -13,14 +13,27 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 
+/**
+ * Testing Patreon OAuth through an endpoint
+ */
 @RestController
 @RequestMapping(value = "/v1")
 public class OAuthTest {
 
+	/**
+	 * oauthClient is the {@link com.patreon.PatreonOAuth} object used for Patreon OAuth requests
+	 */
 	@Lazy
 	@Autowired
 	private PatreonOAuth oauthClient;
 
+	/**
+	 * Testing the OAuth request using an endpoint like we will be doing in Patreon Shout
+	 *
+	 * @param code is used to fetch access tokens for the session that just signed in with Patreon
+	 * @param state is transparently appended from the state param provided in PatreonShout Client from Dev Portal
+	 * @return a String containing a hello message to let the user know that the endpoint worked
+	 */
 	@GetMapping("/webhook")
 	public String WebhookReceiver(
 			// Used to fetch access tokens for the session that just signed in with Patreon.

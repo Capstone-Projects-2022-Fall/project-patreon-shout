@@ -33,9 +33,10 @@ public class PostsRepository {
     private EntityManager em;
 
     /**
+     * getPost() gets a specific post based on the post url
      *
-     * @param url
-     * @return
+     * @param url is the url of the Patreon post
+     * @return a {@link com.patreonshout.beans.PostBean} object containing the Patreon post information of the given url
      */
     @Transactional
     public PostBean getPost(String url){
@@ -54,8 +55,9 @@ public class PostsRepository {
     }
 
     /**
+     * getAllPosts() returns every post in the database
      *
-     * @return
+     * @return a List of {@link com.patreonshout.beans.PostBean} containing every post in the database
      */
     @Transactional
     public List<PostBean> getAllPosts() {
@@ -67,8 +69,9 @@ public class PostsRepository {
     }
 
     /**
+     * putPost() adds a new Post to the database
      *
-     * @param pb
+     * @param pb is the post to be added to the database
      */
     @Transactional
     public void putPost(PostBean pb) {
@@ -86,8 +89,9 @@ public class PostsRepository {
     }
 
     /**
+     * updatePost() updates an existing post in the database based on the post_id
      *
-     * @param pb
+     * @param pb is the post to be updated in the database
      */
     @Transactional
     public void updatePost(PostBean pb) {
@@ -106,8 +110,9 @@ public class PostsRepository {
     }
 
     /**
+     * removePost() removes a post in the database based on the post url
      *
-     * @param url
+     * @param url is the url of the Patreon post
      */
     @Transactional
     public void removePost(String url) {

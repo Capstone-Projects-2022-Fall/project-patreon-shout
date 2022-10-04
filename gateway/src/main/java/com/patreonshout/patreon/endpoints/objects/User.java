@@ -146,12 +146,13 @@ public class User {
 	}
 
 	/**
-	 * Provides the application with a toString() of {@link com.patreonshout.patreon.endpoints.objects.User.Links}
+	 * Provides the application with a toString() of {@link com.patreonshout.patreon.endpoints.objects.User.Links} that hold
+	 * the urls of first, prev, next, and last pages if they exist
 	 */
 	@ToString
 	public class Links {
 		/**
-		 *
+		 * self contains the urls of the first, prev, next, and last pages
 		 */
 		@JsonProperty("self")
 		public String self;
