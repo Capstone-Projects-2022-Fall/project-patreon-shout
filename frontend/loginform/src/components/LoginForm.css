@@ -26,38 +26,6 @@
     justify-content: space-around;
 }
 
-input {
-    border: none;
-    background-color: rgb(229, 226, 226);
-    width: 80%;
-    border-radius: 0.25em;
-    text-align: center;
-    padding: 2em;
-    font-size: 0.75em;
-}
-
-input:focus {
-    outline-color: rgb(32, 177, 255);
-}
-
-.OtherLog {
-    width: 80%;
-    height: 3em;
-    display: flex;
-    justify-content: space-around;
-}
-
-.OtherLog div {
-    width: 15%;
-    height: 90%;
-    border-radius: 0.25em;
-    background-color: grey;
-    background-position: center;
-    background-size: contain;
-    background-repeat: no-repeat;
-    cursor: pointer;
-}
-
 .loginButton {
     width: 40%;
     height: 3em;
@@ -82,7 +50,12 @@ input:focus {
     transform: scale(0);
 }
 
+.textInputLog{
+    position: relative;
+}
+
 h3{
     text-align: center;
 }
+
 
