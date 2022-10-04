@@ -33,6 +33,7 @@ public class JPAConfiguration {
 
     /**
      * Configures the data source to our database
+     *
      * @return a {@link javax.sql.DataSource} object that will connect to our database
      */
     @Bean
@@ -47,6 +48,7 @@ public class JPAConfiguration {
 
     /**
      * Java Persistence API Transaction Manager between the program and our database
+     *
      * @return a {@link org.springframework.orm.jpa.JpaTransactionManager} object that will manage the
      * transactions we have with our database
      */
