@@ -8,6 +8,11 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
+/**
+ * calls the files that holds the function LoginForm and RegistrationForm
+ *
+ * @returns the header tab of sign in and registration form integrated
+ */
 function FormContainers() {
 
     const [value, setValue] = React.useState(0)
