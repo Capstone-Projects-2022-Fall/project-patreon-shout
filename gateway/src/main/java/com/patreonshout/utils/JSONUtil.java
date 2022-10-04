@@ -42,7 +42,6 @@ public class JSONUtil {
      * @param json is the json in string format
      * @param beanClass is the class we want to turn the json into
      * @param <T> is the generic typing so we can use this for multiple classes
-     * @exception UnrecognizedPropertyException when a varaible is not recognized for the specific class provided
      * @return an object of type T with values corresponding to the json provided
      */
     public static <T> Object getBeanFromJSON(String json, Class<T> beanClass) {
