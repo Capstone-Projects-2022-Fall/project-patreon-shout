@@ -11,14 +11,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class WebAccount {
 
+	/**
+	 * webAccountRepository is the {@link com.patreonshout.jpa.WebAccountRepository} class that handles all logic regarding
+	 * database connections with the webaccounts table
+	 */
 	@Autowired
 	WebAccountRepository webAccountRepository;
 
 	/**
 	 * Attempts to add a {@link WebAccount} into the database
 	 *
-	 * @param username Username for the {@link WebAccount}
-	 * @param password Password for the {@link WebAccount}
+	 * @param username is the username for the {@link WebAccount}
+	 * @param password is the password for the {@link WebAccount}
 	 * @return {@link HttpStatus} 200 if the registration was successful
 	 * {@link HttpStatus} 409 if the account already exists
 	 */

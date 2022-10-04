@@ -13,6 +13,9 @@ import javax.persistence.Query;
 @Repository
 public class WebAccountRepository {
 
+	/**
+	 * em is the {@link EntityManager} that handles all the transactions with our database
+	 */
 	@PersistenceContext
 	private EntityManager em;
 

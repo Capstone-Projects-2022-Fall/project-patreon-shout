@@ -1,0 +1,12 @@
+unnamed package
+com.patreonshout
+com.patreonshout.beans
+com.patreonshout.config
+com.patreonshout.interfaces
+com.patreonshout.jpa
+com.patreonshout.output
+com.patreonshout.patreon
+com.patreonshout.patreon.endpoints
+com.patreonshout.patreon.endpoints.objects
+com.patreonshout.rest
+com.patreonshout.utils
