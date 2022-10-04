@@ -14,6 +14,9 @@ import java.net.URL;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ *
+ */
 public class PostGetter {
 
     private PatreonAPI apiClient;
