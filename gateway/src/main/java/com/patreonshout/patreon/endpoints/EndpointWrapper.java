@@ -6,11 +6,24 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
 
+/**
+ * Helps connect to the Patreon OAuth endpoint
+ */
 @Component
 public class EndpointWrapper {
 
+	/**
+	 * url to the Patreon OAuth endpoint
+	 */
 	private static String baseUrl = "https://www.patreon.com/api/oauth2/v2/";
 
+	/**
+	 * Sends a Patreon OAuth request
+	 *
+	 * @param accessToken is the content creator access token
+	 * @return the json output from the OAuth request
+	 * @throws IOException when the Patreon OAuth request doesn't go as planned
+	 */
 	public static User fetchUser(String accessToken) throws IOException {
 		return WebClient
 				.create(baseUrl)

@@ -14,16 +14,37 @@ import java.net.URL;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Gets Posts from a Patreon content creator in {@link org.json.simple.JSONArray} form
+ */
 public class PostGetter {
 
+    /**
+     * apiClient is the object used to connect to Patreon's API
+     */
     private PatreonAPI apiClient;
+    /**
+     * Patreon API token needed to provide authorization to get Patreon content creator information
+     */
     private String token;
 
+    /**
+     * Initialize {@link com.patreon.PatreonAPI} and set PatreonAPI token
+     *
+     * @param token the Patreon API token needed to provide authorization to get Patreon content creator information
+     */
     public PostGetter(String token) {
         this.token = token;
         apiClient = new PatreonAPI(token);
     }
 
+    /**
+     * Returns a {@link org.json.simple.JSONArray} with all the content creator's posts
+     *
+     * @return a {@link org.json.simple.JSONArray} of content creator posts
+     * @throws IOException in case the HTTP connection fails
+     * @throws ParseException in case the scanner fails
+     */
     public JSONArray getPosts() throws IOException, ParseException {
 
         JSONAPIDocument<List<Campaign>> campaignList = apiClient.fetchCampaigns();

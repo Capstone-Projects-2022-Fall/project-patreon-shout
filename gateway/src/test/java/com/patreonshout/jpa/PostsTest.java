@@ -14,6 +14,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Testing the Posts class
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 @ContextConfiguration(classes = {TestConfig.class, Posts.class, PostsRepository.class})
@@ -21,9 +24,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class PostsTest {
 
+    /**
+     * posts is the reference to the {@link com.patreonshout.jpa.Posts} object that is the wrapper class to the {@link com.patreonshout.jpa.PostsRepository}
+     * that handles the communication to the database's posts table
+     */
     @Autowired
     Posts posts;
 
+    /**
+     * tests putPost() and getAllPosts() from {@link com.patreonshout.jpa.Posts} that puts a PostBean into the database
+     * and gets every post in the database respectively
+     */
     @Test
     public void putPostAndGetAllPostsTest() {
         PostBean pb1 = new PostBean();
@@ -49,6 +60,9 @@ public class PostsTest {
         Assert.assertEquals(2, posts.getAllPosts().size());
     }
 
+    /**
+     * tests getPost() from {@link com.patreonshout.jpa.Posts} that gets a specific post from the database based on a given url
+     */
     @Test
     public void getPostTest() {
         PostBean pb1 = new PostBean();
@@ -69,6 +83,9 @@ public class PostsTest {
         Assert.assertEquals(pb1.getUrl(), pb2.getUrl());
     }
 
+    /**
+     * tests updatePost() from {@link com.patreonshout.jpa.Posts} that updates a post in the database based on a post_id when provided a PostBean
+     */
     @Test
     public void updatePostTest() {
         PostBean pb1 = new PostBean();
@@ -87,6 +104,9 @@ public class PostsTest {
         Assert.assertEquals("url2", posts.getPost("url2").getUrl());
     }
 
+    /**
+     * tests removePost() from {@link com.patreonshout.jpa.Posts} that will remove a given post from the database given a url
+     */
     @Test
     public void removePostTest() {
         PostBean pb1 = new PostBean();
