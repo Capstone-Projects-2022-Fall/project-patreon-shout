@@ -1,0 +1,24 @@
+.feed {
+    position: center;
+    padding-top: 20px;
+    padding-left: 340px;
+    padding-right: 400px;
+    flex: 0.4;
+    border-right: var(--background) 1px solid;
+    min-width: fit-content;
+    overflow-y: auto;
+  }
+  .feed__header {
+    position: sticky;
+    background-color: white;
+    z-index: 100;
+    border: 1px solid var(--background);
+    padding: 15px 20px;
+  }
+  .feed::-webkit-scrollbar {
+    display: none;
+  }
+  .feed__header > h2 {
+    font-size: 20px;
+    font-weight: 700;
+  }
