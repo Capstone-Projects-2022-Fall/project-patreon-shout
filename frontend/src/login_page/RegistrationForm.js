@@ -2,12 +2,6 @@ import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import './RegistrationForm.css'
 
-/**
- * The registration form component to be displayed on the login page under the registration tab
- * 
- * @returns The registration form component where a user can register for Patreon Shout using their full name, username, email, and password
- */
-
 const RegistrationForm = () => {
 
     const [fullName, setFullName] = useState('')
