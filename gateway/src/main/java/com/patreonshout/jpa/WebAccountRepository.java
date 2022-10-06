@@ -1,5 +1,8 @@
 package com.patreonshout.jpa;
 
+import com.patreonshout.jpa.constants.IntegrationType;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,15 +27,28 @@ public class WebAccountRepository {
 	 *
 	 * @param username Username for the {@link WebAccount}
 	 * @param password Password for the {@link WebAccount}
+	 * @return {@link HttpStatus} object containing either 200 (No error) or
+	 * 409 (Username already exists in webaccounts table)
 	 */
 	@Transactional
-	public void putAccount(String username, String password) {
+	public HttpStatus putAccount(String username, String password) {
 		String sql = "insert into webaccounts (username, password) values (:username, :password)";
 		Query q = em.createNativeQuery(sql);
 
 		q.setParameter("username", username);
 		q.setParameter("password", password);
 
-		q.executeUpdate();
+		try {
+			q.executeUpdate();
+		} catch (DataIntegrityViolationException ex) {
+			return HttpStatus.CONFLICT; // Username already exists in webaccounts table
+		}
+
+		return HttpStatus.OK; // No error
 	}
+
+//	@Transactional
+//	public HttpStatus putIntegration(IntegrationType type, String data) {
+//
+//	}
 }
