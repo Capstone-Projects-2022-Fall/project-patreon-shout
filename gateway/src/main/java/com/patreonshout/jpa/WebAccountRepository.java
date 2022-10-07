@@ -23,10 +23,10 @@ public class WebAccountRepository {
 	private EntityManager em;
 
 	/**
-	 * Adds a {@link WebAccount} to the database
+	 * Adds a {@link com.patreonshout.jpa.WebAccount} to the database
 	 *
-	 * @param username Username for the {@link WebAccount}
-	 * @param password Password for the {@link WebAccount}
+	 * @param username Username for the {@link com.patreonshout.jpa.WebAccount}
+	 * @param password Password for the {@link com.patreonshout.jpa.WebAccount}
 	 * @return {@link HttpStatus} object containing either 200 (No error) or
 	 * 409 (Username already exists in webaccounts table)
 	 */
@@ -47,8 +47,24 @@ public class WebAccountRepository {
 		return HttpStatus.OK; // No error
 	}
 
-//	@Transactional
-//	public HttpStatus putIntegration(IntegrationType type, String data) {
+	@Transactional
+	public HttpStatus putIntegration(int webAccountId, IntegrationType type, String data) {
+//		String sql = "INSERT INTO social_integrations (social_integration_id, :type) " +
+//				"VALUES (:social_integration_id, :data) " +
+//				"ON DUPLICATE KEY UPDATE :type = VALUES(:type)";
+//		Query q = em.createNativeQuery(sql);
 //
-//	}
+//		q.setParameter("social_integration_id", webAccountId);
+//		q.setParameter("type", type.name().toLowerCase());
+//		q.setParameter("data", data);
+
+		String givenType = type.name().toLowerCase();
+		Query q = em.createNativeQuery("INSERT INTO social_integrations (social_integration_id, " + givenType + ") "
+				+ "VALUES (" + webAccountId + ", '" + data + "')"
+				+ "ON DUPLICATE KEY UPDATE " + type + " = VALUES(" + type + ")");
+
+		q.executeUpdate();
+
+		return HttpStatus.OK;
+	}
 }

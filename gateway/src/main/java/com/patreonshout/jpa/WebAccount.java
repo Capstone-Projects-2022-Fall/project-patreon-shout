@@ -2,7 +2,6 @@ package com.patreonshout.jpa;
 
 import com.patreonshout.jpa.constants.IntegrationType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
@@ -38,7 +37,7 @@ public class WebAccount {
 	 * @param data Webhook URL or access token
 	 * @return
 	 */
-	public HttpStatus putIntegration(IntegrationType type, String data) {
-		return null; //webAccountRepository.putIntegration(type, data);
+	public HttpStatus putIntegration(int webAccountId, IntegrationType type, String data) {
+		return webAccountRepository.putIntegration(webAccountId, type, data);
 	}
 }
