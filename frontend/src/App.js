@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './App.css';
 import Home from "./home_page/Home";
@@ -11,6 +11,12 @@ import Login from "./login_page/Login"
  */
 
 function App() {
+  const [token, setToken] = useState();
+
+  if (!token) {
+    return <Login setToken={setToken}/>
+  }
+
   return (
     <div className="App">
       <BrowserRouter>
