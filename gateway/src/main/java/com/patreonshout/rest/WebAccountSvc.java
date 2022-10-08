@@ -5,6 +5,7 @@ import com.patreonshout.jpa.WebAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,5 +42,16 @@ public class WebAccountSvc implements WebAccountImpl {
 	) {
 		// TODO: Ensure username and password are sanitized and fit specific requirements
 		return webAccount.putAccount(username, password);
+	}
+
+	/**
+	 * Endpoint to return a token to grant the request sender access to our website
+	 *
+	 * @param request is the json request body
+	 * @return 
+	 */
+	public String Login(@RequestBody String request) {
+
+		return "GOOD";
 	}
 }
