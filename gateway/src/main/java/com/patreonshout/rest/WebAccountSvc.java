@@ -51,6 +51,7 @@ public class WebAccountSvc implements WebAccountImpl {
 	 * @return // TODO
 	 */
 	public String Login(@RequestBody String request) {
+		System.out.println(request);
 
 		return "GOOD";
 	}
