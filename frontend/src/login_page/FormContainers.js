@@ -7,13 +7,14 @@ import Tab from '@mui/material/Tab';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import PropTypes from "prop-types";
 
 /**
  * Calls the files that holds the function LoginForm and RegistrationForm
  *
  * @returns The header tab of sign in and registration form integrated
  */
-function FormContainers() {
+function FormContainers({setToken}) {
 
     const [value, setValue] = React.useState(0)
 
@@ -49,7 +50,7 @@ function FormContainers() {
                     <Tab label="Register" />
                 </Tabs>
                 <TabPanel value={value} index={0}>
-                    <LoginForm />
+                    <LoginForm setToken={setToken}/>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                     <RegistrationForm />
@@ -58,5 +59,9 @@ function FormContainers() {
         </div>
     );
 }
+
+FormContainers.propTypes = {
+    setToken: PropTypes.func.isRequired
+};
 
 export default FormContainers
