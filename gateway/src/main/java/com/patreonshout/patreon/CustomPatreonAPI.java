@@ -9,9 +9,9 @@ import com.github.jasminb.jsonapi.JSONAPIDocument;
 import com.github.jasminb.jsonapi.Link;
 import com.github.jasminb.jsonapi.Links;
 import com.github.jasminb.jsonapi.ResourceConverter;
+import com.patreon.PatreonAPI;
 import com.patreon.resources.Campaign;
 import com.patreon.resources.Pledge;
-import com.patreon.resources.RequestUtil;
 import com.patreon.resources.User;
 import com.patreon.resources.Pledge.PledgeField;
 import com.patreon.resources.User.UserField;
@@ -19,44 +19,46 @@ import com.patreon.resources.shared.BaseResource;
 import com.patreon.resources.shared.Field;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
-import lombok.extern.slf4j.Slf4j;
+import com.patreonshout.beans.PostBean;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.client.utils.URLEncodedUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Slf4j
 public class CustomPatreonAPI {
     public static final String BASE_URI = System.getProperty("patreon.rest.uri", "https://www.patreon.com");
+    private static final Logger log = LoggerFactory.getLogger(PatreonAPI.class);
     private final String accessToken;
-    private final RequestUtil requestUtil;
     private ResourceConverter converter;
 
     public CustomPatreonAPI(String accessToken) {
-        this(accessToken, new RequestUtil());
-    }
-
-    CustomPatreonAPI(String accessToken, RequestUtil requestUtil) {
         this.accessToken = accessToken;
-        this.requestUtil = requestUtil;
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        this.converter = new ResourceConverter(objectMapper, new Class[]{User.class, Campaign.class, Pledge.class});
+        this.converter = new ResourceConverter(objectMapper, new Class[]{User.class, Campaign.class, Pledge.class, PostBean.class});
         this.converter.enableDeserializationOption(com.github.jasminb.jsonapi.DeserializationFeature.ALLOW_UNKNOWN_INCLUSIONS);
     }
 
-//    public JSONAPIDocument<User> fetchPosts() throws IOException {
-//
-//    }
+    public JSONAPIDocument<List<PostBean>> fetchPosts(String campaignId) throws IOException {
+        URIBuilder pathBuilder = (new URIBuilder()).setPath("campaigns/" + campaignId + "/posts")
+                .addParameter("fields[post]", "content,is_public,published_at,title,url");
+        System.out.println(pathBuilder.toString());
+        return this.converter.readDocumentCollection(this.getDataStream(pathBuilder.toString(), true), PostBean.class);
+    }
 
     public JSONAPIDocument<User> fetchUser() throws IOException {
         return this.fetchUser((Collection)null);
@@ -70,13 +72,13 @@ public class CustomPatreonAPI {
             this.addFieldsParam(pathBuilder, User.class, optionalAndDefaultFields);
         }
 
-        return this.converter.readDocument(this.getDataStream(pathBuilder.toString()), User.class);
+        return this.converter.readDocument(this.getDataStream(pathBuilder.toString(), false), User.class);
     }
 
     public JSONAPIDocument<List<Campaign>> fetchCampaigns() throws IOException {
         String path = (new URIBuilder()).setPath("current_user/campaigns").addParameter("include", "rewards,creator,goals").toString();
         System.out.println("path: " + path);
-        return this.converter.readDocumentCollection(this.getDataStream(path), Campaign.class);
+        return this.converter.readDocumentCollection(this.getDataStream(path, false), Campaign.class);
     }
 
     public JSONAPIDocument<List<Pledge>> fetchPageOfPledges(String campaignId, int pageSize, String pageCursor) throws IOException {
@@ -95,7 +97,7 @@ public class CustomPatreonAPI {
             this.addFieldsParam(pathBuilder, Pledge.class, optionalAndDefaultFields);
         }
 
-        return this.converter.readDocumentCollection(this.getDataStream(pathBuilder.toString()), Pledge.class);
+        return this.converter.readDocumentCollection(this.getDataStream(pathBuilder.toString(), false), Pledge.class);
     }
 
     public String getNextCursorFromDocument(JSONAPIDocument document) {
@@ -142,8 +144,8 @@ public class CustomPatreonAPI {
         return new ArrayList(pledges);
     }
 
-    private InputStream getDataStream(String suffix) throws IOException {
-        return this.requestUtil.request(suffix, this.accessToken);
+    private InputStream getDataStream(String suffix, boolean apiV2) throws IOException {
+        return this.request(suffix, this.accessToken, apiV2);
     }
 
     private URIBuilder addFieldsParam(URIBuilder builder, Class<? extends BaseResource> type, Collection<? extends Field> fields) {
@@ -158,6 +160,22 @@ public class CustomPatreonAPI {
         String typeStr = BaseResource.getType(type);
         builder.addParameter("fields[" + typeStr + "]", String.join(",", fieldNames));
         return builder;
+    }
+
+    private InputStream request(String pathSuffix, String accessToken, boolean apiV2) throws IOException {
+        String prefix = PatreonAPI.BASE_URI + (apiV2 ? "/api/oauth2/v2/" : "/api/oauth2/api/");
+        URL url = new URL(prefix.concat(pathSuffix));
+        HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+        connection.setRequestProperty("Authorization", "Bearer ".concat(accessToken));
+        connection.setRequestProperty("User-Agent", String.format("Patreon-Java, version %s, platform %s %s", this.getVersion(), System.getProperty("os.name"), System.getProperty("os.version")));
+        return connection.getInputStream();
+    }
+
+    private String getVersion() throws IOException {
+        InputStream resourceAsStream = this.getClass().getResourceAsStream("/version.properties");
+        Properties prop = new Properties();
+        prop.load(resourceAsStream);
+        return prop.getProperty("version");
     }
 }
 
