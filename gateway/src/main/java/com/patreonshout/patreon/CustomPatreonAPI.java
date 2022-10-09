@@ -14,7 +14,6 @@ import com.patreon.resources.Campaign;
 import com.patreon.resources.Pledge;
 import com.patreon.resources.User;
 import com.patreon.resources.Pledge.PledgeField;
-import com.patreon.resources.User.UserField;
 import com.patreon.resources.shared.BaseResource;
 import com.patreon.resources.shared.Field;
 import java.io.IOException;
@@ -38,12 +37,28 @@ import org.apache.http.client.utils.URLEncodedUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Used to send Patreon API requests
+ */
 public class CustomPatreonAPI {
-    public static final String BASE_URI = System.getProperty("patreon.rest.uri", "https://www.patreon.com");
+    /**
+     * log is used to send log output to the terminal
+     */
     private static final Logger log = LoggerFactory.getLogger(PatreonAPI.class);
+    /**
+     * accessToken is used to access the patreon API for different users
+     */
     private final String accessToken;
+    /**
+     * converter is used to convert the json data returned into an object of our choosing
+     */
     private ResourceConverter converter;
 
+    /**
+     * Initializes variables needed for sending requests to the Patreon API
+     *
+     * @param accessToken is used to access the patreon API for different users
+     */
     public CustomPatreonAPI(String accessToken) {
         this.accessToken = accessToken;
         ObjectMapper objectMapper = new ObjectMapper();
@@ -53,6 +68,13 @@ public class CustomPatreonAPI {
         this.converter.enableDeserializationOption(com.github.jasminb.jsonapi.DeserializationFeature.ALLOW_UNKNOWN_INCLUSIONS);
     }
 
+    /**
+     * Gets the Patreon posts from a given campaignId
+     *
+     * @param campaignId is the id of the campaign we want to get posts from
+     * @return a {@link com.github.jasminb.jsonapi.JSONAPIDocument} containing a list of {@link PostBean} objects
+     * @throws IOException when it can't parse the json request
+     */
     public JSONAPIDocument<List<PostBean>> fetchPosts(String campaignId) throws IOException {
         URIBuilder pathBuilder = (new URIBuilder()).setPath("campaigns/" + campaignId + "/posts")
                 .addParameter("fields[post]", "content,is_public,published_at,title,url");
@@ -60,31 +82,52 @@ public class CustomPatreonAPI {
         return this.converter.readDocumentCollection(this.getDataStream(pathBuilder.toString(), true), PostBean.class);
     }
 
-    public JSONAPIDocument<User> fetchUser() throws IOException {
-        return this.fetchUser((Collection)null);
+    /**
+     * Gets the Patreon User information
+     *
+     * @return User object containing user information
+     * @throws IOException when it can't parse the json request
+     */
+    public JSONAPIDocument<User> fetchUser() throws IOException { // TODO: if we need more fields other than full_name we need to add onto this
+        URIBuilder pathBuilder = (new URIBuilder()).setPath("identity").addParameter("fields[user]", "full_name");
+        return this.converter.readDocument(this.getDataStream(pathBuilder.toString(), true), User.class);
     }
 
-    public JSONAPIDocument<User> fetchUser(Collection<UserField> optionalFields) throws IOException {
-        URIBuilder pathBuilder = (new URIBuilder()).setPath("current_user").addParameter("include", "pledges");
-        if (optionalFields != null) {
-            Set<UserField> optionalAndDefaultFields = new HashSet(optionalFields);
-            optionalAndDefaultFields.addAll(UserField.getDefaultFields());
-            this.addFieldsParam(pathBuilder, User.class, optionalAndDefaultFields);
-        }
-
-        return this.converter.readDocument(this.getDataStream(pathBuilder.toString(), false), User.class);
-    }
-
+    /**
+     * Gets the campaigns of a given access_token
+     *
+     * @return {@link com.github.jasminb.jsonapi.JSONAPIDocument} with a list of {@link com.patreon.resources.Campaign} objects
+     * @throws IOException when it can't parse the json request
+     */
     public JSONAPIDocument<List<Campaign>> fetchCampaigns() throws IOException {
-        String path = (new URIBuilder()).setPath("current_user/campaigns").addParameter("include", "rewards,creator,goals").toString();
+        String path = (new URIBuilder()).setPath("campaigns").toString();
         System.out.println("path: " + path);
-        return this.converter.readDocumentCollection(this.getDataStream(path, false), Campaign.class);
+        return this.converter.readDocumentCollection(this.getDataStream(path, true), Campaign.class);
     }
 
+    /**
+     * Wrapper for fetching a page of pledges
+     *
+     * @param campaignId is the id of a campaign
+     * @param pageSize is the size of a page
+     * @param pageCursor is the page cursor
+     * @return
+     * @throws IOException when it can't parse the json request
+     */
     public JSONAPIDocument<List<Pledge>> fetchPageOfPledges(String campaignId, int pageSize, String pageCursor) throws IOException {
         return this.fetchPageOfPledges(campaignId, pageSize, pageCursor, (Collection)null);
     }
 
+    /**
+     * Gets a page of pledges from Patreon API
+     *
+     * @param campaignId is the id of a campaign
+     * @param pageSize is the size of a page
+     * @param pageCursor is the page cursor
+     * @param optionalFields are the optional fields a user may want to provide for more information
+     * @return a {@link com.github.jasminb.jsonapi.JSONAPIDocument} with a list of {@link com.patreon.resources.Pledge} objects
+     * @throws IOException when it can't parse the json request
+     */
     public JSONAPIDocument<List<Pledge>> fetchPageOfPledges(String campaignId, int pageSize, String pageCursor, Collection<PledgeField> optionalFields) throws IOException {
         URIBuilder pathBuilder = (new URIBuilder()).setPath(String.format("campaigns/%s/pledges", campaignId)).addParameter("page[count]", String.valueOf(pageSize));
         if (pageCursor != null) {
@@ -100,6 +143,12 @@ public class CustomPatreonAPI {
         return this.converter.readDocumentCollection(this.getDataStream(pathBuilder.toString(), false), Pledge.class);
     }
 
+    /**
+     * Gets the cursor from a {@link com.github.jasminb.jsonapi.JSONAPIDocument} object
+     *
+     * @param document is the document to be parsed for a cursor
+     * @return a String containing the cursor
+     */
     public String getNextCursorFromDocument(JSONAPIDocument document) {
         Links links = document.getLinks();
         if (links == null) {
@@ -131,6 +180,13 @@ public class CustomPatreonAPI {
         }
     }
 
+    /**
+     * Gets all the pledges from Patreon API
+     *
+     * @param campaignId is the id of a campaign
+     * @return a list of {@link com.patreon.resources.Pledge} objects
+     * @throws IOException when it can't parse the json request
+     */
     public List<Pledge> fetchAllPledges(String campaignId) throws IOException {
         Set<Pledge> pledges = new HashSet();
         String cursor = null;
@@ -144,10 +200,26 @@ public class CustomPatreonAPI {
         return new ArrayList(pledges);
     }
 
+    /**
+     * Wrapper for the request() function
+     *
+     * @param suffix the suffix of the Patreon request url
+     * @param apiV2 is the version of the endpoint we will be calling from Patreon
+     * @return an {@link java.io.InputStream} object pointing to the Patreon api
+     * @throws IOException when it can't parse the json request
+     */
     private InputStream getDataStream(String suffix, boolean apiV2) throws IOException {
         return this.request(suffix, this.accessToken, apiV2);
     }
 
+    /**
+     * Adds Field parameters to the Patreon request url
+     *
+     * @param builder is the uri request builder
+     * @param type is the type of param given to Patreon
+     * @param fields are the fields we want from Patreon's type of param
+     * @return a {@link org.apache.http.client.utils.URIBuilder} of the field params we want to add
+     */
     private URIBuilder addFieldsParam(URIBuilder builder, Class<? extends BaseResource> type, Collection<? extends Field> fields) {
         List<String> fieldNames = new ArrayList();
         Iterator var5 = fields.iterator();
@@ -162,6 +234,15 @@ public class CustomPatreonAPI {
         return builder;
     }
 
+    /**
+     * Gets the {@link java.io.InputStream} for the Patreon API request link we want to use
+     *
+     * @param pathSuffix is the suffix of the Patreon request url
+     * @param accessToken is used to access the patreon API for a specific user's data
+     * @param apiV2 is a boolean representing what version of the Patreon API we want to use
+     * @return an {@link java.io.InputStream} object pointing to our Patreon API request link
+     * @throws IOException when it can't parse the json request
+     */
     private InputStream request(String pathSuffix, String accessToken, boolean apiV2) throws IOException {
         String prefix = PatreonAPI.BASE_URI + (apiV2 ? "/api/oauth2/v2/" : "/api/oauth2/api/");
         URL url = new URL(prefix.concat(pathSuffix));
@@ -171,6 +252,12 @@ public class CustomPatreonAPI {
         return connection.getInputStream();
     }
 
+    /**
+     * Gets the versions of different items from the place that the request is sent
+     *
+     * @return a String holding the versions of different items fromt he place that the request is sent
+     * @throws IOException when it can't parse the json request
+     */
     private String getVersion() throws IOException {
         InputStream resourceAsStream = this.getClass().getResourceAsStream("/version.properties");
         Properties prop = new Properties();

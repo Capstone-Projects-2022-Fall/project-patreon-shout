@@ -1,19 +1,23 @@
-import com.patreon.PatreonAPI;
-import com.patreon.PatreonOAuth;
-import com.patreon.resources.Campaign;
-import com.patreonshout.beans.PostBean;
-import com.patreonshout.output.DiscordSender;
-import com.patreonshout.patreon.CustomPatreonAPI;
-import com.patreonshout.patreon.PostGetter;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Component;
+//import com.patreon.PatreonAPI;
+//import com.patreon.PatreonOAuth;
+//import com.patreon.resources.Campaign;
+//
+//import com.patreonshout.output.DiscordSender;
+//
+//import com.patreonshout.patreon.PostGetter;
+//import org.json.simple.JSONArray;
+//import org.json.simple.JSONObject;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.context.annotation.Lazy;
+//import org.springframework.stereotype.Component;
+//import java.util.ListIterator;
+//import java.awt.*;
 
-import java.awt.*;
+import com.patreon.resources.User;
+import com.patreonshout.beans.PostBean;
+import com.patreonshout.patreon.CustomPatreonAPI;
 import java.io.IOException;
-import java.util.ListIterator;
+
 
 /**
  * Testing how we will combine getting posts and how we will send posts to Discord
@@ -31,7 +35,7 @@ public class PatreonShout {
     static String token = "";
 
     /**
-     * Runs the {@link com.patreonshout.patreon.PostGetter} and the {@link com.patreonshout.output.DiscordSender} in
+     * Used for basic testing of different components that haven't been fully joined yet
      *
      * @param args are the program arguments
      */
@@ -42,8 +46,12 @@ public class PatreonShout {
         String campaignId = apiClient.fetchCampaigns().get().get(0).getId();
         System.out.println(campaignId);
 
-        String name = apiClient.fetchUser().get().getFullName();
-        System.out.println(name);
+        User user = apiClient.fetchUser().get();
+        System.out.println(user.getFullName());
+
+//        String name = apiClient.fetchCampaigns().get().get(0).getCreator().getFullName();
+
+//        System.out.println(name);
 
         for (PostBean post : apiClient.fetchPosts(campaignId).get()) {
             System.out.println(post);
