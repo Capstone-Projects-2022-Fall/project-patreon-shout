@@ -1,4 +1,4 @@
-package com.patreonshout.interfaces;
+package com.patreonshout.rest.interfaces;
 
 import com.patreonshout.beans.PatreonInfoBean;
 import io.swagger.v3.oas.annotations.Operation;
