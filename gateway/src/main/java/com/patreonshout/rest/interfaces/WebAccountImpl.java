@@ -1,6 +1,6 @@
 package com.patreonshout.rest.interfaces;
 
-import com.patreonshout.beans.IntegrationBean;
+import com.patreonshout.beans.IntegrationRequestBean;
 import com.patreonshout.jpa.WebAccount;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -44,8 +44,8 @@ public interface WebAccountImpl {
 	/**
 	 * Endpoint that allows registering, updating or deleting integrations for social platforms.
 	 *
-	 * @param integrationBean {@link IntegrationBean} object that contains {@link WebAccount} and request details.
-	 * @return {@link HttpStatus#OK} if successful, {@link HttpStatus#CONFLICT} if the provided {@link IntegrationBean}
+	 * @param integrationRequestBean {@link IntegrationRequestBean} object that contains {@link WebAccount} and request details.
+	 * @return {@link HttpStatus#OK} if successful, {@link HttpStatus#CONFLICT} if the provided {@link IntegrationRequestBean}
 	 * does not contain a valid {@link com.patreonshout.beans.WebAccountBean} ID number.
 	 */
 	@PutMapping("/integration")
@@ -60,6 +60,6 @@ public interface WebAccountImpl {
 	})
 	@ResponseStatus(code = HttpStatus.OK, reason = "Data saved successfully")
 	HttpStatus Integration(
-			@RequestBody IntegrationBean integrationBean
+			@RequestBody IntegrationRequestBean integrationRequestBean
 	);
 }

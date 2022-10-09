@@ -1,6 +1,6 @@
 package com.patreonshout.rest;
 
-import com.patreonshout.beans.IntegrationBean;
+import com.patreonshout.beans.IntegrationRequestBean;
 import com.patreonshout.jpa.WebAccount;
 import com.patreonshout.rest.interfaces.WebAccountImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,11 +40,11 @@ public class WebAccountSvc extends GeneralSvc implements WebAccountImpl {
 	 * {@inheritDoc}
 	 */
 	public HttpStatus Integration(
-			@RequestBody IntegrationBean integrationBean
+			@RequestBody IntegrationRequestBean integrationRequestBean
 	) {
-		webAccount.putIntegration(integrationBean.getWebaccount().getWebaccount_id(),
-				integrationBean.getIntegrationType(),
-				integrationBean.getData());
+		webAccount.putIntegration(integrationRequestBean.getWebaccount().getWebaccount_id(),
+				integrationRequestBean.getIntegrationType(),
+				integrationRequestBean.getData());
 		return HttpStatus.OK;
 	}
 }
