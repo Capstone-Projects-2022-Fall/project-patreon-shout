@@ -1,9 +1,13 @@
 package com.patreonshout.jpa;
 
+import com.patreonshout.jpa.constants.IntegrationType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+
+import javax.validation.ConstraintViolationException;
+import java.sql.SQLIntegrityConstraintViolationException;
 
 /**
  * Functions for WebAccount endpoints that allow interaction with the database
@@ -27,12 +31,17 @@ public class WebAccount {
 	 * {@link HttpStatus} 409 if the account already exists
 	 */
 	public HttpStatus putAccount(String username, String password) {
-		try {
-			webAccountRepository.putAccount(username, password);
-		} catch (DataIntegrityViolationException ex) { // Username already exists in webaccounts table
-			return HttpStatus.CONFLICT;
-		}
+			return webAccountRepository.putAccount(username, password);
+	}
 
-		return HttpStatus.OK; // No error
+	/**
+	 * Adds a social integration
+	 *
+	 * @param type Integration type
+	 * @param data Webhook URL or access token
+	 * @return
+	 */
+	public void putIntegration(int webAccountId, IntegrationType type, String data) {
+		webAccountRepository.putIntegration(webAccountId, type, data);
 	}
 }
