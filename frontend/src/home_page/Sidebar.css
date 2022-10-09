@@ -1,0 +1,7 @@
+  .sidebar {
+    position: absolute;
+    width: 300px;
+    block-size: 140px;
+    padding-top: 70px;
+    padding-left: 70px;
+  }
