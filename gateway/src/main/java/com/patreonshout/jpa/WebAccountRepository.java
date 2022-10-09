@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.sql.SQLIntegrityConstraintViolationException;
 
 /**
  * Functions that directly interact with the WebAccounts table in the database
@@ -48,7 +49,7 @@ public class WebAccountRepository {
 	}
 
 	@Transactional
-	public HttpStatus putIntegration(int webAccountId, IntegrationType type, String data) {
+	public void putIntegration(int webAccountId, IntegrationType type, String data) {
 //		String sql = "INSERT INTO social_integrations (social_integration_id, :type) " +
 //				"VALUES (:social_integration_id, :data) " +
 //				"ON DUPLICATE KEY UPDATE :type = VALUES(:type)";
@@ -64,7 +65,5 @@ public class WebAccountRepository {
 				+ "ON DUPLICATE KEY UPDATE " + type + " = VALUES(" + type + ")");
 
 		q.executeUpdate();
-
-		return HttpStatus.OK;
 	}
 }

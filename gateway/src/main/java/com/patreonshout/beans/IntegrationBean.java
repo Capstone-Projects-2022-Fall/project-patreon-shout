@@ -1,16 +1,15 @@
-package com.patreonshout.rest.formats;
+package com.patreonshout.beans;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.patreonshout.beans.WebAccountBean;
 import com.patreonshout.jpa.constants.IntegrationType;
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
-public class Integration {
+public class IntegrationBean {
 	@JsonProperty("webaccount")
-	WebAccountBean webAccountBean;
+	WebAccountBean webaccount;
 
 	@JsonProperty("integration_type")
 	IntegrationType integrationType;

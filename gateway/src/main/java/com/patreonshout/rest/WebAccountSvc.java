@@ -1,16 +1,13 @@
 package com.patreonshout.rest;
 
-import com.patreonshout.beans.WebAccountBean;
-import com.patreonshout.rest.formats.Integration;
+import com.patreonshout.beans.IntegrationBean;
 import com.patreonshout.rest.interfaces.WebAccountImpl;
 import com.patreonshout.jpa.WebAccount;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Web Account  RESTful Endpoint Interface
@@ -22,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  * </p>
  */
 @RestController
-public class WebAccountSvc implements WebAccountImpl {
+public class WebAccountSvc extends GeneralSvc implements WebAccountImpl {
 
 	/**
 	 * webAccount is the wrapper class for {@link com.patreonshout.jpa.WebAccountRepository}
@@ -46,24 +43,14 @@ public class WebAccountSvc implements WebAccountImpl {
 		return webAccount.putAccount(username, password);
 	}
 
-//	public WebAccountBean GetAccount(
-//			@RequestBody int id
-//	) {
-//		r
-//	}
-
 	@PutMapping("/integration")
-	public ResponseEntity<HttpStatus> Integration(
-			@RequestBody Integration integration
+	@ResponseStatus(code = HttpStatus.OK, reason = "Data saved successfully")
+	public HttpStatus Integration(
+			@RequestBody IntegrationBean integrationBean
 	) {
-		return ResponseEntity.ok(webAccount.putIntegration(
-				integration.getWebAccountBean().getWebaccount_id(),
-				integration.getIntegrationType(),
-				integration.getData()));
-//		return webAccount.putIntegration(
-//				integration.getWebAccountBean().getWebaccount_id(),
-//				integration.getIntegrationType(),
-//				integration.getData()
-//		);
+		webAccount.putIntegration(integrationBean.getWebaccount().getWebaccount_id(),
+				integrationBean.getIntegrationType(),
+				integrationBean.getData());
+		return HttpStatus.OK;
 	}
 }
