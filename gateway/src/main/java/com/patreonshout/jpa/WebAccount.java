@@ -30,8 +30,8 @@ public class WebAccount {
 	 * @return {@link HttpStatus} 200 if the registration was successful
 	 * {@link HttpStatus} 409 if the account already exists
 	 */
-	public HttpStatus putAccount(String username, String password) {
-			return webAccountRepository.putAccount(username, password);
+	public void putAccount(String username, String password) {
+		webAccountRepository.putAccount(username, password);
 	}
 
 	/**

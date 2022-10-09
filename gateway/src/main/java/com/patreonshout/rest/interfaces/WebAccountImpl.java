@@ -26,7 +26,7 @@ public interface WebAccountImpl {
 	 * @return {@link HttpStatus#OK} if the registration was successful, {@link HttpStatus#CONFLICT} if the account
 	 * already exists
 	 */
-	@GetMapping("/register")
+	@PostMapping("/register")
 	@Operation(summary = "Registers WebAccounts during PatreonShout sign up")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200",

@@ -33,7 +33,9 @@ public class WebAccountSvc extends GeneralSvc implements WebAccountImpl {
 	                            @RequestParam(name = "pass") String password
 	) {
 		// TODO: Ensure username and password are sanitized and fit specific requirements
-		return webAccount.putAccount(username, password);
+		webAccount.putAccount(username, password);
+
+		return HttpStatus.CREATED; // Http 201
 	}
 
 	/**
@@ -45,6 +47,6 @@ public class WebAccountSvc extends GeneralSvc implements WebAccountImpl {
 		webAccount.putIntegration(integrationRequestBean.getWebaccount().getWebaccount_id(),
 				integrationRequestBean.getIntegrationType(),
 				integrationRequestBean.getData());
-		return HttpStatus.OK;
+		return HttpStatus.OK; // Http 200
 	}
 }

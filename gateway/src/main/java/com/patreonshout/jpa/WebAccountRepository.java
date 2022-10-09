@@ -32,20 +32,20 @@ public class WebAccountRepository {
 	 * 409 (Username already exists in webaccounts table)
 	 */
 	@Transactional
-	public HttpStatus putAccount(String username, String password) {
+	public void putAccount(String username, String password) {
 		String sql = "insert into webaccounts (username, password) values (:username, :password)";
 		Query q = em.createNativeQuery(sql);
 
 		q.setParameter("username", username);
 		q.setParameter("password", password);
 
-		try {
-			q.executeUpdate();
-		} catch (DataIntegrityViolationException ex) {
-			return HttpStatus.CONFLICT; // Username already exists in webaccounts table
-		}
-
-		return HttpStatus.OK; // No error
+//		try {
+		q.executeUpdate();
+//		} catch (DataIntegrityViolationException ex) {
+//			return HttpStatus.CONFLICT; // Username already exists in webaccounts table
+//		}
+//
+//		return HttpStatus.OK; // No error
 	}
 
 	@Transactional
