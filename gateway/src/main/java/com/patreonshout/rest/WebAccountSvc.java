@@ -1,12 +1,10 @@
 package com.patreonshout.rest;
 
 import com.patreonshout.beans.IntegrationBean;
-import com.patreonshout.rest.interfaces.WebAccountImpl;
 import com.patreonshout.jpa.WebAccount;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import com.patreonshout.rest.interfaces.WebAccountImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -28,12 +26,7 @@ public class WebAccountSvc extends GeneralSvc implements WebAccountImpl {
 	WebAccount webAccount;
 
 	/**
-	 * Endpoint to put an object containing a user's login information to our database
-	 *
-	 * @param username is the username for the {@link WebAccount}
-	 * @param password is the password for the {@link WebAccount}
-	 * @return {@link HttpStatus} 200 if the registration was successful
-	 * {@link HttpStatus} 409 if the account already exists
+	 * {@inheritDoc}
 	 */
 	public HttpStatus Register( // This String object will contain an error message, or be empty if no error occurred
 	                            @RequestParam(name = "user") String username,
@@ -43,8 +36,9 @@ public class WebAccountSvc extends GeneralSvc implements WebAccountImpl {
 		return webAccount.putAccount(username, password);
 	}
 
-	@PutMapping("/integration")
-	@ResponseStatus(code = HttpStatus.OK, reason = "Data saved successfully")
+	/**
+	 * {@inheritDoc}
+	 */
 	public HttpStatus Integration(
 			@RequestBody IntegrationBean integrationBean
 	) {
