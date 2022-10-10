@@ -1,5 +1,9 @@
 package com.patreonshout.beans;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.jasminb.jsonapi.annotations.Type;
+import com.patreon.resources.shared.BaseResource;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,7 +16,8 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="posts")
-public class PostBean {
+@Type("post")
+public class PostBean extends BaseResource {
 
     /**
      * post_id is the index/primary key for the posts table in our database
@@ -26,30 +31,35 @@ public class PostBean {
      * publishdate is the date at which a Patreonpost was published
      */
     @Column(name="publishdate")
+    @JsonProperty("published_at")
     protected String publishdate;
 
     /**
      * title is the title of the Patreon post
      */
     @Column(name="title")
+    @JsonProperty("title")
     protected String title;
 
     /**
      * url is the url of the Patreon post
      */
     @Column(name="url")
+    @JsonProperty("url")
     protected String url;
 
     /**
      * content is the content of the Patreon post
      */
     @Column(name="content")
+    @JsonProperty("content")
     protected String content;
 
     /**
      * isprivate denotes whether the Patreon post is private or public
      */
     @Column(name="isprivate")
+    @JsonProperty("is_public")
     protected boolean isprivate;
 
     /**
@@ -143,7 +153,7 @@ public class PostBean {
      * @return isprivate
      */
     public boolean isIsprivate() {
-        return isprivate;
+        return !isprivate;
     }
 
     /**
@@ -151,7 +161,7 @@ public class PostBean {
      * @param isprivate
      */
     public void setIsprivate(boolean isprivate) {
-        this.isprivate = isprivate;
+        this.isprivate = !isprivate;
     }
 
     /**

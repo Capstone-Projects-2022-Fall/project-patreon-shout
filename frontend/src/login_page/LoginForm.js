@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import {useNavigate} from 'react-router-dom'
 import "./LoginForm.css"
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
@@ -9,12 +10,22 @@ const LoginForm = () => {
 
     const [userName, setUserName] = useState('')
     const [userPassword, setPassword] = useState('')
+    const navigate = useNavigate();
 
 
     //shows the login failed if username/pass != correct
     const popup = () => {
-        showPopup("loginPop")
-        setTimeout(() => showPopup("hide"), 4000)
+
+        if (!userName || !userPassword) {
+            showPopup("loginPop")
+
+        }
+        else {
+            navigate('/home');
+        }
+
+        // showPopup("loginPop")
+        // setTimeout(() => showPopup("hide"), 4000)
     }
 
     //hides the login failed warning in general
