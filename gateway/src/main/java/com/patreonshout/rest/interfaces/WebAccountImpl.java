@@ -1,6 +1,7 @@
 package com.patreonshout.rest.interfaces;
 
 import com.patreonshout.beans.IntegrationRequestBean;
+import com.patreonshout.beans.request.RegisterRequest;
 import com.patreonshout.jpa.WebAccount;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -21,8 +22,7 @@ public interface WebAccountImpl {
 	/**
 	 * Endpoint that will create a new {@link WebAccount} into the database.
 	 *
-	 * @param username username for a new {@link WebAccount}
-	 * @param password password for a new {@link WebAccount}
+	 * @param registerRequest {@link RegisterRequest} object that contains the desired login details for a new
 	 * @return {@link HttpStatus#OK} if the registration was successful, {@link HttpStatus#CONFLICT} if the account
 	 * already exists
 	 */
@@ -37,8 +37,7 @@ public interface WebAccountImpl {
 					content = {@Content(mediaType = "application/json")})
 	})
 	HttpStatus Register(
-			@RequestParam(name = "user") String username,
-			@RequestParam(name = "pass") String password
+			@RequestBody RegisterRequest registerRequest
 	);
 
 	/**

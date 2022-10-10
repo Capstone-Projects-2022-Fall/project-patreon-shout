@@ -1,15 +1,16 @@
 package com.patreonshout.jpa;
 
+import com.patreonshout.beans.request.RegisterRequest;
+import com.patreonshout.config.SecurityConfiguration;
 import com.patreonshout.jpa.constants.IntegrationType;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.sql.SQLIntegrityConstraintViolationException;
 
 /**
  * Functions that directly interact with the WebAccounts table in the database
@@ -24,28 +25,27 @@ public class WebAccountRepository {
 	private EntityManager em;
 
 	/**
-	 * Adds a {@link com.patreonshout.jpa.WebAccount} to the database
+	 * securityConfiguration is the {@link SecurityConfiguration} that handles encrypting password with
+	 * {@link BCryptPasswordEncoder} hashing
+	 */
+	@Autowired
+	SecurityConfiguration securityConfiguration;
+
+	/**
+	 * Adds a {@link WebAccount} to the database
 	 *
-	 * @param username Username for the {@link com.patreonshout.jpa.WebAccount}
-	 * @param password Password for the {@link com.patreonshout.jpa.WebAccount}
-	 * @return {@link HttpStatus} object containing either 200 (No error) or
-	 * 409 (Username already exists in webaccounts table)
+	 * @param registerRequest {@link RegisterRequest} object that contains the desired login details for a new
+	 * {@link WebAccount}
 	 */
 	@Transactional
-	public void putAccount(String username, String password) {
+	public void putAccount(RegisterRequest registerRequest) {
 		String sql = "insert into webaccounts (username, password) values (:username, :password)";
 		Query q = em.createNativeQuery(sql);
 
-		q.setParameter("username", username);
-		q.setParameter("password", password);
+		q.setParameter("username", registerRequest.getUsername());
+		q.setParameter("password", securityConfiguration.passwordEncoder().encode(registerRequest.getPassword()));
 
-//		try {
 		q.executeUpdate();
-//		} catch (DataIntegrityViolationException ex) {
-//			return HttpStatus.CONFLICT; // Username already exists in webaccounts table
-//		}
-//
-//		return HttpStatus.OK; // No error
 	}
 
 	@Transactional
