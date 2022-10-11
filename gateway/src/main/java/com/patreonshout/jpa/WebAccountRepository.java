@@ -1,5 +1,7 @@
 package com.patreonshout.jpa;
 
+import com.patreonshout.beans.WebAccountBean;
+import com.patreonshout.beans.request.LoginRequest;
 import com.patreonshout.beans.request.RegisterRequest;
 import com.patreonshout.config.SecurityConfiguration;
 import com.patreonshout.jpa.constants.IntegrationType;
@@ -11,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.util.List;
 
 /**
  * Functions that directly interact with the WebAccounts table in the database
@@ -46,6 +49,35 @@ public class WebAccountRepository {
 		q.setParameter("password", securityConfiguration.passwordEncoder().encode(registerRequest.getPassword()));
 
 		q.executeUpdate();
+	}
+
+	/**
+	 * Ensures a {@link WebAccount} with a matching username and password exists in the database
+	 *
+	 * @param loginRequest {@link LoginRequest} object that contains the desired login details to check
+	 */
+	@Transactional
+	public void readAccount(LoginRequest loginRequest) {
+		String sql = "SELECT * FROM webaccounts WHERE username = :username";
+
+		Query q = em.createNativeQuery(sql, WebAccountBean.class);
+		q.setParameter("username", loginRequest.getUsername());
+
+		List<WebAccountBean> waList = q.getResultList();
+
+		if (waList.isEmpty()) {
+			// TODO: Username does not exist
+			return;
+		}
+
+		WebAccountBean accountBean = waList.get(0);
+
+		if (!securityConfiguration.passwordEncoder().matches(loginRequest.getPassword(), accountBean.getPassword())) {
+			// TODO: Password does not match the given user
+			return;
+		}
+
+		// TODO: Username and password match, WebAccount was found.
 	}
 
 	@Transactional

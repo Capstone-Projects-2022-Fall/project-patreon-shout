@@ -1,5 +1,6 @@
 package com.patreonshout.jpa;
 
+import com.patreonshout.beans.request.LoginRequest;
 import com.patreonshout.beans.request.RegisterRequest;
 import com.patreonshout.jpa.constants.IntegrationType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +31,20 @@ public class WebAccount {
 	}
 
 	/**
+	 * Attempts to acquire a token by checking for a matching {@link WebAccount} with the given username and password
+	 * in the database
+	 *
+	 * @param loginRequest {@link LoginRequest} object that contains the desired login details to check
+	 */
+	public void readAccount(LoginRequest loginRequest) {
+		webAccountRepository.readAccount(loginRequest);
+	}
+
+	/**
 	 * Adds a social integration
 	 *
 	 * @param type Integration type
 	 * @param data Webhook URL or access token
-	 * @return
 	 */
 	public void putIntegration(int webAccountId, IntegrationType type, String data) {
 		webAccountRepository.putIntegration(webAccountId, type, data);

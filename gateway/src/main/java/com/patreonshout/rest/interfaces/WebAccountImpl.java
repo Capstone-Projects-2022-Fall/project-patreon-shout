@@ -1,6 +1,7 @@
 package com.patreonshout.rest.interfaces;
 
 import com.patreonshout.beans.IntegrationRequestBean;
+import com.patreonshout.beans.request.LoginRequest;
 import com.patreonshout.beans.request.RegisterRequest;
 import com.patreonshout.jpa.WebAccount;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,9 +37,16 @@ public interface WebAccountImpl {
 					description = "Username already exists",
 					content = {@Content(mediaType = "application/json")})
 	})
-	HttpStatus Register(
-			@RequestBody RegisterRequest registerRequest
-	);
+	HttpStatus Register(@RequestBody RegisterRequest registerRequest);
+
+	@PostMapping("/login")
+	@Operation(summary = "Retrieves a login token given valid WebAccount details")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200",
+					description = "Token retrieved",
+					content = {@Content(mediaType = "application/json")})
+	})
+	HttpStatus Login(@RequestBody LoginRequest loginRequest);
 
 	/**
 	 * Endpoint that allows registering, updating or deleting integrations for social platforms.
@@ -58,7 +66,5 @@ public interface WebAccountImpl {
 					content = {@Content(mediaType = "application/json")})
 	})
 	@ResponseStatus(code = HttpStatus.OK, reason = "Data saved successfully")
-	HttpStatus Integration(
-			@RequestBody IntegrationRequestBean integrationRequestBean
-	);
+	HttpStatus Integration(@RequestBody IntegrationRequestBean integrationRequestBean);
 }
