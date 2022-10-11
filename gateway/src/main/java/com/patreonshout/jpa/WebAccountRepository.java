@@ -1,15 +1,19 @@
 package com.patreonshout.jpa;
 
+import com.patreonshout.beans.WebAccountBean;
+import com.patreonshout.beans.request.LoginRequest;
+import com.patreonshout.beans.request.RegisterRequest;
+import com.patreonshout.config.SecurityConfiguration;
 import com.patreonshout.jpa.constants.IntegrationType;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.List;
 
 /**
  * Functions that directly interact with the WebAccounts table in the database
@@ -24,28 +28,56 @@ public class WebAccountRepository {
 	private EntityManager em;
 
 	/**
-	 * Adds a {@link com.patreonshout.jpa.WebAccount} to the database
+	 * securityConfiguration is the {@link SecurityConfiguration} that handles encrypting password with
+	 * {@link BCryptPasswordEncoder} hashing
+	 */
+	@Autowired
+	SecurityConfiguration securityConfiguration;
+
+	/**
+	 * Adds a {@link WebAccount} to the database
 	 *
-	 * @param username Username for the {@link com.patreonshout.jpa.WebAccount}
-	 * @param password Password for the {@link com.patreonshout.jpa.WebAccount}
-	 * @return {@link HttpStatus} object containing either 200 (No error) or
-	 * 409 (Username already exists in webaccounts table)
+	 * @param registerRequest {@link RegisterRequest} object that contains the desired login details for a new
+	 * {@link WebAccount}
 	 */
 	@Transactional
-	public HttpStatus putAccount(String username, String password) {
+	public void putAccount(RegisterRequest registerRequest) {
 		String sql = "insert into webaccounts (username, password) values (:username, :password)";
 		Query q = em.createNativeQuery(sql);
 
-		q.setParameter("username", username);
-		q.setParameter("password", password);
+		q.setParameter("username", registerRequest.getUsername());
+		q.setParameter("password", securityConfiguration.passwordEncoder().encode(registerRequest.getPassword()));
 
-		try {
-			q.executeUpdate();
-		} catch (DataIntegrityViolationException ex) {
-			return HttpStatus.CONFLICT; // Username already exists in webaccounts table
+		q.executeUpdate();
+	}
+
+	/**
+	 * Ensures a {@link WebAccount} with a matching username and password exists in the database
+	 *
+	 * @param loginRequest {@link LoginRequest} object that contains the desired login details to check
+	 */
+	@Transactional
+	public void readAccount(LoginRequest loginRequest) {
+		String sql = "SELECT * FROM webaccounts WHERE username = :username";
+
+		Query q = em.createNativeQuery(sql, WebAccountBean.class);
+		q.setParameter("username", loginRequest.getUsername());
+
+		List<WebAccountBean> waList = q.getResultList();
+
+		if (waList.isEmpty()) {
+			// TODO: Username does not exist
+			return;
 		}
 
-		return HttpStatus.OK; // No error
+		WebAccountBean accountBean = waList.get(0);
+
+		if (!securityConfiguration.passwordEncoder().matches(loginRequest.getPassword(), accountBean.getPassword())) {
+			// TODO: Password does not match the given user
+			return;
+		}
+
+		// TODO: Username and password match, WebAccount was found.
 	}
 
 	@Transactional

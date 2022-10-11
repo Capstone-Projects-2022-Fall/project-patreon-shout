@@ -1,6 +1,8 @@
 package com.patreonshout.rest;
 
 import com.patreonshout.beans.IntegrationRequestBean;
+import com.patreonshout.beans.request.LoginRequest;
+import com.patreonshout.beans.request.RegisterRequest;
 import com.patreonshout.jpa.WebAccount;
 import com.patreonshout.rest.interfaces.WebAccountImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,23 +30,26 @@ public class WebAccountSvc extends GeneralSvc implements WebAccountImpl {
 	/**
 	 * {@inheritDoc}
 	 */
-	public HttpStatus Register( // This String object will contain an error message, or be empty if no error occurred
-	                            @RequestParam(name = "user") String username,
-	                            @RequestParam(name = "pass") String password
-	) {
+	public HttpStatus Register(@RequestBody RegisterRequest registerRequest) {
 		// TODO: Ensure username and password are sanitized and fit specific requirements
-		return webAccount.putAccount(username, password);
+		webAccount.putAccount(registerRequest);
+
+		return HttpStatus.CREATED; // Http 201
+	}
+
+	public HttpStatus Login(@RequestBody LoginRequest loginRequest) {
+		webAccount.readAccount(loginRequest);
+
+		return HttpStatus.OK;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public HttpStatus Integration(
-			@RequestBody IntegrationRequestBean integrationRequestBean
-	) {
+	public HttpStatus Integration(@RequestBody IntegrationRequestBean integrationRequestBean) {
 		webAccount.putIntegration(integrationRequestBean.getWebaccount().getWebaccount_id(),
 				integrationRequestBean.getIntegrationType(),
 				integrationRequestBean.getData());
-		return HttpStatus.OK;
+		return HttpStatus.OK; // Http 200
 	}
 }

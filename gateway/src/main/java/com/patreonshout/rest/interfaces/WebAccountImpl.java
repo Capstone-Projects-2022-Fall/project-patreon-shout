@@ -1,6 +1,8 @@
 package com.patreonshout.rest.interfaces;
 
 import com.patreonshout.beans.IntegrationRequestBean;
+import com.patreonshout.beans.request.LoginRequest;
+import com.patreonshout.beans.request.RegisterRequest;
 import com.patreonshout.jpa.WebAccount;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -21,12 +23,11 @@ public interface WebAccountImpl {
 	/**
 	 * Endpoint that will create a new {@link WebAccount} into the database.
 	 *
-	 * @param username username for a new {@link WebAccount}
-	 * @param password password for a new {@link WebAccount}
+	 * @param registerRequest {@link RegisterRequest} object that contains the desired login details for a new
 	 * @return {@link HttpStatus#OK} if the registration was successful, {@link HttpStatus#CONFLICT} if the account
 	 * already exists
 	 */
-	@GetMapping("/register")
+	@PostMapping("/register")
 	@Operation(summary = "Registers WebAccounts during PatreonShout sign up")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200",
@@ -36,10 +37,16 @@ public interface WebAccountImpl {
 					description = "Username already exists",
 					content = {@Content(mediaType = "application/json")})
 	})
-	HttpStatus Register(
-			@RequestParam(name = "user") String username,
-			@RequestParam(name = "pass") String password
-	);
+	HttpStatus Register(@RequestBody RegisterRequest registerRequest);
+
+	@PostMapping("/login")
+	@Operation(summary = "Retrieves a login token given valid WebAccount details")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200",
+					description = "Token retrieved",
+					content = {@Content(mediaType = "application/json")})
+	})
+	HttpStatus Login(@RequestBody LoginRequest loginRequest);
 
 	/**
 	 * Endpoint that allows registering, updating or deleting integrations for social platforms.
@@ -59,7 +66,5 @@ public interface WebAccountImpl {
 					content = {@Content(mediaType = "application/json")})
 	})
 	@ResponseStatus(code = HttpStatus.OK, reason = "Data saved successfully")
-	HttpStatus Integration(
-			@RequestBody IntegrationRequestBean integrationRequestBean
-	);
+	HttpStatus Integration(@RequestBody IntegrationRequestBean integrationRequestBean);
 }
