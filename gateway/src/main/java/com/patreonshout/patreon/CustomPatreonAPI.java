@@ -3,12 +3,14 @@
 package com.patreonshout.patreon;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.github.jasminb.jsonapi.JSONAPIDocument;
 import com.github.jasminb.jsonapi.Link;
 import com.github.jasminb.jsonapi.Links;
 import com.github.jasminb.jsonapi.ResourceConverter;
+import com.github.jasminb.jsonapi.SerializationFeature;
 import com.patreon.PatreonAPI;
 import com.patreon.resources.Campaign;
 import com.patreon.resources.Pledge;
@@ -28,12 +30,18 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import java.util.Scanner;
 import java.util.Set;
 
+import com.patreonshout.beans.MembershipBean;
 import com.patreonshout.beans.PostBean;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.client.utils.URLEncodedUtils;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,7 +73,8 @@ public class CustomPatreonAPI {
         objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         this.converter = new ResourceConverter(objectMapper, new Class[]{User.class, Campaign.class, Pledge.class, PostBean.class});
-        this.converter.enableDeserializationOption(com.github.jasminb.jsonapi.DeserializationFeature.ALLOW_UNKNOWN_INCLUSIONS);
+//        this.converter.enableDeserializationOption(com.github.jasminb.jsonapi.DeserializationFeature.ALLOW_UNKNOWN_INCLUSIONS);
+        this.converter.enableSerializationOption(SerializationFeature.INCLUDE_RELATIONSHIP_ATTRIBUTES);
     }
 
     /**
@@ -78,8 +87,51 @@ public class CustomPatreonAPI {
     public JSONAPIDocument<List<PostBean>> fetchPosts(String campaignId) throws IOException {
         URIBuilder pathBuilder = (new URIBuilder()).setPath("campaigns/" + campaignId + "/posts")
                 .addParameter("fields[post]", "content,is_public,published_at,title,url");
-        System.out.println(pathBuilder.toString());
         return this.converter.readDocumentCollection(this.getDataStream(pathBuilder.toString(), true), PostBean.class);
+    }
+
+    /**
+     * Gets the list of campaigns that the user is either following or pledged to
+     *
+     * @return a list of {@link MembershipBean} objects
+     * @throws IOException when it can't parse the json request
+     */
+    public List<MembershipBean> fetchFollowingCampaigns() throws IOException{
+        // build uri
+        URIBuilder pathBuilder = (new URIBuilder()).setPath("identity")
+                .addParameter("include", "memberships.campaign")
+                .addParameter("fields[member]", "is_follower,patron_status");
+
+        // send request
+        StringBuilder inline = new StringBuilder();
+        Scanner scanner = new Scanner(this.getDataStream(pathBuilder.toString(), true));
+
+        // write all the JSON data into a string using a scanner
+        while (scanner.hasNext()) {
+            inline.append(scanner.nextLine());
+        }
+
+        // close the scanner
+        scanner.close();
+
+        // convert to JsonNode object
+        ObjectMapper map = new ObjectMapper();
+        JsonNode data = map.readTree(inline.toString()).findPath("included");
+
+        List<MembershipBean> mbList = new ArrayList<>();
+
+        // go through each value/2 because data is duplicated at the end of the JsonNode
+        for (int i = 0; i < data.size() / 2; i++) {
+            MembershipBean mb = new MembershipBean();
+
+            mb.set_follower(data.get(i).findPath("attributes").get("is_follower").isBoolean());
+            mb.setPatron_status(data.get(i).findPath("attributes").get("patron_status").asText());
+            mb.setCampaignid(data.get(i).findPath("relationships").findPath("campaign").findPath("data").get("id").asInt());
+
+            mbList.add(mb);
+        }
+
+        return mbList;
     }
 
     /**
