@@ -76,7 +76,7 @@ public class PostsTest {
 
         PostBean pb2 = posts.getPost("url1");
 
-        Assert.assertEquals(pb1.isIsprivate(), pb2.isIsprivate());
+        Assert.assertEquals(!pb1.isIsprivate(), pb2.isIsprivate());
         Assert.assertEquals(pb1.getContent(), pb2.getContent());
         Assert.assertEquals(pb1.getPublishdate(), pb2.getPublishdate());
         Assert.assertEquals(pb1.getTitle(), pb2.getTitle());
