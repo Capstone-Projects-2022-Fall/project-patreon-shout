@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './App.css';
 import Home from "./home_page/Home";
@@ -21,7 +21,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Login />}>
+          <Route path="/" element={<Login setToken={setToken}/>}>
           </Route>
           <Route path="/home" element={<Home />}>
           </Route>

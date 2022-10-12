@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import {useNavigate} from 'react-router-dom'
 import "./LoginForm.css"
 import FacebookIcon from '@mui/icons-material/Facebook';
@@ -6,15 +7,35 @@ import TwitterIcon from '@mui/icons-material/Twitter';
 import GoogleIcon from '@mui/icons-material/Google';
 import TextField from '@mui/material/TextField';
 
-const LoginForm = () => {
+const LoginForm = ({setToken}) => {
 
     const [userName, setUserName] = useState('')
     const [userPassword, setPassword] = useState('')
     const navigate = useNavigate();
 
 
+    async function loginUser(credentials) {
+        return fetch('http://localhost:5000/webaccount/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Origin': 'http://localhost:5000'
+            },
+            body: JSON.stringify(credentials)
+        })
+            .then(data => data.json())
+    }
+
+
     //shows the login failed if username/pass != correct
-    const popup = () => {
+    const handleSubmit = async e => {
+        e.preventDefault();
+        const token = await loginUser({
+            userName,
+            userPassword
+        });
+        setToken(token);
 
         if (!userName || !userPassword) {
             showPopup("loginPop")
@@ -40,7 +61,7 @@ const LoginForm = () => {
             <TextField className='textInputLog' id="outlined-basic" label="Password" type='password'
                        variant="outlined" value={userPassword} onChange={(e) => setPassword(e.target.value)}/>
 
-            <div className="loginButton" onClick={popup}>Sign in</div>
+            <div className="loginButton" onClick={handleSubmit}>Sign in</div>
 
             <p className="text">Or sign in with with</p>
 
@@ -58,5 +79,9 @@ const LoginForm = () => {
         </div>
     )
 }
+
+LoginForm.propTypes = {
+    setToken: PropTypes.func.isRequired
+};
 
 export default LoginForm;
