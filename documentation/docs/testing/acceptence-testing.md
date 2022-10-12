@@ -43,4 +43,4 @@ Expected Result: The given password is securely stored on the website’s databa
 
 ## Testing Sheet
 
-![PatreonShout_AcceptanceTestingSheet](/documentation/static/img/excel.png)
+![excel](https://user-images.githubusercontent.com/29709311/195232930-7e2143fd-19e9-473e-b403-578539191ea2.png)
