@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./Feed.css";
 import Post from "./Post";
+import Searchbar from "./Searchbar";
 
 /**
  * This is the Feed function which will appear on the home page
@@ -15,6 +16,7 @@ function Feed() {
       <div className="feed__header">
         <h2>Home</h2>
       </div>
+      <Searchbar />
       {posts.map((post) => (
         <Post
           displayName={post.displayName}
