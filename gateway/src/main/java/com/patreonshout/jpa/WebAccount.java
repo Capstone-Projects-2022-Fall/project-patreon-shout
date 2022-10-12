@@ -1,7 +1,9 @@
 package com.patreonshout.jpa;
 
+import com.patreonshout.beans.request.LoginRequest;
+import com.patreonshout.beans.request.RegisterRequest;
+import com.patreonshout.jpa.constants.IntegrationType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
@@ -21,18 +23,30 @@ public class WebAccount {
 	/**
 	 * Attempts to add a {@link WebAccount} into the database
 	 *
-	 * @param username is the username for the {@link WebAccount}
-	 * @param password is the password for the {@link WebAccount}
-	 * @return {@link HttpStatus} 200 if the registration was successful
+	 * @param registerRequest {@link RegisterRequest} object that contains the desired login details for a new
 	 * {@link HttpStatus} 409 if the account already exists
 	 */
-	public HttpStatus putAccount(String username, String password) {
-		try {
-			webAccountRepository.putAccount(username, password);
-		} catch (DataIntegrityViolationException ex) { // Username already exists in webaccounts table
-			return HttpStatus.CONFLICT;
-		}
+	public void putAccount(RegisterRequest registerRequest) {
+		webAccountRepository.putAccount(registerRequest);
+	}
 
-		return HttpStatus.OK; // No error
+	/**
+	 * Attempts to acquire a token by checking for a matching {@link WebAccount} with the given username and password
+	 * in the database
+	 *
+	 * @param loginRequest {@link LoginRequest} object that contains the desired login details to check
+	 */
+	public void readAccount(LoginRequest loginRequest) {
+		webAccountRepository.readAccount(loginRequest);
+	}
+
+	/**
+	 * Adds a social integration
+	 *
+	 * @param type Integration type
+	 * @param data Webhook URL or access token
+	 */
+	public void putIntegration(int webAccountId, IntegrationType type, String data) {
+		webAccountRepository.putIntegration(webAccountId, type, data);
 	}
 }

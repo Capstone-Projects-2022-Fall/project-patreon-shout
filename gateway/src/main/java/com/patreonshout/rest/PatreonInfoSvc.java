@@ -1,7 +1,7 @@
 package com.patreonshout.rest;
 
 import com.patreonshout.beans.PatreonInfoBean;
-import com.patreonshout.interfaces.PatreonInfoImpl;
+import com.patreonshout.rest.interfaces.PatreonInfoImpl;
 import com.patreonshout.jpa.PatreonInfo;
 import com.patreonshout.utils.JSONUtil;
 import org.springframework.beans.factory.annotation.Autowired;
