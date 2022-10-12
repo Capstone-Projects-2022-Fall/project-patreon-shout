@@ -5,12 +5,21 @@ import Home from "./home_page/Home";
 import Login from "./login_page/Login"
 
 
+/**
+ * Set user session token function
+ *
+ * @param userToken is the user token to be set
+ */
 function setToken(userToken) {
   sessionStorage.setItem('token', JSON.stringify(userToken));
 }
 
+/**
+ * Get user session token function
+ *
+ */
 function getToken() {
-
+// TODO: another ticket's job
 }
 
 /**
