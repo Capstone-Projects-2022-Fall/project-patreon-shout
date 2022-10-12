@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.json.simple.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,6 +40,12 @@ public interface WebAccountImpl {
 	})
 	HttpStatus Register(@RequestBody RegisterRequest registerRequest);
 
+	/**
+	 * Endpoint that will create a new {@link com.patreonshout.jpa.WebAccount] into the database}
+	 *
+	 * @param loginRequest is the json request
+	 * @return a token signifying valid login or no token signifying invalid login
+	 */
 	@PostMapping("/login")
 	@Operation(summary = "Retrieves a login token given valid WebAccount details")
 	@ApiResponses(value = {
@@ -46,7 +53,7 @@ public interface WebAccountImpl {
 					description = "Token retrieved",
 					content = {@Content(mediaType = "application/json")})
 	})
-	HttpStatus Login(@RequestBody LoginRequest loginRequest);
+	JSONObject Login(@RequestBody LoginRequest loginRequest);
 
 	/**
 	 * Endpoint that allows registering, updating or deleting integrations for social platforms.

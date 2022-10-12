@@ -5,9 +5,12 @@ import com.patreonshout.beans.request.LoginRequest;
 import com.patreonshout.beans.request.RegisterRequest;
 import com.patreonshout.jpa.WebAccount;
 import com.patreonshout.rest.interfaces.WebAccountImpl;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Web Account  RESTful Endpoint Interface
@@ -37,10 +40,18 @@ public class WebAccountSvc extends GeneralSvc implements WebAccountImpl {
 		return HttpStatus.CREATED; // Http 201
 	}
 
-	public HttpStatus Login(@RequestBody LoginRequest loginRequest) {
+	/**
+	 * {@inheritDoc}
+	 * @return
+	 */
+	@CrossOrigin(origins = "http://localhost:3000")
+	public JSONObject Login(@RequestBody LoginRequest loginRequest) {
 		webAccount.readAccount(loginRequest);
 
-		return HttpStatus.OK;
+		JSONObject obj = new JSONObject();
+		obj.put("token", "helloalex");
+
+		return obj;
 	}
 
 	/**
