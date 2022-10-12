@@ -5,9 +5,36 @@ import './RegistrationForm.css'
 const RegistrationForm = () => {
 
     const [fullName, setFullName] = useState('')
-    const [regUserName, setRegUserName] = useState('')
-    const [regPassword, setRegPassword] = useState('')
+    const [user, setRegUserName] = useState('')
+    const [pass, setRegPassword] = useState('')
     const [regEmail, setRegEmail] = useState('')
+
+    async function registerUser(credentials) {
+        return fetch('http://localhost:5000/webaccount/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Origin': 'http://localhost:5000'
+            },
+            body: JSON.stringify(credentials)
+        })
+            .then(data => data.json())
+    }
+
+    const handleSubmit = async e => {
+        e.preventDefault();
+        const retVal = await registerUser({
+            user,
+            pass
+        })
+
+        if (retVal !== "CREATED") {
+            console.log("account NOT created");
+        }
+        else {
+            console.log("account created");
+        }
+    }
 
     return(
 
@@ -17,15 +44,15 @@ const RegistrationForm = () => {
                        value={fullName} onChange={(e) => setFullName(e.target.value)}/>
 
             <TextField className='textLog' id="outlined-basic" label="User Name"
-                       variant="outlined" value={regUserName} onChange={(e) => setRegUserName(e.target.value)}/>
+                       variant="outlined" value={user} onChange={(e) => setRegUserName(e.target.value)}/>
 
             <TextField className='textLog' id="outlined-basic" label="Email" variant="outlined"
                        value={regEmail} onChange={(e) => setRegEmail(e.target.value)}/>
 
             <TextField className='textLog' id="outlined-basic" label="Password" variant="outlined" type='password'
-                       value={regPassword} onChange={(e) => setRegPassword(e.target.value)}/>
+                       value={pass} onChange={(e) => setRegPassword(e.target.value)}/>
 
-            <div className="registerButton">Submit</div>
+            <div className="registerButton" onClick={handleSubmit}>Submit</div>
 
         </div>
     )

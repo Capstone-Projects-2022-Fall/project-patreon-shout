@@ -33,6 +33,7 @@ public class WebAccountSvc extends GeneralSvc implements WebAccountImpl {
 	/**
 	 * {@inheritDoc}
 	 */
+	@CrossOrigin(origins = "http://localhost:3000")
 	public HttpStatus Register(@RequestBody RegisterRequest registerRequest) {
 		// TODO: Ensure username and password are sanitized and fit specific requirements
 		webAccount.putAccount(registerRequest);
