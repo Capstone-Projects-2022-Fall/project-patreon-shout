@@ -1,26 +1,9 @@
-// import React, {useState} from "react";
+import React from "react";
 import { Routes, Route } from "react-router-dom";
 import './App.css';
 import Home from "./home_page/Home";
-import Login from "./login_page/Login"
-
-
-/**
- * Set user session token function
- *
- * @param userToken is the user token to be set
- */
-function setToken(userToken) {
-  sessionStorage.setItem('token', JSON.stringify(userToken));
-}
-
-/**
- * Get user session token function
- *
- */
-function getToken() {
-// TODO: another ticket's job
-}
+import Login from "./login_page/Login";
+import useToken from './useToken';
 
 /**
  * The App function, where users can navigate to and from different pages
@@ -28,7 +11,8 @@ function getToken() {
  * @returns The user interface and the current page the user is on
  */
 function App() {
-  const token = getToken();
+  
+  const { token, setToken } = useToken();
 
   if (!token) {
     return <Login setToken={setToken}/>
