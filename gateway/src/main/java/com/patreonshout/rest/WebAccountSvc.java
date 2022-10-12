@@ -4,6 +4,7 @@ import com.patreonshout.interfaces.WebAccountImpl;
 import com.patreonshout.jpa.WebAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,6 +51,7 @@ public class WebAccountSvc implements WebAccountImpl {
 	 * @param request is the json request body
 	 * @return // TODO
 	 */
+	@CrossOrigin(origins = "http://localhost:3000")
 	public String Login(@RequestBody String request) {
 		System.out.println(request);
 
