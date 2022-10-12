@@ -1,23 +1,24 @@
+import { Button } from "@material-ui/core";
 import React, { useState } from "react";
 import "./Searchbar.css";
-import {useState} from "react";
 
-/**
- * 
- * @returns Displays a Searchbar component
- */
 function Searchbar() {
-  const [query, setQuery] = useState("")
+  const [searchInput, setSearch] = useState("");
   return (
     <div className="Searchbar">
-      <input placeholder="Search PatreonShout..." onChange={event => setQuery(event.target.value)} />
-        {
-          Data.map((post, index) => {
-            <div key={index}>
-              <p>{post.title}</p>
-              <p>{post.author}</p>
-            </div> })
-        }
+      <form>
+        <div className="Searchbar__input">
+          <input
+          value={searchInput}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search PatreonShout"
+          type="text"
+          />
+        </div>
+        <Button type="submit" className="Searchbar__button">
+          Search
+        </Button>
+      </form>
     </div>
   );
 }
