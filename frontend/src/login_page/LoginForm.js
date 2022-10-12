@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import "./LoginForm.css"
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
@@ -42,7 +42,7 @@ const LoginForm = ({setToken}) => {
 
         }
         else {
-            navigate('/home');
+            navigate("/home");
         }
 
         // showPopup("loginPop")
