@@ -2,12 +2,16 @@ import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import './RegistrationForm.css'
 
+/**
+ * The Registration Form, where users can register an account
+ *
+ * @returns the registration form
+ */
 const RegistrationForm = () => {
 
-    const [fullName, setFullName] = useState('')
     const [user, setRegUserName] = useState('')
     const [pass, setRegPassword] = useState('')
-    const [regEmail, setRegEmail] = useState('')
+    const [popup, showPopup] = useState("hide")
 
     async function registerUser(credentials) {
         return fetch('http://localhost:5000/webaccount/register', {
@@ -22,38 +26,59 @@ const RegistrationForm = () => {
     }
 
     const handleSubmit = async e => {
+
+        if (!user || !pass) {
+            document.getElementById("register").textContent = "Register Failed";
+            document.getElementById("errormsg").textContent = "Username or Password not provided";
+            showPopup("registerPop")
+            return 1;
+        }
+
         e.preventDefault();
         const retVal = await registerUser({
             user,
             pass
         })
 
-        if (retVal !== "CREATED") {
-            console.log("account NOT created");
-        }
-        else {
-            console.log("account created");
+        if (retVal === "CREATED") {
+            document.getElementById("register").textContent = "Register Success";
+            document.getElementById("errormsg").textContent = "";
+
+        } else {
+
+            let errorMsg = "Error " + retVal.status + ": ";
+
+            if (retVal.status === 409) {
+                errorMsg += "Username already in use";
+            }
+            else {
+                errorMsg += "Internal server error";
+            }
+
+            document.getElementById("register").textContent = "Register Failed";
+            document.getElementById("errormsg").textContent = errorMsg;
+            showPopup("registerPop")
         }
     }
+
 
     return(
 
         <div className="mainPage">
             <h1>Register</h1>
-            <TextField className='textLog' id="outlined-basic" label="Full Name" variant="outlined"
-                       value={fullName} onChange={(e) => setFullName(e.target.value)}/>
 
-            <TextField className='textLog' id="outlined-basic" label="User Name"
+            <TextField className='textLog' id="outlined-basic" label="Username"
                        variant="outlined" value={user} onChange={(e) => setRegUserName(e.target.value)}/>
-
-            <TextField className='textLog' id="outlined-basic" label="Email" variant="outlined"
-                       value={regEmail} onChange={(e) => setRegEmail(e.target.value)}/>
 
             <TextField className='textLog' id="outlined-basic" label="Password" variant="outlined" type='password'
                        value={pass} onChange={(e) => setRegPassword(e.target.value)}/>
 
-            <div className="registerButton" onClick={handleSubmit}>Submit</div>
+            <div className="registerButton" onClick={handleSubmit}>Register</div>
 
+            <div className={popup}>
+                <h3 id="register"> </h3>
+                <p id="errormsg"> </p>
+            </div>
         </div>
     )
 }

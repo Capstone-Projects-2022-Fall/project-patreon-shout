@@ -2,15 +2,18 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom'
 import "./LoginForm.css"
-import FacebookIcon from '@mui/icons-material/Facebook';
-import TwitterIcon from '@mui/icons-material/Twitter';
-import GoogleIcon from '@mui/icons-material/Google';
 import TextField from '@mui/material/TextField';
 
+/**
+ * The Login Form, where users can login to the website
+ *
+ * @returns the login form
+ */
 const LoginForm = ({setToken}) => {
 
     const [userName, setUserName] = useState('')
     const [userPassword, setPassword] = useState('')
+    const [popupFailed, showPopup] = useState("hide")
     const navigate = useNavigate();
 
 
@@ -35,22 +38,17 @@ const LoginForm = ({setToken}) => {
             userName,
             userPassword
         });
+        console.log(token);
         setToken(token);
 
-        if (!userName || !userPassword) {
+        if (!userName || !userPassword || !token.token) {
             showPopup("loginPop")
-
         }
         else {
             navigate("/home");
         }
-
-        // showPopup("loginPop")
-        // setTimeout(() => showPopup("hide"), 4000)
     }
 
-    //hides the login failed warning in general
-    const [popupFailed, showPopup] = useState("hide")
 
     return(
         <div className="cover">
@@ -63,18 +61,9 @@ const LoginForm = ({setToken}) => {
 
             <div className="loginButton" onClick={handleSubmit}>Sign in</div>
 
-            <p className="text">Or sign in with with</p>
-
-            <div className="OtherLogin">
-                <TwitterIcon></TwitterIcon>
-                <FacebookIcon></FacebookIcon>
-                <GoogleIcon></GoogleIcon>
-            </div>
-
             <div className={popupFailed}>
                 <h3>Sign in Failed</h3>
                 <p>Incorrect Username or Password. Please try again</p>
-
             </div>
         </div>
     )

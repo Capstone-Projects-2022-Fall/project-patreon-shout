@@ -14,7 +14,7 @@ function App() {
   
   const { token, setToken } = useToken();
 
-  if (!token) {
+  if (!token) { // TODO: check if session token is also valid via http request to database
     return <Login setToken={setToken}/>
   }
 
