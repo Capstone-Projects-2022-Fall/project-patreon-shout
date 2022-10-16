@@ -1,11 +1,11 @@
 import React from "react";
 import "./Sidebar.css";
 import SidebarOption from "./SidebarOption";
-import HomeIcon from "@material-ui/icons/Home";
-import SearchIcon from "@material-ui/icons/Search";
-import ListAltIcon from "@material-ui/icons/ListAlt";
-import PermIdentityIcon from "@material-ui/icons/PermIdentity";
-import SettingsIcon from "@material-ui/icons/Settings";
+import HomeIcon from "@mui/icons-material/Home";
+import SearchIcon from "@mui/icons-material/Search";
+import ListAltIcon from "@mui/icons-material/ListAlt";
+import PermIdentityIcon from "@mui/icons-material/PermIdentity";
+import SettingsIcon from "@mui/icons-material/Settings";
 
 /**
  * This is the Sidebar Component of the home page

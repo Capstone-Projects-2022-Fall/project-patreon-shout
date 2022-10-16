@@ -1,10 +1,10 @@
-import { Avatar } from "@material-ui/core";
+import { Avatar } from "@mui/material";
 import {
   FavoriteBorder,
   Language,
   ListAlt,
   VerifiedUser,
-} from "@material-ui/icons";
+} from "@mui/icons-material";
 import React from "react";
 import "./Post.css";
 
