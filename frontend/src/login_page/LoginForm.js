@@ -4,6 +4,11 @@ import { useNavigate } from 'react-router-dom'
 import "./LoginForm.css"
 import TextField from '@mui/material/TextField';
 
+/**
+ * The Login Form, where users can login to the website
+ *
+ * @returns the login form
+ */
 const LoginForm = ({setToken}) => {
 
     const [userName, setUserName] = useState('')

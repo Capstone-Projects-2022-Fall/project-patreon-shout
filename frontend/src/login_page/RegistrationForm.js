@@ -2,6 +2,11 @@ import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import './RegistrationForm.css'
 
+/**
+ * The Registration Form, where users can register an account
+ *
+ * @returns the registration form
+ */
 const RegistrationForm = () => {
 
     const [user, setRegUserName] = useState('')
