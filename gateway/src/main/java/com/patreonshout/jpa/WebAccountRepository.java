@@ -76,7 +76,22 @@ public class WebAccountRepository {
 			throw new PSException(HttpStatus.UNAUTHORIZED, "Incorrect password.");
 
 		// TODO: Username and password match, WebAccount was found.
-		return securityConfiguration.SHA1Encoder(System.currentTimeMillis() + loginRequest.getUsername());
+		String loginToken = securityConfiguration.SHA1Encoder(System.currentTimeMillis() + loginRequest.getUsername());
+		putLoginToken(loginToken, loginRequest.getUsername());
+
+		return loginToken;
+	}
+
+	@Transactional
+	public void putLoginToken(String loginToken, String username) {
+		String sql = "UPDATE webaccounts SET login_token = :login_token WHERE username = :username";
+
+		Query q = em.createNativeQuery(sql);
+
+		q.setParameter("login_token", loginToken);
+		q.setParameter("username", username);
+
+		q.executeUpdate();
 	}
 
 	@Transactional
