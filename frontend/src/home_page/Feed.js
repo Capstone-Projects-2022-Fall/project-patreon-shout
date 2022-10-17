@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./Feed.css";
 import Post from "./Post";
 import Searchbar from "./Searchbar";
+import PatreonConnect from "./PatreonConnect";
 
 /**
  * This is the Feed function which will appear on the home page
@@ -17,6 +18,7 @@ function Feed() {
         <h2>Home</h2>
       </div>
       <Searchbar />
+      <PatreonConnect />
       {posts.map((post) => (
         <Post
           displayName={post.displayName}
