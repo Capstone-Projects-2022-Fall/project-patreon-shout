@@ -1,14 +1,15 @@
 package com.patreonshout.rest;
 
+import com.patreonshout.PSException;
 import com.patreonshout.beans.IntegrationRequestBean;
 import com.patreonshout.beans.request.LoginRequest;
 import com.patreonshout.beans.request.RegisterRequest;
+import com.patreonshout.beans.response.LoginResponse;
 import com.patreonshout.jpa.WebAccount;
 import com.patreonshout.rest.interfaces.WebAccountImpl;
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,7 +34,7 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	/**
 	 * {@inheritDoc}
 	 */
-	@CrossOrigin(origins = "http://localhost:3000")
+//	@CrossOrigin(origins = @Value("${spring.datasource.url}"))
 	public HttpStatus Register(@RequestBody RegisterRequest registerRequest) {
 		// TODO: Ensure username and password are sanitized and fit specific requirements
 		webAccount.putAccount(registerRequest);
@@ -43,16 +44,12 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 
 	/**
 	 * {@inheritDoc}
-	 * @return
 	 */
-	@CrossOrigin(origins = "http://localhost:3000")
-	public JSONObject Login(@RequestBody LoginRequest loginRequest) {
-		webAccount.readAccount(loginRequest);
+//	@CrossOrigin(origins = "http://localhost:3000")
+	public ResponseEntity<?> Login(@RequestBody LoginRequest loginRequest) throws PSException {
+		String loginToken = webAccount.readAccount(loginRequest);
 
-		JSONObject obj = new JSONObject();
-		obj.put("token", "helloalex");
-
-		return obj;
+		return new ResponseEntity<>(new LoginResponse(loginToken), HttpStatus.CREATED);
 	}
 
 	/**

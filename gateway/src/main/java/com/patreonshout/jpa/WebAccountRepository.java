@@ -1,11 +1,13 @@
 package com.patreonshout.jpa;
 
+import com.patreonshout.PSException;
 import com.patreonshout.beans.WebAccountBean;
 import com.patreonshout.beans.request.LoginRequest;
 import com.patreonshout.beans.request.RegisterRequest;
 import com.patreonshout.config.SecurityConfiguration;
 import com.patreonshout.jpa.constants.IntegrationType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,7 +59,7 @@ public class WebAccountRepository {
 	 * @param loginRequest {@link LoginRequest} object that contains the desired login details to check
 	 */
 	@Transactional
-	public void readAccount(LoginRequest loginRequest) {
+	public String readAccount(LoginRequest loginRequest) throws PSException {
 		String sql = "SELECT * FROM webaccounts WHERE username = :username";
 
 		Query q = em.createNativeQuery(sql, WebAccountBean.class);
@@ -65,19 +67,31 @@ public class WebAccountRepository {
 
 		List<WebAccountBean> waList = q.getResultList();
 
-		if (waList.isEmpty()) {
-			// TODO: Username does not exist
-			return;
-		}
+		// Username does not exist.
+		if (waList.isEmpty())
+			throw new PSException(HttpStatus.NOT_FOUND, "Username does not exist.");
 
-		WebAccountBean accountBean = waList.get(0);
-
-		if (!securityConfiguration.passwordEncoder().matches(loginRequest.getPassword(), accountBean.getPassword())) {
-			// TODO: Password does not match the given user
-			return;
-		}
+		// Password does not match the given user.
+		if (!securityConfiguration.passwordEncoder().matches(loginRequest.getPassword(), waList.get(0).getPassword()))
+			throw new PSException(HttpStatus.UNAUTHORIZED, "Incorrect password.");
 
 		// TODO: Username and password match, WebAccount was found.
+		String loginToken = securityConfiguration.SHA1Encoder(System.currentTimeMillis() + loginRequest.getUsername());
+		putLoginToken(loginToken, loginRequest.getUsername());
+
+		return loginToken;
+	}
+
+	@Transactional
+	public void putLoginToken(String loginToken, String username) {
+		String sql = "UPDATE webaccounts SET login_token = :login_token WHERE username = :username";
+
+		Query q = em.createNativeQuery(sql);
+
+		q.setParameter("login_token", loginToken);
+		q.setParameter("username", username);
+
+		q.executeUpdate();
 	}
 
 	@Transactional

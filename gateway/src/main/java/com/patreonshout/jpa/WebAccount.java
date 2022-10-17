@@ -1,5 +1,6 @@
 package com.patreonshout.jpa;
 
+import com.patreonshout.PSException;
 import com.patreonshout.beans.request.LoginRequest;
 import com.patreonshout.beans.request.RegisterRequest;
 import com.patreonshout.jpa.constants.IntegrationType;
@@ -36,8 +37,8 @@ public class WebAccount {
 	 *
 	 * @param loginRequest {@link LoginRequest} object that contains the desired login details to check
 	 */
-	public void readAccount(LoginRequest loginRequest) {
-		webAccountRepository.readAccount(loginRequest);
+	public String readAccount(LoginRequest loginRequest) throws PSException {
+		return webAccountRepository.readAccount(loginRequest);
 	}
 
 	/**

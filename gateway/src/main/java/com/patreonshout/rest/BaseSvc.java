@@ -1,5 +1,6 @@
 package com.patreonshout.rest;
 
+import com.patreonshout.PSException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -30,6 +31,11 @@ public class BaseSvc {
 				ex.printStackTrace();
 				return createResponse(HttpStatus.BAD_REQUEST, "SQLIntegrityConstraintViolationException unknown SQL code");
 		}
+	}
+
+	@ExceptionHandler(value = PSException.class)
+	public ResponseEntity<?> catchCustomException(PSException ex) {
+		return createResponse(ex.getHttpStatus(), ex.getMessage());
 	}
 
 	/**

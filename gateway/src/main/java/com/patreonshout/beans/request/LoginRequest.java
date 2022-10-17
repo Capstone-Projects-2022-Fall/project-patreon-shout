@@ -16,13 +16,13 @@ public class LoginRequest {
 	 * The desired username for the given request
 	 */
 	@NotNull
-	@JsonProperty("user")
+	@JsonProperty("userName")
 	private String username;
 
 	/**
 	 * The desired password for the given request
 	 */
 	@NotNull
-	@JsonProperty("pass")
+	@JsonProperty("userPassword")
 	private String password;
 }
