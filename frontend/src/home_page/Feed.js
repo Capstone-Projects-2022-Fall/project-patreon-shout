@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import "./Feed.css";
+import postData from "./posts.json"
 import Post from "./Post";
 import Searchbar from "./Searchbar";
 
@@ -9,8 +10,8 @@ import Searchbar from "./Searchbar";
  * @returns Visual representation of the list of posts
  */
 function Feed() {
-  const [posts] = useState([]);
 
+  const posts = postData['posts']
   return (
     <div className="feed">
       <div className="feed__header">
@@ -27,94 +28,6 @@ function Feed() {
           image={post.image}
         />
       ))}
-      <Post
-        displayName={"Jones"}
-        username={"BoneyJones"}
-        verified={"check"}
-        text={"Wow this is a cool website"}
-        avatar={"post.avatar"}
-        image={"post.image"}
-      />
-      <Post
-        displayName={"Alex"}
-        username={"ALLLLLLEX"}
-        verified={false}
-        text={"I HATE THIS WEBSITE MAN"}
-        avatar={"post.avatar"}
-        image={"post.image"}
-      />
-      <Post
-        displayName={"Chris"}
-        username={"ChrystalLite"}
-        verified={"check"}
-        text={"Man this needs a LOT of work"}
-        avatar={"post.avatar"}
-        image={"post.image"}
-      />
-      <Post
-        displayName={"Jones"}
-        username={"BoneyJones"}
-        verified={"check"}
-        text={"Wow this is a cool website"}
-        avatar={"post.avatar"}
-        image={"post.image"}
-      />
-      <Post
-        displayName={"Jones"}
-        username={"BoneyJones"}
-        verified={"check"}
-        text={"Wow this is a cool website"}
-        avatar={"post.avatar"}
-        image={"post.image"}
-      />
-      <Post
-        displayName={"Jones"}
-        username={"BoneyJones"}
-        verified={"check"}
-        text={"Wow this is a cool website"}
-        avatar={"post.avatar"}
-        image={"post.image"}
-      />
-      <Post
-        displayName={"Jones"}
-        username={"BoneyJones"}
-        verified={"check"}
-        text={"Wow this is a cool website"}
-        avatar={"post.avatar"}
-        image={"post.image"}
-      />
-      <Post
-        displayName={"Jones"}
-        username={"BoneyJones"}
-        verified={"check"}
-        text={"Wow this is a cool website"}
-        avatar={"post.avatar"}
-        image={"post.image"}
-      />
-      <Post
-        displayName={"Jones"}
-        username={"BoneyJones"}
-        verified={"check"}
-        text={"Wow this is a cool website"}
-        avatar={"post.avatar"}
-        image={"post.image"}
-      />
-      <Post
-        displayName={"Jones"}
-        username={"BoneyJones"}
-        verified={"check"}
-        text={"Wow this is a cool website"}
-        avatar={"post.avatar"}
-        image={"post.image"}
-      />
-      <Post
-        displayName={"Jones"}
-        username={"BoneyJones"}
-        verified={"check"}
-        text={"Wow this is a cool website"}
-        avatar={"post.avatar"}
-        image={"post.image"}
-      />
     </div>
   );
 }
