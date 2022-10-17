@@ -2,6 +2,7 @@ package com.patreonshout.rest.interfaces;
 
 import com.patreonshout.PSException;
 import com.patreonshout.beans.IntegrationRequestBean;
+import com.patreonshout.beans.WebAccountBean;
 import com.patreonshout.beans.request.LoginRequest;
 import com.patreonshout.beans.request.RegisterRequest;
 import com.patreonshout.jpa.WebAccount;
@@ -75,4 +76,21 @@ public interface WebAccountImpl {
 	})
 	@ResponseStatus(code = HttpStatus.OK, reason = "Data saved successfully")
 	HttpStatus Integration(@RequestBody IntegrationRequestBean integrationRequestBean);
+
+	/**
+	 * Endpoint that allows retrieval of Patreon access and refresh tokens for a {@link WebAccount} containing the given
+	 * login token
+	 *
+	 * @param loginToken Login token belonging to a {@link WebAccount}
+	 * @return {@link WebAccountBean} containing a valid {@link WebAccount} ID and its respective login, refresh and
+	 * access tokens
+	 */
+	@GetMapping("/patreontokens")
+	@Operation(summary = "Retrieves Patreon access and refresh tokens for a WebAccount containing the given login token")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200",
+					description = "Tokens retrieved",
+					content = {@Content(mediaType = "application/json")})
+	})
+	ResponseEntity<?> GetPatreonTokens(@RequestParam(name = "login_token") String loginToken) throws PSException;
 }
