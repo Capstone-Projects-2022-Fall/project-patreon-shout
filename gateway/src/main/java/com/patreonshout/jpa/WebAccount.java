@@ -49,4 +49,8 @@ public class WebAccount {
 	public void putIntegration(int webAccountId, IntegrationType type, String data) {
 		webAccountRepository.putIntegration(webAccountId, type, data);
 	}
+
+	public void putTokens(String accessToken, String refreshToken, String loginToken) {
+		webAccountRepository.putTokens(accessToken, refreshToken, loginToken);
+	}
 }

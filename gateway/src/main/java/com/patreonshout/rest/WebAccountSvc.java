@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
  * </p>
  */
 @RestController
-public class WebAccountSvc extends GeneralSvc implements WebAccountImpl {
+public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 
 	/**
 	 * webAccount is the wrapper class for {@link com.patreonshout.jpa.WebAccountRepository}

@@ -98,4 +98,26 @@ public class WebAccountRepository {
 
 		q.executeUpdate();
 	}
+
+	@Transactional
+	public void putTokens(String accessToken, String refreshToken, String loginToken) {
+		if (accessToken == null && refreshToken == null)
+			return;
+
+		String sql = "UPDATE webaccounts SET";
+
+		if (accessToken != null)
+			sql += " access_token = '" + accessToken + "'";
+
+		if (refreshToken != null) {
+			if (accessToken != null)
+				sql += ",";
+			sql += " refresh_token = '" + refreshToken + "'";
+		}
+
+		sql += " WHERE login_token = " + loginToken;
+
+		Query q = em.createNativeQuery(sql);
+		q.executeUpdate();
+	}
 }

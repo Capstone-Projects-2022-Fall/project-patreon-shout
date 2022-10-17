@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * Parental service that any {@link RestController} objects must extend. Contains controller-wide Exception Handler.
  */
-public class GeneralSvc {
+public class BaseSvc {
 
 	/**
 	 * Handles every {@link SQLIntegrityConstraintViolationException} exception thrown by controllers.
