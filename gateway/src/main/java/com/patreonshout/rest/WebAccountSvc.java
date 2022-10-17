@@ -2,6 +2,7 @@ package com.patreonshout.rest;
 
 import com.patreonshout.PSException;
 import com.patreonshout.beans.IntegrationRequestBean;
+import com.patreonshout.beans.WebAccountBean;
 import com.patreonshout.beans.request.LoginRequest;
 import com.patreonshout.beans.request.RegisterRequest;
 import com.patreonshout.beans.response.LoginResponse;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -45,7 +47,6 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	/**
 	 * {@inheritDoc}
 	 */
-//	@CrossOrigin(origins = "http://localhost:3000")
 	public ResponseEntity<?> Login(@RequestBody LoginRequest loginRequest) throws PSException {
 		String loginToken = webAccount.readAccount(loginRequest);
 
@@ -60,5 +61,16 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 				integrationRequestBean.getIntegrationType(),
 				integrationRequestBean.getData());
 		return HttpStatus.OK; // Http 200
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public ResponseEntity<?> GetPatreonTokens(@RequestParam(name = "login_token") String loginToken) throws PSException {
+		WebAccountBean test = webAccount.getPatreonTokens(loginToken);
+		test.setUsername(null);
+		test.setPassword(null);
+
+		return new ResponseEntity<>(test, HttpStatus.CREATED);
 	}
 }

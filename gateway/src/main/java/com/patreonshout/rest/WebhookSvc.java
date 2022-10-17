@@ -1,6 +1,7 @@
 package com.patreonshout.rest;
 
 import com.patreon.PatreonOAuth;
+import com.patreonshout.jpa.WebAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -10,7 +11,15 @@ import java.io.IOException;
 
 @RestController
 public class WebhookSvc extends BaseSvc {
+	/**
+	 * webAccount is the wrapper class for {@link com.patreonshout.jpa.WebAccountRepository}
+	 */
+	@Autowired
+	WebAccount webAccount;
 
+	/**
+	 * oauthClient is a communication layer to Patreon utilized for acquiring tokens when users link accounts via OAuth
+	 */
 	@Autowired
 	private PatreonOAuth oauthClient;
 
@@ -24,20 +33,16 @@ public class WebhookSvc extends BaseSvc {
 	) throws IOException {
 		// OAuth
 		if (code != null && state != null) {
-//			try {
 			PatreonOAuth.TokensResponse tokens = oauthClient.getTokens(code); // Should we handle IOException?
 
 			//Store the refresh TokensResponse in your data store
 			String accessToken = tokens.getAccessToken();
 			String refreshToken = tokens.getRefreshToken();
 
+			webAccount.putPatreonTokens(accessToken, refreshToken, state);
 
-
-//			} catch (HttpStatusException ex) { // Can occur when retrieving TokensResponse object if code was used already
-//				System.out.println("HTTP error fetching URL");
-//			} catch (IOException ex) { // Can occur when retrieving TokensResponse object
-//				System.out.println("IOException error.");
-//			}
+			return "Patreon linked!  Close this pop-up and refresh the PatreonShout webpage.";
+//			throw new PSException(HttpStatus.CREATED, "Token created");
 		}
 
 		// Webhook
