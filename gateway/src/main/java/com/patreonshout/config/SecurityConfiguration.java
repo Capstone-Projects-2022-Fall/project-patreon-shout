@@ -1,5 +1,6 @@
 package com.patreonshout.config;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -19,5 +20,9 @@ public class SecurityConfiguration {
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+	}
+
+	public String SHA1Encoder(String text) {
+		return DigestUtils.shaHex(text);
 	}
 }

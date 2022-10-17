@@ -1,15 +1,18 @@
 package com.patreonshout.rest;
 
+import com.patreonshout.PSException;
 import com.patreonshout.beans.IntegrationRequestBean;
+import com.patreonshout.beans.WebAccountBean;
 import com.patreonshout.beans.request.LoginRequest;
 import com.patreonshout.beans.request.RegisterRequest;
+import com.patreonshout.beans.response.LoginResponse;
 import com.patreonshout.jpa.WebAccount;
 import com.patreonshout.rest.interfaces.WebAccountImpl;
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -22,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
  * </p>
  */
 @RestController
-public class WebAccountSvc extends GeneralSvc implements WebAccountImpl {
+public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 
 	/**
 	 * webAccount is the wrapper class for {@link com.patreonshout.jpa.WebAccountRepository}
@@ -33,7 +36,7 @@ public class WebAccountSvc extends GeneralSvc implements WebAccountImpl {
 	/**
 	 * {@inheritDoc}
 	 */
-	@CrossOrigin(origins = "http://localhost:3000")
+//	@CrossOrigin(origins = @Value("${spring.datasource.url}"))
 	public HttpStatus Register(@RequestBody RegisterRequest registerRequest) {
 		// TODO: Ensure username and password are sanitized and fit specific requirements
 		webAccount.putAccount(registerRequest);
@@ -43,16 +46,11 @@ public class WebAccountSvc extends GeneralSvc implements WebAccountImpl {
 
 	/**
 	 * {@inheritDoc}
-	 * @return
 	 */
-	@CrossOrigin(origins = "http://localhost:3000")
-	public JSONObject Login(@RequestBody LoginRequest loginRequest) {
-		webAccount.readAccount(loginRequest);
+	public ResponseEntity<?> Login(@RequestBody LoginRequest loginRequest) throws PSException {
+		String loginToken = webAccount.readAccount(loginRequest);
 
-		JSONObject obj = new JSONObject();
-		obj.put("token", "helloalex");
-
-		return obj;
+		return new ResponseEntity<>(new LoginResponse(loginToken), HttpStatus.CREATED);
 	}
 
 	/**
@@ -63,5 +61,16 @@ public class WebAccountSvc extends GeneralSvc implements WebAccountImpl {
 				integrationRequestBean.getIntegrationType(),
 				integrationRequestBean.getData());
 		return HttpStatus.OK; // Http 200
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public ResponseEntity<?> GetPatreonTokens(@RequestParam(name = "login_token") String loginToken) throws PSException {
+		WebAccountBean test = webAccount.getPatreonTokens(loginToken);
+		test.setUsername(null);
+		test.setPassword(null);
+
+		return new ResponseEntity<>(test, HttpStatus.CREATED);
 	}
 }
