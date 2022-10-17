@@ -1,5 +1,6 @@
 package com.patreonshout.rest.interfaces;
 
+import com.patreonshout.PSException;
 import com.patreonshout.beans.IntegrationRequestBean;
 import com.patreonshout.beans.request.LoginRequest;
 import com.patreonshout.beans.request.RegisterRequest;
@@ -9,8 +10,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.json.simple.JSONObject;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -41,7 +42,7 @@ public interface WebAccountImpl {
 	HttpStatus Register(@RequestBody RegisterRequest registerRequest);
 
 	/**
-	 * Endpoint that will create a new {@link com.patreonshout.jpa.WebAccount] into the database}
+	 * Endpoint that will create a new {@link WebAccount} into the database
 	 *
 	 * @param loginRequest is the json request
 	 * @return a token signifying valid login or no token signifying invalid login
@@ -53,7 +54,7 @@ public interface WebAccountImpl {
 					description = "Token retrieved",
 					content = {@Content(mediaType = "application/json")})
 	})
-	JSONObject Login(@RequestBody LoginRequest loginRequest);
+	ResponseEntity<?> Login(@RequestBody LoginRequest loginRequest) throws PSException;
 
 	/**
 	 * Endpoint that allows registering, updating or deleting integrations for social platforms.

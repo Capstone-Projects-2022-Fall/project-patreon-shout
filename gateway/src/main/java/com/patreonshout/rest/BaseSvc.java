@@ -1,5 +1,6 @@
 package com.patreonshout.rest;
 
+import com.patreonshout.PSException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,7 +12,7 @@ import java.util.Map;
 /**
  * Parental service that any {@link RestController} objects must extend. Contains controller-wide Exception Handler.
  */
-public class GeneralSvc {
+public class BaseSvc {
 
 	/**
 	 * Handles every {@link SQLIntegrityConstraintViolationException} exception thrown by controllers.
@@ -30,6 +31,11 @@ public class GeneralSvc {
 				ex.printStackTrace();
 				return createResponse(HttpStatus.BAD_REQUEST, "SQLIntegrityConstraintViolationException unknown SQL code");
 		}
+	}
+
+	@ExceptionHandler(value = PSException.class)
+	public ResponseEntity<?> catchCustomException(PSException ex) {
+		return createResponse(ex.getHttpStatus(), ex.getMessage());
 	}
 
 	/**
