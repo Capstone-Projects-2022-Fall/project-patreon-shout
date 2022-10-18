@@ -2,6 +2,7 @@ package com.patreonshout.jpa;
 
 import com.patreonshout.beans.PostBean;
 
+import com.patreonshout.rest.BaseSvc;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,13 +25,29 @@ import java.util.List;
  * </p>
  */
 @Repository
-public class PostsRepository {
+public class PostsRepository  extends BaseSvc {
 
     /**
      * em is the {@link EntityManager} that handles all the transactions with our database
      */
     @PersistenceContext
     private EntityManager em;
+
+    /**
+     * getCreatorPosts() gets the posts from a particular creator
+     *
+     * @param creator is the creator who made the posts we want to get
+     * @return a List of {@link com.patreonshout.beans.PostBean} objects containing Patreon post information of a given creator
+     */
+    @Transactional
+    public List<PostBean> getCreatorPosts(String creator) {
+        String sql = "select * from posts where creator = :creator";
+
+        Query q = em.createNativeQuery(sql, PostBean.class);
+        q.setParameter("creator", creator);
+
+        return q.getResultList();
+    }
 
     /**
      * getPost() gets a specific post based on the post url
