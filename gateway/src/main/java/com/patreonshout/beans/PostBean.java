@@ -1,5 +1,6 @@
 package com.patreonshout.beans;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Type;
 import com.patreon.resources.shared.BaseResource;
@@ -14,6 +15,7 @@ import javax.persistence.Table;
 /**
  * POJO that relates to the posts table in our database
  */
+@JsonIgnoreProperties({ "id", "links", "post_id" })
 @Entity
 @Table(name="posts")
 @Type("post")

@@ -27,6 +27,16 @@ public class Posts {
     PostsRepository postsRepository;
 
     /**
+     * getCreatorPosts() gets the posts from a particular creator
+     *
+     * @param creator is the creator who made the posts we want to get
+     * @return a List of {@link com.patreonshout.beans.PostBean} objects containing Patreon post information of a given creator
+     */
+    public List<PostBean> getCreatorPosts(String creator) {
+        return postsRepository.getCreatorPosts(creator);
+    }
+
+    /**
      * getPost() gets a specific post based on the post url
      *
      * @param url is the url of the Patreon post

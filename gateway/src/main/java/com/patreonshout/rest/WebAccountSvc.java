@@ -67,10 +67,10 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	 * {@inheritDoc}
 	 */
 	public ResponseEntity<?> GetPatreonTokens(@RequestParam(name = "login_token") String loginToken) throws PSException {
-		WebAccountBean test = webAccount.getPatreonTokens(loginToken);
-		test.setUsername(null);
-		test.setPassword(null);
+		WebAccountBean response = webAccount.getPatreonTokens(loginToken);
+		response.setUsername(null);
+		response.setPassword(null);
 
-		return new ResponseEntity<>(test, HttpStatus.CREATED);
+		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
 }
