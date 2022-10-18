@@ -35,7 +35,7 @@ function Feed() {
             <PatreonConnect/>
             {postList.map((item) => (
                 <Post
-                    displayName={item.creator}
+                    displayName={item.title}
                     username={item.creator}
                     verified={item.verified}
                     text={item.content.replaceAll("<p>", "").replaceAll("</p>", "")}

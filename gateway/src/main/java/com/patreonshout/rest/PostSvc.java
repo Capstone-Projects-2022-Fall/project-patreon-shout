@@ -29,6 +29,12 @@ public class PostSvc extends BaseSvc implements PostImpl {
     public ResponseEntity<?> GetCreatorPosts(@RequestParam(name = "creator") String creator) {
         List<PostBean> response = posts.getCreatorPosts(creator);
 
+        for (PostBean pb : response) {
+            if (!pb.isIs_public()) {
+                pb.setContent("This post is private");
+            }
+        }
+
         return new ResponseEntity<>(response, HttpStatus.FOUND);
     }
 }

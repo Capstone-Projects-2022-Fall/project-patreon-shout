@@ -60,9 +60,9 @@ public class PostBean extends BaseResource {
     /**
      * isprivate denotes whether the Patreon post is private or public
      */
-    @Column(name="isprivate")
+    @Column(name="is_public")
     @JsonProperty("is_public")
-    protected boolean isprivate;
+    protected boolean is_public;
 
     /**
      * creator is the name of the content creator who made the Patreon post
@@ -151,19 +151,19 @@ public class PostBean extends BaseResource {
     }
 
     /**
-     * isprivate getter
-     * @return isprivate
+     * is_public getter
+     * @return is_public
      */
-    public boolean isIsprivate() {
-        return !isprivate;
+    public boolean isIs_public() {
+        return is_public;
     }
 
     /**
-     * isprivate setter
-     * @param isprivate
+     * is_public setter
+     * @param is_public
      */
-    public void setIsprivate(boolean isprivate) {
-        this.isprivate = !isprivate;
+    public void setIs_public(boolean is_public) {
+        this.is_public = is_public;
     }
 
     /**
@@ -194,7 +194,7 @@ public class PostBean extends BaseResource {
                 ", title='" + title + '\'' +
                 ", url='" + url + '\'' +
                 ", content='" + content + '\'' +
-                ", isprivate=" + isprivate +
+                ", is_public=" + is_public +
                 ", creator='" + creator + '\'' +
                 '}';
     }
