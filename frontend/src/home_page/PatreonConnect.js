@@ -12,7 +12,7 @@ function PatreonConnect() {
 
     const patreonUrlDev = "https://www.patreon.com/oauth2/authorize" +
         "?response_type=code" +
-        "&client_id=Aymjq1-b_ZkmaeejretFStklrikzMGcG-LEtCkt3GvOeiuOO2MY0_hluLoUzC4ce" +
+        "&client_id=QshCpqHpThL5sckRQX88TwE9vPr4pEWOjdyZbAKVIJie1hhOdPbsp6Qaqrd9C7M6" +
         "&redirect_uri=http://localhost:5000/webhook" +
         "&scope=identity identity.memberships campaigns w:campaigns.webhook campaigns.members campaigns.members.address campaigns.posts" +
         "&state=";

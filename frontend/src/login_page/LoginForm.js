@@ -39,14 +39,18 @@ const LoginForm = ({setToken}) => {
             userPassword
         });
         console.log(token);
-        setToken(token);
 
         if (!userName || !userPassword || !token.token) {
             showPopup("loginPop")
         }
         else {
+            setToken(token);
             navigate("/home");
         }
+
+
+
+
     }
 
 
