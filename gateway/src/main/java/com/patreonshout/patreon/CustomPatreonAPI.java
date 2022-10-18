@@ -153,7 +153,6 @@ public class CustomPatreonAPI {
      */
     public JSONAPIDocument<List<Campaign>> fetchCampaigns() throws IOException {
         String path = (new URIBuilder()).setPath("campaigns").toString();
-        System.out.println("path: " + path);
         return this.converter.readDocumentCollection(this.getDataStream(path, true), Campaign.class);
     }
 

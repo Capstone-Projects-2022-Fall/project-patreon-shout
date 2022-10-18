@@ -1,7 +1,12 @@
 package com.patreonshout.rest;
 
 import com.patreon.PatreonOAuth;
+import com.patreon.resources.Campaign;
+import com.patreon.resources.User;
+import com.patreonshout.beans.PostBean;
+import com.patreonshout.jpa.Posts;
 import com.patreonshout.jpa.WebAccount;
+import com.patreonshout.patreon.CustomPatreonAPI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,6 +21,9 @@ public class WebhookSvc extends BaseSvc {
 	 */
 	@Autowired
 	WebAccount webAccount;
+
+	@Autowired
+	Posts posts;
 
 	/**
 	 * oauthClient is a communication layer to Patreon utilized for acquiring tokens when users link accounts via OAuth
@@ -39,6 +47,19 @@ public class WebhookSvc extends BaseSvc {
 			String accessToken = tokens.getAccessToken();
 			String refreshToken = tokens.getRefreshToken();
 
+			// put content creator posts in database
+			CustomPatreonAPI client = new CustomPatreonAPI(accessToken);
+
+			User user = client.fetchUser().get();
+
+			for (Campaign campaign : client.fetchCampaigns().get()) {
+				for (PostBean post : client.fetchPosts(campaign.getId()).get()) {
+					post.setCreator(user.getFullName());
+					posts.putPost(post);
+				}
+			}
+
+			// put patreon tokens in database
 			webAccount.putPatreonTokens(accessToken, refreshToken, state);
 
 			return "Patreon linked!  Close this pop-up and refresh the PatreonShout webpage.";

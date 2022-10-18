@@ -1,0 +1,34 @@
+package com.patreonshout.rest;
+
+import com.patreonshout.beans.PostBean;
+import com.patreonshout.jpa.Posts;
+import com.patreonshout.rest.interfaces.PostImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+/**
+ * Post RESTful Endpoint Interface
+ */
+@RestController
+public class PostSvc extends BaseSvc implements PostImpl {
+
+    /**
+     * posts is the wrapper class for {@link com.patreonshout.jpa.PostsRepository}
+     */
+    @Autowired
+    Posts posts;
+
+    /**
+     * {@inheritDoc}
+     */
+    public ResponseEntity<?> GetCreatorPosts(@RequestParam(name = "creator") String creator) {
+        List<PostBean> response = posts.getCreatorPosts(creator);
+
+        return new ResponseEntity<>(response, HttpStatus.FOUND);
+    }
+}
