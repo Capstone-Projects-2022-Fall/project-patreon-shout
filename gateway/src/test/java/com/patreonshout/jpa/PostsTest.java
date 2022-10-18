@@ -38,7 +38,7 @@ public class PostsTest {
     @Test
     public void putPostAndGetAllPostsTest() {
         PostBean pb1 = new PostBean();
-        pb1.setIsprivate(false);
+        pb1.setIs_public(false);
         pb1.setContent("content1");
         pb1.setPublishdate("date1");
         pb1.setCreator("creator1");
@@ -49,7 +49,7 @@ public class PostsTest {
         Assert.assertEquals(1, posts.getAllPosts().size());
 
         PostBean pb2 = new PostBean();
-        pb1.setIsprivate(false);
+        pb1.setIs_public(false);
         pb1.setContent("content2");
         pb1.setPublishdate("date2");
         pb1.setCreator("creator2");
@@ -66,7 +66,7 @@ public class PostsTest {
     @Test
     public void getPostTest() {
         PostBean pb1 = new PostBean();
-        pb1.setIsprivate(false);
+        pb1.setIs_public(false);
         pb1.setContent("content1");
         pb1.setPublishdate("date1");
         pb1.setCreator("creator1");
@@ -76,7 +76,7 @@ public class PostsTest {
 
         PostBean pb2 = posts.getPost("url1");
 
-        Assert.assertEquals(!pb1.isIsprivate(), pb2.isIsprivate());
+        Assert.assertEquals(pb1.isIs_public(), pb2.isIs_public());
         Assert.assertEquals(pb1.getContent(), pb2.getContent());
         Assert.assertEquals(pb1.getPublishdate(), pb2.getPublishdate());
         Assert.assertEquals(pb1.getTitle(), pb2.getTitle());
@@ -89,7 +89,7 @@ public class PostsTest {
     @Test
     public void updatePostTest() {
         PostBean pb1 = new PostBean();
-        pb1.setIsprivate(false);
+        pb1.setIs_public(false);
         pb1.setContent("content1");
         pb1.setPublishdate("date1");
         pb1.setCreator("creator1");
@@ -110,7 +110,7 @@ public class PostsTest {
     @Test
     public void removePostTest() {
         PostBean pb1 = new PostBean();
-        pb1.setIsprivate(false);
+        pb1.setIs_public(false);
         pb1.setContent("content1");
         pb1.setPublishdate("date1");
         pb1.setCreator("creator1");

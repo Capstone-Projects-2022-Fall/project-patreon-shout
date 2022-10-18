@@ -92,14 +92,14 @@ public class PostsRepository  extends BaseSvc {
      */
     @Transactional
     public void putPost(PostBean pb) {
-        String sql = "insert into posts (publishdate, title, url, content, isprivate, creator) values (:publishdate, :title, :url, :content, :isprivate, :creator)";
+        String sql = "insert into posts (publishdate, title, url, content, is_public, creator) values (:publishdate, :title, :url, :content, :is_public, :creator)";
 
         Query q = em.createNativeQuery(sql, PostBean.class);
         q.setParameter("publishdate", pb.getPublishdate());
         q.setParameter("title", pb.getTitle());
         q.setParameter("url", pb.getUrl());
         q.setParameter("content", pb.getContent());
-        q.setParameter("isprivate", pb.isIsprivate());
+        q.setParameter("is_public", pb.isIs_public());
         q.setParameter("creator", pb.getCreator());
 
         q.executeUpdate();
@@ -112,14 +112,14 @@ public class PostsRepository  extends BaseSvc {
      */
     @Transactional
     public void updatePost(PostBean pb) {
-        String sql = "update posts set publishdate = :publishdate, title = :title, url = :url, content = :content, isprivate = :isprivate, creator = :creator where post_id = :post_id";
+        String sql = "update posts set publishdate = :publishdate, title = :title, url = :url, content = :content, is_public = :is_public, creator = :creator where post_id = :post_id";
 
         Query q = em.createNativeQuery(sql, PostBean.class);
         q.setParameter("publishdate", pb.getPublishdate());
         q.setParameter("title", pb.getTitle());
         q.setParameter("url", pb.getUrl());
         q.setParameter("content", pb.getContent());
-        q.setParameter("isprivate", pb.isIsprivate());
+        q.setParameter("is_public", pb.isIs_public());
         q.setParameter("creator", pb.getCreator());
         q.setParameter("post_id", pb.getPost_id());
 
