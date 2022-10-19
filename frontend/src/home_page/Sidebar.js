@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useCallback} from "react";
 import "./Sidebar.css";
 import SidebarOption from "./SidebarOption";
 import HomeIcon from "@mui/icons-material/Home";
@@ -8,6 +8,7 @@ import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom'
+import { logoutUser } from '../services/logout.js'
 
 /**
  * This is the Sidebar Component of the home page
@@ -16,12 +17,25 @@ import { useNavigate } from 'react-router-dom'
  */
 function Sidebar() {
 
-    const navigate=useNavigate();
+    const navigate = useNavigate();
+    const [logout, setLogoutValue] = useState([]);
+
+    const request = useCallback(() => {
+        const tokenString = localStorage.getItem('token');
+        const userToken = JSON.parse(tokenString);
+        logoutUser(userToken.token)
+            .then(items => {
+                setLogoutValue(items)
+            })
+    }, [])
 
     const logOut = () => {
+        request()
         localStorage.removeItem("token");
         navigate('/');
+        console.log(logout);
     }
+
 
     return (
     <div className="sidebar">
