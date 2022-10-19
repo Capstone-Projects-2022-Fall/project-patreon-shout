@@ -58,6 +58,21 @@ public interface WebAccountImpl {
 	ResponseEntity<?> Login(@RequestBody LoginRequest loginRequest) throws PSException;
 
 	/**
+	 * Endpoint that will delete a login token from a {@link WebAccount} in the database
+	 *
+	 * @param loginToken Login token to delete from the database
+	 * @return {@link HttpStatus#OK} if successful
+	 */
+	@DeleteMapping("/logout")
+	@Operation(summary = "Deletes a login token from a WebAccount if it exists")
+	@ApiResponses(
+			@ApiResponse(responseCode = "200",
+					description = "Token deleted, if it existed",
+					content = {@Content(mediaType = "application/json")})
+	)
+	ResponseEntity<?> Logout(@RequestParam(name = "login_token") String loginToken);
+
+	/**
 	 * Endpoint that allows registering, updating or deleting integrations for social platforms.
 	 *
 	 * @param integrationRequestBean {@link IntegrationRequestBean} object that contains {@link WebAccount} and request details.

@@ -8,6 +8,7 @@ import com.patreonshout.beans.request.RegisterRequest;
 import com.patreonshout.beans.response.LoginResponse;
 import com.patreonshout.jpa.WebAccount;
 import com.patreonshout.rest.interfaces.WebAccountImpl;
+import com.patreonshout.utils.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +37,6 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	/**
 	 * {@inheritDoc}
 	 */
-//	@CrossOrigin(origins = @Value("${spring.datasource.url}"))
 	public HttpStatus Register(@RequestBody RegisterRequest registerRequest) {
 		// TODO: Ensure username and password are sanitized and fit specific requirements
 		webAccount.putAccount(registerRequest);
@@ -56,11 +56,20 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	/**
 	 * {@inheritDoc}
 	 */
+	public ResponseEntity<?> Logout(@RequestParam(name = "login_token") String loginToken) {
+		webAccount.deleteLoginToken(loginToken);
+
+		return ResponseUtil.Generic(HttpStatus.OK, "Token deleted if it existed.");
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public HttpStatus Integration(@RequestBody IntegrationRequestBean integrationRequestBean) {
 		webAccount.putIntegration(integrationRequestBean.getWebaccount().getWebaccount_id(),
 				integrationRequestBean.getIntegrationType(),
 				integrationRequestBean.getData());
-		return HttpStatus.OK; // Http 200
+		return HttpStatus.OK;
 	}
 
 	/**

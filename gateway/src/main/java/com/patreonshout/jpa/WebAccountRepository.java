@@ -93,9 +93,23 @@ public class WebAccountRepository {
 		String sql = "UPDATE webaccounts SET login_token = :login_token WHERE username = :username";
 
 		Query q = em.createNativeQuery(sql);
-
 		q.setParameter("login_token", loginToken);
 		q.setParameter("username", username);
+
+		q.executeUpdate();
+	}
+
+	/**
+	 * Removes a login token from a {@link WebAccount}
+	 *
+	 * @param loginToken Login token to delete from the database
+	 */
+	@Transactional
+	public void deleteLoginToken(String loginToken) {
+		String sql = "UPDATE webaccounts SET login_token = NULL WHERE login_token = :login_token";
+
+		Query q = em.createNativeQuery(sql);
+		q.setParameter("login_token", loginToken);
 
 		q.executeUpdate();
 	}
