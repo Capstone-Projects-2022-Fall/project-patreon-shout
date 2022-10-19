@@ -24,8 +24,6 @@ function Feed() {
         return () => mounted = false;
     }, [])
 
-    console.log("Postlist: " + postList);
-
     return (
         <div className="feed">
             <div className="feed__header">

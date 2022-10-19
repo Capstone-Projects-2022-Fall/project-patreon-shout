@@ -1,13 +1,14 @@
 package com.patreonshout.rest;
 
 import com.patreonshout.PSException;
+import com.patreonshout.beans.response.BaseResponse;
+import com.patreonshout.utils.ResponseUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.SQLIntegrityConstraintViolationException;
-import java.util.Map;
 
 /**
  * Parental service that any {@link RestController} objects must extend. Contains controller-wide Exception Handler.
@@ -24,33 +25,17 @@ public class BaseSvc {
 	public ResponseEntity<?> catchSQLIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException ex) {
 		switch (ex.getErrorCode()) {
 			case 1062: // Duplicate entry for key
-				return createResponse(HttpStatus.CONFLICT, "Duplicate primary key.");
+				return ResponseUtil.Generic(HttpStatus.CONFLICT, "Duplicate primary key.");
 			case 1452:
-				return createResponse(HttpStatus.CONFLICT, "Foreign key constraint failed.");
+				return ResponseUtil.Generic(HttpStatus.CONFLICT, "Foreign key constraint failed.");
 			default:
 				ex.printStackTrace();
-				return createResponse(HttpStatus.BAD_REQUEST, "SQLIntegrityConstraintViolationException unknown SQL code");
+				return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "SQLIntegrityConstraintViolationException unknown SQL code");
 		}
 	}
 
 	@ExceptionHandler(value = PSException.class)
 	public ResponseEntity<?> catchCustomException(PSException ex) {
-		return createResponse(ex.getHttpStatus(), ex.getMessage());
-	}
-
-	/**
-	 * Create a JSON response to output.
-	 *
-	 * @param httpStatus HTTP code specifying the error
-	 * @param message    Reasoning for the provided HTTP code
-	 * @return {@link ResponseEntity}
-	 */
-	private ResponseEntity<?> createResponse(HttpStatus httpStatus, String message) {
-		return ResponseEntity
-				.status(httpStatus)
-				.body(Map.of(
-						"status", httpStatus.value(),
-						"message", message
-				));
+		return ResponseUtil.Generic(ex.getHttpStatus(), ex.getMessage());
 	}
 }

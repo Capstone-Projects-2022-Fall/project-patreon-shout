@@ -42,6 +42,15 @@ public class WebAccount {
 	}
 
 	/**
+	 *
+	 *
+	 * @param loginToken login token belonging to a {@link WebAccount}
+	 */
+	public void deleteLoginToken(String loginToken) {
+		webAccountRepository.deleteLoginToken(loginToken);
+	}
+
+	/**
 	 * Adds a social integration
 	 *
 	 * @param type Integration type
