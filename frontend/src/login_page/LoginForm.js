@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom'
-import "./LoginForm.css"
+import "./login_css/LoginForm.css"
 import TextField from '@mui/material/TextField';
+import { loginUser } from '../services/api/login';
 
 /**
  * The Login Form, where users can login to the website
@@ -15,21 +16,6 @@ const LoginForm = ({setToken}) => {
     const [userPassword, setPassword] = useState('')
     const [popupFailed, showPopup] = useState("hide")
     const navigate = useNavigate();
-
-
-    async function loginUser(credentials) {
-        return fetch('http://localhost:5000/webaccount/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Origin': 'http://localhost:5000'
-            },
-            body: JSON.stringify(credentials)
-        })
-            .then(data => data.json())
-    }
-
 
     //shows the login failed if username/pass != correct
     const handleSubmit = async e => {
@@ -47,10 +33,6 @@ const LoginForm = ({setToken}) => {
             setToken(token);
             navigate("/home");
         }
-
-
-
-
     }
 
 

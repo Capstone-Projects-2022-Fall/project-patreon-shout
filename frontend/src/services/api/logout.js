@@ -4,6 +4,7 @@
  * @param token is the session token
  * @returns {Promise<any>} is the json data returned
  */
+
 export function logoutUser(token) {
     return fetch('http://localhost:5000/webaccount/logout?login_token=' + token, {
         method: 'DELETE',

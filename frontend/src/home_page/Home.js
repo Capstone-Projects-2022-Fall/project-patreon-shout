@@ -1,7 +1,7 @@
 import Feed from "./Feed";
 import Sidebar from "./Sidebar";
 import React from "react";
-import './Home.css';
+import './home_css/Home.css';
 
 /**
  * This is the Home function which creates the home page

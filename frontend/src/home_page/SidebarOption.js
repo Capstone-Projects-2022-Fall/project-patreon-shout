@@ -1,5 +1,5 @@
 import React from "react";
-import "./SidebarOption.css";
+import "./home_css/SidebarOption.css";
 
 /**
  * The SidebarOption component to populate the sidebar component

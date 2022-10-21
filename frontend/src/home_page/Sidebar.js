@@ -1,14 +1,14 @@
 import React, {useState, useCallback} from "react";
-import "./Sidebar.css";
+import "./home_css/Sidebar.css";
 import SidebarOption from "./SidebarOption";
 import HomeIcon from "@mui/icons-material/Home";
 import SearchIcon from "@mui/icons-material/Search";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import SettingsIcon from "@mui/icons-material/Settings";
-import LogoutIcon from '@mui/icons-material/Logout';
-import { useNavigate } from 'react-router-dom'
-import { logoutUser } from '../services/logout.js'
+import LogoutIcon from "@mui/icons-material/Logout";
+import { useNavigate } from "react-router-dom";
+import { logoutUser } from "../services/api/logout";
 
 /**
  * This is the Sidebar Component of the home page
