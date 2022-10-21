@@ -4,15 +4,14 @@ import SidebarOption from "./SidebarOption";
 import HomeIcon from "@mui/icons-material/Home";
 import SearchIcon from "@mui/icons-material/Search";
 import ListAltIcon from "@mui/icons-material/ListAlt";
-import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { useNavigate } from "react-router-dom";
-import { logoutUser } from "../services/api/logout";
+import {useNavigate} from "react-router-dom";
+import {logoutUser} from "../services/api/logout";
 
 /**
  * This is the Sidebar Component of the home page
- * 
+ *
  * @returns Visual representation of the sidebar and it's options
  */
 function Sidebar() {
@@ -29,6 +28,22 @@ function Sidebar() {
             })
     }, [])
 
+    const goToHome = () => {
+        navigate('/home')
+    }
+
+    const goToExplore = () => {
+        navigate('/explore')
+    }
+
+    const goToLists = () => {
+        navigate('/lists')
+    }
+
+    const goToSettings = () => {
+        navigate('/settings')
+    }
+
     const logOut = () => {
         request()
         localStorage.removeItem("token");
@@ -36,19 +51,19 @@ function Sidebar() {
         console.log(logout);
     }
 
-
     return (
-    <div className="sidebar">
-      <SidebarOption Icon={HomeIcon} text="Home" active={true} />
-      <SidebarOption Icon={SearchIcon} text="Explore" />
-      <SidebarOption Icon={ListAltIcon} text="Lists" />
-      <SidebarOption Icon={PermIdentityIcon} text="Profile" />
-      <SidebarOption Icon={SettingsIcon} text="Settings" />
-      <div onClick={logOut}>
-      <SidebarOption Icon={LogoutIcon} text="Logout"/>
-      </div>
-    </div>
-  );
+        <ul className="sidebar">
+            <li onClick={goToHome} id="/home"><SidebarOption Icon={HomeIcon} text="Home" active="true"/></li>
+
+            <li onClick={goToExplore} id="/explore"><SidebarOption  Icon={SearchIcon} text="Explore"/></li>
+
+            <li onClick={goToLists} id="/lists"><SidebarOption  Icon={ListAltIcon} text="Lists"/></li>
+
+            <li onClick={goToSettings} id="/settings"><SidebarOption  Icon={SettingsIcon} text="Settings"/></li>
+
+            <li onClick={logOut} id="/logout"><SidebarOption Icon={LogoutIcon} text="Logout"/></li>
+        </ul>
+    );
 }
 
 export default Sidebar;

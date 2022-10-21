@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import './App.css';
 import Home from "./home_page/Home";
 import LoginPage from "./login_page/LoginPage";
+import ListPage from "./list_page/ListPage";
 import useToken from './services/useToken';
 
 /**
@@ -11,18 +12,21 @@ import useToken from './services/useToken';
  * @returns The user interface and the current page the user is on
  */
 function App() {
-  
+
+  // session token
   const { token, setToken } = useToken();
 
-  if (!token) { // TODO: check if session token is also valid via http request to database
+  if (!token) {
     return <LoginPage setToken={setToken}/>
   }
+
 
   return (
     <div className="App">
       <Routes>
         <Route path="/" element={<LoginPage setToken={setToken}/>}/>
         <Route path="/home" element={<Home/>}/>
+        <Route path="/lists" element={<ListPage/>}/>
       </Routes>
     </div>
   );

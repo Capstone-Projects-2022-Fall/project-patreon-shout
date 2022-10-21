@@ -1,26 +1,28 @@
 .sidebarOption {
-    display: block;
-    align-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
     height: 100%;
-    width: 100%;
+    width: fit-content;
     column-count: 4;
     cursor: pointer;
-    border-radius: 10px;
-  }
+    border-radius: 25px;
+    gap: 15px;
+    padding: 5px 17px 5px 8px;
+/*          top right bottom left*/
+}
 
-  .sidebarOption:hover {
+.sidebarOption:hover {
     background-color: #b1cffc73;
     color: var(--main-color);
     transition: color 100ms ease-out;
-    align-items: center;
-  }
+}
 
-  .sidebarOption > h2 {
+.sidebarOption > h2 {
     font-weight: 700;
     font-size: 26px;
-  }
+}
 
-  .sidebarOption--active {
+.sidebarOption--active {
     color: var(--main-color);
-    display: inherit;
-  }
+}

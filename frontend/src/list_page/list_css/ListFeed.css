@@ -1,0 +1,36 @@
+.listfeed {
+    position: center;
+    padding-top: 20px;
+    padding-left: 340px;
+    padding-right: 400px;
+    flex: 0.4;
+    border-right: var(--background) 1px solid;
+    min-width: fit-content;
+    overflow-y: auto;
+}
+.listfeed__header {
+    position: sticky;
+    background-color: white;
+    z-index: 100;
+    border: 1px solid var(--background);
+    padding: 15px 20px;
+    display: flex;
+    align-content: center;
+    justify-content: space-between;
+}
+.listfeed::-webkit-scrollbar {
+    display: none;
+}
+
+#addListButton {
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    padding: 5px 8px 5px 8px;
+}
+
+#addListButton:hover {
+    background-color: #b1cffc73;
+    transition: background-color 200ms ease;
+    cursor: pointer;
+}
