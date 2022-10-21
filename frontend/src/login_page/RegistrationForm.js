@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
-import './RegistrationForm.css'
+import './login_css/RegistrationForm.css'
+import { registerUser } from '../services/api/register';
 
 /**
  * The Registration Form, where users can register an account
@@ -12,18 +13,6 @@ const RegistrationForm = () => {
     const [user, setRegUserName] = useState('')
     const [pass, setRegPassword] = useState('')
     const [popup, showPopup] = useState("hide")
-
-    async function registerUser(credentials) {
-        return fetch('http://localhost:5000/webaccount/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Origin': 'http://localhost:5000'
-            },
-            body: JSON.stringify(credentials)
-        })
-            .then(data => data.json())
-    }
 
     const handleSubmit = async e => {
 

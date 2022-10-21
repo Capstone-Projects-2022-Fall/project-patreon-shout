@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
-import "./Feed.css";
+import "./home_css/Feed.css";
 import Post from "./Post";
 import Searchbar from "./Searchbar";
 import PatreonConnect from "./PatreonConnect";
-import { getPosts } from '../services/posts.js'
+import { getPosts } from '../services/api/posts'
 
 /**
  * This is the Feed function which will appear on the home page

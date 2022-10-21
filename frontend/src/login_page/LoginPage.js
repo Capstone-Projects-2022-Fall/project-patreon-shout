@@ -1,5 +1,5 @@
 import React from 'react';
-import './Login.css'
+import './login_css/Login.css'
 import FormContainers from './FormContainers';
 import PropTypes from "prop-types";
 
@@ -9,7 +9,7 @@ import PropTypes from "prop-types";
  * @returns The login page user interface
  */
 
-function Login({setToken}) {
+function LoginPage({setToken}) {
 
   return (
     <div>
@@ -20,8 +20,8 @@ function Login({setToken}) {
   );
 }
 
-Login.propTypes = {
+LoginPage.propTypes = {
     setToken: PropTypes.func.isRequired
 };
 
-export default Login;
+export default LoginPage;

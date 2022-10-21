@@ -1,6 +1,6 @@
 import React from "react";
-import useToken from "../useToken";
-import Login from "../login_page/Login";
+import useToken from "../services/useToken";
+import Login from "../login_page/LoginPage";
 
 function PatreonConnect() {
     const patreonUrl = "https://www.patreon.com/oauth2/authorize" +

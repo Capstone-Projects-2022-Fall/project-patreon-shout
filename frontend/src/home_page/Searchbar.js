@@ -1,6 +1,6 @@
 import { Button } from "@mui/material";
 import React, { useState } from "react";
-import "./Searchbar.css";
+import "./home_css/Searchbar.css";
 
 function Searchbar() {
   const [searchInput, setSearch] = useState("");

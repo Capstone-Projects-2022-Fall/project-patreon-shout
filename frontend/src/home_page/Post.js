@@ -6,7 +6,7 @@ import {
   VerifiedUser,
 } from "@mui/icons-material";
 import React from "react";
-import "./Post.css";
+import "./home_css/Post.css";
 
 /**
  * The post object which will appear in the feed

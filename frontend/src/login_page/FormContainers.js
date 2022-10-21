@@ -1,7 +1,7 @@
 import React from 'react'
 import LoginForm from './LoginForm'
 import RegistrationForm from './RegistrationForm';
-import './FormContainers.css'
+import './login_css/FormContainers.css'
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Paper from '@mui/material/Paper';
