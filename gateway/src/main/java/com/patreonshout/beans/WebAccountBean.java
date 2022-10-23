@@ -19,7 +19,7 @@ public class WebAccountBean {
 	 */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "webaccount_id")
+	@Column(name = "webaccount_id", unique = true)
 	int webaccount_id;
 
 	/**
@@ -33,6 +33,12 @@ public class WebAccountBean {
 	 */
 	@Column(name = "password")
 	String password;
+
+	/**
+	 * <b>password_salt</b> is a {@link String} that holds the password salt for the account
+	 */
+	@Column(name = "NaCl", unique = true)
+	String password_salt;
 
 	/**
 	 * <b>login_token</b> is a {@link String} that holds the login token for the account
