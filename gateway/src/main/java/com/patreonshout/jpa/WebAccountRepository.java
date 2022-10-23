@@ -44,11 +44,14 @@ public class WebAccountRepository {
 	 */
 	@Transactional
 	public void putAccount(RegisterRequest registerRequest) {
-		String sql = "insert into webaccounts (username, password) values (:username, :password)";
+		String sql = "insert into webaccounts (username, password, NaCl) values (:username, :password, :password_salt)";
 		Query q = em.createNativeQuery(sql);
 
+		String salt = securityConfiguration.createSalt();
+
 		q.setParameter("username", registerRequest.getUsername());
-		q.setParameter("password", securityConfiguration.passwordEncoder().encode(registerRequest.getPassword()));
+		q.setParameter("password", securityConfiguration.encodePassword(registerRequest.getPassword(), salt));
+		q.setParameter("password_salt", salt);
 
 		q.executeUpdate();
 	}
@@ -71,8 +74,10 @@ public class WebAccountRepository {
 		if (waList.isEmpty())
 			throw new PSException(HttpStatus.NOT_FOUND, "Username does not exist.");
 
+		WebAccountBean accountBean = waList.get(0);
+
 		// Password does not match the given user.
-		if (!securityConfiguration.passwordEncoder().matches(loginRequest.getPassword(), waList.get(0).getPassword()))
+		if (!securityConfiguration.passwordMatches(loginRequest.getPassword(), accountBean.getPassword_salt(), accountBean.getPassword()))
 			throw new PSException(HttpStatus.UNAUTHORIZED, "Incorrect password.");
 
 		// TODO: Username and password match, WebAccount was found.
