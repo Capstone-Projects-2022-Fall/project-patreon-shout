@@ -30,6 +30,12 @@ public class PostBean extends BaseResource {
     protected int post_id;
 
     /**
+     * creator is the name of the content creator who made the Patreon post
+     */
+    @Column(name="creator_page_url")
+    protected String creator_page_url;
+
+    /**
      * publishdate is the date at which a Patreonpost was published
      */
     @Column(name="publishdate")
@@ -63,12 +69,6 @@ public class PostBean extends BaseResource {
     @Column(name="is_public")
     @JsonProperty("is_public")
     protected boolean is_public;
-
-    /**
-     * creator is the name of the content creator who made the Patreon post
-     */
-    @Column(name="creator")
-    protected String creator;
 
     /**
      * post_id getter
@@ -171,15 +171,15 @@ public class PostBean extends BaseResource {
      * @return creator
      */
     public String getCreator() {
-        return creator;
+        return creator_page_url;
     }
 
     /**
      * creator setter
-     * @param creator
+     * @param creator_page_url
      */
-    public void setCreator(String creator) {
-        this.creator = creator;
+    public void setCreator(String creator_page_url) {
+        this.creator_page_url = creator_page_url;
     }
 
     /**
@@ -195,7 +195,7 @@ public class PostBean extends BaseResource {
                 ", url='" + url + '\'' +
                 ", content='" + content + '\'' +
                 ", is_public=" + is_public +
-                ", creator='" + creator + '\'' +
+                ", creator_page_url='" + creator_page_url + '\'' +
                 '}';
     }
 }
