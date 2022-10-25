@@ -21,7 +21,7 @@ import java.util.List;
 public class Posts {
 
     /**
-     * postsRepository is the {@link com.patreonshout.jpa.PatreonInfoRepository} class that handles all logic regarding
+     * postsRepository is the {@link CreatorTokensRepository} class that handles all logic regarding
      * database connections with the patreon_info table
      */
     @Autowired

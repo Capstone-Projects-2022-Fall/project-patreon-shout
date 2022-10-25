@@ -54,7 +54,11 @@ public class WebhookSvc extends BaseSvc {
 
 			for (Campaign campaign : client.fetchCampaigns().get()) {
 				for (PostBean post : client.fetchPosts(campaign.getId()).get()) {
-					post.setCreator(user.getFullName());
+//					post.setCreator_page_url(user.getFullName());
+					/* TODO:
+					 * Change user.getFullName() to the campaign url...  Maybe use:
+					 * client.fetchCampaigns().get().get(0).getPledgeUrl()
+					 */
 					posts.putPost(post);
 				}
 			}

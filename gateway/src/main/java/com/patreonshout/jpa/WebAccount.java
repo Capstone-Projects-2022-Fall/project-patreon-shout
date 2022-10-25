@@ -1,6 +1,7 @@
 package com.patreonshout.jpa;
 
 import com.patreonshout.PSException;
+import com.patreonshout.beans.CreatorTokensBean;
 import com.patreonshout.beans.WebAccountBean;
 import com.patreonshout.beans.request.LoginRequest;
 import com.patreonshout.beans.request.RegisterRequest;
@@ -76,10 +77,10 @@ public class WebAccount {
 	 * given login token
 	 *
 	 * @param loginToken login token belonging to a {@link WebAccount}
-	 * @return {@link WebAccountBean} containing the access and refresh tokens for the {@link WebAccount} that contains
+	 * @return {@link CreatorTokensBean} containing the access and refresh tokens for the {@link WebAccount} that contains
 	 * the given login token
 	 */
-	public WebAccountBean getPatreonTokens(String loginToken) throws PSException {
+	public CreatorTokensBean getPatreonTokens(String loginToken) throws PSException {
 		return webAccountRepository.getPatreonTokens(loginToken);
 	}
 }

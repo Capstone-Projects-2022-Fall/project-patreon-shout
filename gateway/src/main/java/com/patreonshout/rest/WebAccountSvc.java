@@ -1,11 +1,13 @@
 package com.patreonshout.rest;
 
 import com.patreonshout.PSException;
+import com.patreonshout.beans.CreatorTokensBean;
 import com.patreonshout.beans.IntegrationRequestBean;
-import com.patreonshout.beans.WebAccountBean;
+import com.patreonshout.beans.NewWebAccount;
 import com.patreonshout.beans.request.LoginRequest;
 import com.patreonshout.beans.request.RegisterRequest;
 import com.patreonshout.beans.response.LoginResponse;
+import com.patreonshout.jpa.TestRepository;
 import com.patreonshout.jpa.WebAccount;
 import com.patreonshout.rest.interfaces.WebAccountImpl;
 import com.patreonshout.utils.ResponseUtil;
@@ -15,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 /**
  * Web Account  RESTful Endpoint Interface
@@ -35,11 +39,28 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	WebAccount webAccount;
 
 	/**
+	 * TODO:
+	 */
+	@Autowired
+	public TestRepository testRepository;
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public HttpStatus Register(@RequestBody RegisterRequest registerRequest) {
+		NewWebAccount webAccountBean = new NewWebAccount();
+		webAccountBean.setUsername("user");
+		webAccountBean.setPassword("pass");
+		webAccountBean.setPassword_salt("salt");
+
+//		try {
+//			testRepository.save(webAccountBean);
+//		} catch (Exception ex) {
+//			ex.printStackTrace();
+//		}
+
 		// TODO: Ensure username and password are sanitized and fit specific requirements
-		webAccount.putAccount(registerRequest);
+//		webAccount.putAccount(registerRequest);
 
 		return HttpStatus.CREATED; // Http 201
 	}
@@ -76,10 +97,10 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	 * {@inheritDoc}
 	 */
 	public ResponseEntity<?> GetPatreonTokens(@RequestParam(name = "login_token") String loginToken) throws PSException {
-		WebAccountBean response = webAccount.getPatreonTokens(loginToken);
-		response.setUsername(null);
-		response.setPassword(null);
+		CreatorTokensBean tokens = webAccount.getPatreonTokens(loginToken);
 
-		return new ResponseEntity<>(response, HttpStatus.CREATED);
+		Map<String, String> response = Map.of("access",tokens.getAccess_token(), "refresh", tokens.getRefresh_token());
+
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 }

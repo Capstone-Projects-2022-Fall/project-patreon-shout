@@ -1,6 +1,7 @@
 package com.patreonshout.beans;
 
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
@@ -10,10 +11,8 @@ import javax.persistence.*;
 @Entity
 @Table(name = "webaccounts")
 @NoArgsConstructor
-@Setter
-@Getter
-public class WebAccountBean {
-
+@Data
+public class NewWebAccount {
 	/**
 	 * <b>webaccount_id</b> is a {@link Integer} primary key for the webaccounts table in the database
 	 */

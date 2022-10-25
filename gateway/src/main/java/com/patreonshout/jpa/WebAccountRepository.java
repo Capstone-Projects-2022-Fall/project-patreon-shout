@@ -1,6 +1,7 @@
 package com.patreonshout.jpa;
 
 import com.patreonshout.PSException;
+import com.patreonshout.beans.CreatorTokensBean;
 import com.patreonshout.beans.WebAccountBean;
 import com.patreonshout.beans.request.LoginRequest;
 import com.patreonshout.beans.request.RegisterRequest;
@@ -12,9 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.*;
 import java.util.List;
 
 /**
@@ -44,16 +43,18 @@ public class WebAccountRepository {
 	 */
 	@Transactional
 	public void putAccount(RegisterRequest registerRequest) {
-		String sql = "insert into webaccounts (username, password, NaCl) values (:username, :password, :password_salt)";
-		Query q = em.createNativeQuery(sql);
 
-		String salt = securityConfiguration.createSalt();
 
-		q.setParameter("username", registerRequest.getUsername());
-		q.setParameter("password", securityConfiguration.encodePassword(registerRequest.getPassword(), salt));
-		q.setParameter("password_salt", salt);
-
-		q.executeUpdate();
+//		String sql = "insert into webaccounts (username, password, NaCl) values (:username, :password, :password_salt)";
+//		Query q = em.createNativeQuery(sql);
+//
+//		String salt = securityConfiguration.createSalt();
+//
+//		q.setParameter("username", registerRequest.getUsername());
+//		q.setParameter("password", securityConfiguration.encodePassword(registerRequest.getPassword(), salt));
+//		q.setParameter("password_salt", salt);
+//
+//		q.executeUpdate();
 	}
 
 	/**
@@ -145,15 +146,20 @@ public class WebAccountRepository {
 	 */
 	@Transactional
 	public void putPatreonTokens(String accessToken, String refreshToken, String loginToken) {
-		String sql = "UPDATE webaccounts SET access_token = COALESCE(:access_token, @access_token), refresh_token = COALESCE(:refresh_token, @refresh_token) WHERE login_token = :login_token";
-
-		Query q = em.createNativeQuery(sql);
-
-		q.setParameter("access_token", accessToken);
-		q.setParameter("refresh_token", refreshToken);
-		q.setParameter("login_token", loginToken);
-
-		q.executeUpdate();
+//		String sql = "UPDATE creator_tokens " +
+//				"SET webaccount_id = COALESCE(:webaccount_id, @webaccount_id), " +
+//				"access_token = COALESCE(:access_token, @access_token), " +
+//				"refresh_token = COALESCE(:refresh_token, @refresh_token), " +
+//				"expires_in = COALESCE(:expires_in, @expires_in), " +
+//				"scope = COALESCE(:scope, @scope), " +
+//				"WHERE login_token = :login_token";
+//
+//		Query q = em.createNativeQuery(sql);
+//		q.setParameter("access_token", accessToken);
+//		q.setParameter("refresh_token", refreshToken);
+//		q.setParameter("login_token", loginToken);
+//
+//		q.executeUpdate();
 	}
 
 	/**
@@ -165,18 +171,21 @@ public class WebAccountRepository {
 	 * the given login token
 	 */
 	@Transactional
-	public WebAccountBean getPatreonTokens(String loginToken) throws PSException {
-		String sql = "SELECT * FROM webaccounts WHERE login_token = :login_token";
+	public CreatorTokensBean getPatreonTokens(String loginToken) throws PSException {
+		String sql = "SELECT * " +
+				"FROM creator_tokens " +
+				"INNER JOIN webaccounts " +
+				"ON creator_tokens.webaccount_id = webaccounts.webaccount_id " +
+				"WHERE webaccounts.login_token = :login_token";
 
-		Query q = em.createNativeQuery(sql, WebAccountBean.class);
-
+		Query q = em.createNativeQuery(sql, CreatorTokensBean.class);
 		q.setParameter("login_token", loginToken);
 
-		List<WebAccountBean> waList = q.getResultList();
+		List<CreatorTokensBean> resultList = q.getResultList();
 
-		if (waList.isEmpty())
+		if (resultList.isEmpty())
 			throw new PSException(HttpStatus.NOT_FOUND, "An exception occurred while finding the login token.");
 
-		return waList.get(0);
+		return resultList.get(0);
 	}
 }
