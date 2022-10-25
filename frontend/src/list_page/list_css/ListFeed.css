@@ -1,0 +1,48 @@
+.listfeed {
+    position: center;
+    padding-top: 20px;
+    padding-left: 340px;
+    padding-right: 400px;
+    flex: 0.4;
+    border-right: var(--background) 1px solid;
+    min-width: fit-content;
+    overflow-y: auto;
+}
+.listfeed__header {
+    display: flex;
+    position: sticky;
+    background-color: white;
+    z-index: 100;
+    border: 1px solid var(--background);
+    padding: 15px 20px;
+    align-content: center;
+    justify-content: space-between;
+}
+.listfeed::-webkit-scrollbar {
+    display: none;
+}
+
+#addListButton {
+    height: 35px;
+    width: 35px;
+    border-radius: 20px;
+
+}
+
+#addListButton:hover {
+    background-color: #b1cffc73;
+    transition: background-color 200ms ease;
+    cursor: pointer;
+}
+
+h2 {
+    padding: 5px;
+}
+
+.listfeed__lists {
+
+}
+
+.listfeed__posts {
+    display: none;
+}
