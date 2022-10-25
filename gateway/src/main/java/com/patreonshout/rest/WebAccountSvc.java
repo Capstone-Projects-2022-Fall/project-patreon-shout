@@ -3,11 +3,10 @@ package com.patreonshout.rest;
 import com.patreonshout.PSException;
 import com.patreonshout.beans.CreatorTokensBean;
 import com.patreonshout.beans.IntegrationRequestBean;
-import com.patreonshout.beans.NewWebAccount;
 import com.patreonshout.beans.request.LoginRequest;
 import com.patreonshout.beans.request.RegisterRequest;
 import com.patreonshout.beans.response.LoginResponse;
-import com.patreonshout.jpa.TestRepository;
+import com.patreonshout.jpa.NewWebAccountRepository;
 import com.patreonshout.jpa.WebAccount;
 import com.patreonshout.rest.interfaces.WebAccountImpl;
 import com.patreonshout.utils.ResponseUtil;
@@ -42,25 +41,14 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	 * TODO:
 	 */
 	@Autowired
-	public TestRepository testRepository;
+	public NewWebAccountRepository newWebAccountRepository;
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public HttpStatus Register(@RequestBody RegisterRequest registerRequest) {
-		NewWebAccount webAccountBean = new NewWebAccount();
-		webAccountBean.setUsername("user");
-		webAccountBean.setPassword("pass");
-		webAccountBean.setPassword_salt("salt");
-
-//		try {
-//			testRepository.save(webAccountBean);
-//		} catch (Exception ex) {
-//			ex.printStackTrace();
-//		}
-
 		// TODO: Ensure username and password are sanitized and fit specific requirements
-//		webAccount.putAccount(registerRequest);
+		webAccount.putAccount(registerRequest);
 
 		return HttpStatus.CREATED; // Http 201
 	}

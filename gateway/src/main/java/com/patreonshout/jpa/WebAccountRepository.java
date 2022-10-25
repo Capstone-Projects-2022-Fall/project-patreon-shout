@@ -58,37 +58,6 @@ public class WebAccountRepository {
 	}
 
 	/**
-	 * Ensures a {@link WebAccount} with a matching username and password exists in the database
-	 *
-	 * @param loginRequest {@link LoginRequest} object that contains the desired login details to check
-	 */
-	@Transactional
-	public String readAccount(LoginRequest loginRequest) throws PSException {
-		String sql = "SELECT * FROM webaccounts WHERE username = :username";
-
-		Query q = em.createNativeQuery(sql, WebAccountBean.class);
-		q.setParameter("username", loginRequest.getUsername());
-
-		List<WebAccountBean> waList = q.getResultList();
-
-		// Username does not exist.
-		if (waList.isEmpty())
-			throw new PSException(HttpStatus.NOT_FOUND, "Username does not exist.");
-
-		WebAccountBean accountBean = waList.get(0);
-
-		// Password does not match the given user.
-		if (!securityConfiguration.passwordMatches(loginRequest.getPassword(), accountBean.getPassword_salt(), accountBean.getPassword()))
-			throw new PSException(HttpStatus.UNAUTHORIZED, "Incorrect password.");
-
-		// TODO: Username and password match, WebAccount was found.
-		String loginToken = securityConfiguration.SHA1Encoder(System.currentTimeMillis() + loginRequest.getUsername());
-		putLoginToken(loginToken, loginRequest.getUsername());
-
-		return loginToken;
-	}
-
-	/**
 	 * Adds a login token to a {@link WebAccount} matching the given username in the database
 	 *
 	 * @param loginToken Login token to add to the desired {@link WebAccount}
