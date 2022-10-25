@@ -65,6 +65,9 @@ function AddListModal() {
                             if (added === true) {
                                 close();
                             }
+                            else {
+                                console.log("add list error msg");
+                            }
                         }}/>
                     </form>
 

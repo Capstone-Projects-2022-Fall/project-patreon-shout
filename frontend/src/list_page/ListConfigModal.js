@@ -63,6 +63,9 @@ function ListConfigModal({setListTitle, setListDesc}) {
                             if (edited === true) {
                                 close()
                             }
+                            else {
+                                console.log("edit list error msg");
+                            }
                         }}/>
                         <input type="button" value="Delete List" onClick={deleteList}/>
 
