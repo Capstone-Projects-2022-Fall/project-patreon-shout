@@ -4,9 +4,9 @@ import {VerifiedUser} from "@mui/icons-material";
 import "./comp_css/Creator.css";
 
 
-function Creator({curCreatorList, setCreatorList, displayName, urlName, description, imgUrl, verified}) {
+function Creator({addedState, curCreatorList, setCreatorList, displayName, urlName, description, imgUrl, verified}) {
 
-    const [added, setAdded] = useState(false);
+    const [added, setAdded] = useState(addedState);
 
     return (
         <div className="creator">

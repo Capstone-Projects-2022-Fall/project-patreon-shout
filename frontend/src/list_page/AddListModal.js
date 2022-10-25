@@ -69,6 +69,7 @@ function AddListModal() {
                     </form>
 
                     <Creator
+                        addedState={false}
                         curCreatorList={creatorList}
                         setCreatorList={setCreatorList}
                         displayName="AlexS"
@@ -78,6 +79,7 @@ function AddListModal() {
                         verified="true"
                     />
                     <Creator
+                        addedState={false}
                         curCreatorList={creatorList}
                         setCreatorList={setCreatorList}
                         displayName="AyserJ"
@@ -87,6 +89,7 @@ function AddListModal() {
                         verified="true"
                     />
                     <Creator
+                        addedState={false}
                         curCreatorList={creatorList}
                         setCreatorList={setCreatorList}
                         displayName="ChrisS"
@@ -96,6 +99,7 @@ function AddListModal() {
                         verified="true"
                     />
                     <Creator
+                        addedState={false}
                         curCreatorList={creatorList}
                         setCreatorList={setCreatorList}
                         displayName="JonahM"
