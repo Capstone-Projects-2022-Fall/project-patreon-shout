@@ -7,22 +7,15 @@ import "./list_css/AddListModal.css";
 
 function AddListModal() {
 
-    const creators = [];
-    const [creator, setCreator] = useState("");
+    const [creatorList, setCreatorList] = useState([]);
     const [titleInput, setTitle] = useState("");
     const [descInput, setDesc] = useState("");
     const [searchInput, setSearch] = useState("");
 
     function addList() {
-        console.log("started adding");
-
+        console.log(creatorList);
     }
 
-    function addCreator(event) {
-        creators.push(creator);
-        console.log(creators);
-        setCreator("");
-    }
 
     return (
         <Popup trigger={<PostAddIcon id="addListButton" onClick={addList}/>} modal>
@@ -54,12 +47,15 @@ function AddListModal() {
                             placeholder="Search Creators"
                             type="text"
                         />
-                        <input type="button" value="Create List" />
+                        <input type="button" value="Create List" onClick={() => {
+                            close();
+                            addList();
+                        }}/>
                     </form>
 
                     <Creator
-                        addCreator={event => addCreator(event)}
-                        setCreator={setCreator}
+                        curCreatorList={creatorList}
+                        setCreatorList={setCreatorList}
                         displayName="Alex Sawicki"
                         urlName="alexzwicky"
                         description="very cool omg so cool omg"
@@ -67,8 +63,8 @@ function AddListModal() {
                         verified="true"
                     />
                     <Creator
-                        addCreator={event => addCreator(event)}
-                        setCreator={setCreator}
+                        curCreatorList={creatorList}
+                        setCreatorList={setCreatorList}
                         displayName="Alex Sawicki"
                         urlName="jack"
                         description="very cool omg so cool omg"
@@ -76,8 +72,8 @@ function AddListModal() {
                         verified="true"
                     />
                     <Creator
-                        addCreator={event => addCreator(event)}
-                        setCreator={setCreator}
+                        curCreatorList={creatorList}
+                        setCreatorList={setCreatorList}
                         displayName="Alex Sawicki"
                         urlName="alexzwicky"
                         description="very cool omg so cool omg"
