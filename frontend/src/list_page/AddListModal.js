@@ -12,13 +12,24 @@ function AddListModal() {
     const [descInput, setDesc] = useState("");
     const [searchInput, setSearch] = useState("");
 
-    function addList() {
+    const eraseInfo = () => {
+        setCreatorList([]);
+        setTitle("");
+        setDesc("");
+        setSearch("");
+    }
+
+    const addList = () => {
+        console.log("title: " + titleInput);
+        console.log("desc: " + descInput);
         console.log(creatorList);
+        eraseInfo();
+        // TODO: send http request to put list for user here
     }
 
 
     return (
-        <Popup trigger={<PostAddIcon id="addListButton" onClick={addList}/>} modal>
+        <Popup trigger={<PostAddIcon id="addListButton" />} onClose={eraseInfo} modal>
             {close => (
                 <div className="modalBox">
                     <button className="close" onClick={close}>
@@ -56,8 +67,8 @@ function AddListModal() {
                     <Creator
                         curCreatorList={creatorList}
                         setCreatorList={setCreatorList}
-                        displayName="Alex Sawicki"
-                        urlName="alexzwicky"
+                        displayName="AlexS"
+                        urlName="alex"
                         description="very cool omg so cool omg"
                         imgUrl="https://i.picsum.photos/id/505/536/354.jpg?hmac=zvFVVisk0oG7zcCY4MmROU21E0SnGTOk3g2OA3fCszo"
                         verified="true"
@@ -65,8 +76,8 @@ function AddListModal() {
                     <Creator
                         curCreatorList={creatorList}
                         setCreatorList={setCreatorList}
-                        displayName="Alex Sawicki"
-                        urlName="jack"
+                        displayName="AyserJ"
+                        urlName="ayser"
                         description="very cool omg so cool omg"
                         imgUrl="https://i.picsum.photos/id/505/536/354.jpg?hmac=zvFVVisk0oG7zcCY4MmROU21E0SnGTOk3g2OA3fCszo"
                         verified="true"
@@ -74,15 +85,17 @@ function AddListModal() {
                     <Creator
                         curCreatorList={creatorList}
                         setCreatorList={setCreatorList}
-                        displayName="Alex Sawicki"
-                        urlName="alexzwicky"
+                        displayName="ChrisS"
+                        urlName="chris"
                         description="very cool omg so cool omg"
                         imgUrl="https://i.picsum.photos/id/505/536/354.jpg?hmac=zvFVVisk0oG7zcCY4MmROU21E0SnGTOk3g2OA3fCszo"
                         verified="true"
                     />
                     <Creator
-                        displayName="Alex Sawicki"
-                        urlName="alexzwicky"
+                        curCreatorList={creatorList}
+                        setCreatorList={setCreatorList}
+                        displayName="JonahM"
+                        urlName="jonah"
                         description="very cool omg so cool omg"
                         imgUrl="https://i.picsum.photos/id/505/536/354.jpg?hmac=zvFVVisk0oG7zcCY4MmROU21E0SnGTOk3g2OA3fCszo"
                         verified="true"
