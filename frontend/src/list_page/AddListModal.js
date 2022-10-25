@@ -24,6 +24,8 @@ function AddListModal() {
         console.log("desc: " + descInput);
         console.log(creatorList);
         eraseInfo();
+
+        return true;
         // TODO: send http request to put list for user here
     }
 
@@ -59,8 +61,10 @@ function AddListModal() {
                             type="text"
                         />
                         <input type="button" value="Create List" onClick={() => {
-                            close();
-                            addList();
+                            const added = addList();
+                            if (added === true) {
+                                close();
+                            }
                         }}/>
                     </form>
 
