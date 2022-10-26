@@ -12,23 +12,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 /**
  * Functions for WebAccount endpoints that allow interaction with the database
  */
 @Component
-public class WebAccount {
+public class WebAccountFunctions {
 
 	/**
-	 * webAccountRepository is the {@link WebAccountRepository} class that handles all logic regarding
+	 * webAccountRepository is the {@link OldWebAccountFunctions} class that handles all logic regarding
 	 * database connections with the webaccounts table
 	 */
 	@Autowired
-	WebAccountRepository webAccountRepository;
+	OldWebAccountFunctions oldWebAccountFunctions;
 
 	/**
-	 * webAccountRepository is the {@link WebAccountRepository} class that handles all logic regarding
+	 * webAccountRepository is the {@link OldWebAccountFunctions} class that handles all logic regarding
 	 * database connections with the webaccounts table
 	 */
 	@Autowired
@@ -42,7 +40,7 @@ public class WebAccount {
 	SecurityConfiguration securityConfiguration;
 
 	/**
-	 * Adds a {@link WebAccount} to the database
+	 * Adds a {@link WebAccountFunctions} to the database
 	 *
 	 * @param registerRequest {@link RegisterRequest} object that contains the desired login details for a new
 	 *                        {@link HttpStatus} 409 if the account already exists
@@ -59,7 +57,7 @@ public class WebAccount {
 	}
 
 	/**
-	 * Adds a login token to a {@link WebAccount} matching the given username in the database
+	 * Adds a login token to a {@link WebAccountFunctions} matching the given username in the database
 	 *
 	 * @param loginRequest {@link LoginRequest} object that contains the desired login details to check
 	 */
@@ -105,29 +103,29 @@ public class WebAccount {
 	 * @param data Webhook URL or access token
 	 */
 	public void putIntegration(int webAccountId, IntegrationType type, String data) {
-		webAccountRepository.putIntegration(webAccountId, type, data);
+		oldWebAccountFunctions.putIntegration(webAccountId, type, data);
 	}
 
 	/**
-	 * Attempts to add Patreon access and refresh tokens into a {@link WebAccount} by checking for a matching login token
+	 * Attempts to add Patreon access and refresh tokens into a {@link WebAccountFunctions} by checking for a matching login token
 	 *
 	 * @param accessToken  Patreon access token - can be null
 	 * @param refreshToken Patreon refresh token - can be null
 	 * @param loginToken   {@link WebAccountBean} login token
 	 */
 	public void putPatreonTokens(String accessToken, String refreshToken, String loginToken) {
-		webAccountRepository.putPatreonTokens(accessToken, refreshToken, loginToken);
+		oldWebAccountFunctions.putPatreonTokens(accessToken, refreshToken, loginToken);
 	}
 
 	/**
-	 * Attempts to acquire Patreon access and refresh tokens by checking for a matching {@link WebAccount} with the
+	 * Attempts to acquire Patreon access and refresh tokens by checking for a matching {@link WebAccountFunctions} with the
 	 * given login token
 	 *
-	 * @param loginToken login token belonging to a {@link WebAccount}
-	 * @return {@link CreatorTokensBean} containing the access and refresh tokens for the {@link WebAccount} that contains
+	 * @param loginToken login token belonging to a {@link WebAccountFunctions}
+	 * @return {@link CreatorTokensBean} containing the access and refresh tokens for the {@link WebAccountFunctions} that contains
 	 * the given login token
 	 */
 	public CreatorTokensBean getPatreonTokens(String loginToken) throws PSException {
-		return webAccountRepository.getPatreonTokens(loginToken);
+		return oldWebAccountFunctions.getPatreonTokens(loginToken);
 	}
 }

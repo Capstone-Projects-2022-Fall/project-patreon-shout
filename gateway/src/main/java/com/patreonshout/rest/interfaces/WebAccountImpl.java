@@ -5,7 +5,7 @@ import com.patreonshout.beans.IntegrationRequestBean;
 import com.patreonshout.beans.WebAccountBean;
 import com.patreonshout.beans.request.LoginRequest;
 import com.patreonshout.beans.request.RegisterRequest;
-import com.patreonshout.jpa.WebAccount;
+import com.patreonshout.jpa.WebAccountFunctions;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 public interface WebAccountImpl {
 
 	/**
-	 * Endpoint that will create a new {@link WebAccount} into the database.
+	 * Endpoint that will create a new {@link WebAccountFunctions} into the database.
 	 *
 	 * @param registerRequest {@link RegisterRequest} object that contains the desired login details for a new
 	 * @return {@link HttpStatus#OK} if the registration was successful, {@link HttpStatus#CONFLICT} if the account
@@ -43,7 +43,7 @@ public interface WebAccountImpl {
 	HttpStatus Register(@RequestBody RegisterRequest registerRequest);
 
 	/**
-	 * Endpoint that will create a new {@link WebAccount} into the database
+	 * Endpoint that will create a new {@link WebAccountFunctions} into the database
 	 *
 	 * @param loginRequest is the json request
 	 * @return a token signifying valid login or no token signifying invalid login
@@ -58,7 +58,7 @@ public interface WebAccountImpl {
 	ResponseEntity<?> Login(@RequestBody LoginRequest loginRequest) throws PSException;
 
 	/**
-	 * Endpoint that will delete a login token from a {@link WebAccount} in the database
+	 * Endpoint that will delete a login token from a {@link WebAccountFunctions} in the database
 	 *
 	 * @param loginToken Login token to delete from the database
 	 * @return {@link HttpStatus#OK} if successful
@@ -76,7 +76,7 @@ public interface WebAccountImpl {
 	/**
 	 * Endpoint that allows registering, updating or deleting integrations for social platforms.
 	 *
-	 * @param integrationRequestBean {@link IntegrationRequestBean} object that contains {@link WebAccount} and request details.
+	 * @param integrationRequestBean {@link IntegrationRequestBean} object that contains {@link WebAccountFunctions} and request details.
 	 * @return {@link HttpStatus#OK} if successful, {@link HttpStatus#CONFLICT} if the provided {@link IntegrationRequestBean}
 	 * does not contain a valid {@link com.patreonshout.beans.WebAccountBean} ID number.
 	 */
@@ -94,11 +94,11 @@ public interface WebAccountImpl {
 	HttpStatus Integration(@RequestBody IntegrationRequestBean integrationRequestBean);
 
 	/**
-	 * Endpoint that allows retrieval of Patreon access and refresh tokens for a {@link WebAccount} containing the given
+	 * Endpoint that allows retrieval of Patreon access and refresh tokens for a {@link WebAccountFunctions} containing the given
 	 * login token
 	 *
-	 * @param loginToken Login token belonging to a {@link WebAccount}
-	 * @return {@link WebAccountBean} containing a valid {@link WebAccount} ID and its respective login, refresh and
+	 * @param loginToken Login token belonging to a {@link WebAccountFunctions}
+	 * @return {@link WebAccountBean} containing a valid {@link WebAccountFunctions} ID and its respective login, refresh and
 	 * access tokens
 	 */
 	@GetMapping("/patreontokens")

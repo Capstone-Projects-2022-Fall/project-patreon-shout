@@ -4,8 +4,9 @@ import com.patreon.PatreonOAuth;
 import com.patreon.resources.Campaign;
 import com.patreon.resources.User;
 import com.patreonshout.beans.PostBean;
+import com.patreonshout.jpa.OldWebAccountFunctions;
 import com.patreonshout.jpa.Posts;
-import com.patreonshout.jpa.WebAccount;
+import com.patreonshout.jpa.WebAccountFunctions;
 import com.patreonshout.patreon.CustomPatreonAPI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,10 +18,10 @@ import java.io.IOException;
 @RestController
 public class WebhookSvc extends BaseSvc {
 	/**
-	 * webAccount is the wrapper class for {@link com.patreonshout.jpa.WebAccountRepository}
+	 * webAccount is the wrapper class for {@link OldWebAccountFunctions}
 	 */
 	@Autowired
-	WebAccount webAccount;
+	WebAccountFunctions webAccountFunctions;
 
 	@Autowired
 	Posts posts;
@@ -64,7 +65,7 @@ public class WebhookSvc extends BaseSvc {
 			}
 
 			// put patreon tokens in database
-			webAccount.putPatreonTokens(accessToken, refreshToken, state);
+			webAccountFunctions.putPatreonTokens(accessToken, refreshToken, state);
 
 			return "Patreon linked!  Close this pop-up and refresh the PatreonShout webpage.";
 //			throw new PSException(HttpStatus.CREATED, "Token created");

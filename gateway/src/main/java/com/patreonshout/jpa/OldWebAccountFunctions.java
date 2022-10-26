@@ -3,8 +3,6 @@ package com.patreonshout.jpa;
 import com.patreonshout.PSException;
 import com.patreonshout.beans.CreatorTokensBean;
 import com.patreonshout.beans.WebAccountBean;
-import com.patreonshout.beans.request.LoginRequest;
-import com.patreonshout.beans.request.RegisterRequest;
 import com.patreonshout.config.SecurityConfiguration;
 import com.patreonshout.jpa.constants.IntegrationType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +18,7 @@ import java.util.List;
  * Functions that directly interact with the WebAccounts table in the database
  */
 @Repository
-public class WebAccountRepository {
+public class OldWebAccountFunctions {
 
 	/**
 	 * em is the {@link EntityManager} that handles all the transactions with our database
@@ -53,7 +51,7 @@ public class WebAccountRepository {
 
 
 	/**
-	 * Attempts to add Patreon access and refresh tokens into a {@link WebAccount} by checking for a matching login token
+	 * Attempts to add Patreon access and refresh tokens into a {@link WebAccountFunctions} by checking for a matching login token
 	 *
 	 * @param accessToken  Patreon access token - can be null
 	 * @param refreshToken Patreon refresh token - can be null
@@ -78,11 +76,11 @@ public class WebAccountRepository {
 	}
 
 	/**
-	 * Attempts to acquire Patreon access and refresh tokens by checking for a matching {@link WebAccount} with the
+	 * Attempts to acquire Patreon access and refresh tokens by checking for a matching {@link WebAccountFunctions} with the
 	 * given login token
 	 *
-	 * @param loginToken login token belonging to a {@link WebAccount}
-	 * @return {@link WebAccountBean} containing the access and refresh tokens for the {@link WebAccount} that contains
+	 * @param loginToken login token belonging to a {@link WebAccountFunctions}
+	 * @return {@link WebAccountBean} containing the access and refresh tokens for the {@link WebAccountFunctions} that contains
 	 * the given login token
 	 */
 	@Transactional

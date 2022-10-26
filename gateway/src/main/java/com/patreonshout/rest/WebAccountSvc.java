@@ -7,7 +7,8 @@ import com.patreonshout.beans.request.LoginRequest;
 import com.patreonshout.beans.request.RegisterRequest;
 import com.patreonshout.beans.response.LoginResponse;
 import com.patreonshout.jpa.NewWebAccountRepository;
-import com.patreonshout.jpa.WebAccount;
+import com.patreonshout.jpa.OldWebAccountFunctions;
+import com.patreonshout.jpa.WebAccountFunctions;
 import com.patreonshout.rest.interfaces.WebAccountImpl;
 import com.patreonshout.utils.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +33,10 @@ import java.util.Map;
 public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 
 	/**
-	 * webAccount is the wrapper class for {@link com.patreonshout.jpa.WebAccountRepository}
+	 * webAccount is the wrapper class for {@link OldWebAccountFunctions}
 	 */
 	@Autowired
-	WebAccount webAccount;
+	WebAccountFunctions webAccountFunctions;
 
 	/**
 	 * TODO:
@@ -48,7 +49,7 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	 */
 	public HttpStatus Register(@RequestBody RegisterRequest registerRequest) {
 		// TODO: Ensure username and password are sanitized and fit specific requirements
-		webAccount.putAccount(registerRequest);
+		webAccountFunctions.putAccount(registerRequest);
 
 		return HttpStatus.CREATED; // Http 201
 	}
@@ -57,7 +58,7 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	 * {@inheritDoc}
 	 */
 	public ResponseEntity<?> Login(@RequestBody LoginRequest loginRequest) throws PSException {
-		String loginToken = webAccount.readAccount(loginRequest);
+		String loginToken = webAccountFunctions.readAccount(loginRequest);
 
 		return new ResponseEntity<>(new LoginResponse(loginToken), HttpStatus.CREATED);
 	}
@@ -66,7 +67,7 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	 * {@inheritDoc}
 	 */
 	public ResponseEntity<?> Logout(@RequestParam(name = "login_token") String loginToken) {
-		webAccount.deleteLoginToken(loginToken);
+		webAccountFunctions.deleteLoginToken(loginToken);
 
 		return ResponseUtil.Generic(HttpStatus.OK, "Token deleted if it existed.");
 	}
@@ -75,7 +76,7 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	 * {@inheritDoc}
 	 */
 	public HttpStatus Integration(@RequestBody IntegrationRequestBean integrationRequestBean) {
-		webAccount.putIntegration(integrationRequestBean.getWebaccount().getWebAccountId(),
+		webAccountFunctions.putIntegration(integrationRequestBean.getWebaccount().getWebAccountId(),
 				integrationRequestBean.getIntegrationType(),
 				integrationRequestBean.getData());
 		return HttpStatus.OK;
@@ -85,7 +86,7 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	 * {@inheritDoc}
 	 */
 	public ResponseEntity<?> GetPatreonTokens(@RequestParam(name = "login_token") String loginToken) throws PSException {
-		CreatorTokensBean tokens = webAccount.getPatreonTokens(loginToken);
+		CreatorTokensBean tokens = webAccountFunctions.getPatreonTokens(loginToken);
 
 		Map<String, String> response = Map.of("access",tokens.getAccess_token(), "refresh", tokens.getRefresh_token());
 
