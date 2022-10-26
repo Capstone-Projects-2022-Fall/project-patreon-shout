@@ -10,7 +10,7 @@ import lombok.Setter;
  */
 @Setter
 @Getter
-public class IntegrationRequestBean {
+public class SocialIntegrationRequest {
 
 	/**
 	 * A {@link String} login token that belongs to a {@link WebAccount}

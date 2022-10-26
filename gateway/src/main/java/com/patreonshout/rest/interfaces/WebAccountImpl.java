@@ -1,7 +1,7 @@
 package com.patreonshout.rest.interfaces;
 
 import com.patreonshout.PSException;
-import com.patreonshout.beans.IntegrationRequestBean;
+import com.patreonshout.beans.SocialIntegrationRequest;
 import com.patreonshout.beans.WebAccount;
 import com.patreonshout.beans.request.LoginRequest;
 import com.patreonshout.beans.request.RegisterRequest;
@@ -76,8 +76,8 @@ public interface WebAccountImpl {
 	/**
 	 * Endpoint that allows registering, updating or deleting integrations for social platforms.
 	 *
-	 * @param integrationRequestBean {@link IntegrationRequestBean} object that contains {@link WebAccountFunctions} and request details.
-	 * @return {@link HttpStatus#OK} if successful, {@link HttpStatus#CONFLICT} if the provided {@link IntegrationRequestBean}
+	 * @param socialIntegrationRequest {@link SocialIntegrationRequest} object that contains {@link WebAccountFunctions} and request details.
+	 * @return {@link HttpStatus#OK} if successful, {@link HttpStatus#CONFLICT} if the provided {@link SocialIntegrationRequest}
 	 * does not contain a valid {@link WebAccount} ID number.
 	 */
 	@PutMapping("/integration")
@@ -91,7 +91,7 @@ public interface WebAccountImpl {
 					content = {@Content(mediaType = "application/json")})
 	})
 	@ResponseStatus(code = HttpStatus.OK, reason = "Data saved successfully")
-	HttpStatus Integration(@RequestBody IntegrationRequestBean integrationRequestBean);
+	HttpStatus Integration(@RequestBody SocialIntegrationRequest socialIntegrationRequest);
 
 	/**
 	 * Endpoint that allows retrieval of Patreon access and refresh tokens for a {@link WebAccountFunctions} containing the given

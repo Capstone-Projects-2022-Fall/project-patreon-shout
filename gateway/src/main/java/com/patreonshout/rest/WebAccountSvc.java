@@ -2,7 +2,7 @@ package com.patreonshout.rest;
 
 import com.patreonshout.PSException;
 import com.patreonshout.beans.CreatorTokensBean;
-import com.patreonshout.beans.IntegrationRequestBean;
+import com.patreonshout.beans.SocialIntegrationRequest;
 import com.patreonshout.beans.request.LoginRequest;
 import com.patreonshout.beans.request.RegisterRequest;
 import com.patreonshout.beans.response.LoginResponse;
@@ -75,8 +75,8 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	/**
 	 * {@inheritDoc}
 	 */
-	public HttpStatus Integration(@RequestBody IntegrationRequestBean integrationRequestBean) {
-		webAccountFunctions.putIntegration(integrationRequestBean);
+	public HttpStatus Integration(@RequestBody SocialIntegrationRequest socialIntegrationRequest) {
+		webAccountFunctions.putSocialIntegration(socialIntegrationRequest);
 		return HttpStatus.OK;
 	}
 

@@ -2,7 +2,7 @@ package com.patreonshout.jpa;
 
 import com.patreonshout.PSException;
 import com.patreonshout.beans.CreatorTokensBean;
-import com.patreonshout.beans.IntegrationRequestBean;
+import com.patreonshout.beans.SocialIntegrationRequest;
 import com.patreonshout.beans.SocialIntegration;
 import com.patreonshout.beans.WebAccount;
 import com.patreonshout.beans.request.LoginRequest;
@@ -94,22 +94,19 @@ public class WebAccountFunctions {
 	@Transactional
 	public void deleteLoginToken(String loginToken) {
 		WebAccount webAccount = webAccountRepository.findByLoginToken(loginToken);
-
 		webAccount.setLoginToken(null);
 
 		webAccountRepository.save(webAccount);
-
-//		webAccountRepository.deleteLoginToken(loginToken);
 	}
 
 	/**
 	 * Adds a social integration
 	 *
-	 * @param integrationRequestBean {@link IntegrationRequestBean} Integration request provided from RESTful call
+	 * @param socialIntegrationRequest {@link SocialIntegrationRequest} Integration request provided from RESTful call
 	 */
 	@Transactional
-	public void putIntegration(IntegrationRequestBean integrationRequestBean) {
-		WebAccount webAccount = webAccountRepository.findByLoginToken(integrationRequestBean.getLoginToken());
+	public void putSocialIntegration(SocialIntegrationRequest socialIntegrationRequest) {
+		WebAccount webAccount = webAccountRepository.findByLoginToken(socialIntegrationRequest.getLoginToken());
 		SocialIntegration socialIntegration = webAccount.getSocialIntegration();
 
 		if (socialIntegration == null) {
@@ -120,15 +117,15 @@ public class WebAccountFunctions {
 		socialIntegration.setWebAccount(webAccount);
 		webAccount.setSocialIntegration(socialIntegration);
 
-		switch (integrationRequestBean.getIntegrationType()) {
+		switch (socialIntegrationRequest.getIntegrationType()) {
 			case DISCORD:
-				socialIntegration.setDiscord(integrationRequestBean.getData());
+				socialIntegration.setDiscord(socialIntegrationRequest.getData());
 				break;
 			case TWITTER:
-				socialIntegration.setTwitter(integrationRequestBean.getData());
+				socialIntegration.setTwitter(socialIntegrationRequest.getData());
 				break;
 			case INSTAGRAM:
-				socialIntegration.setInstagram(integrationRequestBean.getData());
+				socialIntegration.setInstagram(socialIntegrationRequest.getData());
 				break;
 		}
 
