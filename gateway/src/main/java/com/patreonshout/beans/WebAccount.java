@@ -45,5 +45,5 @@ public class WebAccount {
 
 	@OneToOne(mappedBy = "webAccount", cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn
-	SocialIntegrationBean socialIntegrationBean;
+	SocialIntegration socialIntegration;
 }

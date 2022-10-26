@@ -34,23 +34,6 @@ public class OldWebAccountFunctions {
 	SecurityConfiguration securityConfiguration;
 
 	/**
-	 * Adds a social integration
-	 *
-	 * @param type Integration type
-	 * @param data Webhook URL or access token
-	 */
-	@Transactional
-	public void putIntegration(int webAccountId, IntegrationType type, String data) {
-		String givenType = type.name().toLowerCase();
-		Query q = em.createNativeQuery("INSERT INTO social_integrations (social_integration_id, " + givenType + ") "
-				+ "VALUES (" + webAccountId + ", '" + data + "')"
-				+ "ON DUPLICATE KEY UPDATE " + type + " = VALUES(" + type + ")");
-
-		q.executeUpdate();
-	}
-
-
-	/**
 	 * Attempts to add Patreon access and refresh tokens into a {@link WebAccountFunctions} by checking for a matching login token
 	 *
 	 * @param accessToken  Patreon access token - can be null

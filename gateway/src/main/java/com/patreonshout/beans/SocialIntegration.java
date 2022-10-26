@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Data
 @Entity
 @Table(name = "social_integrations")
-public class SocialIntegrationBean implements Serializable {
+public class SocialIntegration implements Serializable {
 
 	/**
 	 * social_integration_id is the index/primary key for the social_integrations table in our database

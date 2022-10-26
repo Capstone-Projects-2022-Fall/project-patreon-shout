@@ -3,7 +3,7 @@ package com.patreonshout.jpa;
 import com.patreonshout.PSException;
 import com.patreonshout.beans.CreatorTokensBean;
 import com.patreonshout.beans.IntegrationRequestBean;
-import com.patreonshout.beans.SocialIntegrationBean;
+import com.patreonshout.beans.SocialIntegration;
 import com.patreonshout.beans.WebAccount;
 import com.patreonshout.beans.request.LoginRequest;
 import com.patreonshout.beans.request.RegisterRequest;
@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import javax.transaction.Transactional;
 
 /**
  * Functions for WebAccount endpoints that allow interaction with the database
@@ -46,6 +48,7 @@ public class WebAccountFunctions {
 	 * @param registerRequest {@link RegisterRequest} object that contains the desired login details for a new
 	 *                        {@link HttpStatus} 409 if the account already exists
 	 */
+	@Transactional
 	public void putAccount(RegisterRequest registerRequest) {
 		WebAccount webAccount = new WebAccount();
 		String salt = securityConfiguration.createSalt();
@@ -62,6 +65,7 @@ public class WebAccountFunctions {
 	 *
 	 * @param loginRequest {@link LoginRequest} object that contains the desired login details to check
 	 */
+	@Transactional
 	public String readAccount(LoginRequest loginRequest) throws PSException {
 		WebAccount webAccount = webAccountRepository.findByUsername(loginRequest.getUsername());
 
@@ -87,6 +91,7 @@ public class WebAccountFunctions {
 	 *
 	 * @param loginToken Login token to delete from a {@link WebAccount}
 	 */
+	@Transactional
 	public void deleteLoginToken(String loginToken) {
 		WebAccount webAccount = webAccountRepository.findByLoginToken(loginToken);
 
@@ -102,27 +107,28 @@ public class WebAccountFunctions {
 	 *
 	 * @param integrationRequestBean {@link IntegrationRequestBean} Integration request provided from RESTful call
 	 */
+	@Transactional
 	public void putIntegration(IntegrationRequestBean integrationRequestBean) {
 		WebAccount webAccount = webAccountRepository.findByLoginToken(integrationRequestBean.getLoginToken());
-		SocialIntegrationBean socialIntegrationBean = webAccount.getSocialIntegrationBean();
+		SocialIntegration socialIntegration = webAccount.getSocialIntegration();
 
-		if (socialIntegrationBean == null) {
-			socialIntegrationBean = new SocialIntegrationBean();
-			socialIntegrationBean.setWebAccountId(webAccount.getWebAccountId());
+		if (socialIntegration == null) {
+			socialIntegration = new SocialIntegration();
+			socialIntegration.setWebAccountId(webAccount.getWebAccountId());
 		}
 
-		socialIntegrationBean.setWebAccount(webAccount);
-		webAccount.setSocialIntegrationBean(socialIntegrationBean);
+		socialIntegration.setWebAccount(webAccount);
+		webAccount.setSocialIntegration(socialIntegration);
 
 		switch (integrationRequestBean.getIntegrationType()) {
 			case DISCORD:
-				socialIntegrationBean.setDiscord(integrationRequestBean.getData());
+				socialIntegration.setDiscord(integrationRequestBean.getData());
 				break;
 			case TWITTER:
-				socialIntegrationBean.setTwitter(integrationRequestBean.getData());
+				socialIntegration.setTwitter(integrationRequestBean.getData());
 				break;
 			case INSTAGRAM:
-				socialIntegrationBean.setInstagram(integrationRequestBean.getData());
+				socialIntegration.setInstagram(integrationRequestBean.getData());
 				break;
 		}
 
