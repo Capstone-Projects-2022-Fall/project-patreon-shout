@@ -6,7 +6,8 @@ import javax.persistence.*;
 
 
 @NoArgsConstructor
-@Data
+@Setter
+@Getter
 @Entity
 @Table(name = "webaccounts")
 public class WebAccount {
@@ -46,4 +47,8 @@ public class WebAccount {
 	@OneToOne(mappedBy = "webAccount", cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn
 	SocialIntegration socialIntegration;
+
+	@OneToOne(mappedBy = "webAccount", cascade = CascadeType.ALL)
+	@PrimaryKeyJoinColumn
+	CreatorTokensBean creatorTokens;
 }
