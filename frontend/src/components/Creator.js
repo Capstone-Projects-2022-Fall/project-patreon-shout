@@ -26,19 +26,21 @@ function Creator({addedState, curCreatorList, setCreatorList, displayName, urlNa
                     </div>
                     <div className="creator__headerDescription">
                         <p>{description}</p>
+                        <div>
+                            {!added ? <div className="creator__addButton" onClick={() => {
+                                setAdded(s => !s);
+                                setCreatorList(curCreatorList => [...curCreatorList, urlName]);
+                            }}>
+                                Add
+                            </div> : null}
+                            {added ? <div className="creator__addButton" onClick={() => {
+                                setAdded(s => !s);
+                                setCreatorList(curCreatorList.filter(name => name !== urlName));
+                            }}>
+                                Remove
+                            </div> : null}
+                        </div>
                     </div>
-                    {!added ? <div className="creator__addButton" onClick={() => {
-                            setAdded(s => !s);
-                            setCreatorList(curCreatorList => [...curCreatorList, urlName]);
-                        }}>
-                        Add
-                    </div> : null}
-                    {added ? <div className="creator__addButton" onClick={() => {
-                        setAdded(s => !s);
-                        setCreatorList(curCreatorList.filter(name => name !== urlName));
-                    }}>
-                    Remove
-                    </div> : null}
                 </div>
             </div>
         </div>
