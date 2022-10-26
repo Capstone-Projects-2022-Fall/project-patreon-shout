@@ -75,7 +75,7 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	/**
 	 * {@inheritDoc}
 	 */
-	public HttpStatus Integration(@RequestBody SocialIntegrationRequest socialIntegrationRequest) {
+	public HttpStatus Integration(@RequestBody SocialIntegrationRequest socialIntegrationRequest) throws PSException {
 		webAccountFunctions.putSocialIntegration(socialIntegrationRequest);
 		return HttpStatus.OK;
 	}

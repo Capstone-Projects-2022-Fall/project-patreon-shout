@@ -4,12 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * POJO that relates to the creator_tokens table in our database
@@ -22,18 +17,12 @@ import javax.persistence.Table;
 public class CreatorTokensBean {
 
     /**
-     * The index/primary key for the creator_tokens table in our database
+     * Holds the ID of the {@link WebAccount} this object belongs to
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="creator_token_id")
-    protected int creator_token_id;
-
-    /**
-     * Holds the ID of the {@link WebAccount} this object belongs to
-     */
     @Column(name = "webaccount_id")
-    protected String webaccount_id;
+    protected int webaccount_id;
 
     /**
      * Holds the Patreon content creator's access token
@@ -58,4 +47,9 @@ public class CreatorTokensBean {
      */
     @Column(name="expires_in")
     protected int expires_in;
+
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "webaccount_id")
+    protected WebAccount webAccount;
 }

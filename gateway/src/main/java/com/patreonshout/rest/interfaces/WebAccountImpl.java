@@ -91,7 +91,7 @@ public interface WebAccountImpl {
 					content = {@Content(mediaType = "application/json")})
 	})
 	@ResponseStatus(code = HttpStatus.OK, reason = "Data saved successfully")
-	HttpStatus Integration(@RequestBody SocialIntegrationRequest socialIntegrationRequest);
+	HttpStatus Integration(@RequestBody SocialIntegrationRequest socialIntegrationRequest) throws PSException;
 
 	/**
 	 * Endpoint that allows retrieval of Patreon access and refresh tokens for a {@link WebAccountFunctions} containing the given

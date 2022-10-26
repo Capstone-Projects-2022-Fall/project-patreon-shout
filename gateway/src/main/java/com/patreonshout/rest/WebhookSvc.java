@@ -3,6 +3,7 @@ package com.patreonshout.rest;
 import com.patreon.PatreonOAuth;
 import com.patreon.resources.Campaign;
 import com.patreon.resources.User;
+import com.patreonshout.PSException;
 import com.patreonshout.beans.PostBean;
 import com.patreonshout.jpa.OldWebAccountFunctions;
 import com.patreonshout.jpa.Posts;
@@ -39,7 +40,7 @@ public class WebhookSvc extends BaseSvc {
 
 			// Transparently appended from the state param provided in PatreonShout Client from Dev Portal
 			@RequestParam(required = false, name = "state") String state
-	) throws IOException {
+	) throws IOException, PSException {
 		// OAuth
 		if (code != null && state != null) {
 			PatreonOAuth.TokensResponse tokens = oauthClient.getTokens(code); // Should we handle IOException?

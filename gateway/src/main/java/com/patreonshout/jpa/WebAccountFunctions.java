@@ -105,8 +105,15 @@ public class WebAccountFunctions {
 	 * @param socialIntegrationRequest {@link SocialIntegrationRequest} Integration request provided from RESTful call
 	 */
 	@Transactional
-	public void putSocialIntegration(SocialIntegrationRequest socialIntegrationRequest) {
+	public void putSocialIntegration(SocialIntegrationRequest socialIntegrationRequest) throws PSException {
+		if (socialIntegrationRequest.getLoginToken() == null)
+			throw new PSException(HttpStatus.NOT_FOUND, "Login token not provided");
+
 		WebAccount webAccount = webAccountRepository.findByLoginToken(socialIntegrationRequest.getLoginToken());
+
+		if (webAccount == null)
+			throw new PSException(HttpStatus.NOT_FOUND, "Login token does not belong to a user");
+
 		SocialIntegration socialIntegration = webAccount.getSocialIntegration();
 
 		if (socialIntegration == null) {
@@ -139,8 +146,30 @@ public class WebAccountFunctions {
 	 * @param refreshToken Patreon refresh token - can be null
 	 * @param loginToken   {@link WebAccount} login token
 	 */
-	public void putPatreonTokens(String accessToken, String refreshToken, String loginToken) {
-		oldWebAccountFunctions.putPatreonTokens(accessToken, refreshToken, loginToken);
+	public void putPatreonTokens(String accessToken, String refreshToken, String loginToken) throws PSException {
+		if (loginToken == null)
+			throw new PSException(HttpStatus.NOT_FOUND, "Login token not provided");
+
+		WebAccount webAccount = webAccountRepository.findByLoginToken(loginToken);
+
+		if (webAccount == null)
+			throw new PSException(HttpStatus.NOT_FOUND, "Login token does not belong to a user");
+
+		CreatorTokensBean creatorTokensBean = webAccount.getCreatorTokens();
+
+		if (creatorTokensBean == null) {
+			creatorTokensBean = new CreatorTokensBean();
+			creatorTokensBean.setWebaccount_id(webAccount.getWebAccountId());
+		}
+
+		creatorTokensBean.setWebAccount(webAccount);
+		webAccount.setCreatorTokens(creatorTokensBean);
+
+		creatorTokensBean.setAccess_token(accessToken);
+		creatorTokensBean.setRefresh_token(refreshToken);
+
+		webAccountRepository.save(webAccount);
+//		oldWebAccountFunctions.putPatreonTokens(accessToken, refreshToken, loginToken);
 	}
 
 	/**
