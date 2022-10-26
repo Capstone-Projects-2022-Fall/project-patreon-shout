@@ -94,12 +94,11 @@ public interface WebAccountImpl {
 	HttpStatus Integration(@RequestBody SocialIntegrationRequest socialIntegrationRequest) throws PSException;
 
 	/**
-	 * Endpoint that allows retrieval of Patreon access and refresh tokens for a {@link WebAccountFunctions} containing the given
+	 * Endpoint that allows retrieval of Patreon access and refresh tokens for a {@link WebAccount} containing the given
 	 * login token
 	 *
-	 * @param loginToken Login token belonging to a {@link WebAccountFunctions}
-	 * @return {@link WebAccount} containing a valid {@link WebAccountFunctions} ID and its respective login, refresh and
-	 * access tokens
+	 * @param loginToken Login token belonging to a {@link WebAccount}
+	 * @return {@link WebAccount} Patreon access and refresh token
 	 */
 	@GetMapping("/patreontokens")
 	@Operation(summary = "Retrieves Patreon access and refresh tokens for a WebAccount containing the given login token")
