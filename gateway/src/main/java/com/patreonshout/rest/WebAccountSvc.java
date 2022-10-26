@@ -2,12 +2,10 @@ package com.patreonshout.rest;
 
 import com.patreonshout.PSException;
 import com.patreonshout.beans.CreatorTokensBean;
-import com.patreonshout.beans.request.SocialIntegrationRequest;
 import com.patreonshout.beans.request.LoginRequest;
 import com.patreonshout.beans.request.RegisterRequest;
+import com.patreonshout.beans.request.SocialIntegrationRequest;
 import com.patreonshout.beans.response.LoginResponse;
-import com.patreonshout.jpa.WebAccountRepository;
-import com.patreonshout.jpa.OldWebAccountFunctions;
 import com.patreonshout.jpa.WebAccountFunctions;
 import com.patreonshout.rest.interfaces.WebAccountImpl;
 import com.patreonshout.utils.ResponseUtil;
@@ -34,16 +32,10 @@ import java.util.Map;
 public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 
 	/**
-	 * webAccount is the wrapper class for {@link OldWebAccountFunctions}
+	 * An autowired Spring component that endpoints utilize to send or receive data from the database
 	 */
 	@Autowired
 	WebAccountFunctions webAccountFunctions;
-
-	/**
-	 * TODO:
-	 */
-	@Autowired
-	public WebAccountRepository webAccountRepository;
 
 	/**
 	 * {@inheritDoc}

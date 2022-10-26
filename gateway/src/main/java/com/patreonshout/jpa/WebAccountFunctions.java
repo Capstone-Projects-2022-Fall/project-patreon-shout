@@ -16,21 +16,13 @@ import org.springframework.stereotype.Component;
 import javax.transaction.Transactional;
 
 /**
- * Functions for WebAccount endpoints that allow interaction with the database
+ * Component that contains functions for WebAccount endpoints that allow interaction with the database
  */
 @Component
 public class WebAccountFunctions {
 
 	/**
-	 * webAccountRepository is the {@link OldWebAccountFunctions} class that handles all logic regarding
-	 * database connections with the webaccounts table
-	 */
-	@Autowired
-	OldWebAccountFunctions oldWebAccountFunctions;
-
-	/**
-	 * webAccountRepository is the {@link OldWebAccountFunctions} class that handles all logic regarding
-	 * database connections with the webaccounts table
+	 * An autowired Spring repository that handles all database CRUD operations with the webaccounts
 	 */
 	@Autowired
 	WebAccountRepository webAccountRepository;

@@ -5,7 +5,6 @@ import com.patreon.resources.Campaign;
 import com.patreon.resources.User;
 import com.patreonshout.PSException;
 import com.patreonshout.beans.PostBean;
-import com.patreonshout.jpa.OldWebAccountFunctions;
 import com.patreonshout.jpa.Posts;
 import com.patreonshout.jpa.WebAccountFunctions;
 import com.patreonshout.patreon.CustomPatreonAPI;
@@ -18,8 +17,9 @@ import java.io.IOException;
 
 @RestController
 public class WebhookSvc extends BaseSvc {
+
 	/**
-	 * webAccount is the wrapper class for {@link OldWebAccountFunctions}
+	 * An autowired Spring component that endpoints utilize to send or receive data from the database
 	 */
 	@Autowired
 	WebAccountFunctions webAccountFunctions;
