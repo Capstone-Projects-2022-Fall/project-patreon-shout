@@ -17,14 +17,14 @@ import javax.persistence.Table;
 @ToString
 @Entity
 @Table(name="lists")
-public class List {
+public class ListBean {
 
     /**
      * list_id is the index/primary key for the lists table in our database
      */
     @Id
-    @Column(name="list_id")
-    protected int list_id;
+    @Column(name="listId")
+    protected int listId;
 
     /**
      * title is the title of the list
