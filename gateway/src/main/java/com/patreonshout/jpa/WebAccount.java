@@ -64,14 +64,13 @@ public class WebAccount {
 	 * @param loginRequest {@link LoginRequest} object that contains the desired login details to check
 	 */
 	public String readAccount(LoginRequest loginRequest) throws PSException {
-		List<WebAccountBean> webAccountBeanList = newWebAccountRepository.findByUsername(loginRequest.getUsername());
+		WebAccountBean webAccountBean = newWebAccountRepository.findByUsername(loginRequest.getUsername());
 
 		// Username does not exist.
-		if (webAccountBeanList.isEmpty())
+		if (webAccountBean == null)
 			throw new PSException(HttpStatus.NOT_FOUND, "Username does not exist.");
 
-		WebAccountBean webAccountBean = webAccountBeanList.get(0);
-
+		// Username exists, check if given password matches.
 		if (!securityConfiguration.passwordMatches(loginRequest.getPassword(), webAccountBean.getPasswordSalt(), webAccountBean.getPassword()))
 			throw new PSException(HttpStatus.UNAUTHORIZED, "Incorrect password.");
 
