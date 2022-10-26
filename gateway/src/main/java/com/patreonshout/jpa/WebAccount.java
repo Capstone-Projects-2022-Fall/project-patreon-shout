@@ -42,7 +42,7 @@ public class WebAccount {
 	SecurityConfiguration securityConfiguration;
 
 	/**
-	 * Attempts to add a {@link WebAccount} into the database
+	 * Adds a {@link WebAccount} to the database
 	 *
 	 * @param registerRequest {@link RegisterRequest} object that contains the desired login details for a new
 	 *                        {@link HttpStatus} 409 if the account already exists
@@ -53,44 +53,49 @@ public class WebAccount {
 
 		webAccountBean.setUsername(registerRequest.getUsername());
 		webAccountBean.setPassword(securityConfiguration.encodePassword(registerRequest.getPassword(), salt));
-		webAccountBean.setPassword_salt(salt);
+		webAccountBean.setPasswordSalt(salt);
 
 		newWebAccountRepository.save(webAccountBean);
 	}
 
 	/**
-	 * Ensures a {@link WebAccount} with a matching username and password exists in the database
+	 * Adds a login token to a {@link WebAccount} matching the given username in the database
 	 *
 	 * @param loginRequest {@link LoginRequest} object that contains the desired login details to check
 	 */
 	public String readAccount(LoginRequest loginRequest) throws PSException {
-		List<WebAccountBean> webAccountBeanList = newWebAccountRepository.findByUsername(loginRequest.getUsername());
+		WebAccountBean webAccountBean = newWebAccountRepository.findByUsername(loginRequest.getUsername());
 
 		// Username does not exist.
-		if (webAccountBeanList.isEmpty())
+		if (webAccountBean == null)
 			throw new PSException(HttpStatus.NOT_FOUND, "Username does not exist.");
 
-		WebAccountBean webAccountBean = webAccountBeanList.get(0);
-
-		if (!securityConfiguration.passwordMatches(loginRequest.getPassword(), webAccountBean.getPassword_salt(), webAccountBean.getPassword()))
+		// Username exists, check if given password matches.
+		if (!securityConfiguration.passwordMatches(loginRequest.getPassword(), webAccountBean.getPasswordSalt(), webAccountBean.getPassword()))
 			throw new PSException(HttpStatus.UNAUTHORIZED, "Incorrect password.");
 
 		// TODO: Username and password match, WebAccount was found.
 		String loginToken = securityConfiguration.SHA1Encoder(System.currentTimeMillis() + loginRequest.getUsername());
 
-		webAccountBean.setLogin_token(loginToken);
+		webAccountBean.setLoginToken(loginToken);
 		newWebAccountRepository.save(webAccountBean);
 
 		return loginToken;
 	}
 
 	/**
+	 * Removes a login token from a {@link WebAccountBean}
 	 *
-	 *
-	 * @param loginToken login token belonging to a {@link WebAccount}
+	 * @param loginToken Login token to delete from a {@link WebAccountBean}
 	 */
 	public void deleteLoginToken(String loginToken) {
-		webAccountRepository.deleteLoginToken(loginToken);
+		WebAccountBean webAccountBean = newWebAccountRepository.findByLoginToken(loginToken);
+
+		webAccountBean.setLoginToken(null);
+
+		newWebAccountRepository.save(webAccountBean);
+
+//		webAccountRepository.deleteLoginToken(loginToken);
 	}
 
 	/**

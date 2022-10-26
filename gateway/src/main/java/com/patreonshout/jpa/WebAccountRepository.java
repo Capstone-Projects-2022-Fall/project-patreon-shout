@@ -36,60 +36,6 @@ public class WebAccountRepository {
 	SecurityConfiguration securityConfiguration;
 
 	/**
-	 * Adds a {@link WebAccount} to the database
-	 *
-	 * @param registerRequest {@link RegisterRequest} object that contains the desired login details for a new
-	 *                        {@link WebAccount}
-	 */
-	@Transactional
-	public void putAccount(RegisterRequest registerRequest) {
-
-
-//		String sql = "insert into webaccounts (username, password, NaCl) values (:username, :password, :password_salt)";
-//		Query q = em.createNativeQuery(sql);
-//
-//		String salt = securityConfiguration.createSalt();
-//
-//		q.setParameter("username", registerRequest.getUsername());
-//		q.setParameter("password", securityConfiguration.encodePassword(registerRequest.getPassword(), salt));
-//		q.setParameter("password_salt", salt);
-//
-//		q.executeUpdate();
-	}
-
-	/**
-	 * Adds a login token to a {@link WebAccount} matching the given username in the database
-	 *
-	 * @param loginToken Login token to add to the desired {@link WebAccount}
-	 * @param username Username of the desired {@link WebAccount}
-	 */
-	@Transactional
-	public void putLoginToken(String loginToken, String username) {
-		String sql = "UPDATE webaccounts SET login_token = :login_token WHERE username = :username";
-
-		Query q = em.createNativeQuery(sql);
-		q.setParameter("login_token", loginToken);
-		q.setParameter("username", username);
-
-		q.executeUpdate();
-	}
-
-	/**
-	 * Removes a login token from a {@link WebAccount}
-	 *
-	 * @param loginToken Login token to delete from the database
-	 */
-	@Transactional
-	public void deleteLoginToken(String loginToken) {
-		String sql = "UPDATE webaccounts SET login_token = NULL WHERE login_token = :login_token";
-
-		Query q = em.createNativeQuery(sql);
-		q.setParameter("login_token", loginToken);
-
-		q.executeUpdate();
-	}
-
-	/**
 	 * Adds a social integration
 	 *
 	 * @param type Integration type

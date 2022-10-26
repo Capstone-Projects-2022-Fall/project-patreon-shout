@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository
 public interface NewWebAccountRepository extends JpaRepository<WebAccountBean, Long> {
-	List<WebAccountBean> findByUsername(String username);
+	WebAccountBean findByUsername(String username);
+	WebAccountBean findByLoginToken(String loginToken);
 }
