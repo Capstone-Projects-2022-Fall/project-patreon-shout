@@ -53,9 +53,9 @@ public class JPAConfiguration {
      * transactions we have with our database
      */
     @Bean
-    public JpaTransactionManager jpaTransactionManager() {
+    public JpaTransactionManager transactionManager() {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
-        transactionManager.setEntityManagerFactory(entityManagerFactoryBean().getObject());
+        transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
         return transactionManager;
     }
 
@@ -78,7 +78,7 @@ public class JPAConfiguration {
      * @return a {@link org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean} that is used to create our Entity Manager
      */
     @Bean
-    LocalContainerEntityManagerFactoryBean entityManagerFactoryBean() {
+    LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactoryBean.setJpaVendorAdapter(vendorAdapter());
         entityManagerFactoryBean.setDataSource(dataSource());

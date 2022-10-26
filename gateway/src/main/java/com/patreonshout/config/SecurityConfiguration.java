@@ -1,6 +1,6 @@
 package com.patreonshout.config;
 
-import com.patreonshout.jpa.WebAccount;
+import com.patreonshout.jpa.WebAccountFunctions;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,7 +52,7 @@ public class SecurityConfiguration {
 	 * This function utilizes the "pepper" constant that is assigned in the application properties.
 	 *
 	 * @param rawPassword {@link String} raw password retrieved from user input
-	 * @param encodedPassword {@link String} Encoded password retrieved from a {@link WebAccount} in the database
+	 * @param encodedPassword {@link String} Encoded password retrieved from a {@link WebAccountFunctions} in the database
 	 * @return {@link Boolean} true if password matches, false otherwise
 	 */
 	public boolean passwordMatches(String rawPassword, String salt, String encodedPassword) {
