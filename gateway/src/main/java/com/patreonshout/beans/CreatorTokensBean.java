@@ -30,7 +30,7 @@ public class CreatorTokensBean {
     protected int creator_token_id;
 
     /**
-     * Holds the ID of the {@link WebAccountBean} this object belongs to
+     * Holds the ID of the {@link WebAccount} this object belongs to
      */
     @Column(name = "webaccount_id")
     protected String webaccount_id;

@@ -41,5 +41,5 @@ public class SocialIntegrationBean implements Serializable {
 	@OneToOne
 	@MapsId
 	@JoinColumn(name = "webaccount_id")
-	protected WebAccountBean webAccountBean;
+	protected WebAccount webAccount;
 }

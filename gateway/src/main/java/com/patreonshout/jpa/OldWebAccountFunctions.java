@@ -2,7 +2,7 @@ package com.patreonshout.jpa;
 
 import com.patreonshout.PSException;
 import com.patreonshout.beans.CreatorTokensBean;
-import com.patreonshout.beans.WebAccountBean;
+import com.patreonshout.beans.WebAccount;
 import com.patreonshout.config.SecurityConfiguration;
 import com.patreonshout.jpa.constants.IntegrationType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +55,7 @@ public class OldWebAccountFunctions {
 	 *
 	 * @param accessToken  Patreon access token - can be null
 	 * @param refreshToken Patreon refresh token - can be null
-	 * @param loginToken   {@link WebAccountBean} login token
+	 * @param loginToken   {@link WebAccount} login token
 	 */
 	@Transactional
 	public void putPatreonTokens(String accessToken, String refreshToken, String loginToken) {
@@ -80,7 +80,7 @@ public class OldWebAccountFunctions {
 	 * given login token
 	 *
 	 * @param loginToken login token belonging to a {@link WebAccountFunctions}
-	 * @return {@link WebAccountBean} containing the access and refresh tokens for the {@link WebAccountFunctions} that contains
+	 * @return {@link WebAccount} containing the access and refresh tokens for the {@link WebAccountFunctions} that contains
 	 * the given login token
 	 */
 	@Transactional

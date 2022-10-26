@@ -13,7 +13,7 @@ import lombok.Setter;
 public class IntegrationRequestBean {
 
 	/**
-	 * A {@link String} login token that belongs to a {@link WebAccountBean}
+	 * A {@link String} login token that belongs to a {@link WebAccount}
 	 */
 	@JsonProperty("login_token")
 	String loginToken;

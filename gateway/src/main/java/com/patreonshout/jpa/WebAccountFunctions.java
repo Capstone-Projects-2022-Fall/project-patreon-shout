@@ -4,7 +4,7 @@ import com.patreonshout.PSException;
 import com.patreonshout.beans.CreatorTokensBean;
 import com.patreonshout.beans.IntegrationRequestBean;
 import com.patreonshout.beans.SocialIntegrationBean;
-import com.patreonshout.beans.WebAccountBean;
+import com.patreonshout.beans.WebAccount;
 import com.patreonshout.beans.request.LoginRequest;
 import com.patreonshout.beans.request.RegisterRequest;
 import com.patreonshout.config.SecurityConfiguration;
@@ -47,14 +47,14 @@ public class WebAccountFunctions {
 	 *                        {@link HttpStatus} 409 if the account already exists
 	 */
 	public void putAccount(RegisterRequest registerRequest) {
-		WebAccountBean webAccountBean = new WebAccountBean();
+		WebAccount webAccount = new WebAccount();
 		String salt = securityConfiguration.createSalt();
 
-		webAccountBean.setUsername(registerRequest.getUsername());
-		webAccountBean.setPassword(securityConfiguration.encodePassword(registerRequest.getPassword(), salt));
-		webAccountBean.setPasswordSalt(salt);
+		webAccount.setUsername(registerRequest.getUsername());
+		webAccount.setPassword(securityConfiguration.encodePassword(registerRequest.getPassword(), salt));
+		webAccount.setPasswordSalt(salt);
 
-		webAccountRepository.save(webAccountBean);
+		webAccountRepository.save(webAccount);
 	}
 
 	/**
@@ -63,36 +63,36 @@ public class WebAccountFunctions {
 	 * @param loginRequest {@link LoginRequest} object that contains the desired login details to check
 	 */
 	public String readAccount(LoginRequest loginRequest) throws PSException {
-		WebAccountBean webAccountBean = webAccountRepository.findByUsername(loginRequest.getUsername());
+		WebAccount webAccount = webAccountRepository.findByUsername(loginRequest.getUsername());
 
 		// Username does not exist.
-		if (webAccountBean == null)
+		if (webAccount == null)
 			throw new PSException(HttpStatus.NOT_FOUND, "Username does not exist.");
 
 		// Username exists, check if given password matches.
-		if (!securityConfiguration.passwordMatches(loginRequest.getPassword(), webAccountBean.getPasswordSalt(), webAccountBean.getPassword()))
+		if (!securityConfiguration.passwordMatches(loginRequest.getPassword(), webAccount.getPasswordSalt(), webAccount.getPassword()))
 			throw new PSException(HttpStatus.UNAUTHORIZED, "Incorrect password.");
 
 		// TODO: Username and password match, WebAccount was found.
 		String loginToken = securityConfiguration.SHA1Encoder(System.currentTimeMillis() + loginRequest.getUsername());
 
-		webAccountBean.setLoginToken(loginToken);
-		webAccountRepository.save(webAccountBean);
+		webAccount.setLoginToken(loginToken);
+		webAccountRepository.save(webAccount);
 
 		return loginToken;
 	}
 
 	/**
-	 * Removes a login token from a {@link WebAccountBean}
+	 * Removes a login token from a {@link WebAccount}
 	 *
-	 * @param loginToken Login token to delete from a {@link WebAccountBean}
+	 * @param loginToken Login token to delete from a {@link WebAccount}
 	 */
 	public void deleteLoginToken(String loginToken) {
-		WebAccountBean webAccountBean = webAccountRepository.findByLoginToken(loginToken);
+		WebAccount webAccount = webAccountRepository.findByLoginToken(loginToken);
 
-		webAccountBean.setLoginToken(null);
+		webAccount.setLoginToken(null);
 
-		webAccountRepository.save(webAccountBean);
+		webAccountRepository.save(webAccount);
 
 //		webAccountRepository.deleteLoginToken(loginToken);
 	}
@@ -103,16 +103,16 @@ public class WebAccountFunctions {
 	 * @param integrationRequestBean {@link IntegrationRequestBean} Integration request provided from RESTful call
 	 */
 	public void putIntegration(IntegrationRequestBean integrationRequestBean) {
-		WebAccountBean webAccountBean = webAccountRepository.findByLoginToken(integrationRequestBean.getLoginToken());
-		SocialIntegrationBean socialIntegrationBean = webAccountBean.getSocialIntegrationBean();
+		WebAccount webAccount = webAccountRepository.findByLoginToken(integrationRequestBean.getLoginToken());
+		SocialIntegrationBean socialIntegrationBean = webAccount.getSocialIntegrationBean();
 
 		if (socialIntegrationBean == null) {
 			socialIntegrationBean = new SocialIntegrationBean();
-			socialIntegrationBean.setWebAccountId(webAccountBean.getWebAccountId());
+			socialIntegrationBean.setWebAccountId(webAccount.getWebAccountId());
 		}
 
-		socialIntegrationBean.setWebAccountBean(webAccountBean);
-		webAccountBean.setSocialIntegrationBean(socialIntegrationBean);
+		socialIntegrationBean.setWebAccount(webAccount);
+		webAccount.setSocialIntegrationBean(socialIntegrationBean);
 
 		switch (integrationRequestBean.getIntegrationType()) {
 			case DISCORD:
@@ -126,7 +126,7 @@ public class WebAccountFunctions {
 				break;
 		}
 
-		webAccountRepository.save(webAccountBean);
+		webAccountRepository.save(webAccount);
 	}
 
 	/**
@@ -134,7 +134,7 @@ public class WebAccountFunctions {
 	 *
 	 * @param accessToken  Patreon access token - can be null
 	 * @param refreshToken Patreon refresh token - can be null
-	 * @param loginToken   {@link WebAccountBean} login token
+	 * @param loginToken   {@link WebAccount} login token
 	 */
 	public void putPatreonTokens(String accessToken, String refreshToken, String loginToken) {
 		oldWebAccountFunctions.putPatreonTokens(accessToken, refreshToken, loginToken);

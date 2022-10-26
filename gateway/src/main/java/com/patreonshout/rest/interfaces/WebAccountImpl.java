@@ -2,7 +2,7 @@ package com.patreonshout.rest.interfaces;
 
 import com.patreonshout.PSException;
 import com.patreonshout.beans.IntegrationRequestBean;
-import com.patreonshout.beans.WebAccountBean;
+import com.patreonshout.beans.WebAccount;
 import com.patreonshout.beans.request.LoginRequest;
 import com.patreonshout.beans.request.RegisterRequest;
 import com.patreonshout.jpa.WebAccountFunctions;
@@ -78,7 +78,7 @@ public interface WebAccountImpl {
 	 *
 	 * @param integrationRequestBean {@link IntegrationRequestBean} object that contains {@link WebAccountFunctions} and request details.
 	 * @return {@link HttpStatus#OK} if successful, {@link HttpStatus#CONFLICT} if the provided {@link IntegrationRequestBean}
-	 * does not contain a valid {@link com.patreonshout.beans.WebAccountBean} ID number.
+	 * does not contain a valid {@link WebAccount} ID number.
 	 */
 	@PutMapping("/integration")
 	@Operation(summary = "Registers WebAccounts during PatreonShout sign up")
@@ -98,7 +98,7 @@ public interface WebAccountImpl {
 	 * login token
 	 *
 	 * @param loginToken Login token belonging to a {@link WebAccountFunctions}
-	 * @return {@link WebAccountBean} containing a valid {@link WebAccountFunctions} ID and its respective login, refresh and
+	 * @return {@link WebAccount} containing a valid {@link WebAccountFunctions} ID and its respective login, refresh and
 	 * access tokens
 	 */
 	@GetMapping("/patreontokens")

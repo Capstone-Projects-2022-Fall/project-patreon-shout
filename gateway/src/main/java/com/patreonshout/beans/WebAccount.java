@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table(name = "webaccounts")
-public class WebAccountBean {
+public class WebAccount {
 
 	/**
 	 * <b>webaccount_id</b> is a {@link Integer} primary key for the webaccounts table in the database
@@ -43,7 +43,7 @@ public class WebAccountBean {
 	@Column(name = "login_token", unique = true)
 	protected String loginToken;
 
-	@OneToOne(mappedBy = "webAccountBean", cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "webAccount", cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn
 	SocialIntegrationBean socialIntegrationBean;
 }
