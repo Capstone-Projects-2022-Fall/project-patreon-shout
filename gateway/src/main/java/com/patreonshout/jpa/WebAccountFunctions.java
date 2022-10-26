@@ -181,6 +181,21 @@ public class WebAccountFunctions {
 	 * the given login token
 	 */
 	public CreatorTokensBean getPatreonTokens(String loginToken) throws PSException {
-		return oldWebAccountFunctions.getPatreonTokens(loginToken);
+		if (loginToken == null)
+			throw new PSException(HttpStatus.NOT_FOUND, "Login token not provided");
+
+		WebAccount webAccount = webAccountRepository.findByLoginToken(loginToken);
+
+		if (webAccount == null)
+			throw new PSException(HttpStatus.NOT_FOUND, "Login token does not belong to a user");
+
+		CreatorTokensBean creatorTokensBean = webAccount.getCreatorTokens();
+
+		if (creatorTokensBean == null) {
+			creatorTokensBean = new CreatorTokensBean();
+			creatorTokensBean.setWebaccount_id(webAccount.getWebAccountId());
+		}
+
+		return creatorTokensBean;
 	}
 }
