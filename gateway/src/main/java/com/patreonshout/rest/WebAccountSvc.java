@@ -75,7 +75,7 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	 * {@inheritDoc}
 	 */
 	public HttpStatus Integration(@RequestBody IntegrationRequestBean integrationRequestBean) {
-		webAccount.putIntegration(integrationRequestBean.getWebaccount().getWebaccount_id(),
+		webAccount.putIntegration(integrationRequestBean.getWebaccount().getWebAccountId(),
 				integrationRequestBean.getIntegrationType(),
 				integrationRequestBean.getData());
 		return HttpStatus.OK;
