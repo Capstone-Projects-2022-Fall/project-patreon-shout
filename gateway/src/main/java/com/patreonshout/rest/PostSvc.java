@@ -30,7 +30,7 @@ public class PostSvc extends BaseSvc implements PostImpl {
         List<PostBean> response = posts.getCreatorPosts(creator);
 
         for (PostBean pb : response) {
-            if (!pb.isIs_public()) {
+            if (!pb.is_public()) {
                 pb.setContent("This post is private");
             }
         }

@@ -1,6 +1,6 @@
 package com.patreonshout.jpa;
 
-import com.patreonshout.beans.PatreonInfoBean;
+import com.patreonshout.beans.CreatorTokensBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -9,16 +9,18 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 /**
- * Communication between the patreon_info table in the database
+ * Communication between the creator_tokens table in the database
  *
  * <p>
- *     Responsibilities:
- *     1) Add a PatreonInfoBean to the patreon_info database
- *     2) Return whether the bean was successfully added or not
+ *     <b>Responsibilities</b>
+ *     <ol>
+ *         <li>Add a {@link CreatorTokensBean} to the creator_tokens database</li>
+ *         <li>Return whether the bean was successfully added or not</li>
+ *     </ol>
  * </p>
  */
 @Repository
-public class PatreonInfoRepository {
+public class CreatorTokensRepository {
 
     /**
      * em is the {@link EntityManager} that handles all the transactions with our database
@@ -27,16 +29,17 @@ public class PatreonInfoRepository {
     private EntityManager em;
 
     /**
-     * Inserts a {@link PatreonInfoBean} into the patreon_info database
+     * Inserts a {@link CreatorTokensBean} into the patreon_info database
      *
-     * @param pib {@link PatreonInfoBean} to be added to database
+     * @param pib {@link CreatorTokensBean} to be added to database
      * @return either "200" - success or "400" - failure
      */
     @Transactional
-    public String putPatreonInfo(PatreonInfoBean pib) {
-        String sql = "insert into patreon_info (access_token, expires_in, scope) values (:access_token, :expires_in, :scope)";
+    public String putPatreonInfo(CreatorTokensBean pib) {
+        String sql = "insert into creator_tokens (webaccount_id, access_token, expires_in, scope) values (:webaccount_id, :access_token, :expires_in, :scope)";
 
-        Query q = em.createNativeQuery(sql, PatreonInfoBean.class);
+        Query q = em.createNativeQuery(sql, CreatorTokensBean.class);
+        q.setParameter("webaccount_id", pib.getWebaccount_id());
         q.setParameter("access_token", pib.getAccess_token());
         q.setParameter("expires_in", pib.getExpires_in());
         q.setParameter("scope", pib.getScope());
