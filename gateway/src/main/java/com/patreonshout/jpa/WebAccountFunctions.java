@@ -1,7 +1,7 @@
 package com.patreonshout.jpa;
 
 import com.patreonshout.PSException;
-import com.patreonshout.beans.CreatorTokensBean;
+import com.patreonshout.beans.PatreonTokens;
 import com.patreonshout.beans.request.SocialIntegrationRequest;
 import com.patreonshout.beans.SocialIntegration;
 import com.patreonshout.beans.WebAccount;
@@ -148,18 +148,18 @@ public class WebAccountFunctions {
 		if (webAccount == null)
 			throw new PSException(HttpStatus.NOT_FOUND, "Login token does not belong to a user");
 
-		CreatorTokensBean creatorTokensBean = webAccount.getCreatorTokens();
+		PatreonTokens patreonTokens = webAccount.getCreatorTokens();
 
-		if (creatorTokensBean == null) {
-			creatorTokensBean = new CreatorTokensBean();
-			creatorTokensBean.setWebaccount_id(webAccount.getWebAccountId());
+		if (patreonTokens == null) {
+			patreonTokens = new PatreonTokens();
+			patreonTokens.setWebAccountId(webAccount.getWebAccountId());
 		}
 
-		creatorTokensBean.setWebAccount(webAccount);
-		webAccount.setCreatorTokens(creatorTokensBean);
+		patreonTokens.setWebAccount(webAccount);
+		webAccount.setCreatorTokens(patreonTokens);
 
-		creatorTokensBean.setAccess_token(accessToken);
-		creatorTokensBean.setRefresh_token(refreshToken);
+		patreonTokens.setAccessToken(accessToken);
+		patreonTokens.setRefreshToken(refreshToken);
 
 		webAccountRepository.save(webAccount);
 //		oldWebAccountFunctions.putPatreonTokens(accessToken, refreshToken, loginToken);
@@ -170,11 +170,11 @@ public class WebAccountFunctions {
 	 * given login token
 	 *
 	 * @param loginToken login token belonging to a {@link WebAccountFunctions}
-	 * @return {@link CreatorTokensBean} containing the access and refresh tokens for the {@link WebAccountFunctions} that contains
+	 * @return {@link PatreonTokens} containing the access and refresh tokens for the {@link WebAccountFunctions} that contains
 	 * the given login token
 	 */
 	@Transactional
-	public CreatorTokensBean getPatreonTokens(String loginToken) throws PSException {
+	public PatreonTokens getPatreonTokens(String loginToken) throws PSException {
 		if (loginToken == null)
 			throw new PSException(HttpStatus.NOT_FOUND, "Login token not provided");
 
@@ -183,13 +183,13 @@ public class WebAccountFunctions {
 		if (webAccount == null)
 			throw new PSException(HttpStatus.NOT_FOUND, "Login token does not belong to a user");
 
-		CreatorTokensBean creatorTokensBean = webAccount.getCreatorTokens();
+		PatreonTokens patreonTokens = webAccount.getCreatorTokens();
 
-		if (creatorTokensBean == null) {
-			creatorTokensBean = new CreatorTokensBean();
-			creatorTokensBean.setWebaccount_id(webAccount.getWebAccountId());
+		if (patreonTokens == null) {
+			patreonTokens = new PatreonTokens();
+			patreonTokens.setWebAccountId(webAccount.getWebAccountId());
 		}
 
-		return creatorTokensBean;
+		return patreonTokens;
 	}
 }

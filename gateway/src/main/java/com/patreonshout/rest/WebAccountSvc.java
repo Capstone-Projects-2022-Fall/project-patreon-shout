@@ -1,7 +1,7 @@
 package com.patreonshout.rest;
 
 import com.patreonshout.PSException;
-import com.patreonshout.beans.CreatorTokensBean;
+import com.patreonshout.beans.PatreonTokens;
 import com.patreonshout.beans.request.LoginRequest;
 import com.patreonshout.beans.request.RegisterRequest;
 import com.patreonshout.beans.request.SocialIntegrationRequest;
@@ -77,11 +77,11 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	 * {@inheritDoc}
 	 */
 	public ResponseEntity<?> GetPatreonTokens(@RequestParam(name = "login_token") String loginToken) throws PSException {
-		CreatorTokensBean tokens = webAccountFunctions.getPatreonTokens(loginToken);
+		PatreonTokens tokens = webAccountFunctions.getPatreonTokens(loginToken);
 
 		Map<String, String> response = new HashMap<>();
-		response.put("access", tokens.getAccess_token());
-		response.put("refresh", tokens.getRefresh_token());
+		response.put("access", tokens.getAccessToken());
+		response.put("refresh", tokens.getRefreshToken());
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}

@@ -1,6 +1,6 @@
 package com.patreonshout.jpa;
 
-import com.patreonshout.beans.CreatorTokensBean;
+import com.patreonshout.beans.PatreonTokens;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -27,10 +27,10 @@ public class CreatorTokens {
      * Calls {@link CreatorTokensRepository}'s putPatreonInfo() and passes it the PatreonInfoBean that
      * is to be added to the database
      *
-     * @param pib is the {@link CreatorTokensBean} being added to the database
+     * @param pib is the {@link PatreonTokens} being added to the database
      * @return either "200" - success or "400" - failure
      */
-    public String putPatreonInfo(CreatorTokensBean pib) {
+    public String putPatreonInfo(PatreonTokens pib) {
         return creatorTokensRepository.putPatreonInfo(pib);
     }
 }
