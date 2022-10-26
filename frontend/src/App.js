@@ -4,6 +4,7 @@ import './App.css';
 import Home from "./home_page/Home";
 import LoginPage from "./login_page/LoginPage";
 import ListPage from "./list_page/ListPage";
+import SettingsPage from "./settings/SettingsContainer"
 import useToken from './services/useToken';
 
 /**
@@ -27,6 +28,7 @@ function App() {
         <Route path="/" element={<LoginPage setToken={setToken}/>}/>
         <Route path="/home" element={<Home/>}/>
         <Route path="/lists" element={<ListPage/>}/>
+        <Route path="/settings" element={<SettingsPage/>}/>
       </Routes>
     </div>
   );
