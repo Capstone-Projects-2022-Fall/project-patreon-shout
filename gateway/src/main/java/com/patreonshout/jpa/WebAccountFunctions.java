@@ -146,6 +146,7 @@ public class WebAccountFunctions {
 	 * @param refreshToken Patreon refresh token - can be null
 	 * @param loginToken   {@link WebAccount} login token
 	 */
+	@Transactional
 	public void putPatreonTokens(String accessToken, String refreshToken, String loginToken) throws PSException {
 		if (loginToken == null)
 			throw new PSException(HttpStatus.NOT_FOUND, "Login token not provided");
@@ -180,6 +181,7 @@ public class WebAccountFunctions {
 	 * @return {@link CreatorTokensBean} containing the access and refresh tokens for the {@link WebAccountFunctions} that contains
 	 * the given login token
 	 */
+	@Transactional
 	public CreatorTokensBean getPatreonTokens(String loginToken) throws PSException {
 		if (loginToken == null)
 			throw new PSException(HttpStatus.NOT_FOUND, "Login token not provided");
