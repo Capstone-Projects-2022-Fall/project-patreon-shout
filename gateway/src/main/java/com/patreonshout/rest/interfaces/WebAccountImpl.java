@@ -1,7 +1,7 @@
 package com.patreonshout.rest.interfaces;
 
 import com.patreonshout.PSException;
-import com.patreonshout.beans.SocialIntegrationRequest;
+import com.patreonshout.beans.request.SocialIntegrationRequest;
 import com.patreonshout.beans.WebAccount;
 import com.patreonshout.beans.request.LoginRequest;
 import com.patreonshout.beans.request.RegisterRequest;

@@ -1,6 +1,7 @@
-package com.patreonshout.beans;
+package com.patreonshout.beans.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.patreonshout.beans.WebAccount;
 import com.patreonshout.jpa.constants.IntegrationType;
 import lombok.Getter;
 import lombok.Setter;

@@ -2,7 +2,7 @@ package com.patreonshout.rest;
 
 import com.patreonshout.PSException;
 import com.patreonshout.beans.CreatorTokensBean;
-import com.patreonshout.beans.SocialIntegrationRequest;
+import com.patreonshout.beans.request.SocialIntegrationRequest;
 import com.patreonshout.beans.request.LoginRequest;
 import com.patreonshout.beans.request.RegisterRequest;
 import com.patreonshout.beans.response.LoginResponse;

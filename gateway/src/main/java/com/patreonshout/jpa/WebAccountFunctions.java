@@ -2,7 +2,7 @@ package com.patreonshout.jpa;
 
 import com.patreonshout.PSException;
 import com.patreonshout.beans.CreatorTokensBean;
-import com.patreonshout.beans.SocialIntegrationRequest;
+import com.patreonshout.beans.request.SocialIntegrationRequest;
 import com.patreonshout.beans.SocialIntegration;
 import com.patreonshout.beans.WebAccount;
 import com.patreonshout.beans.request.LoginRequest;
@@ -133,7 +133,7 @@ public class WebAccountFunctions {
 	}
 
 	/**
-	 * Attempts to add Patreon access and refresh tokens into a {@link WebAccountFunctions} by checking for a matching login token
+	 * Attempts to add Patreon access and refresh tokens into a {@link WebAccount} by checking for a matching login token
 	 *
 	 * @param accessToken  Patreon access token - can be null
 	 * @param refreshToken Patreon refresh token - can be null
