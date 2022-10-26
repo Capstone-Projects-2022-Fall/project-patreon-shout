@@ -6,7 +6,7 @@ import com.patreonshout.beans.IntegrationRequestBean;
 import com.patreonshout.beans.request.LoginRequest;
 import com.patreonshout.beans.request.RegisterRequest;
 import com.patreonshout.beans.response.LoginResponse;
-import com.patreonshout.jpa.NewWebAccountRepository;
+import com.patreonshout.jpa.WebAccountRepository;
 import com.patreonshout.jpa.OldWebAccountFunctions;
 import com.patreonshout.jpa.WebAccountFunctions;
 import com.patreonshout.rest.interfaces.WebAccountImpl;
@@ -42,7 +42,7 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	 * TODO:
 	 */
 	@Autowired
-	public NewWebAccountRepository newWebAccountRepository;
+	public WebAccountRepository webAccountRepository;
 
 	/**
 	 * {@inheritDoc}
@@ -76,9 +76,7 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	 * {@inheritDoc}
 	 */
 	public HttpStatus Integration(@RequestBody IntegrationRequestBean integrationRequestBean) {
-		webAccountFunctions.putIntegration(integrationRequestBean.getWebaccount().getWebAccountId(),
-				integrationRequestBean.getIntegrationType(),
-				integrationRequestBean.getData());
+		webAccountFunctions.putIntegration(integrationRequestBean);
 		return HttpStatus.OK;
 	}
 

@@ -2,11 +2,12 @@ package com.patreonshout.jpa;
 
 import com.patreonshout.PSException;
 import com.patreonshout.beans.CreatorTokensBean;
+import com.patreonshout.beans.IntegrationRequestBean;
+import com.patreonshout.beans.SocialIntegrationBean;
 import com.patreonshout.beans.WebAccountBean;
 import com.patreonshout.beans.request.LoginRequest;
 import com.patreonshout.beans.request.RegisterRequest;
 import com.patreonshout.config.SecurityConfiguration;
-import com.patreonshout.jpa.constants.IntegrationType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -30,7 +31,7 @@ public class WebAccountFunctions {
 	 * database connections with the webaccounts table
 	 */
 	@Autowired
-	NewWebAccountRepository newWebAccountRepository;
+	WebAccountRepository webAccountRepository;
 
 	/**
 	 * securityConfiguration is the {@link SecurityConfiguration} that handles encrypting password with
@@ -53,7 +54,7 @@ public class WebAccountFunctions {
 		webAccountBean.setPassword(securityConfiguration.encodePassword(registerRequest.getPassword(), salt));
 		webAccountBean.setPasswordSalt(salt);
 
-		newWebAccountRepository.save(webAccountBean);
+		webAccountRepository.save(webAccountBean);
 	}
 
 	/**
@@ -62,7 +63,7 @@ public class WebAccountFunctions {
 	 * @param loginRequest {@link LoginRequest} object that contains the desired login details to check
 	 */
 	public String readAccount(LoginRequest loginRequest) throws PSException {
-		WebAccountBean webAccountBean = newWebAccountRepository.findByUsername(loginRequest.getUsername());
+		WebAccountBean webAccountBean = webAccountRepository.findByUsername(loginRequest.getUsername());
 
 		// Username does not exist.
 		if (webAccountBean == null)
@@ -76,7 +77,7 @@ public class WebAccountFunctions {
 		String loginToken = securityConfiguration.SHA1Encoder(System.currentTimeMillis() + loginRequest.getUsername());
 
 		webAccountBean.setLoginToken(loginToken);
-		newWebAccountRepository.save(webAccountBean);
+		webAccountRepository.save(webAccountBean);
 
 		return loginToken;
 	}
@@ -87,11 +88,11 @@ public class WebAccountFunctions {
 	 * @param loginToken Login token to delete from a {@link WebAccountBean}
 	 */
 	public void deleteLoginToken(String loginToken) {
-		WebAccountBean webAccountBean = newWebAccountRepository.findByLoginToken(loginToken);
+		WebAccountBean webAccountBean = webAccountRepository.findByLoginToken(loginToken);
 
 		webAccountBean.setLoginToken(null);
 
-		newWebAccountRepository.save(webAccountBean);
+		webAccountRepository.save(webAccountBean);
 
 //		webAccountRepository.deleteLoginToken(loginToken);
 	}
@@ -99,11 +100,33 @@ public class WebAccountFunctions {
 	/**
 	 * Adds a social integration
 	 *
-	 * @param type Integration type
-	 * @param data Webhook URL or access token
+	 * @param integrationRequestBean {@link IntegrationRequestBean} Integration request provided from RESTful call
 	 */
-	public void putIntegration(int webAccountId, IntegrationType type, String data) {
-		oldWebAccountFunctions.putIntegration(webAccountId, type, data);
+	public void putIntegration(IntegrationRequestBean integrationRequestBean) {
+		WebAccountBean webAccountBean = webAccountRepository.findByLoginToken(integrationRequestBean.getLoginToken());
+		SocialIntegrationBean socialIntegrationBean = webAccountBean.getSocialIntegrationBean();
+
+		if (socialIntegrationBean == null) {
+			socialIntegrationBean = new SocialIntegrationBean();
+			socialIntegrationBean.setWebAccountId(webAccountBean.getWebAccountId());
+		}
+
+		socialIntegrationBean.setWebAccountBean(webAccountBean);
+		webAccountBean.setSocialIntegrationBean(socialIntegrationBean);
+
+		switch (integrationRequestBean.getIntegrationType()) {
+			case DISCORD:
+				socialIntegrationBean.setDiscord(integrationRequestBean.getData());
+				break;
+			case TWITTER:
+				socialIntegrationBean.setTwitter(integrationRequestBean.getData());
+				break;
+			case INSTAGRAM:
+				socialIntegrationBean.setInstagram(integrationRequestBean.getData());
+				break;
+		}
+
+		webAccountRepository.save(webAccountBean);
 	}
 
 	/**

@@ -13,20 +13,19 @@ import lombok.Setter;
 public class IntegrationRequestBean {
 
 	/**
-	 * webaccount is a {@link WebAccountBean} that will contain only the ID field filled as required for database entries
+	 * A {@link String} login token that belongs to a {@link WebAccountBean}
 	 */
-	@JsonProperty("webaccount")
-	WebAccountBean webaccount;
+	@JsonProperty("login_token")
+	String loginToken;
 
 	/**
-	 * integrationType is an {@link IntegrationType} that will contain the type of social platform desired for this
-	 * request
+	 * An {@link IntegrationType} that will contain the type of social platform desired for this request
 	 */
 	@JsonProperty("integration_type")
 	IntegrationType integrationType;
 
 	/**
-	 * data is a {@link String} that will contain either a webhook URL or a token
+	 * A {@link String} that will contain either a webhook URL or a token
 	 */
 	@JsonProperty("data")
 	String data;

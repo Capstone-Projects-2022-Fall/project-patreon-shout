@@ -4,12 +4,10 @@ import lombok.*;
 
 import javax.persistence.*;
 
-/**
- * POJO that relates to the webaccounts table in the database
- */
-@Entity
+
 @NoArgsConstructor
 @Data
+@Entity
 @Table(name = "webaccounts")
 public class WebAccountBean {
 
@@ -44,4 +42,8 @@ public class WebAccountBean {
 	 */
 	@Column(name = "login_token", unique = true)
 	protected String loginToken;
+
+	@OneToOne(mappedBy = "webAccountBean", cascade = CascadeType.ALL)
+	@PrimaryKeyJoinColumn
+	SocialIntegrationBean socialIntegrationBean;
 }
