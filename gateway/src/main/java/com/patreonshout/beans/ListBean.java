@@ -6,8 +6,13 @@ import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  * POJO that relates to the posts table in our database
@@ -17,14 +22,15 @@ import javax.persistence.Table;
 @ToString
 @Entity
 @Table(name="lists")
-public class ListBean {
+public class ListBean implements Serializable {
 
     /**
-     * list_id is the index/primary key for the lists table in our database
+     * list_id is the index/primary key for the posts table in our database
      */
     @Id
-    @Column(name="listId")
-    protected int listId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="list_id")
+    protected int list_id;
 
     /**
      * title is the title of the list
@@ -43,4 +49,11 @@ public class ListBean {
      */
     @Column(name="added_creators")
     protected String added_creators;
+
+    /**
+     * webAccount is the {@link com.patreonshout.beans.WebAccount} object linked with this object
+     */
+    @ManyToOne
+    @JoinColumn(name = "webaccount_id", insertable = false, updatable = false)
+    protected WebAccount webAccount;
 }

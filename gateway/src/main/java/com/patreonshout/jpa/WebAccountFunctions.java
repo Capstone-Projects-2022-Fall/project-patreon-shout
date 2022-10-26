@@ -192,4 +192,14 @@ public class WebAccountFunctions {
 
 		return patreonTokens;
 	}
+
+	/**
+	 * Gets a {@link com.patreonshout.beans.WebAccount} object from a specified login token
+	 *
+	 * @param loginToken is the user's session login token used to validate the user
+	 * @return {@link com.patreonshout.beans.WebAccount} object holding data corresponding to the provided login token
+	 */
+	public WebAccount findByLoginToken(String loginToken) {
+		return webAccountRepository.findByLoginToken(loginToken);
+	}
 }

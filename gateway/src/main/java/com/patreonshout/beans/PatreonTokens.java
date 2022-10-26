@@ -48,6 +48,9 @@ public class PatreonTokens {
     @Column(name="expires_in")
     protected int expiresIn;
 
+    /**
+     * webAccount is the {@link com.patreonshout.beans.WebAccount} object linked with this object
+     */
     @OneToOne
     @MapsId
     @JoinColumn(name = "webaccount_id")

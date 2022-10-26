@@ -1,6 +1,7 @@
 package com.patreonshout.rest.interfaces;
 
 import com.patreonshout.beans.request.ListCreationRequest;
+import com.patreonshout.beans.request.ListDeleteRequest;
 import com.patreonshout.beans.request.ListUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -42,7 +43,7 @@ public interface ListImpl {
     /**
      * Endpoint that will add a new {@link com.patreonshout.beans.ListBean} object to the database
      *
-     * @param listCreationRequest is the {@link com.patreonshout.beans.request.ListCreationRequest} object that contains {@link com.patreonshout.beans.ListBean} request details
+     * @param listCreationRequest is the {@link com.patreonshout.beans.request.ListCreationRequest} object that contains {@link com.patreonshout.beans.ListBean} request parameters
      * @return {@link org.springframework.http.HttpStatus#CREATED} if successful, {@link org.springframework.http.HttpStatus#CONFLICT} otherwise
      */
     @PostMapping("/list")
@@ -60,25 +61,38 @@ public interface ListImpl {
     /**
      * Endpoint that will update a {@link com.patreonshout.beans.ListBean} object in the database
      *
-     * @param listUpdateRequest is the {@link com.patreonshout.beans.request.ListUpdateRequest} object that contains {@link com.patreonshout.beans.ListBean} request details
-     * @return {@link org.springframework.http.HttpStatus#OK} if successful, {@link org.springframework.http.HttpStatus#CONFLICT} otherwise
+     * @param listUpdateRequest is the {@link com.patreonshout.beans.request.ListUpdateRequest} object that contains {@link com.patreonshout.beans.ListBean} request parameters
+     * @return {@link org.springframework.http.HttpStatus#OK} if successful, {@link org.springframework.http.HttpStatus#BAD_REQUEST} otherwise
      */
     @PutMapping("list")
     @Operation(summary = "Updates one of the user's lists")
-    @ApiResponses(value = { // TODO (the responses shown were copied from AddUserList above)
+    @ApiResponses(value = {
             @ApiResponse(responseCode = "201",
                     description = "List created.",
                     content = {@Content(mediaType = "application/json")}),
-            @ApiResponse(responseCode = "409",
-                    description = "Foreign key constraint failed.",
-                    content = {@Content(mediaType = "application/json")})
+            @ApiResponse(responseCode = "400",
+                    description = "the login token provided doesn't match up with the owner of the requested list's login token",
+                    content = {@Content(mediaType = "application/json")}
+            )
     })
     ResponseEntity<?> UpdateUserList(@RequestBody ListUpdateRequest listUpdateRequest);
 
+    /**
+     * Endpoint that will delete a {@link com.patreonshout.beans.ListBean} object in the database
+     *
+     * @param listDeleteRequest is the {@link com.patreonshout.beans.request.ListDeleteRequest} object that contains {@link com.patreonshout.beans.ListBean} requests parameters
+     * @return {@link org.springframework.http.HttpStatus#OK} if successful, {@link org.springframework.http.HttpStatus#BAD_REQUEST} otherwise
+     */
     @DeleteMapping("list")
     @Operation(summary = "Deletes one of the user's lists")
     @ApiResponses(value = {
-            @ApiResponse() // TODO
+            @ApiResponse(responseCode = "200",
+                    description = "List removed.",
+                    content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "400",
+                    description = "the login token provided doesn't match up with the owner of the requested list's login token",
+                    content = {@Content(mediaType = "application/json")}
+            )
     })
-    ResponseEntity<?> DeleteUserList(@RequestParam(required = true, name = "list_id") String list_id);
+    ResponseEntity<?> DeleteUserList(@RequestBody ListDeleteRequest listDeleteRequest);
 }
