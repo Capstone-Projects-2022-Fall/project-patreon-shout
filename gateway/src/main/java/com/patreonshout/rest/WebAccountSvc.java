@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -86,7 +87,9 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	public ResponseEntity<?> GetPatreonTokens(@RequestParam(name = "login_token") String loginToken) throws PSException {
 		CreatorTokensBean tokens = webAccountFunctions.getPatreonTokens(loginToken);
 
-		Map<String, String> response = Map.of("access",tokens.getAccess_token(), "refresh", tokens.getRefresh_token());
+		Map<String, String> response = new HashMap<>();
+		response.put("access", tokens.getAccess_token());
+		response.put("refresh", tokens.getRefresh_token());
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
