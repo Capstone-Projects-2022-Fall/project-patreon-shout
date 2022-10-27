@@ -10,39 +10,153 @@ import { getPosts } from '../services/api/posts'
  *
  * @returns Visual representation of the list of posts
  */
-function Feed() {
-    const [postList, setPostList] = useState([]);
 
-    useEffect(() => {
-        let mounted = true;
-        getPosts("Alex Sawicki")
-            .then(items => {
-                if (mounted) {
-                    setPostList(items)
-                }
-            })
-        return () => mounted = false;
-    }, [])
+
+function Feed() {
+
+    const [data, setData] = useState([]);
+    //let postscount = 0;
+    //const [postList, setPostList] = useState([]);
+
+    // useEffect(() => {
+    //     postscount += 1;
+    //     let mounted = true;
+    //     getPosts("Alex Sawicki")
+    //         .then(items => {
+    //             if (mounted) {
+    //                 setPostList(items)
+    //             }
+    //         })
+    //     return () => {
+    //     mounted = false;
+    //     postscount -= 1;}
+    // }, [])
+
+    let postscount = 14
 
     return (
         <div className="feed">
             <div className="feed__header">
                 <h2>Home</h2>
             </div>
-            <Searchbar/>
+            <Searchbar
+                data={data}
+                setData={setData}
+            />
             <PatreonConnect/>
-            {postList.map((item) => (
-                <Post
-                    displayName={item.title}
-                    username={item.creator}
-                    verified={item.verified}
-                    text={item.content.replaceAll("<p>", "").replaceAll("</p>", "")}
-                    avatar={item.avatar}
-                    image={item.image}
-                />
-            ))}
+            <Post
+                displayName={data}
+                username={"Thatoneguywhocreates"}
+                verified={true}
+                text={"One upon a time there was a land far far away where things could be found when searched"}
+                avatar={"yes"}
+                image={"yes"}
+            />
+            <Post
+                displayName={"Creator"}
+                username={"Thatoneguywhocreates"}
+                verified={true}
+                text={"One upon a time there was a land far far away where things could be found when searched"}
+                avatar={"yes"}
+                image={"yes"}
+            />
+            <Post
+                displayName={"Creator"}
+                username={"Thatoneguywhocreates"}
+                verified={true}
+                text={"One upon a time there was a land far far away where things could be found when searched"}
+                avatar={"yes"}
+                image={"yes"}
+            />
+            <Post
+                displayName={"Creator"}
+                username={"Thatoneguywhocreates"}
+                verified={true}
+                text={"One upon a time there was a land far far away where things could be found when searched"}
+                avatar={"yes"}
+                image={"yes"}
+            />
+            <Post
+                displayName={"Creator"}
+                username={"Thatoneguywhocreates"}
+                verified={true}
+                text={"One upon a time there was a land far far away where things could be found when searched"}
+                avatar={"yes"}
+                image={"yes"}
+            />
+            <Post
+                displayName={"Creator"}
+                username={"Thatoneguywhocreates"}
+                verified={true}
+                text={"One upon a time there was a land far far away where things could be found when searched"}
+                avatar={"yes"}
+                image={"yes"}
+            />
+            <Post
+                displayName={"Creator"}
+                username={"Thatoneguywhocreates"}
+                verified={true}
+                text={"One upon a time there was a land far far away where things could be found when searched"}
+                avatar={"yes"}
+                image={"yes"}
+            />
+            <Post
+                displayName={"Creator"}
+                username={"Thatoneguywhocreates"}
+                verified={true}
+                text={"One upon a time there was a land far far away where things could be found when searched"}
+                avatar={"yes"}
+                image={"yes"}
+            />
+            <Post
+                displayName={"Creator"}
+                username={"Thatoneguywhocreates"}
+                verified={true}
+                text={"One upon a time there was a land far far away where things could be found when searched"}
+                avatar={"yes"}
+                image={"yes"}
+            />
+            <Post
+                displayName={"Creator"}
+                username={"Thatoneguywhocreates"}
+                verified={true}
+                text={"One upon a time there was a land far far away where things could be found when searched"}
+                avatar={"yes"}
+                image={"yes"}
+            />
+            <Post
+                displayName={"Creator"}
+                username={"Thatoneguywhocreates"}
+                verified={true}
+                text={"One upon a time there was a land far far away where things could be found when searched"}
+                avatar={"yes"}
+                image={"yes"}
+            />
+            <Post
+                displayName={"Creator"}
+                username={"Thatoneguywhocreates"}
+                verified={true}
+                text={"One upon a time there was a land far far away where things could be found when searched"}
+                avatar={"yes"}
+                image={"yes"}
+            />
+            <Post
+                displayName={"Creator"}
+                username={"Thatoneguywhocreates"}
+                verified={true}
+                text={"One upon a time there was a land far far away where things could be found when searched"}
+                avatar={"yes"}
+                image={"yes"}
+            />
+            <Post
+                displayName={"Creator"}
+                username={"Thatoneguywhocreates"}
+                verified={true}
+                text={"One upon a time there was a land far far away where things could be found when searched"}
+                avatar={"yes"}
+                image={"yes"}
+            />
         </div>
     );
 }
-
 export default Feed;

@@ -3,20 +3,19 @@ import { SearchRounded } from "@mui/icons-material";
 import React, { useState } from "react";
 import "./home_css/Searchbar.css";
 
-function Searchbar() {
+function Searchbar({data, setData}) {
 
-    const handleChange = (e) => {
-        e.preventDefault();
-        setSearch(e.target.value);
-      };
+    const [searchInput, setSearchInput] = useState("");
 
-//    if (searchInput.length > 0) {
-//        posts.filter((post) => {
-//        return post.name.match(searchInput);
-//        });
-//    }
+    let inputHandler = (e) => {
+        var input = e.target.value;
+        setSearchInput(input);
+    }
+    let buttonHandler = () => {
+        console.log(data)
+        setData(searchInput)
+    }
 
-    const [searchInput, setSearch] = useState("");
     return (
         <div className="Searchbar">
             <form>
@@ -24,15 +23,16 @@ function Searchbar() {
                     <input
                         value={searchInput}
                         placeholder="Search PatreonShout..."
-                        onChange={handleChange}
+                        onChange={inputHandler}
                         type="text"
                     />
-                    <Button type="submit" className="Searchbar__button">
+                    <Button className="Searchbar__button" onClick={(buttonHandler)}> 
                         <SearchRounded/>
                     </Button>
                 </div>
             </form>
         </div>
+
     );
 }
 
