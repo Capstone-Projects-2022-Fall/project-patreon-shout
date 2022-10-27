@@ -1,7 +1,5 @@
 .Searchbar {
-    padding-bottom: 10px;
-    border-bottom: 8px solid var(--background);
-    padding-right: 500px;
+
   }
   .Searchbar > form {
     display: flex;
@@ -10,6 +8,7 @@
   .Searchbar__input {
     display: flex;
     padding: 20px;
+    width: 600px;
   }
   .Searchbar__input > input {
     flex: 1;
@@ -18,6 +17,7 @@
     font-size: 20px;
     border: 10px, black;
     border-radius: 10px;
+    width: 600px;
   }
   .Searchbar__input > input:focus {
     outline: none;

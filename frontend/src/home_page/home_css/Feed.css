@@ -25,3 +25,9 @@
     font-size: 20px;
     font-weight: 700;
 }
+
+.feed__filters {
+    display: flex;
+    border-bottom: 8px solid var(--background);
+    align-items: center;
+}

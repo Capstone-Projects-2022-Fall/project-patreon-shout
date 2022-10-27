@@ -54,11 +54,13 @@ function Feed() {
             <div className="feed__header">
                 <h2>Home</h2>
             </div>
-            <Searchbar
-                searchTerm={searchTerm}
-                setSearchTerm={setSearchTerm}
-            />
-            <Filter/>
+            <div className="feed__filters">
+                <Searchbar
+                    searchTerm={searchTerm}
+                    setSearchTerm={setSearchTerm}
+                />
+                <Filter id="feed__filter"/>
+            </div>
             {/* Unsearched map of posts, don't delete yet
                 {postList.map((item) => (
                 <Post

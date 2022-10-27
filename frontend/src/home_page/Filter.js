@@ -1,14 +1,14 @@
 import React, {useState} from "react";
 import Popup from "reactjs-popup";
 import { Button } from "@mui/material";
-import "./home_css/Feed.css";
+import "./home_css/Filter.css";
 
 function Filter() {
 
     const [selection, setSelection] = useState("We can see it");
 
     return (
-        <Popup 
+        <Popup
         trigger={<div className="dropdown">{selection}</div>}
         position="bottom"
         on="click"
