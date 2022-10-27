@@ -30,7 +30,6 @@ function Feed() {
                 <h2>Home</h2>
             </div>
             <Searchbar/>
-            <PatreonConnect/>
             {postList.map((item) => (
                 <Post
                     displayName={item.title}
