@@ -1,7 +1,9 @@
 package com.patreonshout.jpa;
 
 import com.patreonshout.PSException;
+import com.patreonshout.beans.CreatorPage;
 import com.patreonshout.beans.PatreonTokens;
+import com.patreonshout.beans.constants.CreatorPageCategory;
 import com.patreonshout.beans.request.SocialIntegrationRequest;
 import com.patreonshout.beans.SocialIntegration;
 import com.patreonshout.beans.WebAccount;
@@ -33,6 +35,19 @@ public class WebAccountFunctions {
 	 */
 	@Autowired
 	SecurityConfiguration securityConfiguration;
+
+	@Transactional
+	public WebAccount getAccount(String loginToken) throws PSException {
+		if (loginToken == null)
+			throw new PSException(HttpStatus.NOT_FOUND, "Login token not provided");
+
+		WebAccount webAccount = webAccountRepository.findByLoginToken(loginToken);
+
+		if (webAccount == null)
+			throw new PSException(HttpStatus.NOT_FOUND, "Login token does not belong to a user");
+
+		return webAccount;
+	}
 
 	/**
 	 * Adds a {@link WebAccountFunctions} to the database
@@ -162,7 +177,6 @@ public class WebAccountFunctions {
 		patreonTokens.setRefreshToken(refreshToken);
 
 		webAccountRepository.save(webAccount);
-//		oldWebAccountFunctions.putPatreonTokens(accessToken, refreshToken, loginToken);
 	}
 
 	/**
@@ -192,4 +206,5 @@ public class WebAccountFunctions {
 
 		return patreonTokens;
 	}
+
 }
