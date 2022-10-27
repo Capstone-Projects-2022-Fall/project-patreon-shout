@@ -26,4 +26,9 @@ public class CreatorPages {
 	protected String creatorName;
 
 	protected CreatorPageCategory creatorPageCategory;
+
+	@OneToOne
+	@MapsId
+	@JoinColumn(name = "webaccount_id")
+	protected WebAccount webAccount;
 }
