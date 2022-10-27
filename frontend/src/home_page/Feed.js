@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import "./home_css/Feed.css";
 import Post from "./Post";
 import Searchbar from "./Searchbar";
-import PatreonConnect from "./PatreonConnect";
 import { getPosts } from '../services/api/posts'
 
 /**
@@ -30,7 +29,6 @@ function Feed() {
                 <h2>Home</h2>
             </div>
             <Searchbar/>
-            <PatreonConnect/>
             {postList.map((item) => (
                 <Post
                     displayName={item.title}

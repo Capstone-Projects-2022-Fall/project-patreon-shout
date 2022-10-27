@@ -1,0 +1,20 @@
+body {
+    --main-color: #e7aa38;
+    --background: #e6ecf0;
+}
+.app {
+    display: flex;
+    height: 100vh;
+    max-width: 1300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/*.paperStyle{*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    align-items: center;*/
+/*    justify-content: center;*/
+/*    width: 310px;*/
+/*    margin: 20px auto;*/
+/*}*/

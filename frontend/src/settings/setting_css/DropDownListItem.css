@@ -1,0 +1,17 @@
+.option {
+    display: flex;
+    flex-direction: column;
+}
+
+.selector {
+    display: flex;
+    width: 325px;
+    justify-content: space-between;
+}
+
+.dropdown {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 5px;
+}
