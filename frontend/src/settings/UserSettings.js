@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { Typography, Button, List, ListItem, ListItemText, Switch } from '@mui/material';
 import PatreonConnect from "../components/PatreonConnect";
+import DropDownListItem from "./DropDownListItem";
+
 
 function UserSettings() {
 
     const [checked, setChecked] = useState(['discord']);
+    const [showDiscord, setShowDiscord] = useState("hide");
 
     const handleToggle = (value) => () => {
         const currentIndex = checked.indexOf(value);
@@ -16,7 +19,15 @@ function UserSettings() {
             newChecked.splice(currentIndex, 1);
         }
 
+        if (newChecked.includes('discord')) {
+            setShowDiscord("show");
+        }
+        else{
+            setShowDiscord("hide");
+        }
+
         setChecked(newChecked);
+
     };
 
     return (
@@ -28,41 +39,21 @@ function UserSettings() {
                 <PatreonConnect />
             </Typography>
 
-            <ListItem>
-                <ListItemText id="switch-list-label-discord" primary="Discord" />
-                <Switch
-                    edge="end"
-                    onChange={handleToggle('discord')}
-                    checked={checked.indexOf('discord') !== -1}
-                    inputProps={{
-                        'aria-labelledby': 'switch-list-label-discord',
-                    }}
-                />
-            </ListItem>
+            <DropDownListItem
+                name="Discord"
+                dropdown="true"
+            />
 
-            <ListItem>
-                <ListItemText id="switch-list-label-twitter" primary="Twitter" />
-                <Switch
-                    edge="end"
-                    onChange={handleToggle('twitter')}
-                    checked={checked.indexOf('twitter') !== -1}
-                    inputProps={{
-                        'aria-labelledby': 'switch-list-label-twitter',
-                    }}
-                />
-            </ListItem>
+            <DropDownListItem
+                name="Twitter"
+                dropdown="false"
+            />
 
-            <ListItem>
-                <ListItemText id="switch-list-label-instagram" primary="Instagram" />
-                <Switch
-                    edge="end"
-                    onChange={handleToggle('instagram')}
-                    checked={checked.indexOf('instagram') !== -1}
-                    inputProps={{
-                        'aria-labelledby': 'switch-list-label-instagram',
-                    }}
-                />
-            </ListItem>
+
+            <DropDownListItem
+                name="Instagram"
+                dropdown="true"
+            />
         </List>
     );
 }
