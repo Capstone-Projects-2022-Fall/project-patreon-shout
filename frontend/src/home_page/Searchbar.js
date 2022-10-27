@@ -3,7 +3,7 @@ import { SearchRounded } from "@mui/icons-material";
 import React, { useState } from "react";
 import "./home_css/Searchbar.css";
 
-function Searchbar({data, setData}) {
+function Searchbar({searchTerm, setSearchTerm}) {
 
     const [searchInput, setSearchInput] = useState("");
 
@@ -12,13 +12,16 @@ function Searchbar({data, setData}) {
         setSearchInput(input);
     }
     let buttonHandler = () => {
-        console.log(data)
-        setData(searchInput)
+        setSearchTerm(searchInput.toLowerCase())
+    }
+    //This is currently preventing Enter from being the input method, only search button
+    const onSubmitForm = e => {
+        e.preventDefault();
     }
 
     return (
         <div className="Searchbar">
-            <form>
+            <form onSubmit={onSubmitForm}>
                 <div className="Searchbar__input">
                     <input
                         value={searchInput}
@@ -26,7 +29,7 @@ function Searchbar({data, setData}) {
                         onChange={inputHandler}
                         type="text"
                     />
-                    <Button className="Searchbar__button" onClick={(buttonHandler)}> 
+                    <Button className="Searchbar__button" onClick={(buttonHandler)}>
                         <SearchRounded/>
                     </Button>
                 </div>
