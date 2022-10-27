@@ -15,10 +15,6 @@ function PatronSettings() {
             newChecked.splice(currentIndex, 1);
         }
 
-        if(currentIndex === 1){
-
-        }
-
         setChecked(newChecked);
     };
 

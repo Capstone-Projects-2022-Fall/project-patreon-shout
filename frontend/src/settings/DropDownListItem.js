@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Typography, Button, List, ListItem, ListItemText, Switch } from '@mui/material';
+import { Button, ListItem, ListItemText, Switch } from '@mui/material';
 import './setting_css/DropDownListItem.css';
+import TextField from '@mui/material/TextField';
 
 function DropDownListItem({dropdown, name}) {
 
@@ -45,8 +46,8 @@ function DropDownListItem({dropdown, name}) {
                 </div>
                 <div className={showDropdown}>
                     <div className="dropdown">
-                        <input type="text"/>
-                        <Button sx={ { borderRadius: 1 } } color="primary" type="submit" variant="contained" onClick={() => {console.log("hello");}}>
+                        <TextField id="outlined-basic" label={"WebHook"} size={"small"} variant="outlined" />
+                        <Button sx={ { borderRadius: 10 } } color="primary" type="submit" variant="contained" size={"medium"} onClick={() => {console.log("hello");}}>
                             Submit
                         </Button>
                     </div>

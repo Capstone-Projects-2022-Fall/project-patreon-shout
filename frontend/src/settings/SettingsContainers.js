@@ -1,5 +1,5 @@
 import React from 'react'
-import UserSettings from './UserSettings'
+import CreatorSettings from './CreatorSettings'
 import PatronSettings from './PatronSettings';
 import './setting_css/SettingsContainers.css';
 import Tabs from '@mui/material/Tabs';
@@ -53,7 +53,7 @@ function SettingsContainers() {
                         <Tab label="Patron Settings" />
                     </Tabs>
                     <TabPanel value={value} index={0}>
-                        <UserSettings/>
+                        <CreatorSettings/>
                     </TabPanel>
                     <TabPanel value={value} index={1}>
                         <PatronSettings />

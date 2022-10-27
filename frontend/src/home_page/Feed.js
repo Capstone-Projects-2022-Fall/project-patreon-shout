@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import "./home_css/Feed.css";
 import Post from "./Post";
 import Searchbar from "./Searchbar";
-import PatreonConnect from "../components/PatreonConnect";
 import { getPosts } from '../services/api/posts'
 
 /**
