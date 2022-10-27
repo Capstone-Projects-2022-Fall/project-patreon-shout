@@ -1,17 +1,22 @@
 package com.patreonshout.rest;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.patreon.PatreonOAuth;
 import com.patreon.resources.Campaign;
 import com.patreon.resources.User;
 import com.patreonshout.PSException;
 import com.patreonshout.beans.PostBean;
+import com.patreonshout.jpa.CreatorPageFunctions;
 import com.patreonshout.jpa.Posts;
 import com.patreonshout.jpa.WebAccountFunctions;
 import com.patreonshout.patreon.CustomPatreonAPI;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
 
@@ -23,6 +28,9 @@ public class WebhookSvc extends BaseSvc {
 	 */
 	@Autowired
 	WebAccountFunctions webAccountFunctions;
+
+	@Autowired
+	CreatorPageFunctions creatorPageFunctions;
 
 	@Autowired
 	Posts posts;
@@ -52,15 +60,45 @@ public class WebhookSvc extends BaseSvc {
 			// put content creator posts in database
 			CustomPatreonAPI client = new CustomPatreonAPI(accessToken);
 
+
 			User user = client.fetchUser().get();
+
+			/**
+			 * TODO: Fix this!!  This is IMPROPER!
+			 * This patch resides here to allow others to work on extra functionality
+			 */
+			// Send GET request to Patreon v2 web API
+			String baseUrl = "https://www.patreon.com/api/oauth2/v2/";
+
+			PatreonURL patreonURL = WebClient
+					.create(baseUrl)
+					.get()
+					.uri(uriBuilder -> uriBuilder
+							.path("campaigns")
+							.queryParam("fields[campaign]", "vanity")
+							.build())
+					.headers(httpHeaders -> httpHeaders.setBearerAuth(accessToken))
+					.retrieve()
+					.bodyToMono(PatreonURL.class)
+					.share()
+					.block();
+
+			if (patreonURL == null)
+				throw new PSException(HttpStatus.BAD_REQUEST, "An error occurred while retrieving Patreon page URL for this user.");
+
+			PatreonURL.Data[] finalPatreonUrl = patreonURL.getData();
+
+			if (finalPatreonUrl.length == 0)
+				throw new PSException(HttpStatus.BAD_REQUEST, "Successfully retrieved Patreon Page URL object, but it was empty");
+
+			String pageUrl = finalPatreonUrl[0].getAttributes().getVanity();
+
+			// Store their
+			creatorPageFunctions.putCreatorPage(pageUrl);
 
 			for (Campaign campaign : client.fetchCampaigns().get()) {
 				for (PostBean post : client.fetchPosts(campaign.getId()).get()) {
-//					post.setCreator_page_url(user.getFullName());
-					/* TODO:
-					 * Change user.getFullName() to the campaign url...  Maybe use:
-					 * client.fetchCampaigns().get().get(0).getPledgeUrl()
-					 */
+					post.setCreator_page_url(pageUrl);
 					posts.putPost(post);
 				}
 			}
@@ -74,5 +112,26 @@ public class WebhookSvc extends BaseSvc {
 
 		// Webhook
 		return "";
+	}
+}
+
+@Data
+class PatreonURL {
+
+	@JsonProperty("data")
+	Data[] data;
+
+	@lombok.Data
+	static class Data {
+
+		@JsonProperty("attributes")
+		Attributes attributes;
+
+		@lombok.Data
+		static class Attributes {
+
+			@JsonProperty("vanity")
+			String vanity;
+		}
 	}
 }

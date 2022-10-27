@@ -51,8 +51,4 @@ public class WebAccount {
 	@OneToOne(mappedBy = "webAccount", cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn
 	PatreonTokens creatorTokens;
-
-	@OneToOne(mappedBy = "webAccount", cascade = CascadeType.ALL)
-	@PrimaryKeyJoinColumn
-	CreatorPages creatorPages;
 }
