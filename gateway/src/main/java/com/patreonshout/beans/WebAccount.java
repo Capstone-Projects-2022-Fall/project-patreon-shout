@@ -62,8 +62,7 @@ public class WebAccount {
 	/**
 	 * listBean is the List of {@link com.patreonshout.beans.ListBean} objects linked with this WebAccount object
 	 */
-	@OneToMany
-	@JoinColumn(name = "webaccount_id")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "webAccount")
 	List<ListBean> listBean;
 
 

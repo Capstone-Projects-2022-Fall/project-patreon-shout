@@ -12,6 +12,7 @@ import com.patreonshout.utils.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,6 +48,10 @@ public class ListSvc extends BaseSvc implements ListImpl {
     public ResponseEntity<?> GetUserLists(@RequestParam(name = "loginToken") String loginToken) {
         WebAccount userAccount = webAccountFunctions.findByLoginToken(loginToken);
 
+        if (userAccount == null) {
+            return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
+        }
+
         // build response so ResponseEntity can parse the returned objects correctly
         List<Map<String, String>> response = new ArrayList<>();
         for (ListBean lb : userAccount.getListBean()) {
@@ -69,6 +74,10 @@ public class ListSvc extends BaseSvc implements ListImpl {
     public ResponseEntity<?> AddUserList(@RequestBody ListCreationRequest listCreationRequest) {
         WebAccount userAccount = webAccountFunctions.findByLoginToken(listCreationRequest.getLoginToken());
 
+        if (userAccount == null) {
+            return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
+        }
+
         ListBean lb = new ListBean();
         lb.setTitle(listCreationRequest.getTitle());
         lb.setDescription(listCreationRequest.getDescription());
@@ -83,6 +92,7 @@ public class ListSvc extends BaseSvc implements ListImpl {
     /**
      * {@inheritDoc}
      */
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<?> UpdateUserList(@RequestBody ListUpdateRequest listUpdateRequest) {
         ListBean lb = listsRepository.getListByList_id(listUpdateRequest.getList_id());
 
@@ -102,6 +112,7 @@ public class ListSvc extends BaseSvc implements ListImpl {
     /**
      * {@inheritDoc}
      */
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<?> DeleteUserList(@RequestBody ListDeleteRequest listDeleteRequest) {
         ListBean lb = listsRepository.getListByList_id(listDeleteRequest.getList_id());
 
