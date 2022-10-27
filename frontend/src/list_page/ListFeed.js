@@ -1,46 +1,65 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import ListButton from "./ListButton";
 import AddListModal from "./AddListModal";
 import Post from "../home_page/Post";
 import "./list_css/ListFeed.css";
+import {getLists} from "../services/api/lists/getLists";
+import jsonPosts from "../data/posts.json";
 
 function ListFeed() {
+    const [userLists, setUserLists] = useState([]);
+    const [posts, setPosts] = useState("hide");
+    const [lists, setLists] = useState("show");
+    const [postData, setPostData] = useState(jsonPosts);
+
+    useEffect(() => {
+        let mounted = true;
+        const tokenString = localStorage.getItem('token');
+        const userToken = JSON.parse(tokenString);
+        getLists(userToken.token)
+            .then(items => {
+                if (mounted) {
+                    console.log(items);
+                    setUserLists(items)
+                }
+            })
+        return () => mounted = false;
+    }, [])
+
+
 
 
     return (
         <div className="listfeed">
             <div className="listfeed__header">
-                <h2>Lists</h2>
+                <h2 id="showLists" onClick={() => {setPosts("hide"); setLists("show")}}>Lists</h2>
                 <AddListModal />
             </div>
 
-            <div className="listfeed__posts"> {/* hide until a list is chosen, then do http request to get list posts */}
-                <Post
-                    displayName="Alex"
-                    username="Alex2"
-                    verified="true"
-                    text="text text text text hello there alex"
-                    avatar="https://i.picsum.photos/id/505/536/354.jpg?hmac=zvFVVisk0oG7zcCY4MmROU21E0SnGTOk3g2OA3fCszo"
-                />
+            {/*TODO: fill with list specific creator posts when we get posts assigned to creators */}
+            <div className={posts}> {/* hide until a list is chosen, then do http request to get list posts */}
+                {postData.map((item) => (
+                    <Post
+                        displayName={item.displayName}
+                        username={item.username}
+                        verified={item.verified}
+                        text={item.text}
+                        avatar={item.avatar}
+                    />
+                ))}
             </div>
 
-            <div className="listfeed__lists" >
-                <ListButton
-                    title="hi alex"
-                    description="alex number 2"
-                />
-                <ListButton
-                    title="hi alex"
-                    description="alex number 2"
-                />
-                <ListButton
-                    title="hi alex"
-                    description="alex number 2"
-                />
-                <ListButton
-                    title="hi alex"
-                    description="alex number 2"
-                />
+            <div className={lists}>
+                {userLists.map((item) => (
+                    <ListButton
+                        setPosts={setPosts}
+                        setLists={setLists}
+                        id={item.list_id}
+                        title={item.title}
+                        description={item.description}
+                        added_creators={item.added_creators.toString().split(',')}
+                    />
+                ))}
             </div>
         </div>
     );

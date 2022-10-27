@@ -3,9 +3,11 @@ import Popup from "reactjs-popup";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import Creator from "../components/Creator";
 import "./list_css/AddListModal.css";
+import {addList} from "../services/api/lists/addList";
 
 
 function AddListModal() {
+
 
     const [creatorList, setCreatorList] = useState([]);
     const [titleInput, setTitle] = useState("");
@@ -19,14 +21,37 @@ function AddListModal() {
         setSearch("");
     }
 
-    const addList = () => {
+    const handleAddList = async e => {
+        const tokenString = localStorage.getItem('token');
+        const loginToken = JSON.parse(tokenString).token;
+        const title = titleInput;
+        const description = descInput;
+        const added_creators = creatorList.toString();
+        console.log(added_creators);
+
+        const message = await addList({
+            loginToken,
+            title,
+            description,
+            added_creators
+        });
+
+        console.log(message);
+        window.location.reload(false);
+    }
+
+    const handleCreateList = () => {
         console.log("title: " + titleInput);
         console.log("desc: " + descInput);
         console.log(creatorList);
-        eraseInfo();
 
+        handleAddList()
+            .then(response => {
+                console.log(response);
+            })
+
+        eraseInfo();
         return true;
-        // TODO: send http request to put list for user here
     }
 
 
@@ -61,7 +86,7 @@ function AddListModal() {
                             type="text"
                         />
                         <input type="button" value="Create List" onClick={() => {
-                            const added = addList();
+                            const added = handleCreateList();
                             if (added === true) {
                                 close();
                             }
@@ -107,69 +132,6 @@ function AddListModal() {
                         setCreatorList={setCreatorList}
                         displayName="JonahM"
                         urlName="jonah"
-                        description="very cool omg so cool omg"
-                        imgUrl="https://i.picsum.photos/id/505/536/354.jpg?hmac=zvFVVisk0oG7zcCY4MmROU21E0SnGTOk3g2OA3fCszo"
-                        verified="true"
-                    />
-                    <Creator
-                        displayName="Alex Sawicki"
-                        urlName="alexzwicky"
-                        description="very cool omg so cool omg"
-                        imgUrl="https://i.picsum.photos/id/505/536/354.jpg?hmac=zvFVVisk0oG7zcCY4MmROU21E0SnGTOk3g2OA3fCszo"
-                        verified="true"
-                    />
-                    <Creator
-                        displayName="Alex Sawicki"
-                        urlName="alexzwicky"
-                        description="very cool omg so cool omg"
-                        imgUrl="https://i.picsum.photos/id/505/536/354.jpg?hmac=zvFVVisk0oG7zcCY4MmROU21E0SnGTOk3g2OA3fCszo"
-                        verified="true"
-                    />
-                    <Creator
-                        displayName="Alex Sawicki"
-                        urlName="alexzwicky"
-                        description="very cool omg so cool omg"
-                        imgUrl="https://i.picsum.photos/id/505/536/354.jpg?hmac=zvFVVisk0oG7zcCY4MmROU21E0SnGTOk3g2OA3fCszo"
-                        verified="true"
-                    />
-                    <Creator
-                        displayName="Alex Sawicki"
-                        urlName="alexzwicky"
-                        description="very cool omg so cool omg"
-                        imgUrl="https://i.picsum.photos/id/505/536/354.jpg?hmac=zvFVVisk0oG7zcCY4MmROU21E0SnGTOk3g2OA3fCszo"
-                        verified="true"
-                    />
-                    <Creator
-                        displayName="Alex Sawicki"
-                        urlName="alexzwicky"
-                        description="very cool omg so cool omg"
-                        imgUrl="https://i.picsum.photos/id/505/536/354.jpg?hmac=zvFVVisk0oG7zcCY4MmROU21E0SnGTOk3g2OA3fCszo"
-                        verified="true"
-                    />
-                    <Creator
-                        displayName="Alex Sawicki"
-                        urlName="alexzwicky"
-                        description="very cool omg so cool omg"
-                        imgUrl="https://i.picsum.photos/id/505/536/354.jpg?hmac=zvFVVisk0oG7zcCY4MmROU21E0SnGTOk3g2OA3fCszo"
-                        verified="true"
-                    />
-                    <Creator
-                        displayName="Alex Sawicki"
-                        urlName="alexzwicky"
-                        description="very cool omg so cool omg"
-                        imgUrl="https://i.picsum.photos/id/505/536/354.jpg?hmac=zvFVVisk0oG7zcCY4MmROU21E0SnGTOk3g2OA3fCszo"
-                        verified="true"
-                    />
-                    <Creator
-                        displayName="Alex Sawicki"
-                        urlName="alexzwicky"
-                        description="very cool omg so cool omg"
-                        imgUrl="https://i.picsum.photos/id/505/536/354.jpg?hmac=zvFVVisk0oG7zcCY4MmROU21E0SnGTOk3g2OA3fCszo"
-                        verified="true"
-                    />
-                    <Creator
-                        displayName="Alex Sawicki"
-                        urlName="alexzwicky"
                         description="very cool omg so cool omg"
                         imgUrl="https://i.picsum.photos/id/505/536/354.jpg?hmac=zvFVVisk0oG7zcCY4MmROU21E0SnGTOk3g2OA3fCszo"
                         verified="true"

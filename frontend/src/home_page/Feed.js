@@ -34,7 +34,7 @@ function Feed() {
             {postList.map((item) => (
                 <Post
                     displayName={item.title}
-                    username={item.creator}
+                    username={item.creator_page_url}
                     verified={item.verified}
                     text={item.content.replaceAll("<p>", "").replaceAll("</p>", "")}
                     avatar={item.avatar}
