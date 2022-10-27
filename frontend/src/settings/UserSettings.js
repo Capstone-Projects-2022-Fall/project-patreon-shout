@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Typography, Button, List, ListItem, ListItemText, Switch } from '@mui/material';
+import PatreonConnect from "../components/PatreonConnect";
 
 function UserSettings() {
 
@@ -24,9 +25,7 @@ function UserSettings() {
             sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
         >
             <Typography mt={1} component="div" align="center">
-                <Button sx={ { borderRadius: 28 } } color="primary" type="submit" variant="contained">
-                    Oauth
-                </Button>
+                <PatreonConnect />
             </Typography>
 
             <ListItem>
