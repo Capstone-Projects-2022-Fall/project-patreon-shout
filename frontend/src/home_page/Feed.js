@@ -4,6 +4,7 @@ import Post from "./Post";
 import Searchbar from "./Searchbar";
 //import { getPosts } from '../services/api/posts'
 import jsonPosts from "../data/posts.json";
+import Filter from "./Filter";
 
 /**
  * This is the Feed function which will appear on the home page
@@ -23,7 +24,6 @@ function Feed() {
     postList.forEach((post, index) => {
         const postInfo = (({displayName, username, text}) => ({displayName, username, text}))(post);
         Object.values(postInfo).every((onlyValues, valIndex) => {
-            console.log(postInfo)
             if (shouldSkip) {return;}
             if (onlyValues.toLowerCase().includes(searchTerm)) {
                 displayedList.push(post)
@@ -54,10 +54,13 @@ function Feed() {
             <div className="feed__header">
                 <h2>Home</h2>
             </div>
-            <Searchbar
-                searchTerm={searchTerm}
-                setSearchTerm={setSearchTerm}
-            />
+            <div className="feed__filters">
+                <Searchbar
+                    searchTerm={searchTerm}
+                    setSearchTerm={setSearchTerm}
+                />
+                <Filter id="feed__filter"/>
+            </div>
             {/* Unsearched map of posts, don't delete yet
                 {postList.map((item) => (
                 <Post
