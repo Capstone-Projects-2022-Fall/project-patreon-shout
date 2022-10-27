@@ -1,7 +1,6 @@
 package com.patreonshout.jpa;
 
 import com.patreonshout.beans.PostBean;
-
 import com.patreonshout.rest.BaseSvc;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +24,7 @@ import java.util.List;
  * </p>
  */
 @Repository
-public class PostsRepository  extends BaseSvc {
+public class PostsRepository extends BaseSvc {
 
     /**
      * em is the {@link EntityManager} that handles all the transactions with our database
@@ -40,11 +39,11 @@ public class PostsRepository  extends BaseSvc {
      * @return a List of {@link com.patreonshout.beans.PostBean} objects containing Patreon post information of a given creator
      */
     @Transactional
-    public List<PostBean> getCreatorPosts(String creator) {
-        String sql = "select * from posts where creator = :creator";
+    public List<PostBean> getCreatorPosts(String creator_page_url) {
+        String sql = "select * from posts where creator_page_url = :creator_page_url";
 
         Query q = em.createNativeQuery(sql, PostBean.class);
-        q.setParameter("creator", creator);
+        q.setParameter("creator_page_url", creator_page_url);
 
         return q.getResultList();
     }
@@ -92,15 +91,15 @@ public class PostsRepository  extends BaseSvc {
      */
     @Transactional
     public void putPost(PostBean pb) {
-        String sql = "insert into posts (publishdate, title, url, content, is_public, creator) values (:publishdate, :title, :url, :content, :is_public, :creator)";
+        String sql = "insert into posts (publishdate, title, url, content, is_public, creator_page_url) values (:publishdate, :title, :url, :content, :is_public, :creator_page_url)";
 
         Query q = em.createNativeQuery(sql, PostBean.class);
         q.setParameter("publishdate", pb.getPublishdate());
         q.setParameter("title", pb.getTitle());
         q.setParameter("url", pb.getUrl());
         q.setParameter("content", pb.getContent());
-        q.setParameter("is_public", pb.isIs_public());
-        q.setParameter("creator", pb.getCreator());
+        q.setParameter("is_public", pb.is_public());
+        q.setParameter("creator_page_url", pb.getCreator_page_url());
 
         q.executeUpdate();
     }
@@ -112,15 +111,15 @@ public class PostsRepository  extends BaseSvc {
      */
     @Transactional
     public void updatePost(PostBean pb) {
-        String sql = "update posts set publishdate = :publishdate, title = :title, url = :url, content = :content, is_public = :is_public, creator = :creator where post_id = :post_id";
+        String sql = "update posts set publishdate = :publishdate, title = :title, url = :url, content = :content, is_public = :is_public, creator_page_url = :creator_page_url where post_id = :post_id";
 
         Query q = em.createNativeQuery(sql, PostBean.class);
         q.setParameter("publishdate", pb.getPublishdate());
         q.setParameter("title", pb.getTitle());
         q.setParameter("url", pb.getUrl());
         q.setParameter("content", pb.getContent());
-        q.setParameter("is_public", pb.isIs_public());
-        q.setParameter("creator", pb.getCreator());
+        q.setParameter("is_public", pb.is_public());
+        q.setParameter("creator_page_url", pb.getCreator_page_url());
         q.setParameter("post_id", pb.getPost_id());
 
         q.executeUpdate();

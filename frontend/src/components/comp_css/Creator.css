@@ -23,7 +23,8 @@
 }
 
 .creator__headerDescription {
-    display: inline;
+    display: flex;
+    justify-content: space-between;
     font-size: 15px;
 }
 
@@ -39,7 +40,6 @@
 .creator__addButton {
     cursor: pointer;
     background: #ffffff;
-    float: right;
     border-radius: 18px;
     border: 1px solid #cfcece;
 }

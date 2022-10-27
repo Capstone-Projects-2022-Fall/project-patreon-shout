@@ -39,6 +39,11 @@ h2 {
     padding: 5px;
 }
 
+h2:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
 .listfeed__lists {
 
 }

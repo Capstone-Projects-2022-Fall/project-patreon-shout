@@ -4,8 +4,8 @@ create table posts (
     title VARCHAR(255),
     url VARCHAR(255),
     content MEDIUMTEXT,
-    isprivate boolean,
-    creator VARCHAR(255),
+    is_public boolean,
+    creator_page_url VARCHAR(255),
     post_id INT PRIMARY KEY AUTO_INCREMENT
 );
 

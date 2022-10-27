@@ -13,16 +13,16 @@ import { getPosts } from '../services/api/posts'
 function Feed() {
     const [postList, setPostList] = useState([]);
 
-    // useEffect(() => {
-    //     let mounted = true;
-    //     getPosts("Alex Sawicki")
-    //         .then(items => {
-    //             if (mounted) {
-    //                 setPostList(items)
-    //             }
-    //         })
-    //     return () => mounted = false;
-    // }, [])
+    useEffect(() => {
+        let mounted = true;
+        getPosts("alexzwicky")
+            .then(items => {
+                if (mounted) {
+                    setPostList(items)
+                }
+            })
+        return () => mounted = false;
+    }, [])
 
     return (
         <div className="feed">
@@ -31,16 +31,16 @@ function Feed() {
             </div>
             <Searchbar/>
             <PatreonConnect/>
-            {/*{postList.map((item) => (*/}
-            {/*    <Post*/}
-            {/*        displayName={item.title}*/}
-            {/*        username={item.creator}*/}
-            {/*        verified={item.verified}*/}
-            {/*        text={item.content.replaceAll("<p>", "").replaceAll("</p>", "")}*/}
-            {/*        avatar={item.avatar}*/}
-            {/*        image={item.image}*/}
-            {/*    />*/}
-            {/*))}*/}
+            {postList.map((item) => (
+                <Post
+                    displayName={item.title}
+                    username={item.creator_page_url}
+                    verified={item.verified}
+                    text={item.content.replaceAll("<p>", "").replaceAll("</p>", "")}
+                    avatar={item.avatar}
+                    image={item.image}
+                />
+            ))}
         </div>
     );
 }

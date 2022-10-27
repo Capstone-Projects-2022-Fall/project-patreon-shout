@@ -1,26 +1,36 @@
 package com.patreonshout.rest;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.patreon.PatreonOAuth;
 import com.patreon.resources.Campaign;
 import com.patreon.resources.User;
+import com.patreonshout.PSException;
 import com.patreonshout.beans.PostBean;
+import com.patreonshout.jpa.CreatorPageFunctions;
 import com.patreonshout.jpa.Posts;
-import com.patreonshout.jpa.WebAccount;
+import com.patreonshout.jpa.WebAccountFunctions;
 import com.patreonshout.patreon.CustomPatreonAPI;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
 
 @RestController
 public class WebhookSvc extends BaseSvc {
+
 	/**
-	 * webAccount is the wrapper class for {@link com.patreonshout.jpa.WebAccountRepository}
+	 * An autowired Spring component that endpoints utilize to send or receive data from the database
 	 */
 	@Autowired
-	WebAccount webAccount;
+	WebAccountFunctions webAccountFunctions;
+
+	@Autowired
+	CreatorPageFunctions creatorPageFunctions;
 
 	@Autowired
 	Posts posts;
@@ -38,7 +48,7 @@ public class WebhookSvc extends BaseSvc {
 
 			// Transparently appended from the state param provided in PatreonShout Client from Dev Portal
 			@RequestParam(required = false, name = "state") String state
-	) throws IOException {
+	) throws IOException, PSException {
 		// OAuth
 		if (code != null && state != null) {
 			PatreonOAuth.TokensResponse tokens = oauthClient.getTokens(code); // Should we handle IOException?
@@ -50,17 +60,51 @@ public class WebhookSvc extends BaseSvc {
 			// put content creator posts in database
 			CustomPatreonAPI client = new CustomPatreonAPI(accessToken);
 
+
 			User user = client.fetchUser().get();
+
+			/**
+			 * TODO: Fix this!!  This is IMPROPER!
+			 * This patch resides here to allow others to work on extra functionality
+			 */
+			// Send GET request to Patreon v2 web API
+			String baseUrl = "https://www.patreon.com/api/oauth2/v2/";
+
+			PatreonURL patreonURL = WebClient
+					.create(baseUrl)
+					.get()
+					.uri(uriBuilder -> uriBuilder
+							.path("campaigns")
+							.queryParam("fields[campaign]", "vanity")
+							.build())
+					.headers(httpHeaders -> httpHeaders.setBearerAuth(accessToken))
+					.retrieve()
+					.bodyToMono(PatreonURL.class)
+					.share()
+					.block();
+
+			if (patreonURL == null)
+				throw new PSException(HttpStatus.BAD_REQUEST, "An error occurred while retrieving Patreon page URL for this user.");
+
+			PatreonURL.Data[] finalPatreonUrl = patreonURL.getData();
+
+			if (finalPatreonUrl.length == 0)
+				throw new PSException(HttpStatus.BAD_REQUEST, "Successfully retrieved Patreon Page URL object, but it was empty");
+
+			String pageUrl = finalPatreonUrl[0].getAttributes().getVanity();
+
+			// Store their
+			creatorPageFunctions.putCreatorPage(pageUrl);
 
 			for (Campaign campaign : client.fetchCampaigns().get()) {
 				for (PostBean post : client.fetchPosts(campaign.getId()).get()) {
-					post.setCreator(user.getFullName());
+					post.setCreator_page_url(pageUrl);
 					posts.putPost(post);
 				}
 			}
 
 			// put patreon tokens in database
-			webAccount.putPatreonTokens(accessToken, refreshToken, state);
+			webAccountFunctions.putPatreonTokens(accessToken, refreshToken, state);
 
 			return "Patreon linked!  Close this pop-up and refresh the PatreonShout webpage.";
 //			throw new PSException(HttpStatus.CREATED, "Token created");
@@ -68,5 +112,26 @@ public class WebhookSvc extends BaseSvc {
 
 		// Webhook
 		return "";
+	}
+}
+
+@Data
+class PatreonURL {
+
+	@JsonProperty("data")
+	Data[] data;
+
+	@lombok.Data
+	static class Data {
+
+		@JsonProperty("attributes")
+		Attributes attributes;
+
+		@lombok.Data
+		static class Attributes {
+
+			@JsonProperty("vanity")
+			String vanity;
+		}
 	}
 }
