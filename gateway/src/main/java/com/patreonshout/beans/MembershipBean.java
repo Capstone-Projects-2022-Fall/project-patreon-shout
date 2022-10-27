@@ -1,6 +1,5 @@
 package com.patreonshout.beans;
 
-import com.github.jasminb.jsonapi.annotations.Type;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

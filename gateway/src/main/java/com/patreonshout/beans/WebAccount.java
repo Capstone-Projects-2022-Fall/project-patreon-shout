@@ -3,6 +3,7 @@ package com.patreonshout.beans;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 
 @NoArgsConstructor
@@ -44,11 +45,25 @@ public class WebAccount {
 	@Column(name = "login_token", unique = true)
 	protected String loginToken;
 
+	/**
+	 * socialIntegration is the {@link com.patreonshout.beans.SocialIntegration} object linked with this WebAccount object
+	 */
 	@OneToOne(mappedBy = "webAccount", cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn
 	SocialIntegration socialIntegration;
 
+	/**
+	 * creatorTokens is the {@link com.patreonshout.beans.PatreonTokens} object linked with this WebAccount object
+	 */
 	@OneToOne(mappedBy = "webAccount", cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn
 	PatreonTokens creatorTokens;
+
+	/**
+	 * listBean is the List of {@link com.patreonshout.beans.ListBean} objects linked with this WebAccount object
+	 */
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "webAccount")
+	List<ListBean> listBean;
+
+
 }

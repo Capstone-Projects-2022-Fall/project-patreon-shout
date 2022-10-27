@@ -1,20 +1,12 @@
-import React from "react";
+import React, {useState} from "react";
 import {Avatar} from "@mui/material";
 import {VerifiedUser} from "@mui/icons-material";
 import "./comp_css/Creator.css";
 
 
-function Creator({addCreator, setCreator, displayName, urlName, description, imgUrl, verified}) {
+function Creator({addedState, curCreatorList, setCreatorList, displayName, urlName, description, imgUrl, verified}) {
 
-    function wrapAddCreator(event) {
-        console.log("addcreator");
-        addCreator(event, urlName);
-    }
-
-    function wrapSetCreator(name) {
-        console.log("setcreator: " + name);
-        wrapAddCreator();
-    }
+    const [added, setAdded] = useState(addedState);
 
     return (
         <div className="creator">
@@ -34,9 +26,20 @@ function Creator({addCreator, setCreator, displayName, urlName, description, img
                     </div>
                     <div className="creator__headerDescription">
                         <p>{description}</p>
-                    </div>
-                    <div className="creator__addButton" onClick={() => { setCreator(urlName); }}>
-                        Add
+                        <div>
+                            {!added ? <div className="creator__addButton" onClick={() => {
+                                setAdded(s => !s);
+                                setCreatorList(curCreatorList => [...curCreatorList, urlName]);
+                            }}>
+                                Add
+                            </div> : null}
+                            {added ? <div className="creator__addButton" onClick={() => {
+                                setAdded(s => !s);
+                                setCreatorList(curCreatorList.filter(name => name !== urlName));
+                            }}>
+                                Remove
+                            </div> : null}
+                        </div>
                     </div>
                 </div>
             </div>

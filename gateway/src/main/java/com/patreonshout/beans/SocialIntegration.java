@@ -38,6 +38,9 @@ public class SocialIntegration implements Serializable {
 	@Column(name = "instagram")
 	protected String instagram;
 
+	/**
+	 * webAccount is the {@link com.patreonshout.beans.WebAccount} object linked with this object
+	 */
 	@OneToOne
 	@MapsId
 	@JoinColumn(name = "webaccount_id")

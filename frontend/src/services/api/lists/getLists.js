@@ -1,11 +1,11 @@
 /**
- * Gets the posts of a specific creator
+ * Gets the List objects of the user
  *
- * @param creator is the creator we want to get the posts of
+ * @param token is the login token of the user's session
  * @returns {Promise<any>} is the json data returned
  */
-export function getPosts(creator) {
-    return fetch('http://localhost:5000/posts/creator?creator=' + creator, {
+export async function getLists(token) {
+    return fetch('http://localhost:5000/lists/user?loginToken=' + token, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
