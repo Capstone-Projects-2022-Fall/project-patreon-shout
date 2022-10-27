@@ -1,39 +1,47 @@
 .post__body > img {
     border-radius: 20px;
     width: 100%;
-  }
-  .post {
+}
+
+.post {
     display: flex;
     align-items: flex-start;
     border-bottom: 1px solid var(--background);
-  }
-  .post__footer {
+}
+
+.post__footer {
     display: flex;
     justify-content: space-between;
     margin-top: 10px;
-  }
-  .post__badge {
+}
+
+.post__badge {
     font-size: 14px !important;
     color: var(--main-color);
-  }
-  .post__headerSpecial {
+}
+
+.post__headerSpecial {
     font-weight: 600;
     font-size: 12px;
     color: gray;
-  }
-  .post__headerText > h3 {
+}
+
+.post__headerText > h3 {
     text-align: left;
     font-size: 15px;
     margin-bottom: 5px;
-  }
-  .post__headerDescription {
+}
+
+.post__headerDescription {
     font-size: 15px;
     margin-bottom: 20px;
-  }
-  .post__body {
+}
+
+.post__body {
     flex: 1;
     padding: 10px;
-  }
-  .post__avatar {
+}
+
+.post__avatar {
     padding: 20px;
-  }
+}

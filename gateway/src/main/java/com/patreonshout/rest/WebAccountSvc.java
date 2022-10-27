@@ -1,12 +1,12 @@
 package com.patreonshout.rest;
 
 import com.patreonshout.PSException;
-import com.patreonshout.beans.IntegrationRequestBean;
-import com.patreonshout.beans.WebAccountBean;
+import com.patreonshout.beans.PatreonTokens;
 import com.patreonshout.beans.request.LoginRequest;
 import com.patreonshout.beans.request.RegisterRequest;
+import com.patreonshout.beans.request.SocialIntegrationRequest;
 import com.patreonshout.beans.response.LoginResponse;
-import com.patreonshout.jpa.WebAccount;
+import com.patreonshout.jpa.WebAccountFunctions;
 import com.patreonshout.rest.interfaces.WebAccountImpl;
 import com.patreonshout.utils.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Web Account  RESTful Endpoint Interface
@@ -29,17 +32,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 
 	/**
-	 * webAccount is the wrapper class for {@link com.patreonshout.jpa.WebAccountRepository}
+	 * An autowired Spring component that endpoints utilize to send or receive data from the database
 	 */
 	@Autowired
-	WebAccount webAccount;
+	WebAccountFunctions webAccountFunctions;
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public HttpStatus Register(@RequestBody RegisterRequest registerRequest) {
 		// TODO: Ensure username and password are sanitized and fit specific requirements
-		webAccount.putAccount(registerRequest);
+		webAccountFunctions.putAccount(registerRequest);
 
 		return HttpStatus.CREATED; // Http 201
 	}
@@ -48,7 +51,7 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	 * {@inheritDoc}
 	 */
 	public ResponseEntity<?> Login(@RequestBody LoginRequest loginRequest) throws PSException {
-		String loginToken = webAccount.readAccount(loginRequest);
+		String loginToken = webAccountFunctions.readAccount(loginRequest);
 
 		return new ResponseEntity<>(new LoginResponse(loginToken), HttpStatus.CREATED);
 	}
@@ -57,7 +60,7 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	 * {@inheritDoc}
 	 */
 	public ResponseEntity<?> Logout(@RequestParam(name = "login_token") String loginToken) {
-		webAccount.deleteLoginToken(loginToken);
+		webAccountFunctions.deleteLoginToken(loginToken);
 
 		return ResponseUtil.Generic(HttpStatus.OK, "Token deleted if it existed.");
 	}
@@ -65,10 +68,8 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	/**
 	 * {@inheritDoc}
 	 */
-	public HttpStatus Integration(@RequestBody IntegrationRequestBean integrationRequestBean) {
-		webAccount.putIntegration(integrationRequestBean.getWebaccount().getWebaccount_id(),
-				integrationRequestBean.getIntegrationType(),
-				integrationRequestBean.getData());
+	public HttpStatus Integration(@RequestBody SocialIntegrationRequest socialIntegrationRequest) throws PSException {
+		webAccountFunctions.putSocialIntegration(socialIntegrationRequest);
 		return HttpStatus.OK;
 	}
 
@@ -76,10 +77,12 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	 * {@inheritDoc}
 	 */
 	public ResponseEntity<?> GetPatreonTokens(@RequestParam(name = "login_token") String loginToken) throws PSException {
-		WebAccountBean response = webAccount.getPatreonTokens(loginToken);
-		response.setUsername(null);
-		response.setPassword(null);
+		PatreonTokens tokens = webAccountFunctions.getPatreonTokens(loginToken);
 
-		return new ResponseEntity<>(response, HttpStatus.CREATED);
+		Map<String, String> response = new HashMap<>();
+		response.put("access", tokens.getAccessToken());
+		response.put("refresh", tokens.getRefreshToken());
+
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 }

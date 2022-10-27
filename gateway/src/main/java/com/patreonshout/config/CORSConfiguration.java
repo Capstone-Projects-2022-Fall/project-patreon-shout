@@ -8,19 +8,21 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * TODO: Create description
+ * SpringBoot configuration for CORS
  */
 @Configuration
 public class CORSConfiguration {
 
 	/**
-	 * TODO: Create description
+	 * CORS http request origin
 	 */
 	@Value("${patreonshout.server.cors-origin}")
 	String origin;
 
 	/**
-	 * TODO Create description
+	 * Configures CORS for the application
+	 *
+	 * @return {@link org.springframework.web.servlet.config.annotation.WebMvcConfigurer} that configures CORS
 	 */
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {

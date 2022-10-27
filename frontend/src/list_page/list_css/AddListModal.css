@@ -1,0 +1,45 @@
+.modalBox {
+    overflow-y: auto;
+    height: 800px;
+    width: 600px;
+    padding: 20px;
+    border-radius: 18px;
+    border: 1px solid #cfcece;
+    font-size: 20px;
+    background: #ffffff;
+}
+
+.modalBox > .close {
+    cursor: pointer;
+    position: absolute;
+    display: block;
+    padding: 2px 5px;
+    line-height: 20px;
+    left: -10px;
+    top: -10px;
+    font-size: 24px;
+    background: #ffffff;
+    border-radius: 18px;
+    border: 1px solid #cfcece;
+}
+
+.modalBox > .header {
+    width: 100%;
+    border-bottom: 1px solid gray;
+    font-size: 24px;
+    text-align: center;
+    padding: 5px;
+}
+.modalBox > .content {
+    width: 100%;
+    padding: 10px 5px;
+}
+
+.modalBox > #addListForm {
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+}

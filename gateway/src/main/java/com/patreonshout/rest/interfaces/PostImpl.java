@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface PostImpl {
 
     /**
-     * Endpoint that will get a List of {@link com.patreonshout.beans.PostBean} objects from the database given a specified creator
+     * Endpoint that will get a list of {@link com.patreonshout.beans.PostBean} objects from the database given a specified creator
      *
      * @param creator is the creator of the posts we want to get
      * @return a json body of post objects from a given creator

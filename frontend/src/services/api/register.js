@@ -1,8 +1,7 @@
-/** 
- * TODO: CHANGE TO REFLECT REGISTER
- * Gets the posts of a specific creator
+/**
+ * Registers the user
  *
- * @param creator is the creator we want to get the posts of
+ * @param credentials are the credentials of the user we want to register
  * @returns {Promise<any>} is the json data returned
  */
 

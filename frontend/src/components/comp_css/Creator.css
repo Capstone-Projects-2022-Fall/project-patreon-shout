@@ -1,0 +1,45 @@
+.creator__body > img {
+    border-radius: 20px;
+    width: 100%;
+}
+
+.creator {
+    padding-top: 8px;
+    display: flex;
+    align-items: flex-start;
+    border-bottom: 1px solid var(--background);
+}
+
+.creator__headerSpecial {
+    font-weight: 600;
+    font-size: 12px;
+    color: gray;
+}
+
+.creator__headerText > h3 {
+    text-align: left;
+    font-size: 15px;
+    margin-bottom: 5px;
+}
+
+.creator__headerDescription {
+    display: flex;
+    justify-content: space-between;
+    font-size: 15px;
+}
+
+.creator__body {
+    flex: 1;
+    padding: 10px;
+}
+
+.creator__avatar {
+    padding: 20px;
+}
+
+.creator__addButton {
+    cursor: pointer;
+    background: #ffffff;
+    border-radius: 18px;
+    border: 1px solid #cfcece;
+}

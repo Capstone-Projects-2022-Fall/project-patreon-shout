@@ -1,6 +1,7 @@
 import React from "react";
 import useToken from "../services/useToken";
 import Login from "../login_page/LoginPage";
+import {Button} from "@mui/material";
 
 function PatreonConnect() {
     const patreonUrl = "https://www.patreon.com/oauth2/authorize" +
@@ -25,9 +26,9 @@ function PatreonConnect() {
 
     return (<div className="PatreonConnect">
 
-        <a href={patreonUrlDev + token}>
-            Connect with Patreon
-        </a>
+        <Button href={patreonUrlDev + token} sx={ { borderRadius: 28 } } color="primary" type="submit" variant="contained">
+            Oauth
+        </Button>
     </div>);
 }
 

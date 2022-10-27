@@ -1,8 +1,7 @@
-/** 
- * TODO: CHANGE TO REFLECT LOGIN
- * Saves the local session token from the database
+/**
+ * Logs the user in using credentials
  *
- * @param token is the session token
+ * @param credentials user login credentials
  * @returns {Promise<any>} is the json data returned
  */
 
