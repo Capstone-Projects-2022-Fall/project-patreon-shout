@@ -139,4 +139,19 @@ public class PostsRepository extends BaseSvc {
 
         q.executeUpdate();
     }
+
+    /**
+     * getExistingPosts() checks what posts in the {@link com.patreonshout.beans.PostBean} object list are already in the database
+     *
+     * @param urlList is the list of unique post urls for a creator
+     * @return a list of {@link com.patreonshout.beans.PostBean} objects that were shown to be in the database
+     */
+    @Transactional
+    public List<PostBean> getExistingPosts(String urlList) {
+        String sql = "SELECT * FROM posts WHERE url IN " + urlList;
+
+        Query q = em.createNativeQuery(sql, PostBean.class);
+
+        return q.getResultList();
+    }
 }

@@ -19,7 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
+import java.util.List;
 
+/**
+ * Patreon Webhook RESTful Endpoint Interface
+ */
 @RestController
 public class WebhookSvc extends BaseSvc {
 
@@ -29,9 +33,15 @@ public class WebhookSvc extends BaseSvc {
 	@Autowired
 	WebAccountFunctions webAccountFunctions;
 
+	/**
+	 * An autowired Spring component that endpoints utilize to send or receive data from the database
+	 */
 	@Autowired
 	CreatorPageFunctions creatorPageFunctions;
 
+	/**
+	 * An autowired Spring component that endpoints utilize to send or receive data from the database
+	 */
 	@Autowired
 	Posts posts;
 
@@ -41,6 +51,15 @@ public class WebhookSvc extends BaseSvc {
 	@Autowired
 	private PatreonOAuth oauthClient;
 
+	/**
+	 *
+	 *
+	 * @param code is used to fetch access tokens for the session that just signed in with Patreon
+	 * @param state is transparently appended from the state param provided in PatreonShout Client from Dev Portal
+	 * @return a json body telling the user that their Patreon was successfully OAuth'd
+	 * @throws IOException when we cannot parse the input
+	 * @throws PSException when there is an internal error with Patreon Shout
+	 */
 	@GetMapping("/webhook")
 	public String WebhookReceiver(
 			// Used to fetch access tokens for the session that just signed in with Patreon.
@@ -97,11 +116,15 @@ public class WebhookSvc extends BaseSvc {
 			creatorPageFunctions.putCreatorPage(pageUrl);
 
 			for (Campaign campaign : client.fetchCampaigns().get()) {
-				for (PostBean post : client.fetchPosts(campaign.getId()).get()) {
 
+				List<PostBean> pbList = client.fetchPosts(campaign.getId()).get();
+				List<PostBean> existingPosts = posts.getExistingPosts(pbList);
+				pbList.removeAll(existingPosts);
 
-
+				for (PostBean post : pbList) {
 					post.setCreator_page_url(pageUrl);
+					System.out.println("p: " + post);
+
 					posts.putPost(post);
 				}
 			}
@@ -118,6 +141,9 @@ public class WebhookSvc extends BaseSvc {
 	}
 }
 
+/**
+ * Class to store the data received from Patreon sending us an http request
+ */
 @Data
 class PatreonURL {
 
