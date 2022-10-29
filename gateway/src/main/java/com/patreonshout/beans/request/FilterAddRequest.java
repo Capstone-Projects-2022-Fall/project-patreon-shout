@@ -24,5 +24,5 @@ public class FilterAddRequest extends FilterCommonRequest implements Serializabl
      */
     @NotNull
     @JsonProperty(value="filter_name")
-    private String filter_name;
+    private String filterName;
 }

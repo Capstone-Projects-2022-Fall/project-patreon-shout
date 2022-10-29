@@ -26,7 +26,7 @@ public class SearchFilter {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name="filter_id")
-    private Long filter_id;
+    private Long filterId;
 
     /**
      * filter is the search term that is set as the filter
@@ -38,7 +38,7 @@ public class SearchFilter {
      * filter_name is the name of the filter shown on the filter list
      */
     @Column(name="filter_name")
-    private String filter_name;
+    private String filterName;
 
     /**
      * webAccount is the {@link com.patreonshout.beans.WebAccount} object linked with this object

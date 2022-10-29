@@ -40,7 +40,7 @@ public class SearchFilterSvc extends BaseSvc implements SearchFilterImpl {
      * {@inheritDoc}
      */
     public ResponseEntity<?> DeleteFilter(FilterDeleteRequest filterDeleteRequest) {
-        SearchFilter sf = searchFiltersRepository.getReferenceById((long) filterDeleteRequest.getFilter_id());
+        SearchFilter sf = searchFiltersRepository.getReferenceById((long) filterDeleteRequest.getFilterId());
 
         if(!sf.getWebAccount().getLoginToken().equals(filterDeleteRequest.getLoginToken())) {
             return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Specified login token does not match the requested list's user login token.");
@@ -67,8 +67,8 @@ public class SearchFilterSvc extends BaseSvc implements SearchFilterImpl {
         for (SearchFilter sf : userAccount.getSearchFilters()) {
             Map<String, String> listResponse = new HashMap<>();
 
-            listResponse.put("filter_id", sf.getFilter_id().toString());
-            listResponse.put("filter_name", sf.getFilter_name());
+            listResponse.put("filter_id", sf.getFilterId().toString());
+            listResponse.put("filter_name", sf.getFilterName());
             listResponse.put("filter", sf.getFilter());
 
             response.add(listResponse);
@@ -89,7 +89,7 @@ public class SearchFilterSvc extends BaseSvc implements SearchFilterImpl {
 
         SearchFilter sf = new SearchFilter();
         sf.setFilter(filterAddRequest.getFilter());
-        sf.setFilter_name(filterAddRequest.getFilter_name());
+        sf.setFilterName(filterAddRequest.getFilterName());
         sf.setWebAccount(userAccount);
 
         searchFiltersRepository.save(sf);
