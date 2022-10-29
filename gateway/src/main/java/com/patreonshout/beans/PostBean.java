@@ -75,4 +75,23 @@ public class PostBean extends BaseResource {
     @Column(name="is_public")
     @JsonProperty("is_public")
     protected boolean is_public;
+
+    /**
+     * Used to check if a {@link com.patreonshout.beans.PostBean} is equal to another PostBean object
+     *
+     * @param o is the object we check the current object against
+     * @return true if the objects are equal, false otherwise
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+
+        if (!(o instanceof PostBean)) {
+            return false;
+        }
+
+        return this.url.equals(((PostBean) o).getUrl());
+    }
 }
