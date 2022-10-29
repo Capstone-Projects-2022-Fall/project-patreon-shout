@@ -2,8 +2,14 @@ package com.patreonshout.beans;
 
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -11,10 +17,34 @@ import javax.persistence.Table;
  */
 @Data
 @Entity
-@Table(name = "search_filter")
+@Table(name = "search_filters")
 public class SearchFilter {
 
+    /**
+     * filter _id is the index/primary key for the search_filters table in our database
+     */
     @Id
-    private Long criteria_id;
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Column(name="filter_id")
+    private Long filter_id;
+
+    /**
+     * filter is the search term that is set as the filter
+     */
+    @Column(name="filter")
+    private String filter;
+
+    /**
+     * filter_name is the name of the filter shown on the filter list
+     */
+    @Column(name="filter_name")
+    private String filter_name;
+
+    /**
+     * webAccount is the {@link com.patreonshout.beans.WebAccount} object linked with this object
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "webaccount_id", nullable = false)
+    protected WebAccount webAccount;
 
 }

@@ -65,5 +65,11 @@ public class WebAccount {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "webAccount")
 	List<ListBean> listBean;
 
+	/**
+	 * searchFilters is the list of {@link com.patreonshout.beans.SearchFilter} objects linked with this WebAccount object
+	 */
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "webAccount")
+	List<SearchFilter> searchFilters;
+
 
 }

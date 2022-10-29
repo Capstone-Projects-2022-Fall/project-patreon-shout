@@ -54,8 +54,10 @@ public class ListSvc extends BaseSvc implements ListImpl {
 
         // build response so ResponseEntity can parse the returned objects correctly
         List<Map<String, String>> response = new ArrayList<>();
+
         for (ListBean lb : userAccount.getListBean()) {
             Map<String, String> listResponse = new HashMap<>();
+
             listResponse.put("webaccount_id", String.valueOf(lb.getWebAccount().getWebAccountId()));
             listResponse.put("title", lb.getTitle());
             listResponse.put("description", lb.getDescription());
