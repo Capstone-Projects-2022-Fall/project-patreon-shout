@@ -93,11 +93,14 @@ public class WebhookSvc extends BaseSvc {
 
 			String pageUrl = finalPatreonUrl[0].getAttributes().getVanity();
 
-			// Store their
+			// Store their creator page information
 			creatorPageFunctions.putCreatorPage(pageUrl);
 
 			for (Campaign campaign : client.fetchCampaigns().get()) {
 				for (PostBean post : client.fetchPosts(campaign.getId()).get()) {
+
+
+
 					post.setCreator_page_url(pageUrl);
 					posts.putPost(post);
 				}
