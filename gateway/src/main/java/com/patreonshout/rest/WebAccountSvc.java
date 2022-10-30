@@ -4,6 +4,7 @@ import com.patreonshout.PSException;
 import com.patreonshout.beans.PatreonTokens;
 import com.patreonshout.beans.request.LoginRequest;
 import com.patreonshout.beans.request.RegisterRequest;
+import com.patreonshout.beans.request.ResetPasswordRequest;
 import com.patreonshout.beans.request.SocialIntegrationRequest;
 import com.patreonshout.beans.response.LoginResponse;
 import com.patreonshout.jpa.WebAccountFunctions;
@@ -84,5 +85,16 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 		response.put("refresh", tokens.getRefreshToken());
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public ResponseEntity<?> ResetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest) throws PSException {
+		webAccountFunctions.putNewPassword(
+				resetPasswordRequest.getLoginToken(),
+				resetPasswordRequest.getCurrentPassword(),
+				resetPasswordRequest.getNewPassword());
+		return null;
 	}
 }

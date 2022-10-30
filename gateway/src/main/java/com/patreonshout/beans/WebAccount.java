@@ -59,6 +59,10 @@ public class WebAccount {
 	@PrimaryKeyJoinColumn
 	PatreonTokens creatorTokens;
 
+	@OneToOne(mappedBy = "webAccount", cascade = CascadeType.ALL)
+	@PrimaryKeyJoinColumn
+	OldPasswords oldPasswords;
+
 	/**
 	 * listBean is the List of {@link com.patreonshout.beans.ListBean} objects linked with this WebAccount object
 	 */
