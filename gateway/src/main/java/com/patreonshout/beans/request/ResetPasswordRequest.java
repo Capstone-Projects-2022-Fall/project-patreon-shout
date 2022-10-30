@@ -13,8 +13,8 @@ public class ResetPasswordRequest {
 	String loginToken;
 
 	@NotNull
-	@JsonProperty("old_password")
-	String oldPassword;
+	@JsonProperty("current_password")
+	String currentPassword;
 
 	@NotNull
 	@JsonProperty("new_password")
