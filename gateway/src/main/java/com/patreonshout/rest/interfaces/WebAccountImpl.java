@@ -1,6 +1,7 @@
 package com.patreonshout.rest.interfaces;
 
 import com.patreonshout.PSException;
+import com.patreonshout.beans.request.ResetPasswordRequest;
 import com.patreonshout.beans.request.SocialIntegrationRequest;
 import com.patreonshout.beans.WebAccount;
 import com.patreonshout.beans.request.LoginRequest;
@@ -108,4 +109,23 @@ public interface WebAccountImpl {
 					content = {@Content(mediaType = "application/json")})
 	})
 	ResponseEntity<?> GetPatreonTokens(@RequestParam(name = "login_token") String loginToken) throws PSException;
+
+	/**
+	 * Endpoint that allows {@link WebAccount} password resetting.
+	 *
+	 * @param resetPasswordRequest {@link ResetPasswordRequest} object generated from a user calling this endpoint
+	 * @return {@link HttpStatus#OK} if successful, {@link HttpStatus#UNAUTHORIZED} if the given oldPassword did not
+	 * match any current passwords belonging to the {@link WebAccount} found with the given loginToken
+	 */
+	@PutMapping("/resetpassword")
+	@Operation(summary = "Retrieves Patreon access and refresh tokens for a WebAccount containing the given login token")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200",
+					description = "Tokens retrieved",
+					content = {@Content(mediaType = "application/json")}),
+			@ApiResponse(responseCode = "401",
+					description = "Tokens retrieved",
+					content = {@Content(mediaType = "application/json")})
+	})
+	ResponseEntity<?> ResetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest) throws PSException;
 }
