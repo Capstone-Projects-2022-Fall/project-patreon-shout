@@ -1,7 +1,7 @@
 package com.patreonshout.rest;
 
 import com.patreonshout.beans.PostBean;
-import com.patreonshout.jpa.Posts;
+import com.patreonshout.jpa.PostsRepository;
 import com.patreonshout.rest.interfaces.PostImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,16 +18,16 @@ import java.util.List;
 public class PostSvc extends BaseSvc implements PostImpl {
 
     /**
-     * posts is the wrapper class for {@link com.patreonshout.jpa.PostsRepository}
+     * posts is the wrapper class for {@link com.patreonshout.jpa.PostsRepositoryImpl}
      */
     @Autowired
-    Posts posts;
+    PostsRepository postsRepository;
 
     /**
      * {@inheritDoc}
      */
     public ResponseEntity<?> GetCreatorPosts(@RequestParam(name = "creator") String creator) {
-        List<PostBean> response = posts.getCreatorPosts(creator);
+        List<PostBean> response = postsRepository.getCreatorPosts(creator);
 
         for (PostBean pb : response) {
             if (!pb.is_public()) {
