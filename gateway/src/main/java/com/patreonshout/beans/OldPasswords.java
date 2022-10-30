@@ -6,6 +6,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+/**
+ * POJO that relates to the old_passwords table in our database
+ */
 @NoArgsConstructor
 @Setter
 @Getter
@@ -39,7 +42,7 @@ public class OldPasswords {
 	protected String oldPasswordThree;
 
 	/**
-	 * webAccount is the {@link com.patreonshout.beans.WebAccount} object linked with this object
+	 * The {@link com.patreonshout.beans.WebAccount} object linked with this object
 	 */
 	@OneToOne
 	@MapsId
