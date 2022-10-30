@@ -1,12 +1,8 @@
 package com.patreonshout.jpa;
 
 import com.patreonshout.PSException;
-import com.patreonshout.beans.CreatorPage;
-import com.patreonshout.beans.PatreonTokens;
-import com.patreonshout.beans.constants.CreatorPageCategory;
+import com.patreonshout.beans.*;
 import com.patreonshout.beans.request.SocialIntegrationRequest;
-import com.patreonshout.beans.SocialIntegration;
-import com.patreonshout.beans.WebAccount;
 import com.patreonshout.beans.request.LoginRequest;
 import com.patreonshout.beans.request.RegisterRequest;
 import com.patreonshout.config.SecurityConfiguration;
@@ -205,6 +201,66 @@ public class WebAccountFunctions {
 		}
 
 		return patreonTokens;
+	}
+
+	/**
+	 * Changes the password for a {@link WebAccount}.<br/>
+	 * <br/>
+	 * <b>Requirements</b>
+	 * <ul>
+	 *     <li>loginToken matches an account</li>
+	 *     <li>currentPassword does not match newPassword</li>
+	 *     <li>currentPassword matches the current password on the {@link WebAccount}</li>
+	 *     <li>newPassword does not match any of the {@link OldPasswords} for the {@link WebAccount}</li>
+	 * </ul>
+	 *
+	 * @param loginToken      login token belonging to a {@link WebAccount}
+	 * @param currentPassword current password for the {@link WebAccount}
+	 * @param newPassword     desired new password for the {@link WebAccount}
+	 * @throws PSException {@link HttpStatus#UNAUTHORIZED} if the given current password is incorrect for the given account.
+	 *                     {@link HttpStatus#CONFLICT} if the new password matches the current password, or any of the previous three
+	 *                     passwords for the account.
+	 */
+	public void putNewPassword(String loginToken, String currentPassword, String newPassword) throws PSException {
+		// ! Given current password is null
+		if (currentPassword == null)
+			throw new PSException(HttpStatus.BAD_REQUEST, "Current password must not be null");
+
+		// ! Given new password is null
+		if (newPassword == null)
+			throw new PSException(HttpStatus.BAD_REQUEST, "New password must not be null");
+
+		// ! Given current password matches the desired new password
+		if (currentPassword.equals(newPassword))
+			throw new PSException(HttpStatus.UNAUTHORIZED, "Current password can not match the new password");
+
+		WebAccount webAccount = getAccount(loginToken);
+
+		// ! Given current password does not match the web account's actual current password
+		if (!securityConfiguration.passwordMatches(currentPassword, webAccount.getPasswordSalt(), webAccount.getPassword()))
+			throw new PSException(HttpStatus.UNAUTHORIZED, "Current password is incorrect for the given account");
+
+		OldPasswords oldPasswords = webAccount.getOldPasswords();
+
+		// First time changing password
+		if (oldPasswords == null)
+			oldPasswords = new OldPasswords();
+		else // ! Desired new password matches one of the previous three passwords
+			for (String oldPass : new String[]{oldPasswords.getOldPasswordOne(), oldPasswords.getOldPasswordTwo(), oldPasswords.getOldPasswordThree()})
+				if (oldPass != null && securityConfiguration.passwordMatches(newPassword, webAccount.getPasswordSalt(), oldPass))
+					throw new PSException(HttpStatus.CONFLICT, "New password can not be one of the last three previously used passwords");
+
+		// Shift passwords one column to the right
+		oldPasswords.setOldPasswordThree(oldPasswords.getOldPasswordTwo());
+		oldPasswords.setOldPasswordTwo(oldPasswords.getOldPasswordOne());
+		oldPasswords.setOldPasswordOne(webAccount.getPassword());
+
+		// Set and save data
+		webAccount.setPassword(securityConfiguration.encodePassword(newPassword, webAccount.getPasswordSalt()));
+		oldPasswords.setWebAccount(webAccount);
+		webAccount.setOldPasswords(oldPasswords);
+
+		webAccountRepository.save(webAccount);
 	}
 
 	/**
