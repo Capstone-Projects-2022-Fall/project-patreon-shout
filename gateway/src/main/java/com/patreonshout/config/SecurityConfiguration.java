@@ -37,10 +37,8 @@ public class SecurityConfiguration {
 			new CharacterRule(EnglishCharacterData.Digit, 1),
 
 			// Require at least one symbol (special character)
-			new CharacterRule(EnglishCharacterData.Special, 1),
-
-			// No spaces allowed
-			new WhitespaceRule()));
+			new CharacterRule(EnglishCharacterData.Special, 1)
+	));
 
 	/**
 	 * Pepper value for WebAccount passwords -- used as a constant value included in every password
