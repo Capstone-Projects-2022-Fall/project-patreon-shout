@@ -1,157 +1,28 @@
 package com.patreonshout.jpa;
 
 import com.patreonshout.beans.PostBean;
-import com.patreonshout.rest.BaseSvc;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import java.util.List;
 
+
 /**
- * Communication between the patreon_info table in the database
- *
- * <p>
- *     Responsibilities:
- *     1) Get a specific PostBean from the database
- *     2) Get all PostBeans in the database
- *     3) Add a PostBean to the database
- *     4) Update a PostBean in the database
- *     5) Remove a PostBean in the database
- *     6) Return whether the bean was successfully added or not
- * </p>
+ * Spring Data Repository for easy use of CRUD operations on the {@link com.patreonshout.beans.PostBean} object
  */
-@Repository
-public class PostsRepository extends BaseSvc {
+public interface PostsRepository extends JpaRepository<PostBean, Long>, PostsRepositoryCustom{
 
     /**
-     * em is the {@link EntityManager} that handles all the transactions with our database
-     */
-    @PersistenceContext
-    private EntityManager em;
-
-    /**
-     * getCreatorPosts() gets the posts from a particular creator
+     * Returns the posts from multiple creators in paginated json body
      *
-     * @param creator is the creator who made the posts we want to get
-     * @return a List of {@link com.patreonshout.beans.PostBean} objects containing Patreon post information of a given creator
+     * @param creatorList is the list of creators we want to get posts from
+     * @param pageable is the {@link org.springframework.data.domain.Pageable} object we use to paginate our data
+     * @return is the {@link org.springframework.data.domain.Page} object with our json body data holding posts from specified creators
      */
-    @Transactional
-    public List<PostBean> getCreatorPosts(String creator_page_url) {
-        String sql = "select * from posts where creator_page_url = :creator_page_url";
-
-        Query q = em.createNativeQuery(sql, PostBean.class);
-        q.setParameter("creator_page_url", creator_page_url);
-
-        return q.getResultList();
-    }
-
-    /**
-     * getPost() gets a specific post based on the post url
-     *
-     * @param url is the url of the Patreon post
-     * @return a {@link com.patreonshout.beans.PostBean} object containing the Patreon post information of the given url
-     */
-    @Transactional
-    public PostBean getPost(String url){
-        String sql = "select * from posts where url = :url";
-
-        Query q = em.createNativeQuery(sql, PostBean.class);
-        q.setParameter("url", url);
-
-        List<PostBean> pbList = q.getResultList();
-
-        if (pbList.isEmpty()) {
-            return new PostBean();
-        }
-
-        return pbList.get(0);
-    }
-
-    /**
-     * getAllPosts() returns every post in the database
-     *
-     * @return a List of {@link com.patreonshout.beans.PostBean} containing every post in the database
-     */
-    @Transactional
-    public List<PostBean> getAllPosts() {
-        String sql = "select * from posts";
-
-        Query q = em.createNativeQuery(sql, PostBean.class);
-
-        return q.getResultList();
-    }
-
-    /**
-     * putPost() adds a new Post to the database
-     *
-     * @param pb is the post to be added to the database
-     */
-    @Transactional
-    public void putPost(PostBean pb) {
-        String sql = "insert into posts (publishdate, title, url, content, is_public, creator_page_url) values (:publishdate, :title, :url, :content, :is_public, :creator_page_url)";
-
-        Query q = em.createNativeQuery(sql, PostBean.class);
-        q.setParameter("publishdate", pb.getPublishdate());
-        q.setParameter("title", pb.getTitle());
-        q.setParameter("url", pb.getUrl());
-        q.setParameter("content", pb.getContent());
-        q.setParameter("is_public", pb.is_public());
-        q.setParameter("creator_page_url", pb.getCreator_page_url());
-
-        q.executeUpdate();
-    }
-
-    /**
-     * updatePost() updates an existing post in the database based on the post_id
-     *
-     * @param pb is the post to be updated in the database
-     */
-    @Transactional
-    public void updatePost(PostBean pb) {
-        String sql = "update posts set publishdate = :publishdate, title = :title, url = :url, content = :content, is_public = :is_public, creator_page_url = :creator_page_url where post_id = :post_id";
-
-        Query q = em.createNativeQuery(sql, PostBean.class);
-        q.setParameter("publishdate", pb.getPublishdate());
-        q.setParameter("title", pb.getTitle());
-        q.setParameter("url", pb.getUrl());
-        q.setParameter("content", pb.getContent());
-        q.setParameter("is_public", pb.is_public());
-        q.setParameter("creator_page_url", pb.getCreator_page_url());
-        q.setParameter("post_id", pb.getPost_id());
-
-        q.executeUpdate();
-    }
-
-    /**
-     * removePost() removes a post in the database based on the post url
-     *
-     * @param url is the url of the Patreon post
-     */
-    @Transactional
-    public void removePost(String url) {
-        String sql = "delete from posts where url = :url";
-
-        Query q = em.createNativeQuery(sql, PostBean.class);
-        q.setParameter("url", url);
-
-        q.executeUpdate();
-    }
-
-    /**
-     * getExistingPosts() checks what posts in the {@link com.patreonshout.beans.PostBean} object list are already in the database
-     *
-     * @param urlList is the list of unique post urls for a creator
-     * @return a list of {@link com.patreonshout.beans.PostBean} objects that were shown to be in the database
-     */
-    @Transactional
-    public List<PostBean> getExistingPosts(String urlList) {
-        String sql = "SELECT * FROM posts WHERE url IN " + urlList;
-
-        Query q = em.createNativeQuery(sql, PostBean.class);
-
-        return q.getResultList();
-    }
+    @Query(value = "SELECT * FROM posts WHERE creator_page_url in ?1",
+    countQuery = "SELECT count(*) FROM posts WHERE creator_page_url in ?1",
+    nativeQuery = true)
+    Page<PostBean> getMultipleCreatorPosts(List<String> creatorList, Pageable pageable);
 }
