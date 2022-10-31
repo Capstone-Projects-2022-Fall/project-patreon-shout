@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import './login_css/RegistrationForm.css'
 import { registerUser } from '../services/api/register';
+import PasswordChecklist from "react-password-checklist"
 
 /**
  * The Registration Form, where users can register an account
@@ -13,6 +14,7 @@ const RegistrationForm = () => {
     const [user, setRegUserName] = useState('')
     const [pass, setRegPassword] = useState('')
     const [popup, showPopup] = useState("hide")
+    let passIsValid;
 
     const handleSubmit = async e => {
 
@@ -26,6 +28,13 @@ const RegistrationForm = () => {
         if (!pass) {
             document.getElementById("register").textContent = "Register Failed";
             document.getElementById("errormsg").textContent = "Password not provided";
+            showPopup("registerPop")
+            return 1;
+        }
+
+        if (!passIsValid) {
+            document.getElementById("register").textContent = "Register Failed";
+            document.getElementById("errormsg").textContent = "Password does not meet the requirements";
             showPopup("registerPop")
             return 1;
         }
@@ -57,6 +66,22 @@ const RegistrationForm = () => {
 
             <TextField className='textLog' id="outlined-basic" label="Password" variant="outlined" type='password'
                        value={pass} onChange={(e) => setRegPassword(e.target.value)}/>
+
+            <PasswordChecklist
+                rules={["minLength","capital","lowercase","number","specialChar"]}
+                minLength={8}
+                value={pass}
+                iconSize={14}
+                messages={{
+                    minLength: "At least 8 characters",
+                    capital: "At least one uppercase letter",
+                    lowercase: "At least one lowercase letter",
+                    number: "At least one number",
+                    specialChar: "At least one special character",
+                }}
+                onChange={(passIsValid) => {}}
+                className="passwordRequirements"
+            />
 
             <div className="registerButton" onClick={handleSubmit}>Register</div>
 

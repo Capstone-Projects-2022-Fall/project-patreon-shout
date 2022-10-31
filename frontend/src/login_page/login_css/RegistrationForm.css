@@ -38,5 +38,8 @@
 
 .textLog{
     position: relative;
+}
 
+.passwordRequirements svg {
+    margin-top: 7px;
 }
