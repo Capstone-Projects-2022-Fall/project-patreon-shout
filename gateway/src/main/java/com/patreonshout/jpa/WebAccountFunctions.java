@@ -52,7 +52,9 @@ public class WebAccountFunctions {
 	 *                        {@link HttpStatus} 409 if the account already exists
 	 */
 	@Transactional
-	public void putAccount(RegisterRequest registerRequest) {
+	public void putAccount(RegisterRequest registerRequest) throws PSException {
+		ensurePasswordValidity(registerRequest.getPassword());
+
 		WebAccount webAccount = new WebAccount();
 		String salt = securityConfiguration.createSalt();
 
@@ -217,9 +219,10 @@ public class WebAccountFunctions {
 	 * @param loginToken      login token belonging to a {@link WebAccount}
 	 * @param currentPassword current password for the {@link WebAccount}
 	 * @param newPassword     desired new password for the {@link WebAccount}
-	 * @throws PSException {@link HttpStatus#UNAUTHORIZED} if the given current password is incorrect for the given account.
-	 *                     {@link HttpStatus#CONFLICT} if the new password matches the current password, or any of the previous three
-	 *                     passwords for the account.
+	 * @throws PSException {@link HttpStatus#UNAUTHORIZED} if the given current password is incorrect for the given
+	 *                     account, or it does not meet our password requirements.
+	 *                     {@link HttpStatus#CONFLICT} if the new password matches the current password, or any of the
+	 *                     previous three passwords for the account.
 	 */
 	public void putNewPassword(String loginToken, String currentPassword, String newPassword) throws PSException {
 		// ! Given current password is null
@@ -233,6 +236,9 @@ public class WebAccountFunctions {
 		// ! Given current password matches the desired new password
 		if (currentPassword.equals(newPassword))
 			throw new PSException(HttpStatus.UNAUTHORIZED, "Current password can not match the new password");
+
+		// ! Given new password does not meet our password requirements
+		ensurePasswordValidity(newPassword);
 
 		WebAccount webAccount = getAccount(loginToken);
 
@@ -261,6 +267,18 @@ public class WebAccountFunctions {
 		webAccount.setOldPasswords(oldPasswords);
 
 		webAccountRepository.save(webAccount);
+	}
+
+	/**
+	 * Checks if the given raw password meets our password requirements
+	 *
+	 * @param rawPassword password to check
+	 * @throws PSException {@link HttpStatus#UNAUTHORIZED} if the password does not meet our password requirements
+	 */
+	private void ensurePasswordValidity(String rawPassword) throws PSException {
+		// ! Given new password does not meet our password requirements
+		if (!securityConfiguration.passwordIsValid(rawPassword))
+			throw new PSException(HttpStatus.UNAUTHORIZED, "New password does not meet password requirements");
 	}
 
 	/**
