@@ -7,7 +7,7 @@ import com.patreon.resources.User;
 import com.patreonshout.PSException;
 import com.patreonshout.beans.PostBean;
 import com.patreonshout.jpa.CreatorPageFunctions;
-import com.patreonshout.jpa.Posts;
+import com.patreonshout.jpa.PostsRepository;
 import com.patreonshout.jpa.WebAccountFunctions;
 import com.patreonshout.patreon.CustomPatreonAPI;
 import lombok.Data;
@@ -43,7 +43,7 @@ public class WebhookSvc extends BaseSvc {
 	 * An autowired Spring component that endpoints utilize to send or receive data from the database
 	 */
 	@Autowired
-	Posts posts;
+	PostsRepository postsRepository;
 
 	/**
 	 * oauthClient is a communication layer to Patreon utilized for acquiring tokens when users link accounts via OAuth
@@ -118,14 +118,14 @@ public class WebhookSvc extends BaseSvc {
 			for (Campaign campaign : client.fetchCampaigns().get()) {
 
 				List<PostBean> pbList = client.fetchPosts(campaign.getId()).get();
-				List<PostBean> existingPosts = posts.getExistingPosts(pbList);
+				List<PostBean> existingPosts = postsRepository.getExistingPosts(pbList);
 				pbList.removeAll(existingPosts);
 
 				for (PostBean post : pbList) {
 					post.setCreator_page_url(pageUrl);
 					System.out.println("p: " + post);
 
-					posts.putPost(post);
+					postsRepository.putPost(post);
 				}
 			}
 
