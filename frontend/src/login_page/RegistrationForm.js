@@ -32,7 +32,7 @@ const RegistrationForm = () => {
             return 1;
         }
 
-        if (!passIsValid) {
+        if (passIsValid === false) {
             document.getElementById("register").textContent = "Register Failed";
             document.getElementById("errormsg").textContent = "Password does not meet the requirements";
             showPopup("registerPop")
