@@ -184,5 +184,13 @@
             <artifactId>hibernate-entitymanager</artifactId>
             <version>5.6.11.Final</version>
         </dependency>
+
+        <!-- Required for Password Validation -->
+        <!-- https://mvnrepository.com/artifact/org.passay/passay -->
+        <dependency>
+            <groupId>org.passay</groupId>
+            <artifactId>passay</artifactId>
+            <version>1.6.2</version>
+        </dependency>
     </dependencies>
 </project>
