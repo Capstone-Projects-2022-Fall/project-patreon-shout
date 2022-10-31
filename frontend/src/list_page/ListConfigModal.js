@@ -151,7 +151,7 @@ function ListConfigModal({listCreators, setListCreators, listId, listTitle, list
                             setCreatorList={setListCreators}
                             displayName={item}
                             urlName={item}
-                            description="very cool omg so cool omg"
+                            description="very unique accurate cool description"
                             imgUrl="https://i.picsum.photos/id/505/536/354.jpg?hmac=zvFVVisk0oG7zcCY4MmROU21E0SnGTOk3g2OA3fCszo"
                             verified="true"
                         />
