@@ -16,9 +16,16 @@ const RegistrationForm = () => {
 
     const handleSubmit = async e => {
 
-        if (!user || !pass) {
+        if (!user) {
             document.getElementById("register").textContent = "Register Failed";
-            document.getElementById("errormsg").textContent = "Username or Password not provided";
+            document.getElementById("errormsg").textContent = "Username not provided";
+            showPopup("registerPop")
+            return 1;
+        }
+
+        if (!pass) {
+            document.getElementById("register").textContent = "Register Failed";
+            document.getElementById("errormsg").textContent = "Password not provided";
             showPopup("registerPop")
             return 1;
         }
@@ -32,22 +39,11 @@ const RegistrationForm = () => {
         if (retVal === "CREATED") {
             document.getElementById("register").textContent = "Register Success";
             document.getElementById("errormsg").textContent = "";
-
         } else {
-
-            let errorMsg = "Error " + retVal.status + ": ";
-
-            if (retVal.status === 409) {
-                errorMsg += "Username already in use";
-            }
-            else {
-                errorMsg += "Internal server error";
-            }
-
             document.getElementById("register").textContent = "Register Failed";
-            document.getElementById("errormsg").textContent = errorMsg;
-            showPopup("registerPop")
+            document.getElementById("errormsg").textContent = retVal.message;
         }
+        showPopup("registerPop")
     }
 
 
