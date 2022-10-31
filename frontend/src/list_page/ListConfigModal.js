@@ -13,6 +13,20 @@ function ListConfigModal({listCreators, setListCreators, listId, listTitle, list
     const [descInput, setDesc] = useState("");
     const [searchInput, setSearch] = useState("");
 
+    const [displayedList, setDisplayedList] = useState(listCreators);
+
+    const searchCreators = (value) => {
+        let filteredList = [];
+
+        stableList.forEach((creator) => {
+            if (creator.toLowerCase().replaceAll(" ", "").includes(value.replaceAll(" ", ""))) {
+                filteredList.push(creator);
+            }
+        });
+
+        setDisplayedList(filteredList);
+    }
+
     const eraseInfo = () => {
         setTitle("");
         setDesc("");
@@ -106,7 +120,7 @@ function ListConfigModal({listCreators, setListCreators, listId, listTitle, list
                         />
                         <input
                             value={searchInput}
-                            onChange={(e) => setSearch(e.target.value)}
+                            onChange={(e) => {setSearch(e.target.value); searchCreators(e.target.value);}}
                             placeholder="Search Creators"
                             type="text"
                         />
@@ -130,7 +144,7 @@ function ListConfigModal({listCreators, setListCreators, listId, listTitle, list
                         }}/>
 
                     </form>
-                    {stableList.map((item) => (
+                    {displayedList.map((item) => (
                         <Creator
                             addedState={true}
                             curCreatorList={listCreators}
