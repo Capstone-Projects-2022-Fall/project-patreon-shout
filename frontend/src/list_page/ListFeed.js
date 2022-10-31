@@ -5,8 +5,14 @@ import Post from "../home_page/Post";
 import "./list_css/ListFeed.css";
 import {getLists} from "../services/api/lists/getLists";
 import jsonPosts from "../data/posts.json";
+import Searchbar from "../home_page/Searchbar";
+import Filter from "../home_page/Filter";
 
 function ListFeed() {
+
+    const [searchTerm, setSearchTerm] = useState([]);
+    const displayedList = [];
+
     const [userLists, setUserLists] = useState([]);
     const [posts, setPosts] = useState("hide");
     const [lists, setLists] = useState("show");
@@ -27,6 +33,21 @@ function ListFeed() {
     }, [])
 
 
+    let postcount = postData.length;
+    let shouldSkip = false;
+
+    postData.forEach((post, index) => {
+        const postInfo = (({displayName, username, text}) => ({displayName, username, text}))(post);
+        Object.values(postInfo).every((onlyValues, valIndex) => {
+            if (shouldSkip) {return;}
+            if (onlyValues.toLowerCase().includes(searchTerm)) {
+                displayedList.push(post)
+                shouldSkip = true;
+            }
+            return displayedList;
+        })
+        shouldSkip = false;
+    });
 
 
     return (
@@ -38,7 +59,15 @@ function ListFeed() {
 
             {/*TODO: fill with list specific creator posts when we get posts assigned to creators */}
             <div className={posts}> {/* hide until a list is chosen, then do http request to get list posts */}
-                {postData.map((item) => (
+                <div className="feed__filters">
+                    <Searchbar
+                        searchTerm={searchTerm}
+                        setSearchTerm={setSearchTerm}
+                    />
+                    <Filter id="feed__filter"/>
+                </div>
+
+                {displayedList.map((item) => (
                     <Post
                         displayName={item.displayName}
                         username={item.username}
