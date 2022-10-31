@@ -41,7 +41,7 @@ public interface WebAccountImpl {
 					description = "Username already exists",
 					content = {@Content(mediaType = "application/json")})
 	})
-	HttpStatus Register(@RequestBody RegisterRequest registerRequest);
+	HttpStatus Register(@RequestBody RegisterRequest registerRequest) throws PSException;
 
 	/**
 	 * Endpoint that will create a new {@link WebAccountFunctions} into the database
