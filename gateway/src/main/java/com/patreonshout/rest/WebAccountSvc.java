@@ -41,7 +41,7 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	/**
 	 * {@inheritDoc}
 	 */
-	public HttpStatus Register(@RequestBody RegisterRequest registerRequest) {
+	public HttpStatus Register(@RequestBody RegisterRequest registerRequest) throws PSException {
 		// TODO: Ensure username and password are sanitized and fit specific requirements
 		webAccountFunctions.putAccount(registerRequest);
 
