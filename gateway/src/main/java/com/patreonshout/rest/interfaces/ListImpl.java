@@ -36,7 +36,11 @@ public interface ListImpl {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "302",
                     description = "user lists returned",
-                    content = {@Content(mediaType = "application/json")})
+                    content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "400",
+                    description = "the login token provided doesn't match up with the owner of the requested list's login token",
+                    content = {@Content(mediaType = "application/json")}
+            )
     })
     ResponseEntity<?> GetUserLists(@RequestParam(required = true, name = "loginToken") String loginToken);
 
@@ -54,7 +58,11 @@ public interface ListImpl {
                 content = {@Content(mediaType = "application/json")}),
         @ApiResponse(responseCode = "409",
                 description = "Foreign key constraint failed.",
-                content = {@Content(mediaType = "application/json")})
+                content = {@Content(mediaType = "application/json")}),
+        @ApiResponse(responseCode = "400",
+                description = "the login token provided doesn't match up with the owner of the requested list's login token",
+                content = {@Content(mediaType = "application/json")}
+        )
     })
     ResponseEntity<?> AddUserList(@RequestBody ListCreationRequest listCreationRequest);
 
