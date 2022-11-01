@@ -26,7 +26,7 @@ function PatreonConnect() {
 
     return (<div className="PatreonConnect">
 
-        <Button href={patreonUrlDev + token} sx={ { borderRadius: 28 } } color="primary" type="submit" variant="contained">
+        <Button target="_blank" href={patreonUrlDev + token} sx={ { borderRadius: 28 } } color="primary" type="submit" variant="contained">
             Oauth
         </Button>
     </div>);

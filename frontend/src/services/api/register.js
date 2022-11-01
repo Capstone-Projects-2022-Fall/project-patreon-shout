@@ -1,3 +1,5 @@
+import { config } from "../../Constants";
+
 /**
  * Registers the user
  *
@@ -6,11 +8,11 @@
  */
 
 export async function registerUser(credentials) {
-    return fetch('http://localhost:5000/webaccount/register', {
+    return fetch(config.url.API_URL + '/webaccount/register', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Origin': 'http://localhost:5000'
+            'Origin': config.url.API_URL
         },
         body: JSON.stringify(credentials)
     })
