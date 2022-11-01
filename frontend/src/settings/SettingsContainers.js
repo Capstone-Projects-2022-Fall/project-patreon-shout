@@ -2,12 +2,8 @@ import React from 'react'
 import CreatorSettings from './CreatorSettings'
 import PatronSettings from './PatronSettings';
 import './setting_css/SettingsContainers.css';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
 import Sidebar from "../home_page/Sidebar";
+import {Tabs, Tab, Paper, Typography, Box} from '@mui/material';
 
 
 /**
@@ -48,16 +44,20 @@ function SettingsContainers() {
             <Sidebar/>
             <div className='paperStyle'>
                 <Paper elevation={20}>
+
                     <Tabs value={value} onChange={handleChange} centered>
                         <Tab label="Creator Settings" />
                         <Tab label="Patron Settings" />
                     </Tabs>
+
                     <TabPanel value={value} index={0}>
                         <CreatorSettings/>
                     </TabPanel>
+
                     <TabPanel value={value} index={1}>
                         <PatronSettings />
                     </TabPanel>
+
                 </Paper>
             </div>
         </div>

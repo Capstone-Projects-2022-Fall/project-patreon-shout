@@ -13,6 +13,7 @@ import com.patreonshout.utils.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -90,11 +91,15 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	/**
 	 * {@inheritDoc}
 	 */
+	@CrossOrigin(origins = "http://localhost:3000")
 	public ResponseEntity<?> ResetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest) throws PSException {
 		webAccountFunctions.putNewPassword(
 				resetPasswordRequest.getLoginToken(),
 				resetPasswordRequest.getCurrentPassword(),
 				resetPasswordRequest.getNewPassword());
-		return null;
+
+		Map<String, String> response = new HashMap<>();
+		response.put("success", "true");
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 }
