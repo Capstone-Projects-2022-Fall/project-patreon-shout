@@ -2,6 +2,7 @@ import React from 'react'
 import CreatorSettings from './CreatorSettings'
 import PatronSettings from './PatronSettings';
 import './setting_css/SettingsContainers.css';
+import Sidebar from "../home_page/Sidebar";
 import {Tabs, Tab, Paper, Typography, Box} from '@mui/material';
 
 
