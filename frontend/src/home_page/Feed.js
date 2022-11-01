@@ -15,28 +15,52 @@ import Filter from "./Filter";
 function Feed() {
 
     const [searchTerm, setSearchTerm] = useState([]);
+    const [filterChoice, setFilterChoice] = useState("");
+    const [dateRange, setDateRange] = useState([]);
     const [postList, setPostList] = useState(jsonPosts);
-    const displayedList = [];
+    const searchedList = [];
+    var displayedList = [];
 
-    let postcount = postList.length;
     let shouldSkip = false;
 
     postList.forEach((post, index) => {
-        const postInfo = (({displayName, username, text}) => ({displayName, username, text}))(post);
+        const postInfo = (({title, creator_page_url, content}) => ({title, creator_page_url, content}))(post);
         Object.values(postInfo).every((onlyValues, valIndex) => {
             if (shouldSkip) {return;}
             if (onlyValues.toLowerCase().includes(searchTerm)) {
-                displayedList.push(post)
+                searchedList.push(post)
                 shouldSkip = true;
             }
-            return displayedList;
+            return searchedList;
         })
         shouldSkip = false;
     });
 
-        // if ((searchTerm!=null) && ((postList.forEach(displayName, i).includes(searchTerm)) || (postList[i].username.includes(searchTerm)) || (postList[i].text.includes(searchTerm)))) {
-        // }
-
+    displayedList = [...searchedList];
+    console.log(filterChoice);
+    switch (filterChoice) {
+        case "newestdate":
+            displayedList = displayedList.sort(function(b, a){return new Date(a.published_at).getTime() - new Date(b.published_at).getTime()});
+            break;
+        case "oldestdate":
+            displayedList = displayedList.sort(function(a, b){return new Date(a.published_at).getTime() - new Date(b.published_at).getTime()});
+            break;
+        case "privposts":
+            displayedList = displayedList.filter(value => value.is_public === false);
+            break;
+        case "pubposts":
+            displayedList = displayedList.filter(value => value.is_public === true);
+            break;
+        case "daterange":
+            displayedList = displayedList.sort(function(b, a){return new Date(a.published_at).getTime() - new Date(b.published_at).getTime()});
+            displayedList = displayedList.filter(value => (new Date(value.published_at).getTime() <= new Date(dateRange.endDate).getTime() && 
+                new Date(value.published_at).getTime() >= new Date(dateRange.startDate).getTime()));
+            break;
+        default:
+            displayedList = displayedList.sort(function(b, a){return new Date(a.published_at).getTime() - new Date(b.published_at).getTime()});
+            break;
+    }
+    
 
     // useEffect(() => {
     //     let mounted = true;
@@ -59,7 +83,12 @@ function Feed() {
                     searchTerm={searchTerm}
                     setSearchTerm={setSearchTerm}
                 />
-                <Filter id="feed__filter"/>
+                <Filter id="feed__filter" 
+                    filterChoice={filterChoice} 
+                    setFilterChoice={setFilterChoice}
+                    dateRange={dateRange}
+                    setDateRange={setDateRange}
+                />
             </div>
             {/* Unsearched map of posts, don't delete yet
                 {postList.map((item) => (
@@ -73,11 +102,12 @@ function Feed() {
             ))} */}
             {displayedList.map((item) => (
                 <Post
-                    displayName={item.displayName}
-                    username={item.username}
-                    verified={item.verified}
-                    text={item.text}
-                    avatar={item.avatar}
+                    title={item.title}
+                    creator_page_url={item.creator_page_url}
+                    is_public={item.is_public}
+                    content={item.content}
+                    published_at={item.published_at}
+                    url = {item.url}
                 />
             ))}
         </div>

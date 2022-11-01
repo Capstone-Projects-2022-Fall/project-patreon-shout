@@ -37,7 +37,7 @@ function ListFeed() {
     let shouldSkip = false;
 
     postData.forEach((post, index) => {
-        const postInfo = (({displayName, username, text}) => ({displayName, username, text}))(post);
+        const postInfo = (({title, creator_page_url, content}) => ({title, creator_page_url, content}))(post);
         Object.values(postInfo).every((onlyValues, valIndex) => {
             if (shouldSkip) {return;}
             if (onlyValues.toLowerCase().includes(searchTerm)) {
@@ -69,11 +69,12 @@ function ListFeed() {
 
                 {displayedList.map((item) => (
                     <Post
-                        displayName={item.displayName}
-                        username={item.username}
-                        verified={item.verified}
-                        text={item.text}
-                        avatar={item.avatar}
+                        title={item.title}
+                        creator_page_url={item.creator_page_url}
+                        is_public={item.is_public}
+                        content={item.content}
+                        published_at={item.published_at}
+                        url = {item.url}
                     />
                 ))}
             </div>

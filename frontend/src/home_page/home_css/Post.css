@@ -15,6 +15,31 @@
     margin-top: 10px;
 }
 
+.post__footerDateTime {
+    display: flex;
+    font-size: 16px;
+    color: gray;
+    margin-top: 10px;
+}
+
+.post__footerRedirect {
+    display: flex;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.post__footerFavorite {
+    display: flex;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.post__footerList {
+    display: flex;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
 .post__badge {
     font-size: 14px !important;
     color: var(--main-color);
@@ -22,19 +47,20 @@
 
 .post__headerSpecial {
     font-weight: 600;
-    font-size: 12px;
+    font-size: 18px;
     color: gray;
 }
 
 .post__headerText > h3 {
     text-align: left;
-    font-size: 15px;
+    font-size: 20px;
     margin-bottom: 5px;
 }
 
 .post__headerDescription {
-    font-size: 15px;
+    font-size: 18px;
     margin-bottom: 20px;
+    padding-left: 20px;
 }
 
 .post__body {
