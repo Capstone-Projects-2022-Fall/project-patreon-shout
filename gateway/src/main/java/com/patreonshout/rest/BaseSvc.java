@@ -3,6 +3,7 @@ package com.patreonshout.rest;
 import com.patreonshout.PSException;
 import com.patreonshout.beans.response.BaseResponse;
 import com.patreonshout.utils.ResponseUtil;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,6 +15,11 @@ import java.sql.SQLIntegrityConstraintViolationException;
  * Parental service that any {@link RestController} objects must extend. Contains controller-wide Exception Handler.
  */
 public class BaseSvc {
+
+	/**
+	 * CORS origin request
+	 */
+	public final static String origin = "http://backend.outofstonk.com/";
 
 	/**
 	 * Handles every {@link SQLIntegrityConstraintViolationException} exception thrown by controllers.

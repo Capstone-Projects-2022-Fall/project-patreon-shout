@@ -45,6 +45,7 @@ public class ListSvc extends BaseSvc implements ListImpl {
     /**
      * {@inheritDoc}
      */
+    @CrossOrigin(origins = origin)
     public ResponseEntity<?> GetUserLists(@RequestParam(name = "loginToken") String loginToken) {
         WebAccount userAccount = webAccountFunctions.findByLoginToken(loginToken);
 
@@ -73,6 +74,7 @@ public class ListSvc extends BaseSvc implements ListImpl {
     /**
      * {@inheritDoc}
      */
+    @CrossOrigin(origins = origin)
     public ResponseEntity<?> AddUserList(@RequestBody ListCreationRequest listCreationRequest) {
         WebAccount userAccount = webAccountFunctions.findByLoginToken(listCreationRequest.getLoginToken());
 
@@ -94,7 +96,7 @@ public class ListSvc extends BaseSvc implements ListImpl {
     /**
      * {@inheritDoc}
      */
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = origin)
     public ResponseEntity<?> UpdateUserList(@RequestBody ListUpdateRequest listUpdateRequest) {
         ListBean lb = listsRepository.getListByList_id(listUpdateRequest.getList_id());
 
@@ -114,7 +116,7 @@ public class ListSvc extends BaseSvc implements ListImpl {
     /**
      * {@inheritDoc}
      */
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = origin)
     public ResponseEntity<?> DeleteUserList(@RequestBody ListDeleteRequest listDeleteRequest) {
         ListBean lb = listsRepository.getListByList_id(listDeleteRequest.getList_id());
 
