@@ -1,1 +1,1 @@
-web: npm run build && serve -s build
+web: unzip -o deploy.zip && npx serve -s build
