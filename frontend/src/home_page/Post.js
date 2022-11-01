@@ -1,4 +1,3 @@
-import {Avatar} from "@mui/material";
 import {
     FavoriteBorder,
     Language,
@@ -11,41 +10,72 @@ import "./home_css/Post.css";
 /**
  * The post object which will appear in the feed
  *
- * @param {string} displayName - The name displayed on the post
- * @param {string} username - The username displayed on the post
- * @param {boolean} verified - The checkmark display for users who have verified their Patreon with us
- * @param {string} text - The message contained in the post
- * @param {image} image - The embedded image of the post
- * @param {image} avatar - The avatar provided by the user
+ * @param {string} title - The name of the post
+ * @param {string} creator_page_url - The creator of the post
+ * @param {boolean} is_public - The checkmark display for private posts
+ * @param {string} content - The message contained in the post
+ * @param {string} url - The url of the creator
+ * @param {Date} published_at - The date and time the post was published
  *
  * @returns A single post component to be displayed in the feed
  */
-function Post({displayName, username, verified, text, image, avatar}) {
+
+function Post({title, creator_page_url, url, content, published_at, is_public}) {
+
+    // TODO: clean this shit up
+    content = content.replace(/<p[^>]*>/g, "");
+    content = content.replace(/<\/?p[^>]*>/g, "");
+    var posteddate = new Date(published_at);
+    var year = String(posteddate.getFullYear());
+    var month = String(posteddate.getMonth() + 1);
+    if (month < 10) {month = "0" + month};
+    var day = String(posteddate.getDate());
+    if (day < 10) {day = "0" + day};
+    var minute = String(posteddate.getMinutes());
+    if (minute < 10) {minute = "0" + minute};
+    var second = String(posteddate.getSeconds());
+    if (second < 10) {second = "0" + second};
+    var hour = String(posteddate.getHours());
+    if (hour < 10) {hour = "0" + hour};
+    if (hour === 0) {hour = "12"};
+    if (hour >= 12) {hour = hour - 12; second = second + "pm"}
+    else {second = second + "am"};
+
+    const handleRedirect = (e) => {
+        window.open(url, "_blank");
+    }
+
+
     return (
         <div className="post">
-            <div className="post__avatar">
-                <Avatar src={avatar}/>
-            </div>
             <div className="post__body">
                 <div className="post__header">
                     <div className="post__headerText">
                         <h3>
-                            {displayName}{" "}
+                            {title}{" "}
                             <span className="post__headerSpecial">
-                                {verified && <VerifiedUser className="post__badge"/>} @
-                                {username}
+                                {!is_public && <VerifiedUser className="post__badge"/>}
+                                @{creator_page_url}
                             </span>
                         </h3>
                     </div>
                     <div className="post__headerDescription">
-                        <p>{text}</p>
+                        {content}
                     </div>
                 </div>
-                <img src={image} alt=""/>
                 <div className="post__footer">
-                    <Language fontSize="small"/>
-                    <FavoriteBorder fontSize="small"/>
-                    <ListAlt fontSize="small"/>
+                    <div className="post__footerDateTime">
+                        {month + "/" + day + "/" + year + "  " + hour + ":" + minute + ":" + second}
+                    </div>
+                    <div className="post__footerRedirect">
+                        <Language fontSize="small" type="button" onClick={handleRedirect} hover="true"/>
+                    </div>
+                    <div className="post__footerFavorite">
+                        <FavoriteBorder fontSize="small"/>
+                    </div>
+                    <div className="post__footerList">
+                        <ListAlt fontSize="small"/>
+                    </div>
                 </div>
             </div>
         </div>
