@@ -64,7 +64,6 @@ public interface WebAccountImpl {
 	 * @param loginToken Login token to delete from the database
 	 * @return {@link HttpStatus#OK} if successful
 	 */
-	@CrossOrigin(origins = "http://localhost:3000")
 	@DeleteMapping("/logout")
 	@Operation(summary = "Deletes a login token from a WebAccount if it exists")
 	@ApiResponses(

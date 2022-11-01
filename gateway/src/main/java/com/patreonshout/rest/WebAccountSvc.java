@@ -42,6 +42,7 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	/**
 	 * {@inheritDoc}
 	 */
+	@CrossOrigin(origins = origin)
 	public HttpStatus Register(@RequestBody RegisterRequest registerRequest) throws PSException {
 		// TODO: Ensure username and password are sanitized and fit specific requirements
 		webAccountFunctions.putAccount(registerRequest);
@@ -52,6 +53,7 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	/**
 	 * {@inheritDoc}
 	 */
+	@CrossOrigin(origins = origin)
 	public ResponseEntity<?> Login(@RequestBody LoginRequest loginRequest) throws PSException {
 		String loginToken = webAccountFunctions.readAccount(loginRequest);
 
@@ -61,6 +63,7 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	/**
 	 * {@inheritDoc}
 	 */
+	@CrossOrigin(origins = origin)
 	public ResponseEntity<?> Logout(@RequestParam(name = "login_token") String loginToken) {
 		webAccountFunctions.deleteLoginToken(loginToken);
 
@@ -70,6 +73,7 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	/**
 	 * {@inheritDoc}
 	 */
+	@CrossOrigin(origins = origin)
 	public HttpStatus Integration(@RequestBody SocialIntegrationRequest socialIntegrationRequest) throws PSException {
 		webAccountFunctions.putSocialIntegration(socialIntegrationRequest);
 		return HttpStatus.OK;
@@ -78,6 +82,7 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	/**
 	 * {@inheritDoc}
 	 */
+	@CrossOrigin(origins = origin)
 	public ResponseEntity<?> GetPatreonTokens(@RequestParam(name = "login_token") String loginToken) throws PSException {
 		PatreonTokens tokens = webAccountFunctions.getPatreonTokens(loginToken);
 
@@ -91,7 +96,7 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	/**
 	 * {@inheritDoc}
 	 */
-	@CrossOrigin(origins = "http://localhost:3000")
+	@CrossOrigin(origins = origin)
 	public ResponseEntity<?> ResetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest) throws PSException {
 		webAccountFunctions.putNewPassword(
 				resetPasswordRequest.getLoginToken(),

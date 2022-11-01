@@ -11,6 +11,7 @@ import com.patreonshout.utils.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ public class SearchFilterSvc extends BaseSvc implements SearchFilterImpl {
     /**
      * {@inheritDoc}
      */
+    @CrossOrigin(origins = origin)
     public ResponseEntity<?> DeleteFilter(FilterDeleteRequest filterDeleteRequest) {
         SearchFilter sf = searchFiltersRepository.getReferenceById((long) filterDeleteRequest.getFilterId());
 
@@ -54,6 +56,7 @@ public class SearchFilterSvc extends BaseSvc implements SearchFilterImpl {
     /**
      * {@inheritDoc}
      */
+    @CrossOrigin(origins = origin)
     public ResponseEntity<?> GetUserFilters(String loginToken) {
         WebAccount userAccount = webAccountFunctions.findByLoginToken(loginToken);
 
@@ -80,6 +83,7 @@ public class SearchFilterSvc extends BaseSvc implements SearchFilterImpl {
     /**
      * {@inheritDoc}
      */
+    @CrossOrigin(origins = origin)
     public ResponseEntity<?> AddFilter(FilterAddRequest filterAddRequest) {
         WebAccount userAccount = webAccountFunctions.findByLoginToken(filterAddRequest.getLoginToken());
 
