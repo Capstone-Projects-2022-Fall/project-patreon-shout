@@ -4,15 +4,43 @@ import PostAddIcon from "@mui/icons-material/PostAdd";
 import Creator from "../components/Creator";
 import "./list_css/AddListModal.css";
 import {addList} from "../services/api/lists/addList";
+import jsonCreators from "../data/creators.json";
 
 
 function AddListModal() {
 
+    // showing the options of creators
+    const [stableList] = useState(jsonCreators);
+    const [displayedList, setDisplayedList] = useState(jsonCreators);
 
+    // adding creators to a list
     const [creatorList, setCreatorList] = useState([]);
     const [titleInput, setTitle] = useState("");
     const [descInput, setDesc] = useState("");
     const [searchInput, setSearch] = useState("");
+
+    const searchCreators = (value) => {
+        let filteredList = [];
+        let added = false;
+
+        stableList.forEach((creator) => {
+            if (creator.displayName.toLowerCase().replaceAll(" ", "").includes(value.replaceAll(" ", "")) && added === false) {
+                filteredList.push(creator);
+                added = true;
+            }
+            if (creator.urlName.toLowerCase().replaceAll(" ", "").includes(value.replaceAll(" ", "")) && added === false) {
+                filteredList.push(creator);
+                added = true;
+            }
+            if (creator.description.toLowerCase().replaceAll(" ", "").includes(value.replaceAll(" ", "")) && added === false) {
+                filteredList.push(creator);
+                added = true;
+            }
+            added = false;
+        });
+
+        setDisplayedList(filteredList);
+    }
 
     const eraseInfo = () => {
         setCreatorList([]);
@@ -81,7 +109,7 @@ function AddListModal() {
                         />
                         <input
                             value={searchInput}
-                            onChange={(e) => setSearch(e.target.value)}
+                            onChange={(e) => {setSearch(e.target.value); searchCreators(e.target.value);}}
                             placeholder="Search Creators"
                             type="text"
                         />
@@ -96,47 +124,18 @@ function AddListModal() {
                         }}/>
                     </form>
 
-                    <Creator
-                        addedState={false}
-                        curCreatorList={creatorList}
-                        setCreatorList={setCreatorList}
-                        displayName="AlexS"
-                        urlName="alex"
-                        description="very cool omg so cool omg"
-                        imgUrl="https://i.picsum.photos/id/505/536/354.jpg?hmac=zvFVVisk0oG7zcCY4MmROU21E0SnGTOk3g2OA3fCszo"
-                        verified="true"
-                    />
-                    <Creator
-                        addedState={false}
-                        curCreatorList={creatorList}
-                        setCreatorList={setCreatorList}
-                        displayName="AyserJ"
-                        urlName="ayser"
-                        description="very cool omg so cool omg"
-                        imgUrl="https://i.picsum.photos/id/505/536/354.jpg?hmac=zvFVVisk0oG7zcCY4MmROU21E0SnGTOk3g2OA3fCszo"
-                        verified="true"
-                    />
-                    <Creator
-                        addedState={false}
-                        curCreatorList={creatorList}
-                        setCreatorList={setCreatorList}
-                        displayName="ChrisS"
-                        urlName="chris"
-                        description="very cool omg so cool omg"
-                        imgUrl="https://i.picsum.photos/id/505/536/354.jpg?hmac=zvFVVisk0oG7zcCY4MmROU21E0SnGTOk3g2OA3fCszo"
-                        verified="true"
-                    />
-                    <Creator
-                        addedState={false}
-                        curCreatorList={creatorList}
-                        setCreatorList={setCreatorList}
-                        displayName="JonahM"
-                        urlName="jonah"
-                        description="very cool omg so cool omg"
-                        imgUrl="https://i.picsum.photos/id/505/536/354.jpg?hmac=zvFVVisk0oG7zcCY4MmROU21E0SnGTOk3g2OA3fCszo"
-                        verified="true"
-                    />
-
+                    {displayedList.map((item) => (
+                        <Creator
+                            addedState={false}
+                            curCreatorList={creatorList}
+                            setCreatorList={setCreatorList}
+                            displayName={item.displayName}
+                            urlName={item.urlName}
+                            description={item.description}
+                            imgUrl={item.imgUrl}
+                            verified={item.verified}
+                        />
+                    ))}
                 </div>
             )}
         </Popup>

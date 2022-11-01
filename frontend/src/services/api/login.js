@@ -1,3 +1,5 @@
+import { config } from "../../Constants";
+
 /**
  * Logs the user in using credentials
  *
@@ -6,12 +8,12 @@
  */
 
 export async function loginUser(credentials) {
-    return fetch('http://localhost:5000/webaccount/login', {
+    return fetch(config.url.API_URL + '/webaccount/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'Origin': 'http://localhost:5000'
+            'Origin': config.url.API_URL
         },
         body: JSON.stringify(credentials)
     })

@@ -1,3 +1,5 @@
+import { config } from "../../../Constants";
+
 /**
  * Creates a new user list
  *
@@ -6,12 +8,12 @@
  */
 
 export async function addList(request) {
-    return fetch('http://localhost:5000/lists/list', {
+    return fetch(config.url.API_URL + '/lists/list', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'Origin': 'http://localhost:5000'
+            'Origin': config.url.API_URL
         },
         body: JSON.stringify(request)
     })

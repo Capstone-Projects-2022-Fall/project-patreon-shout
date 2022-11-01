@@ -1,3 +1,5 @@
+import { config } from "../../../Constants";
+
 /**
  * Deletes a user list
  *
@@ -7,12 +9,12 @@
 
 export async function deleteList(request) {
     console.log(JSON.stringify(request));
-    return fetch('http://localhost:5000/lists/list', {
+    return fetch(config.url.API_URL + '/lists/list', {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'Origin': 'http://localhost:5000'
+            'Origin': config.url.API_URL
         },
         body: JSON.stringify(request)
     })

@@ -1,3 +1,5 @@
+import { config } from "../../../Constants";
+
 /**
  * Gets the List objects of the user
  *
@@ -5,11 +7,11 @@
  * @returns {Promise<any>} is the json data returned
  */
 export async function getLists(token) {
-    return fetch('http://localhost:5000/lists/user?loginToken=' + token, {
+    return fetch(config.url.API_URL + '/lists/user?loginToken=' + token, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'Origin': 'http://localhost:5000'
+            'Origin': config.url.API_URL
         }
     })
         .then(data => data.json())

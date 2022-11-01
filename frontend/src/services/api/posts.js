@@ -1,3 +1,5 @@
+import { config } from "../../Constants";
+
 /**
  * Gets the posts of a specific creator
  *
@@ -5,11 +7,11 @@
  * @returns {Promise<any>} is the json data returned
  */
 export function getPosts(creator) {
-    return fetch('http://localhost:5000/posts/creator?creator=' + creator, {
+    return fetch(config.url.API_URL + '/posts/creator?creator=' + creator, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'Origin': 'http://localhost:5000'
+            'Origin': config.url.API_URL
         }
     })
         .then(data => data.json())
