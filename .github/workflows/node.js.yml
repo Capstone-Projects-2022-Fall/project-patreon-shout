@@ -14,6 +14,9 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      NODE_ENV: production
+
     strategy:
       matrix:
         node-version: [18.x]
@@ -29,8 +32,8 @@ jobs:
     - run: npm ci
     - run: CI=false npm run build --if-present
 
-    - name: Echoing
-      run: echo "AYSERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR" && pwd
+    - name: check env var
+    - run: echo "$NODE_ENV"
 
     - name: deploy to gh-pages
       uses: peaceiris/actions-gh-pages@v3
