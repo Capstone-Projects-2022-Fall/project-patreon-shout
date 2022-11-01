@@ -1,3 +1,5 @@
+import { config } from "../../Constants";
+
 /**
  * Deletes the local session token from the database
  *
@@ -6,11 +8,11 @@
  */
 
 export function logoutUser(token) {
-    return fetch('http://localhost:5000/webaccount/logout?login_token=' + token, {
+    return fetch(config.url.API_URL + '/webaccount/logout?login_token=' + token, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
-            'Origin': 'http://localhost:5000'
+            'Origin': config.url.API_URL
         }
     })
         .then(data => data.json())

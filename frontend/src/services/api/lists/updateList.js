@@ -1,3 +1,5 @@
+import { config } from "../../../Constants";
+
 /**
  * Updates a user list
  *
@@ -5,12 +7,12 @@
  * @returns {Promise<any>} is the json data returned
  */
 export async function updateList(request) {
-    return fetch('http://localhost:5000/lists/list', {
+    return fetch(config.url.API_URL + '/lists/list', {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'Origin': 'http://localhost:5000'
+            'Origin': config.url.API_URL
         },
         body: JSON.stringify(request)
     })
