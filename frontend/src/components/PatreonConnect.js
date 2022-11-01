@@ -24,10 +24,10 @@ function PatreonConnect() {
         return <Login setToken={setToken}/>
     }
 
-    return (<div className="PatreonConnect">
-
-        <Button target="_blank" href={patreonUrlDev + token} sx={ { borderRadius: 28 } } color="primary" type="submit" variant="contained">
-            Oauth
+    return (
+        <div className="PatreonConnect">
+            <Button target="_blank" href={patreonUrlDev + token} sx={ { borderRadius: 28 } } color="primary" type="submit" variant="contained">
+                Oauth
         </Button>
     </div>);
 }
