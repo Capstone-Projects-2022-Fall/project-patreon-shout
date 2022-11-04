@@ -8,12 +8,16 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.List;
 
 /**
  * POJO that relates to the posts table in our database
@@ -75,6 +79,12 @@ public class PostBean extends BaseResource {
     @Column(name="is_public")
     @JsonProperty("is_public")
     protected boolean is_public;
+
+    /**
+     * tags is the list of {@link com.patreonshout.beans.Tag} objects linked with this PostBean object
+     */
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "postBean")
+    List<Tag> tags;
 
     /**
      * Used to check if a {@link com.patreonshout.beans.PostBean} is equal to another PostBean object

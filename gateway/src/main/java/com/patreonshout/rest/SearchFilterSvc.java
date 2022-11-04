@@ -40,7 +40,6 @@ public class SearchFilterSvc extends BaseSvc implements SearchFilterImpl {
     /**
      * {@inheritDoc}
      */
-    @CrossOrigin(origins = origin)
     public ResponseEntity<?> DeleteFilter(FilterDeleteRequest filterDeleteRequest) {
         SearchFilter sf = searchFiltersRepository.getReferenceById((long) filterDeleteRequest.getFilterId());
 
@@ -56,7 +55,6 @@ public class SearchFilterSvc extends BaseSvc implements SearchFilterImpl {
     /**
      * {@inheritDoc}
      */
-    @CrossOrigin(origins = origin)
     public ResponseEntity<?> GetUserFilters(String loginToken) {
         WebAccount userAccount = webAccountFunctions.findByLoginToken(loginToken);
 
@@ -83,7 +81,6 @@ public class SearchFilterSvc extends BaseSvc implements SearchFilterImpl {
     /**
      * {@inheritDoc}
      */
-    @CrossOrigin(origins = origin)
     public ResponseEntity<?> AddFilter(FilterAddRequest filterAddRequest) {
         WebAccount userAccount = webAccountFunctions.findByLoginToken(filterAddRequest.getLoginToken());
 

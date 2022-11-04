@@ -16,10 +16,10 @@ import java.sql.SQLIntegrityConstraintViolationException;
  */
 public class BaseSvc {
 
-	/**
-	 * CORS origin request
-	 */
-	public final static String origin = "http://backend.outofstonk.com/";
+//	/**
+//	 * CORS origin request
+//	 */
+//	public final static String origin = "http://backend.outofstonk.com/";
 
 	/**
 	 * Handles every {@link SQLIntegrityConstraintViolationException} exception thrown by controllers.

@@ -26,17 +26,55 @@ public interface PostsRepository extends JpaRepository<PostBean, Long> {
     nativeQuery = true)
     Page<PostBean> getMultipleCreatorPosts(List<String> creatorList, Pageable pageable);
 
+    /**
+     * getCreatorPosts() gets the posts from a particular creator
+     *
+     * @param creator_page_url is the creator who made the posts we want to get
+     * @return a List of {@link com.patreonshout.beans.PostBean} objects containing Patreon post information of a given creator
+     */
     List<PostBean> getCreatorPosts(String creator_page_url);
 
+    /**
+     * getPost() gets a specific post based on the post url
+     *
+     * @param url is the url of the Patreon post
+     * @return a {@link com.patreonshout.beans.PostBean} object containing the Patreon post information of the given url
+     */
     PostBean getPost(String url);
 
+    /**
+     * getAllPosts() returns every post in the database
+     *
+     * @return a List of {@link com.patreonshout.beans.PostBean} containing every post in the database
+     */
     List<PostBean> getAllPosts();
 
+    /**
+     * putPost() adds a new Post to the database
+     *
+     * @param pb is the post to be added to the database
+     */
     void putPost(PostBean pb);
 
+    /**
+     * updatePost() updates an existing post in the database based on the post_id
+     *
+     * @param pb is the post to be updated in the database
+     */
     void updatePost(PostBean pb);
 
+    /**
+     * removePost() removes a post in the database based on the post url
+     *
+     * @param url is the url of the Patreon post
+     */
     void removePost(String url);
 
+    /**
+     * getExistingPosts() checks what posts in the {@link com.patreonshout.beans.PostBean} object list are already in the database
+     *
+     * @param pbList is the list of {@link com.patreonshout.beans.PostBean} objects that we want to check the database for
+     * @return a list of {@link com.patreonshout.beans.PostBean} objects that were shown to be in the database
+     */
     List<PostBean> getExistingPosts(List<PostBean> pbList);
 }

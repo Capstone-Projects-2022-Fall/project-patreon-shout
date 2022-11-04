@@ -59,6 +59,9 @@ public class WebAccount {
 	@PrimaryKeyJoinColumn
 	PatreonTokens creatorTokens;
 
+	/**
+	 * oldPasswords is the {@link com.patreonshout.beans.OldPasswords} object linked with this WebAccount object
+	 */
 	@OneToOne(mappedBy = "webAccount", cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn
 	OldPasswords oldPasswords;
@@ -75,5 +78,9 @@ public class WebAccount {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "webAccount")
 	List<SearchFilter> searchFilters;
 
-
+	/**
+	 * tags is the list of {@link com.patreonshout.beans.Tag} objects linked with this WebAccount object
+	 */
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "webAccount")
+	List<Tag> tags;
 }
