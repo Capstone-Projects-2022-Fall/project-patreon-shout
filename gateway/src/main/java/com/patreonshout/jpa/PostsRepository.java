@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Spring Data Repository for easy use of CRUD operations on the {@link com.patreonshout.beans.PostBean} object
  */
-public interface PostsRepository extends JpaRepository<PostBean, Long>, PostsRepositoryCustom{
+public interface PostsRepository extends JpaRepository<PostBean, Long> {
 
     /**
      * Returns the posts from multiple creators in paginated json body
@@ -25,4 +25,18 @@ public interface PostsRepository extends JpaRepository<PostBean, Long>, PostsRep
     countQuery = "SELECT count(*) FROM posts WHERE creator_page_url in ?1",
     nativeQuery = true)
     Page<PostBean> getMultipleCreatorPosts(List<String> creatorList, Pageable pageable);
+
+    List<PostBean> getCreatorPosts(String creator_page_url);
+
+    PostBean getPost(String url);
+
+    List<PostBean> getAllPosts();
+
+    void putPost(PostBean pb);
+
+    void updatePost(PostBean pb);
+
+    void removePost(String url);
+
+    List<PostBean> getExistingPosts(List<PostBean> pbList);
 }

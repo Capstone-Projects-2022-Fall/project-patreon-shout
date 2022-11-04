@@ -12,6 +12,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Testing the Posts class
  */
@@ -121,5 +124,15 @@ public class PostsTest {
 
         Assert.assertEquals(0, postsRepository.getAllPosts().size());
     }
+
+    @Test
+    public void existingPostsTest() {
+
+        List<PostBean> pbList = new ArrayList<>();
+
+        postsRepository.getExistingPosts(pbList);
+    }
+
+
 
 }

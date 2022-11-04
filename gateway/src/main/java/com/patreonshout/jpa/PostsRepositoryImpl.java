@@ -14,7 +14,7 @@ import java.util.List;
  * Implementation of custom Spring Data Repository for custom SQL functionality not automatically provided in {@link org.springframework.data.jpa.repository.JpaRepository}
  */
 @Repository
-public class PostsRepositoryImpl extends BaseSvc implements PostsRepositoryCustom {
+public class PostsRepositoryImpl extends BaseSvc {
 
     /**
      * em is the {@link EntityManager} that handles all the transactions with our database
@@ -154,6 +154,11 @@ public class PostsRepositoryImpl extends BaseSvc implements PostsRepositoryCusto
      * @return a list of urls from the pbList provided
      */
     private String getUrlList(List<PostBean> pbList) {
+
+        if (pbList.isEmpty()) {
+            return "()";
+        }
+
         StringBuilder urlList = new StringBuilder("(");
 
         // fence post problem
