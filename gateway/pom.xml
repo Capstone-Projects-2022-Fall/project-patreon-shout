@@ -192,5 +192,13 @@
             <artifactId>passay</artifactId>
             <version>1.6.2</version>
         </dependency>
+
+        <!-- Required for application.properties encrypting -->
+        <!-- https://mvnrepository.com/artifact/com.github.ulisesbocchio/jasypt-spring-boot-starter -->
+        <dependency>
+            <groupId>com.github.ulisesbocchio</groupId>
+            <artifactId>jasypt-spring-boot-starter</artifactId>
+            <version>3.0.4</version>
+        </dependency>
     </dependencies>
 </project>
