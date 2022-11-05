@@ -1,6 +1,5 @@
 package com.patreonshout.rest;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.patreon.PatreonOAuth;
 import com.patreon.resources.Campaign;
 import com.patreon.resources.User;
@@ -12,12 +11,11 @@ import com.patreonshout.jpa.PostsRepository;
 import com.patreonshout.jpa.WebAccountFunctions;
 import com.patreonshout.patreon.CustomPatreonAPI;
 import com.patreonshout.rest.interfaces.ReceiverImpl;
-import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
@@ -54,20 +52,10 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	private PatreonOAuth oauthClient;
 
 	/**
-	 *
-	 *
-	 * @param code is used to fetch access tokens for the session that just signed in with Patreon
-	 * @param state is transparently appended from the state param provided in PatreonShout Client from Dev Portal
-	 * @return a json body telling the user that their Patreon was successfully OAuth'd
-	 * @throws IOException when we cannot parse the input
-	 * @throws PSException when there is an internal error with Patreon Shout
+	 * {@inheritDoc}
 	 */
-	@GetMapping("/webhook")
-	public String WebhookReceiver(
-			// Used to fetch access tokens for the session that just signed in with Patreon.
+	public String PatreonOAuth(
 			@RequestParam(required = false, name = "code") String code,
-
-			// Transparently appended from the state param provided in PatreonShout Client from Dev Portal
 			@RequestParam(required = false, name = "state") String state
 	) throws IOException, PSException {
 		// OAuth
@@ -80,7 +68,6 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 
 			// put content creator posts in database
 			CustomPatreonAPI client = new CustomPatreonAPI(accessToken);
-
 
 			User user = client.fetchUser().get();
 
@@ -140,5 +127,39 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 
 		// Webhook
 		return "";
+	}
+
+	public ResponseEntity<?> PatreonWebhook(
+			@RequestHeader("x-patreon-signature") String patreonSignature,
+			@RequestHeader("x-patreon-event") String patreonEvent,
+			@RequestHeader(HttpHeaders.USER_AGENT) String userAgent,
+			@RequestBody String body
+	) {
+		if (!userAgent.equals("Patreon HTTP Robot"))
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
+		/*
+		TODO:
+		   Note that there will be a X-Patreon-Signature header, which is the HEX digest of the message body HMAC
+		   signed (with MD5) using your webhook's secret. We suggest you use this to verify authenticity of the
+		   webhook event. Webhook secrets should not be shared.
+		 */
+
+		switch(patreonEvent) {
+			case "posts:publish":
+				System.out.println("Received: " + patreonEvent);
+				break;
+			case "posts:update":
+				System.out.println("Received: " + patreonEvent);
+				break;
+			case "posts:delete":
+				System.out.println("Received: " + patreonEvent);
+				break;
+			default:
+				System.out.println("RECEIVED UNKNOWN EVENT: " + patreonEvent);
+				break;
+		}
+
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }
