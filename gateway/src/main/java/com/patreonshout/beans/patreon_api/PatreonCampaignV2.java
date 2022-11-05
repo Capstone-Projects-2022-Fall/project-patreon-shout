@@ -18,6 +18,16 @@ public class PatreonCampaignV2 {
 		@JsonProperty("attributes")
 		Attributes attributes;
 
+		@JsonProperty("id")
+		String id;
+
+//      TODO: Commented out for now as there seem to be circular relationships and I don't know if we'll need it yet
+//		@JsonProperty("relationships")
+//		Relationships relationships;
+
+		@JsonProperty("type")
+		String type;
+
 		@lombok.Data
 		public static class Attributes {
 

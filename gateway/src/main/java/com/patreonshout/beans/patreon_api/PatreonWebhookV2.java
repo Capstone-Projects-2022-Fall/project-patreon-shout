@@ -2,11 +2,16 @@ package com.patreonshout.beans.patreon_api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@lombok.Data
 public class PatreonWebhookV2 {
 
 	@JsonProperty("data")
 	Data[] data;
 
+	@JsonProperty("meta")
+	Meta meta;
+
+	@lombok.Data
 	public static class Data {
 
 		@JsonProperty("attributes")
@@ -39,8 +44,17 @@ public class PatreonWebhookV2 {
 		String type;
 	}
 
-	public static class Links {
+	@lombok.Data
+	public static class Meta {
+		@lombok.Data
+		public static class Pagination {
+			@JsonProperty("total")
+			int total;
+		}
+	}
 
+	@lombok.Data
+	public static class Links {
 		@JsonProperty("self")
 		String self;
 	}
