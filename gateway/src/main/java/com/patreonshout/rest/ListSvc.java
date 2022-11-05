@@ -61,7 +61,7 @@ public class ListSvc extends BaseSvc implements ListImpl {
             listResponse.put("title", lb.getTitle());
             listResponse.put("description", lb.getDescription());
             listResponse.put("added_creators", lb.getAdded_creators());
-            listResponse.put("list_id", String.valueOf(lb.getList_id()));
+            listResponse.put("list_id", String.valueOf(lb.getListId()));
 
             response.add(listResponse);
         }
@@ -115,12 +115,20 @@ public class ListSvc extends BaseSvc implements ListImpl {
     public ResponseEntity<?> DeleteUserList(@RequestBody ListDeleteRequest listDeleteRequest) {
         ListBean lb = listsRepository.getListByList_id(listDeleteRequest.getList_id());
 
-        if(!lb.getWebAccount().getLoginToken().equals(listDeleteRequest.getLoginToken())) {
-            return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Specified login token does not match the requested list's user login token.");
+        try {
+            if(!lb.getWebAccount().getLoginToken().equals(listDeleteRequest.getLoginToken())) {
+                return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Specified login token does not match the requested list's user login token.");
+            }
+        }
+        catch (NullPointerException e) {
+            return ResponseUtil.Generic(HttpStatus.OK, "List removed if the list existed");
         }
 
-        listsRepository.delete(lb);
 
-        return ResponseUtil.Generic(HttpStatus.OK, "List removed.");
+        System.out.println("lb: " + lb);
+        System.out.println("wb: " + lb.getWebAccount());
+        listsRepository.deleteListByList_id(listDeleteRequest.getList_id());
+
+        return ResponseUtil.Generic(HttpStatus.OK, "List removed if the list existed.");
     }
 }
