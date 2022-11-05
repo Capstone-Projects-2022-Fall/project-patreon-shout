@@ -31,7 +31,7 @@ public class ListBean implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="list_id")
-    protected int list_id;
+    protected int listId;
 
     /**
      * title is the title of the list
@@ -54,7 +54,7 @@ public class ListBean implements Serializable {
     /**
      * webAccount is the {@link com.patreonshout.beans.WebAccount} object linked with this object
      */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "webaccount_id", nullable = false)
     protected WebAccount webAccount;
 }
