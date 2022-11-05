@@ -13,4 +13,6 @@ public interface ListsRepositoryCustom {
      * @return the {@link com.patreonshout.beans.ListBean} holding the list data corresponding to the list_id provided
      */
     ListBean getListByList_id(int list_id);
+
+    void deleteListByList_id(int list_id);
 }
