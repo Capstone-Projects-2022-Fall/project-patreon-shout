@@ -9,7 +9,7 @@ public class PatreonWebhookV2 {
 	Data[] data;
 
 	@JsonProperty("meta")
-	Meta meta;
+	PatreonMetaV2 meta;
 
 	@lombok.Data
 	public static class Data {
@@ -42,20 +42,5 @@ public class PatreonWebhookV2 {
 
 		@JsonProperty("type")
 		String type;
-	}
-
-	@lombok.Data
-	public static class Meta {
-		@lombok.Data
-		public static class Pagination {
-			@JsonProperty("total")
-			int total;
-		}
-	}
-
-	@lombok.Data
-	public static class Links {
-		@JsonProperty("self")
-		String self;
 	}
 }
