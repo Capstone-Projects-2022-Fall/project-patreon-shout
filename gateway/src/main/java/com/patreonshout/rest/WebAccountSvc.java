@@ -31,7 +31,6 @@ import java.util.Map;
  * </p>
  */
 @RestController
-@CrossOrigin
 public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 
 	/**

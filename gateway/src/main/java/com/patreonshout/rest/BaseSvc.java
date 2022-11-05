@@ -6,6 +6,7 @@ import com.patreonshout.utils.ResponseUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,6 +15,7 @@ import java.sql.SQLIntegrityConstraintViolationException;
 /**
  * Parental service that any {@link RestController} objects must extend. Contains controller-wide Exception Handler.
  */
+@CrossOrigin
 public class BaseSvc {
 
 //	/**
