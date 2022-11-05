@@ -10,6 +10,7 @@ import com.patreonshout.jpa.CreatorPageFunctions;
 import com.patreonshout.jpa.PostsRepository;
 import com.patreonshout.jpa.WebAccountFunctions;
 import com.patreonshout.patreon.CustomPatreonAPI;
+import com.patreonshout.rest.interfaces.ReceiverImpl;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,7 @@ import java.util.List;
  * Patreon Webhook RESTful Endpoint Interface
  */
 @RestController
-public class WebhookSvc extends BaseSvc {
+public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 
 	/**
 	 * An autowired Spring component that endpoints utilize to send or receive data from the database
