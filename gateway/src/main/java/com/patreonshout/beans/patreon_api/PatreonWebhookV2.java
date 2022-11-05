@@ -2,7 +2,7 @@ package com.patreonshout.beans.patreon_api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Webhook {
+public class PatreonWebhookV2 {
 
 	@JsonProperty("data")
 	Data[] data;
