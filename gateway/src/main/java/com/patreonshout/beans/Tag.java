@@ -14,6 +14,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+/**
+ * POJO that relates to the tags table in our database
+ */
 @NoArgsConstructor
 @Setter
 @Getter

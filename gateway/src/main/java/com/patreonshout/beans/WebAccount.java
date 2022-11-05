@@ -7,7 +7,9 @@ import org.hibernate.annotations.LazyCollectionOption;
 import javax.persistence.*;
 import java.util.List;
 
-
+/**
+ * POJO that relates to the webaccounts table in our database
+ */
 @NoArgsConstructor
 @Setter
 @Getter

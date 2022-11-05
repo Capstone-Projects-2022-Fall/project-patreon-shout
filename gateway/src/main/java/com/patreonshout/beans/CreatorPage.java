@@ -6,6 +6,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+/**
+ * POJO that relates to the creator_pages table in our database
+ */
 @NoArgsConstructor
 @Setter
 @Getter
