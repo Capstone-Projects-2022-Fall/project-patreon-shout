@@ -6,7 +6,7 @@
 
     <groupId>com.patreonshout</groupId>
     <artifactId>gateway</artifactId>
-    <version>0.2</version>
+    <version>0.3</version>
     <name>gateway</name>
     <description>TODO</description>
 
@@ -16,7 +16,7 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
 
-        <plugin.springboot.version>2.7.4</plugin.springboot.version>
+        <plugin.springboot.version>2.7.5</plugin.springboot.version>
     </properties>
 
     <build>
@@ -62,7 +62,7 @@
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
-            <version>1.6.11</version>
+            <version>1.6.12</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter -->
@@ -112,16 +112,17 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
-            <version>5.7.3</version>
+            <version>5.7.5</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+        <!-- https://mvnrepository.com/artifact/com.mysql/mysql-connector-j -->
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.30</version>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>8.0.31</version>
             <scope>runtime</scope>
         </dependency>
+
 
         <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
         <dependency>
