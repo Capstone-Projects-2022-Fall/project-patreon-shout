@@ -1,21 +1,28 @@
 package com.patreonshout.rest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.patreon.PatreonOAuth;
 import com.patreon.resources.Campaign;
 import com.patreon.resources.User;
 import com.patreonshout.PSException;
 import com.patreonshout.beans.PostBean;
 import com.patreonshout.beans.patreon_api.PatreonCampaignV2;
+import com.patreonshout.beans.patreon_api.PatreonPostV2;
+import com.patreonshout.beans.request.receivers.patreon.WebhookRequest;
 import com.patreonshout.jpa.CreatorPageFunctions;
 import com.patreonshout.jpa.PostsRepository;
 import com.patreonshout.jpa.WebAccountFunctions;
+import com.patreonshout.output.DiscordSender;
 import com.patreonshout.patreon.CustomPatreonAPI;
 import com.patreonshout.rest.interfaces.ReceiverImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
@@ -52,6 +59,12 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	private PatreonOAuth oauthClient;
 
 	/**
+	 * Jackson object mapper that allows converting Java type {@link Object} to custom POJOs.
+	 */
+	@Autowired
+	ObjectMapper objectMapper;
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public String PatreonOAuth(
@@ -71,9 +84,10 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 
 			User user = client.fetchUser().get();
 
-			/**
-			 * TODO: Fix this!!  This is IMPROPER!
-			 * This patch resides here to allow others to work on extra functionality
+			/*
+			 TODO:
+			    Fix this!!  This is IMPROPER!
+			    This patch resides here to allow others to work on extra functionality
 			 */
 			// Send GET request to Patreon v2 web API
 			String baseUrl = "https://www.patreon.com/api/oauth2/v2/";
@@ -99,6 +113,8 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 			if (finalPatreonUrl.length == 0)
 				throw new PSException(HttpStatus.BAD_REQUEST, "Successfully retrieved Patreon Page URL object, but it was empty");
 
+			// * End of TODO
+
 			String pageUrl = finalPatreonUrl[0].getAttributes().getVanity();
 
 			// Store their creator page information
@@ -118,23 +134,26 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 				}
 			}
 
-			// put patreon tokens in database
+			// Put Patreon tokens in database
 			webAccountFunctions.putPatreonTokens(accessToken, refreshToken, state);
 
 			return "Patreon linked!  Close this pop-up and refresh the PatreonShout webpage.";
-//			throw new PSException(HttpStatus.CREATED, "Token created");
 		}
 
-		// Webhook
+		// Unknown case, but required for compilation
 		return "";
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public ResponseEntity<?> PatreonWebhook(
 			@RequestHeader("x-patreon-signature") String patreonSignature,
 			@RequestHeader("x-patreon-event") String patreonEvent,
 			@RequestHeader(HttpHeaders.USER_AGENT) String userAgent,
-			@RequestBody String body
+			@RequestBody WebhookRequest webhookRequest
 	) {
+		// Ensure someone that isn't Patreon is hitting this endpoint
 		if (!userAgent.equals("Patreon HTTP Robot"))
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
@@ -150,7 +169,25 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 				System.out.println("Received: " + patreonEvent);
 				break;
 			case "posts:update":
-				System.out.println("Received: " + patreonEvent);
+				PatreonPostV2 patreonPost;
+
+				// Convert the data attribute to a Patreon Post POJO
+				try {
+					patreonPost = objectMapper.convertValue(webhookRequest.getData().getAttributes(), PatreonPostV2.class);
+				} catch (Exception e) {
+					e.printStackTrace();
+					// * We want to catch these Exceptions and return 200 OK as if we keep timing out, Patreon will stop using our webhook.
+					return new ResponseEntity<>(HttpStatus.OK);
+				}
+
+				DiscordSender discordSender = new DiscordSender("https://discord.com/api/webhooks/1038528862289657906/zSVQAw3DI3AYdBVAL1BgQnD8lAavFvsZ-BItnQgrqH82XyfxuZQwRXSjA0cjPRK0-xCs");
+
+				String content = patreonPost.getContent().replace("<p>", "").replace("</p>", "");
+
+				discordSender.addField(patreonPost.getTitle(), content);
+				discordSender.setColor(patreonPost.getIsPublic() ? 0x00FF00 : 0xFF0000);
+
+				discordSender.send();
 				break;
 			case "posts:delete":
 				System.out.println("Received: " + patreonEvent);
