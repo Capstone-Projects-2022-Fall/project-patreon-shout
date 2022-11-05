@@ -1,11 +1,15 @@
 package com.patreonshout.beans;
 
 import lombok.*;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.util.List;
 
-
+/**
+ * POJO that relates to the webaccounts table in our database
+ */
 @NoArgsConstructor
 @Setter
 @Getter
@@ -59,6 +63,9 @@ public class WebAccount {
 	@PrimaryKeyJoinColumn
 	PatreonTokens creatorTokens;
 
+	/**
+	 * oldPasswords is the {@link com.patreonshout.beans.OldPasswords} object linked with this WebAccount object
+	 */
 	@OneToOne(mappedBy = "webAccount", cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn
 	OldPasswords oldPasswords;
@@ -66,14 +73,21 @@ public class WebAccount {
 	/**
 	 * listBean is the List of {@link com.patreonshout.beans.ListBean} objects linked with this WebAccount object
 	 */
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "webAccount")
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "webAccount")
 	List<ListBean> listBean;
 
 	/**
 	 * searchFilters is the list of {@link com.patreonshout.beans.SearchFilter} objects linked with this WebAccount object
 	 */
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "webAccount")
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "webAccount")
 	List<SearchFilter> searchFilters;
 
-
+	/**
+	 * tags is the list of {@link com.patreonshout.beans.Tag} objects linked with this WebAccount object
+	 */
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "webAccount")
+	List<Tag> tags;
 }

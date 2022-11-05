@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  */
 @Configuration
 @EnableScheduling
-@Import({JPAConfiguration.class})
+@Import({JPAConfiguration.class, CORSConfiguration.class})
 public class PSConfiguration {
 
 	/**

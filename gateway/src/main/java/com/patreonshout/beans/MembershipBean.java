@@ -7,8 +7,6 @@ import lombok.ToString;
 /**
  * POJO that shows a patron's membership details for a campaign
  */
-
-
 @ToString
 @Getter
 @Setter
