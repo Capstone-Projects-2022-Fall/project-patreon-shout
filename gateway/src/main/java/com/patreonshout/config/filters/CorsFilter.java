@@ -10,16 +10,24 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 
+/**
+ * Filter for all http requests we receive
+ */
 @Component
 public class CorsFilter implements Filter {
 
-    public CorsFilter() {
-        System.out.println("cors filter init");
-    }
-
-
+    /**
+     * Creates the filter and assigns all attributes we want
+     *
+     * @param servletRequest is the config for request information we receive for each http request
+     * @param servletResponse is the config for response we send to each http request
+     * @param filterChain is the filter we are appending our options to
+     * @throws IOException in case we cannot read our data correctly
+     * @throws ServletException in case the servlet has an error
+     */
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
@@ -37,10 +45,18 @@ public class CorsFilter implements Filter {
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
+    /**
+     * init method for CORS
+     *
+     * @param filterConfig is the {@link javax.servlet.FilterConfig} used during init
+     */
     @Override
     public void init(FilterConfig filterConfig) {
     }
 
+    /**
+     * destroy method for CORS
+     */
     @Override
     public void destroy() {
         Filter.super.destroy();
