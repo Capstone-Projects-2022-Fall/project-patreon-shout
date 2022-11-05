@@ -52,7 +52,7 @@ function ListConfigModal({listCreators, setListCreators, listId, listTitle, list
         })
 
         console.log(message);
-        window.location.reload(false);
+        // window.location.reload(false);
     }
 
     const setupEditList = () => {
@@ -80,7 +80,7 @@ function ListConfigModal({listCreators, setListCreators, listId, listTitle, list
         });
 
         console.log(message);
-        window.location.reload(false);
+        // window.location.reload(false);
 
     }
 

@@ -65,7 +65,7 @@ function AddListModal() {
         });
 
         console.log(message);
-        window.location.reload(false);
+        // window.location.reload(false);
     }
 
     const handleCreateList = () => {
