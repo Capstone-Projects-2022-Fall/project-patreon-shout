@@ -1,8 +1,8 @@
 package com.patreonshout.rest.interfaces;
 
 import com.patreonshout.PSException;
+import com.patreonshout.beans.request.receivers.patreon.WebhookRequest;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,7 +26,7 @@ public interface ReceiverImpl {
 	 * @throws IOException when we cannot parse the input
 	 * @throws PSException when there is an internal error with Patreon Shout
 	 */
-	@GetMapping("/patreonoauth")
+	@GetMapping("/patreon/oauth")
 	@Operation(summary = "")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200",
@@ -38,11 +38,11 @@ public interface ReceiverImpl {
 	) throws IOException, PSException;
 
 
-	@PostMapping("/patreonwebhook")
+	@PostMapping("/patreon/webhook")
 	ResponseEntity<?> PatreonWebhook(
 			@RequestHeader("x-patreon-signature") String patreonSignature,
 			@RequestHeader("x-patreon-event") String patreonEvent,
 			@RequestHeader(HttpHeaders.USER_AGENT) String userAgent,
-			@RequestBody String body
+			@RequestBody WebhookRequest webhookRequest
 	);
 }
