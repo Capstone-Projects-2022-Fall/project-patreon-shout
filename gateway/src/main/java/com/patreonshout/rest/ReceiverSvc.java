@@ -6,6 +6,7 @@ import com.patreon.resources.Campaign;
 import com.patreon.resources.User;
 import com.patreonshout.PSException;
 import com.patreonshout.beans.PostBean;
+import com.patreonshout.beans.patreon_api.PatreonCampaignV2;
 import com.patreonshout.jpa.CreatorPageFunctions;
 import com.patreonshout.jpa.PostsRepository;
 import com.patreonshout.jpa.WebAccountFunctions;
@@ -90,7 +91,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 			// Send GET request to Patreon v2 web API
 			String baseUrl = "https://www.patreon.com/api/oauth2/v2/";
 
-			PatreonURL patreonURL = WebClient
+			PatreonCampaignV2 patreonURL = WebClient
 					.create(baseUrl)
 					.get()
 					.uri(uriBuilder -> uriBuilder
@@ -99,14 +100,14 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 							.build())
 					.headers(httpHeaders -> httpHeaders.setBearerAuth(accessToken))
 					.retrieve()
-					.bodyToMono(PatreonURL.class)
+					.bodyToMono(PatreonCampaignV2.class)
 					.share()
 					.block();
 
 			if (patreonURL == null)
 				throw new PSException(HttpStatus.BAD_REQUEST, "An error occurred while retrieving Patreon page URL for this user.");
 
-			PatreonURL.Data[] finalPatreonUrl = patreonURL.getData();
+			PatreonCampaignV2.Data[] finalPatreonUrl = patreonURL.getData();
 
 			if (finalPatreonUrl.length == 0)
 				throw new PSException(HttpStatus.BAD_REQUEST, "Successfully retrieved Patreon Page URL object, but it was empty");
@@ -139,29 +140,5 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 
 		// Webhook
 		return "";
-	}
-}
-
-/**
- * Class to store the data received from Patreon sending us an http request
- */
-@Data
-class PatreonURL {
-
-	@JsonProperty("data")
-	Data[] data;
-
-	@lombok.Data
-	static class Data {
-
-		@JsonProperty("attributes")
-		Attributes attributes;
-
-		@lombok.Data
-		static class Attributes {
-
-			@JsonProperty("vanity")
-			String vanity;
-		}
 	}
 }
