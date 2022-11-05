@@ -30,16 +30,28 @@ import java.util.List;
 @RestController
 public class TagSvc extends BaseSvc implements TagImpl {
 
+    /**
+     * An autowired Spring component that endpoints utilize to send or receive data from the tags table in the database
+     */
     @Autowired
     TagsRepository tagsRepository;
 
+    /**
+     * An autowired Spring component that endpoints utilize to send or receive data from the posts table in the database
+     */
     @Autowired
     PostsRepository postsRepository;
 
+    /**
+     * An autowired Spring component that endpoints utilize to send or receive data from the database
+     */
     @Autowired
     WebAccountFunctions webAccountFunctions;
 
 
+    /**
+     * {@inheritDoc}
+     */
     public ResponseEntity<?> AddTag(@RequestBody TagAddRequest tagAddRequest) {
         WebAccount userAccount = webAccountFunctions.findByLoginToken(tagAddRequest.getLoginToken());
 
@@ -63,6 +75,9 @@ public class TagSvc extends BaseSvc implements TagImpl {
         return ResponseUtil.Generic(HttpStatus.CREATED, "Tag created.");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ResponseEntity<?> GetUserTagsOnSinglePost(@RequestBody TagGetRequest tagGetRequest) {
 
         WebAccount userAccount = webAccountFunctions.findByLoginToken(tagGetRequest.getLoginToken());
@@ -87,6 +102,9 @@ public class TagSvc extends BaseSvc implements TagImpl {
         return new ResponseEntity<>(response, HttpStatus.FOUND);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ResponseEntity<?> DeleteUserTagOnSinglePost(@RequestBody TagDeleteRequest tagDeleteRequest) {
 
         WebAccount userAccount = webAccountFunctions.findByLoginToken(tagDeleteRequest.getLoginToken());
