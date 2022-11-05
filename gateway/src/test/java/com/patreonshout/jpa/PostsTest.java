@@ -125,6 +125,9 @@ public class PostsTest {
         Assert.assertEquals(0, postsRepository.getAllPosts().size());
     }
 
+    /**
+     * tests getExistingPosts() from {@link com.patreonshout.jpa.PostsRepository} that will return a list of posts that are already in the database from the list of posts given in the parameter
+     */
     @Test
     public void existingPostsTest() {
 
