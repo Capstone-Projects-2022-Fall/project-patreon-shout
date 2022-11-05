@@ -4,12 +4,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Webhook {
 
-	public Data data;
-
-	@JsonProperty("links")
-	public Links links;
+	@JsonProperty("data")
+	Data[] data;
 
 	public static class Data {
+
+		@JsonProperty("attributes")
+		Attributes attributes;
 
 		public static class Attributes {
 			@JsonProperty("last_attempted_at")
