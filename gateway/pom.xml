@@ -206,5 +206,13 @@
             <artifactId>jasypt-spring-boot-starter</artifactId>
             <version>3.0.4</version>
         </dependency>
+
+        <!-- Required for HTML to Markdown conversion -->
+        <!-- https://mvnrepository.com/artifact/io.github.furstenheim/copy_down -->
+        <dependency>
+            <groupId>io.github.furstenheim</groupId>
+            <artifactId>copy_down</artifactId>
+            <version>1.1</version>
+        </dependency>
     </dependencies>
 </project>

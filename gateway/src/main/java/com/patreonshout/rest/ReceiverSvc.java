@@ -3,7 +3,6 @@ package com.patreonshout.rest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.patreon.PatreonOAuth;
 import com.patreon.resources.Campaign;
-import com.patreon.resources.User;
 import com.patreonshout.PSException;
 import com.patreonshout.beans.PostBean;
 import com.patreonshout.beans.patreon_api.PatreonCampaignV2;
@@ -15,6 +14,7 @@ import com.patreonshout.jpa.WebAccountFunctions;
 import com.patreonshout.output.DiscordSender;
 import com.patreonshout.patreon.CustomPatreonAPI;
 import com.patreonshout.rest.interfaces.ReceiverImpl;
+import io.github.furstenheim.CopyDown;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -64,6 +64,8 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	@Autowired
 	ObjectMapper objectMapper;
 
+	CopyDown copyDown = new CopyDown();
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -81,8 +83,6 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 
 			// put content creator posts in database
 			CustomPatreonAPI client = new CustomPatreonAPI(accessToken);
-
-			User user = client.fetchUser().get();
 
 			/*
 			 TODO:
@@ -164,12 +164,16 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		   webhook event. Webhook secrets should not be shared.
 		 */
 
+		// Initiate post creation
+		DiscordSender discordSender = new DiscordSender("https://discord.com/api/webhooks/1038528862289657906/zSVQAw3DI3AYdBVAL1BgQnD8lAavFvsZ-BItnQgrqH82XyfxuZQwRXSjA0cjPRK0-xCs");
+		PatreonPostV2 patreonPost;
+		String content = "";
+
 		switch(patreonEvent) {
 			case "posts:publish":
 				System.out.println("Received: " + patreonEvent);
 				break;
 			case "posts:update":
-				PatreonPostV2 patreonPost;
 
 				// Convert the data attribute to a Patreon Post POJO
 				try {
@@ -180,9 +184,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 					return new ResponseEntity<>(HttpStatus.OK);
 				}
 
-				DiscordSender discordSender = new DiscordSender("https://discord.com/api/webhooks/1038528862289657906/zSVQAw3DI3AYdBVAL1BgQnD8lAavFvsZ-BItnQgrqH82XyfxuZQwRXSjA0cjPRK0-xCs");
-
-				String content = patreonPost.getContent().replace("<p>", "").replace("</p>", "");
+				content += copyDown.convert(patreonPost.getContent());
 
 				discordSender.addField(patreonPost.getTitle(), content);
 				discordSender.setColor(patreonPost.getIsPublic() ? 0x00FF00 : 0xFF0000);
