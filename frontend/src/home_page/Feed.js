@@ -5,6 +5,8 @@ import Searchbar from "./Searchbar";
 //import { getPosts } from '../services/api/posts'
 import jsonPosts from "../data/posts.json";
 import Filter from "./Filter";
+import {addList} from "../services/api/lists/addList";
+import {getLists} from "../services/api/lists/getLists";
 
 /**
  * This is the Feed function which will appear on the home page
@@ -60,7 +62,22 @@ function Feed() {
             displayedList = displayedList.sort(function(b, a){return new Date(a.published_at).getTime() - new Date(b.published_at).getTime()});
             break;
     }
-    
+
+    const [userLists, setUserLists] = useState(["hello", "allex"]);
+
+    useEffect(() => {
+        let mounted = true;
+        const tokenString = localStorage.getItem('token');
+        const userToken = JSON.parse(tokenString);
+        getLists(userToken.token)
+            .then(items => {
+                if (mounted) {
+                    console.log(items);
+                    setUserLists(items)
+                }
+            })
+        return () => mounted = false;
+    }, [])
 
     // useEffect(() => {
     //     let mounted = true;
@@ -108,6 +125,7 @@ function Feed() {
                     content={item.content}
                     published_at={item.published_at}
                     url = {item.url}
+                    lists = {userLists}
                 />
             ))}
         </div>
