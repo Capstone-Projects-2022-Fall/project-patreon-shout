@@ -7,6 +7,7 @@ import {getLists} from "../services/api/lists/getLists";
 import jsonPosts from "../data/posts.json";
 import Searchbar from "../home_page/Searchbar";
 import Filter from "../home_page/Filter";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 function ListFeed() {
 
@@ -52,8 +53,10 @@ function ListFeed() {
     return (
         <div className="listfeed">
             <div className="listfeed__header">
-                {/*<h2 id="showLists" onClick={() => {setPosts("hide"); setLists("show")}}>Lists</h2>*/}
-                <h2>Lists</h2>
+                <h2 className={lists}>Lists</h2>
+                <div id="backDiv">
+                    <ArrowBackIcon id="backArrow" fontSize="large" className={posts} onClick={() => {setPosts("hide"); setLists("show");}}/>
+                </div>
                 <AddListModal />
             </div>
 

@@ -47,3 +47,12 @@ h2 {
 .listfeed__posts {
     display: none;
 }
+
+#backDiv {
+    display: flex;
+    align-items: center;
+}
+
+#backArrow:hover {
+    cursor: pointer;
+}
