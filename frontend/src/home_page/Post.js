@@ -6,6 +6,7 @@ import {
 } from "@mui/icons-material";
 import React from "react";
 import "./home_css/Post.css";
+import Popup from "reactjs-popup";
 
 /**
  * The post object which will appear in the feed
@@ -45,6 +46,12 @@ function Post({title, creator_page_url, url, content, published_at, is_public}) 
         window.open(url, "_blank");
     }
 
+    const lists = [];
+
+    const cout = () => {
+        console.log("hell0o alex");
+    }
+
 
     return (
         <div className="post">
@@ -74,7 +81,33 @@ function Post({title, creator_page_url, url, content, published_at, is_public}) 
                         <FavoriteBorder fontSize="small"/>
                     </div>
                     <div className="post__footerList">
-                        <ListAlt fontSize="small"/>
+                        <Popup trigger={<ListAlt onClick={cout} fontSize="small"/>}  modal>
+                            {close => (
+                                <div className="modalBox">
+                                    <button className="close" onClick={close}>
+                                        &times;
+                                    </button>
+                                    <div className="header">
+                                        Lists
+                                    </div>
+                                    <div className="fields">
+                                    {/*    fields here*/}
+                                        {lists.map((item) => (
+                                            // <ListButton
+                                            //     setPosts={setPosts}
+                                            //     setLists={setLists}
+                                            //     id={item.list_id}
+                                            //     title={item.title}
+                                            //     description={item.description}
+                                            // />
+                                            <div>
+                                                {item.title}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </Popup>
                     </div>
                 </div>
             </div>
