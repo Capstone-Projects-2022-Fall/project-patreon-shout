@@ -9,9 +9,10 @@ import TextField from "@mui/material/TextField";
 
 function AddListModal() {
 
+    const [popup, showPopup] = React.useState("hide");
+
     const [titleInput, setTitle] = useState("");
     const [descInput, setDesc] = useState("");
-
 
     const eraseInfo = () => {
         setTitle("");
@@ -35,8 +36,10 @@ function AddListModal() {
     }
 
     const addListInit = () => {
-        console.log("title: " + titleInput);
-        console.log("desc: " + descInput);
+
+        if (titleInput.replaceAll(" ", "") === "" || descInput.replaceAll(" ", "") === "") {
+            return false;
+        }
 
         addListRequest().then()
 
@@ -55,15 +58,28 @@ function AddListModal() {
                     <div className="header">
                         Create a new List
                     </div>
-                        <div className="fields">
-                            <TextField id="outlined-basic" label={"Title"} size={"small"} variant="outlined" value={titleInput} onChange={(e) => setTitle(e.target.value)}/>
-                            <TextField id="outlined-basic" label={"Description"} size={"small"} variant="outlined" value={descInput} onChange={(e) => setDesc(e.target.value)}/>
-                            <div id="buttonContainer">
-                                <Button id="submitbtn" sx={ { borderRadius: 10 } } color="primary" type="submit" variant="contained"  onClick={() => {addListInit();}}>
-                                    Create
-                                </Button>
-                            </div>
+                    <div className="fields">
+                        <TextField id="outlined-basic" label={"Title"} size={"small"} variant="outlined" value={titleInput} onChange={(e) => setTitle(e.target.value)}/>
+                        <TextField id="outlined-basic" label={"Description"} size={"small"} variant="outlined" value={descInput} onChange={(e) => setDesc(e.target.value)}/>
+
+                        <div className={popup}>
+                            <p id="errormsg"> </p>
                         </div>
+
+                        <div className="buttonContainer">
+                            <Button id="createbtn" sx={ { borderRadius: 10 } } color="primary" type="submit" variant="contained" onClick={() => {
+                                if (addListInit()) {
+                                    close();
+                                }
+                                else {
+                                    document.getElementById("errormsg").textContent = "Provide Title and Description";
+                                    showPopup("show");
+                                }
+                                }}>
+                                Create
+                            </Button>
+                        </div>
+                    </div>
                 </div>
             )}
         </Popup>

@@ -33,7 +33,6 @@ function ListFeed() {
     }, [])
 
 
-    let postcount = postData.length;
     let shouldSkip = false;
 
     postData.forEach((post, index) => {
@@ -53,7 +52,8 @@ function ListFeed() {
     return (
         <div className="listfeed">
             <div className="listfeed__header">
-                <h2 id="showLists" onClick={() => {setPosts("hide"); setLists("show")}}>Lists</h2>
+                {/*<h2 id="showLists" onClick={() => {setPosts("hide"); setLists("show")}}>Lists</h2>*/}
+                <h2>Lists</h2>
                 <AddListModal />
             </div>
 
@@ -87,7 +87,6 @@ function ListFeed() {
                         id={item.list_id}
                         title={item.title}
                         description={item.description}
-                        added_creators={item.added_creators.toString().split(',')}
                     />
                 ))}
             </div>
