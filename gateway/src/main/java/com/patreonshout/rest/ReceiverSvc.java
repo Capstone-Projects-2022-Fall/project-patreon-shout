@@ -11,10 +11,10 @@ import com.patreonshout.beans.request.receivers.patreon.WebhookRequest;
 import com.patreonshout.jpa.CreatorPageFunctions;
 import com.patreonshout.jpa.PostsRepository;
 import com.patreonshout.jpa.WebAccountFunctions;
-import com.patreonshout.output.DiscordSender;
+import com.patreonshout.utils.DiscordWebhookUtil;
 import com.patreonshout.patreon.CustomPatreonAPI;
 import com.patreonshout.rest.interfaces.ReceiverImpl;
-import io.github.furstenheim.CopyDown;
+import com.vladsch.flexmark.html2md.converter.FlexmarkHtmlConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -64,7 +64,10 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	@Autowired
 	ObjectMapper objectMapper;
 
-	CopyDown copyDown = new CopyDown();
+	/**
+	 * TODO
+	 */
+	FlexmarkHtmlConverter converter = FlexmarkHtmlConverter.builder().build();
 
 	/**
 	 * {@inheritDoc}
@@ -165,7 +168,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		 */
 
 		// Initiate post creation
-		DiscordSender discordSender = new DiscordSender("https://discord.com/api/webhooks/1038528862289657906/zSVQAw3DI3AYdBVAL1BgQnD8lAavFvsZ-BItnQgrqH82XyfxuZQwRXSjA0cjPRK0-xCs");
+		DiscordWebhookUtil discordWebhookUtil = new DiscordWebhookUtil("https://discord.com/api/webhooks/1038528862289657906/zSVQAw3DI3AYdBVAL1BgQnD8lAavFvsZ-BItnQgrqH82XyfxuZQwRXSjA0cjPRK0-xCs");
 		PatreonPostV2 patreonPost;
 		String content = "";
 
@@ -174,22 +177,23 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 				System.out.println("Received: " + patreonEvent);
 				break;
 			case "posts:update":
-
 				// Convert the data attribute to a Patreon Post POJO
 				try {
 					patreonPost = objectMapper.convertValue(webhookRequest.getData().getAttributes(), PatreonPostV2.class);
 				} catch (Exception e) {
 					e.printStackTrace();
-					// * We want to catch these Exceptions and return 200 OK as if we keep timing out, Patreon will stop using our webhook.
+					// * We want to catch these Exceptions and return 200 OK because if we time out 3 times, Patreon will stop using our webhook.
 					return new ResponseEntity<>(HttpStatus.OK);
 				}
 
-				content += copyDown.convert(patreonPost.getContent());
 
-				discordSender.addField(patreonPost.getTitle(), content);
-				discordSender.setColor(patreonPost.getIsPublic() ? 0x00FF00 : 0xFF0000);
+				content += converter.convert(patreonPost.getContent());
 
-				discordSender.send();
+				discordWebhookUtil.addField(patreonPost.getTitle(), content);
+				discordWebhookUtil.setColor(patreonPost.getIsPublic() ? 0x00FF00 : 0xFF0000);
+				discordWebhookUtil.setTitle(patreonPost.getTitle());
+
+				discordWebhookUtil.send();
 				break;
 			case "posts:delete":
 				System.out.println("Received: " + patreonEvent);

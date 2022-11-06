@@ -208,11 +208,11 @@
         </dependency>
 
         <!-- Required for HTML to Markdown conversion -->
-        <!-- https://mvnrepository.com/artifact/io.github.furstenheim/copy_down -->
+        <!-- https://mvnrepository.com/artifact/com.vladsch.flexmark/flexmark-all -->
         <dependency>
-            <groupId>io.github.furstenheim</groupId>
-            <artifactId>copy_down</artifactId>
-            <version>1.1</version>
+            <groupId>com.vladsch.flexmark</groupId>
+            <artifactId>flexmark-all</artifactId>
+            <version>0.64.0</version>
         </dependency>
     </dependencies>
 </project>
