@@ -63,7 +63,7 @@ function Feed() {
             break;
     }
 
-    const [userLists, setUserLists] = useState(["hello", "allex"]);
+    const [userLists, setUserLists] = useState([]);
 
     useEffect(() => {
         let mounted = true;
