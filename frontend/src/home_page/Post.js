@@ -4,9 +4,10 @@ import {
     ListAlt,
     VerifiedUser,
 } from "@mui/icons-material";
-import React from "react";
+import React, {useState} from "react";
 import "./home_css/Post.css";
 import Popup from "reactjs-popup";
+import {getLists} from "../services/api/lists/getLists";
 
 /**
  * The post object which will appear in the feed
@@ -21,7 +22,7 @@ import Popup from "reactjs-popup";
  * @returns A single post component to be displayed in the feed
  */
 
-function Post({title, creator_page_url, url, content, published_at, is_public}) {
+function Post({title, creator_page_url, url, content, published_at, is_public, lists}) {
 
     // TODO: clean this shit up
     content = content.replace(/<p[^>]*>/g, "");
@@ -44,12 +45,6 @@ function Post({title, creator_page_url, url, content, published_at, is_public}) 
 
     const handleRedirect = (e) => {
         window.open(url, "_blank");
-    }
-
-    const lists = [];
-
-    const cout = () => {
-        console.log("hell0o alex");
     }
 
 
@@ -80,8 +75,8 @@ function Post({title, creator_page_url, url, content, published_at, is_public}) 
                     <div className="post__footerFavorite">
                         <FavoriteBorder fontSize="small"/>
                     </div>
-                    <div className="post__footerList">
-                        <Popup trigger={<ListAlt onClick={cout} fontSize="small"/>}  modal>
+                    <div className="post__footerList" onClick={() => {console.log("hello");}}>
+                        <Popup trigger={<ListAlt fontSize="small"/>} modal>
                             {close => (
                                 <div className="modalBox">
                                     <button className="close" onClick={close}>
@@ -90,16 +85,8 @@ function Post({title, creator_page_url, url, content, published_at, is_public}) 
                                     <div className="header">
                                         Lists
                                     </div>
-                                    <div className="fields">
-                                    {/*    fields here*/}
+                                    <div id="fields">
                                         {lists.map((item) => (
-                                            // <ListButton
-                                            //     setPosts={setPosts}
-                                            //     setLists={setLists}
-                                            //     id={item.list_id}
-                                            //     title={item.title}
-                                            //     description={item.description}
-                                            // />
                                             <div>
                                                 {item.title}
                                             </div>
