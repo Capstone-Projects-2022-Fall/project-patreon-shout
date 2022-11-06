@@ -146,7 +146,6 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		// Unknown case, but required for compilation
 		return "";
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -157,8 +156,10 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 			@RequestBody WebhookRequest webhookRequest
 	) {
 		// Ensure someone that isn't Patreon is hitting this endpoint
-		if (!userAgent.equals("Patreon HTTP Robot"))
+		if (!userAgent.equals("Patreon HTTP Robot")) {
+			// TODO: Log the user agent for whoever hit this endpoint
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
 
 		/*
 		TODO:
@@ -170,7 +171,6 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		// Initiate post creation
 		DiscordWebhookUtil discordWebhookUtil = new DiscordWebhookUtil("https://discord.com/api/webhooks/1038528862289657906/zSVQAw3DI3AYdBVAL1BgQnD8lAavFvsZ-BItnQgrqH82XyfxuZQwRXSjA0cjPRK0-xCs");
 		PatreonPostV2 patreonPost;
-		String content = "";
 
 		switch(patreonEvent) {
 			case "posts:publish":
@@ -186,12 +186,13 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 					return new ResponseEntity<>(HttpStatus.OK);
 				}
 
-
-				content += converter.convert(patreonPost.getContent());
-
-				discordWebhookUtil.addField(patreonPost.getTitle(), content);
 				discordWebhookUtil.setColor(patreonPost.getIsPublic() ? 0x00FF00 : 0xFF0000);
-				discordWebhookUtil.setTitle(patreonPost.getTitle());
+				discordWebhookUtil.setTitle(patreonPost.getTitle(), "https://patreon.com" + patreonPost.getUrl());
+				discordWebhookUtil.setDescription(converter.convert(patreonPost.getContent()));
+
+				// TODO: This seems to never be true as Patreon never sends us images/videos.
+				if  (patreonPost.getEmbedUrl() != null)
+					discordWebhookUtil.setImage(patreonPost.getEmbedUrl());
 
 				discordWebhookUtil.send();
 				break;

@@ -20,11 +20,11 @@ public class DiscordWebhookUtil {
 	/**
 	 * client is the webhook client used to send messages via webhooks
 	 */
-	private WebhookClient client;
+	private final WebhookClient client;
 	/**
 	 * embed is the embed builder that we populate with data to send to Discord
 	 */
-	private WebhookEmbedBuilder embed;
+	private final WebhookEmbedBuilder embed;
 
 	/**
 	 * Instantiates client and embed with necessary information
@@ -35,7 +35,7 @@ public class DiscordWebhookUtil {
 		client = WebhookClient.withUrl(webhookUrl);
 		embed = new WebhookEmbedBuilder();
 		embed.setTimestamp(OffsetDateTime.now()); // this line might not be useful, its just to test what we can currently do
-		embed.setAuthor(new WebhookEmbed.EmbedAuthor("PDA", "https://i.imgur.com/KlveixN.png", "https://github.com/cis3296s22/patreon-discord-announcer"));
+//		embed.setAuthor(new WebhookEmbed.EmbedAuthor("PDA", "https://i.imgur.com/KlveixN.png", "https://github.com/cis3296s22/patreon-discord-announcer"));
 		// TODO: the "https://i.imgur.com/KlveixN.png" needs to be changed/fixed
 	}
 
