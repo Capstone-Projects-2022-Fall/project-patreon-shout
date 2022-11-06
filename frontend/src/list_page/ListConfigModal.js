@@ -2,74 +2,59 @@ import React, {useState} from "react";
 import Popup from "reactjs-popup";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import "./list_css/AddListModal.css";
-import Creator from "../components/Creator";
 import {deleteList} from "../services/api/lists/deleteList";
 import {updateList} from "../services/api/lists/updateList";
+import TextField from "@mui/material/TextField";
+import {Button} from "@mui/material";
 
 function ListConfigModal({listCreators, setListCreators, listId, listTitle, listDesc, setListTitle, setListDesc}) {
 
-    const [stableList] = useState(listCreators);
+    const [popup, showPopup] = React.useState("hide")
+
     const [titleInput, setTitle] = useState("");
     const [descInput, setDesc] = useState("");
-    const [searchInput, setSearch] = useState("");
 
-    const [displayedList, setDisplayedList] = useState(listCreators);
-
-    const searchCreators = (value) => {
-        let filteredList = [];
-
-        stableList.forEach((creator) => {
-            if (creator.toLowerCase().replaceAll(" ", "").includes(value.replaceAll(" ", ""))) {
-                filteredList.push(creator);
-            }
-        });
-
-        setDisplayedList(filteredList);
-    }
 
     const eraseInfo = () => {
         setTitle("");
         setDesc("");
-        setSearch("");
     }
 
-    const handleEditList = async e => {
+    const editListRequest = async e => {
         const tokenString = localStorage.getItem('token');
         const loginToken = JSON.parse(tokenString).token;
         const list_id = listId;
         const title = titleInput;
         const description = descInput;
-        const added_creators = listCreators.toString();
 
-        console.log("added_creators: " + added_creators);
 
         const message = await updateList({
             loginToken,
             list_id,
             title,
             description,
-            added_creators
         })
 
         console.log(message);
-        // window.location.reload(false);
     }
 
-    const setupEditList = () => {
+    const editListInit = () => {
+
+        if (titleInput.replaceAll(" ", "") === "" || descInput.replaceAll(" ", "") === "") {
+            return false;
+        }
+
+        editListRequest().then()
+
         setListTitle(titleInput);
         setListDesc(descInput);
-
-        handleEditList()
-            .then(response => {
-                // console.log(response); // sends undefined :(
-            })
 
         eraseInfo()
         return true;
     }
 
 
-    const handleDeleteList = async e => {
+    const deleteListRequest = async e => {
         const tokenString = localStorage.getItem('token');
         const loginToken = JSON.parse(tokenString).token;
         const list_id = listId;
@@ -80,13 +65,13 @@ function ListConfigModal({listCreators, setListCreators, listId, listTitle, list
         });
 
         console.log(message);
-        // window.location.reload(false);
+        window.location.reload();
 
     }
 
-    const setupDeleteList = () => {
+    const deleteListInit = () => {
 
-        handleDeleteList()
+        deleteListRequest()
             .then(response => {
                 console.log(response);
             })
@@ -102,61 +87,33 @@ function ListConfigModal({listCreators, setListCreators, listId, listTitle, list
                         &times;
                     </button>
                     <div className="header">
-                        List Settings
+                        Edit "{listTitle}"
                     </div>
+                    <div className="fields">
+                        <TextField id="outlined-basic" label={"Title"} size={"small"} variant="outlined" value={titleInput} onChange={(e) => setTitle(e.target.value)}/>
+                        <TextField id="outlined-basic" label={"Description"} size={"small"} variant="outlined" value={descInput} onChange={(e) => setDesc(e.target.value)}/>
 
-                    <form id="addListForm">
-                        <input
-                            value={titleInput}
-                            onChange={(e) => setTitle(e.target.value)}
-                            placeholder={listTitle || "Title"}
-                            type="text"
-                        />
-                        <input
-                            value={descInput}
-                            onChange={(e) => setDesc(e.target.value)}
-                            placeholder={listDesc || "Description"}
-                            type="text"
-                        />
-                        <input
-                            value={searchInput}
-                            onChange={(e) => {setSearch(e.target.value); searchCreators(e.target.value);}}
-                            placeholder="Search Creators"
-                            type="text"
-                        />
-                        <input type="button" value="Edit List" onClick={() => {
-                            const edited = setupEditList();
-                            if (edited === true) {
-                                close()
-                            }
-                            else {
-                                console.log("edit list error msg");
-                            }
-                        }}/>
-                        <input type="button" value="Delete List" onClick={() => {
-                            const deleted = setupDeleteList();
-                            if (deleted === true) {
-                                close()
-                            }
-                            else {
-                                console.log("something went wrong with deleting the list");
-                            }
-                        }}/>
+                        <div className={popup}>
+                            <p id="errormsg"> </p>
+                        </div>
 
-                    </form>
-                    {displayedList.map((item) => (
-                        <Creator
-                            addedState={true}
-                            curCreatorList={listCreators}
-                            setCreatorList={setListCreators}
-                            displayName={item}
-                            urlName={item}
-                            description="very unique accurate cool description"
-                            imgUrl="https://i.picsum.photos/id/505/536/354.jpg?hmac=zvFVVisk0oG7zcCY4MmROU21E0SnGTOk3g2OA3fCszo"
-                            verified="true"
-                        />
-                    ))}
-
+                        <div className="buttonContainer">
+                            <Button id="savebtn" sx={ { borderRadius: 10 } } color="primary" type="submit" variant="contained"  onClick={() => {
+                                    if (editListInit()){
+                                        close();
+                                    }
+                                    else {
+                                        document.getElementById("errormsg").textContent = "Provide Title and Description";
+                                        showPopup("show");
+                                    }
+                                }}>
+                                Save
+                            </Button>
+                            <Button id="deletebtn" sx={ { borderRadius: 10 } } color="primary" type="submit" variant="contained"  onClick={() => {deleteListInit(); close();}}>
+                                Delete
+                            </Button>
+                        </div>
+                    </div>
                 </div>
             )}
 

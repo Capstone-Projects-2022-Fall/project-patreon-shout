@@ -55,7 +55,16 @@
 
 }
 
-.modalBox > .fields > #buttonContainer {
+.modalBox > .fields > .buttonContainer {
     display: flex;
     justify-content: center;
+    gap: 20px;
+}
+
+.modalBox > .fields > .buttonContainer > #deletebtn{
+    background-color: red;
+}
+
+.modalBox > .fields > .buttonContainer > #deletebtn:hover{
+    background-color: darkred;
 }
