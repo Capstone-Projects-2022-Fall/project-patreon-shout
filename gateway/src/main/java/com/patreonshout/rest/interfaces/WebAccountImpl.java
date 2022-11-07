@@ -81,7 +81,7 @@ public interface WebAccountImpl {
 	 * @return {@link HttpStatus#OK} if successful, {@link HttpStatus#CONFLICT} if the provided {@link PutSocialIntegrationRequest}
 	 * does not contain a valid {@link WebAccount} ID number.
 	 */
-	@PutMapping("/integration")
+	@PutMapping("/socialintegration")
 	@Operation(summary = "Registers WebAccounts during PatreonShout sign up")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200",
@@ -100,7 +100,7 @@ public interface WebAccountImpl {
 	 * @param loginToken Login token belonging to a {@link WebAccount}
 	 * @return {@link SocialIntegration} Social integration tokens and webhook URLs
 	 */
-	@GetMapping("/integration")
+	@GetMapping("/socialintegration")
 	@Operation(summary = "Registers WebAccounts during PatreonShout sign up")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200",
