@@ -26,22 +26,6 @@ function PatronSettings() {
             sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
         >
 
-                <DropDownListItem
-                    name="Discord"
-                    dropdown="true"
-                />
-
-                <DropDownListItem
-                    name="Twitter"
-                    dropdown="false"
-                />
-
-
-                <DropDownListItem
-                    name="Instagram"
-                    dropdown="false"
-                />
-
                 <ResetPassModal/>
 
         </List>
