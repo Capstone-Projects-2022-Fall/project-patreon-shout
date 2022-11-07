@@ -8,6 +8,7 @@ import jsonPosts from "../data/posts.json";
 import Searchbar from "../home_page/Searchbar";
 import Filter from "../home_page/Filter";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { getPosts } from '../services/api/posts';
 
 function ListFeed() {
 
@@ -20,7 +21,7 @@ function ListFeed() {
     const [userLists, setUserLists] = useState([]);
     const [posts, setPosts] = useState("hide");
     const [lists, setLists] = useState("show");
-    const [postData, setPostData] = useState(jsonPosts);
+    const [postData, setPostData] = useState([]);
 
     useEffect(() => {
         let mounted = true;
@@ -62,10 +63,10 @@ function ListFeed() {
             displayedList = displayedList.sort(function(a, b){return new Date(a.published_at).getTime() - new Date(b.published_at).getTime()});
             break;
         case "privposts":
-            displayedList = displayedList.filter(value => value.is_public === false);
+            displayedList = displayedList.filter(value => (value.is_public === "true") === false);
             break;
         case "pubposts":
-            displayedList = displayedList.filter(value => value.is_public === true);
+            displayedList = displayedList.filter(value => (value.is_public === "true") === true);
             break;
         case "daterange":
             displayedList = displayedList.sort(function(b, a){return new Date(a.published_at).getTime() - new Date(b.published_at).getTime()});
@@ -83,12 +84,11 @@ function ListFeed() {
             <div className="listfeed__header">
                 <h2 className={lists}>Lists</h2>
                 <div id="backDiv">
-                    <ArrowBackIcon id="backArrow" fontSize="large" className={posts} onClick={() => {setPosts("hide"); setLists("show");}}/>
+                    <ArrowBackIcon id="backArrow" fontSize="large" className={posts} onClick={() => {setPosts("hide"); setLists("show"); setPostData([]);}}/>
                 </div>
                 <AddListModal />
             </div>
 
-            {/*TODO: fill with list specific creator posts when we get posts assigned to creators */}
             <div className={posts}> {/* hide until a list is chosen, then do http request to get list posts */}
                 <div className="feed__filters">
                     <Searchbar
@@ -107,7 +107,7 @@ function ListFeed() {
                     <Post
                         title={item.title}
                         creator_page_url={item.creator_page_url}
-                        is_public={item.is_public}
+                        is_public={(item.is_public === "true")} // converts the string to a boolean
                         content={item.content}
                         published_at={item.published_at}
                         url = {item.url}
@@ -119,6 +119,7 @@ function ListFeed() {
             <div className={lists}>
                 {userLists.map((item) => (
                     <ListButton
+                        setPostData={setPostData}
                         setPosts={setPosts}
                         setLists={setLists}
                         id={item.list_id}

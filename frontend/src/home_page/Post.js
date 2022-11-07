@@ -7,7 +7,10 @@ import {
 import React, {useState} from "react";
 import "./home_css/Post.css";
 import Popup from "reactjs-popup";
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import {getLists} from "../services/api/lists/getLists";
+import Checkbox from '@mui/material/Checkbox';
 
 /**
  * The post object which will appear in the feed
@@ -18,6 +21,7 @@ import {getLists} from "../services/api/lists/getLists";
  * @param {string} content - The message contained in the post
  * @param {string} url - The url of the creator
  * @param {Date} published_at - The date and time the post was published
+ * @param lists - The user's lists
  *
  * @returns A single post component to be displayed in the feed
  */
@@ -48,6 +52,8 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
     }
 
 
+
+
     return (
         <div className="post">
             <div className="post__body">
@@ -75,8 +81,9 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
                     <div className="post__footerFavorite">
                         <FavoriteBorder fontSize="small"/>
                     </div>
-                    <div className="post__footerList" onClick={() => {console.log("hello");}}>
-                        <Popup trigger={<ListAlt fontSize="small"/>} modal>
+
+                    <div className="post__footerList">  {/*TODO*/}
+                        <Popup onOpen={() => {console.log("send http request to see what lists this post is apart of")}} trigger={<ListAlt fontSize="small"/>} modal>
                             {close => (
                                 <div className="modalBox">
                                     <button className="close" onClick={close}>
@@ -86,11 +93,11 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
                                         Lists
                                     </div>
                                     <div id="fields">
-                                        {lists.map((item) => (
-                                            <div>
-                                                {item.title}
-                                            </div>
-                                        ))}
+                                        <FormGroup>
+                                            {lists.map((item) => (
+                                                <FormControlLabel control={<Checkbox label="hello" />} label={item.title}/>
+                                            ))}
+                                        </FormGroup>
                                     </div>
                                 </div>
                             )}
