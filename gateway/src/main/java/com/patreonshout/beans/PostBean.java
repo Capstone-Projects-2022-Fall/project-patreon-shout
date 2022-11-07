@@ -1,6 +1,7 @@
 package com.patreonshout.beans;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Type;
 import com.patreon.resources.shared.BaseResource;
@@ -22,7 +23,6 @@ import java.util.List;
 /**
  * POJO that relates to the posts table in our database
  */
-@JsonIgnoreProperties({ "id", "links", "post_id" })
 @Entity
 @Table(name="posts")
 @Type("post")
@@ -37,53 +37,63 @@ public class PostBean extends BaseResource {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="post_id")
-    protected int post_id;
+    protected int postId;
+
+    @Column(name="app_id")
+    protected String appId;
+
+    @Column(name="app_status")
+    protected String appStatus;
+
+    @Column(name="embed_data")
+    protected String embedData;
+
+    @Column(name="embed_url")
+    protected String embedUrl;
+
+    @Column(name="is_paid")
+    protected String isPaid;
 
     /**
      * creator is the name of the content creator who made the Patreon post
      */
     @Column(name="creator_page_url")
-    protected String creator_page_url;
+    protected String creatorPageUrl;
 
     /**
      * publishdate is the date at which a Patreonpost was published
      */
     @Column(name="publishdate")
-    @JsonProperty("published_at")
-    protected String publishdate;
+    protected String publishDate;
 
     /**
      * title is the title of the Patreon post
      */
     @Column(name="title")
-    @JsonProperty("title")
     protected String title;
 
     /**
      * url is the url of the Patreon post
      */
     @Column(name="url")
-    @JsonProperty("url")
     protected String url;
 
     /**
      * content is the content of the Patreon post
      */
     @Column(name="content")
-    @JsonProperty("content")
     protected String content;
 
     /**
      * isprivate denotes whether the Patreon post is private or public
      */
     @Column(name="is_public")
-    @JsonProperty("is_public")
-    protected boolean is_public;
+    protected boolean isPublic;
 
     /**
      * tags is the list of {@link com.patreonshout.beans.Tag} objects linked with this PostBean object
      */
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "postBean")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "postBean")
     List<Tag> tags;
 
     /**

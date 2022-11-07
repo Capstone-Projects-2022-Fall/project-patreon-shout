@@ -46,12 +46,6 @@ public class ListBean implements Serializable {
     protected String description;
 
     /**
-     * added_creators is the JSON Array of creators that are added to the list, ex) ["alex", "ayser", "chris", "jonah"]
-     */
-    @Column(name="added_creators")
-    protected String added_creators;
-
-    /**
      * webAccount is the {@link com.patreonshout.beans.WebAccount} object linked with this object
      */
     @ManyToOne(fetch = FetchType.EAGER)

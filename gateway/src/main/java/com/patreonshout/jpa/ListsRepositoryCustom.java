@@ -7,12 +7,17 @@ import com.patreonshout.beans.ListBean;
  */
 public interface ListsRepositoryCustom {
     /**
-     * Returns a {@link com.patreonshout.beans.ListBean} object via specifiec list_id
+     * Returns a {@link com.patreonshout.beans.ListBean} object via specific list_id
      *
      * @param list_id the id of the list
      * @return the {@link com.patreonshout.beans.ListBean} holding the list data corresponding to the list_id provided
      */
     ListBean getListByList_id(int list_id);
 
+    /**
+     * Deletes a {@link com.patreonshout.beans.ListBean} object via specific list_id
+     *
+     * @param list_id is the id of the list we want to delete
+     */
     void deleteListByList_id(int list_id);
 }

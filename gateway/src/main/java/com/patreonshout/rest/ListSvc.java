@@ -60,7 +60,6 @@ public class ListSvc extends BaseSvc implements ListImpl {
             listResponse.put("webaccount_id", String.valueOf(lb.getWebAccount().getWebAccountId()));
             listResponse.put("title", lb.getTitle());
             listResponse.put("description", lb.getDescription());
-            listResponse.put("added_creators", lb.getAdded_creators());
             listResponse.put("list_id", String.valueOf(lb.getListId()));
 
             response.add(listResponse);
@@ -82,7 +81,6 @@ public class ListSvc extends BaseSvc implements ListImpl {
         ListBean lb = new ListBean();
         lb.setTitle(listCreationRequest.getTitle());
         lb.setDescription(listCreationRequest.getDescription());
-        lb.setAdded_creators(listCreationRequest.getAdded_creators());
         lb.setWebAccount(userAccount);
 
         listsRepository.save(lb);
@@ -102,7 +100,6 @@ public class ListSvc extends BaseSvc implements ListImpl {
 
         lb.setTitle(listUpdateRequest.getTitle());
         lb.setDescription(listUpdateRequest.getDescription());
-        lb.setAdded_creators(listUpdateRequest.getAdded_creators());
 
         listsRepository.save(lb);
 
@@ -115,6 +112,7 @@ public class ListSvc extends BaseSvc implements ListImpl {
     public ResponseEntity<?> DeleteUserList(@RequestBody ListDeleteRequest listDeleteRequest) {
         ListBean lb = listsRepository.getListByList_id(listDeleteRequest.getList_id());
 
+        // TODO: fix the error messages for this (check login token first, then check if list exists) dont give any info for potential attacker
         try {
             if(!lb.getWebAccount().getLoginToken().equals(listDeleteRequest.getLoginToken())) {
                 return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Specified login token does not match the requested list's user login token.");

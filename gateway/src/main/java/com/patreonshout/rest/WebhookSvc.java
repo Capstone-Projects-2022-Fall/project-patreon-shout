@@ -76,11 +76,8 @@ public class WebhookSvc extends BaseSvc {
 			String accessToken = tokens.getAccessToken();
 			String refreshToken = tokens.getRefreshToken();
 
-			// put content creator posts in database
-			CustomPatreonAPI client = new CustomPatreonAPI(accessToken);
 
 
-			User user = client.fetchUser().get();
 
 			/**
 			 * TODO: Fix this!!  This is IMPROPER!
@@ -115,19 +112,8 @@ public class WebhookSvc extends BaseSvc {
 			// Store their creator page information
 			creatorPageFunctions.putCreatorPage(pageUrl);
 
-			for (Campaign campaign : client.fetchCampaigns().get()) {
-
-				List<PostBean> pbList = client.fetchPosts(campaign.getId()).get();
-				List<PostBean> existingPosts = postsRepository.getExistingPosts(pbList);
-				pbList.removeAll(existingPosts);
-
-				for (PostBean post : pbList) {
-					post.setCreator_page_url(pageUrl);
-					System.out.println("p: " + post);
-
-					postsRepository.putPost(post);
-				}
-			}
+			// put content creator posts in database
+			savePosts(accessToken, pageUrl);
 
 			// put patreon tokens in database
 			webAccountFunctions.putPatreonTokens(accessToken, refreshToken, state);
@@ -138,6 +124,24 @@ public class WebhookSvc extends BaseSvc {
 
 		// Webhook
 		return "";
+	}
+
+	public void savePosts(String accessToken, String pageUrl) throws IOException {
+		CustomPatreonAPI client = new CustomPatreonAPI(accessToken);
+
+		for (Campaign campaign : client.fetchCampaigns().get()) {
+
+			List<PostBean> pbList = client.fetchPosts(campaign.getId()).get();
+			List<PostBean> existingPosts = postsRepository.getExistingPosts(pbList);
+			pbList.removeAll(existingPosts);
+
+			for (PostBean post : pbList) {
+				post.setCreatorPageUrl(pageUrl);
+				System.out.println("p: " + post);
+
+				postsRepository.save(post);
+			}
+		}
 	}
 }
 

@@ -41,6 +41,9 @@ public class ListsRepositoryImpl extends BaseSvc implements ListsRepositoryCusto
         return (ListBean) ret.get(0);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void deleteListByList_id(int list_id) {
         String sql = "delete from lists where list_id = :list_id";
 
