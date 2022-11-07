@@ -111,14 +111,7 @@ public class WebAccountFunctions {
 	 */
 	@Transactional
 	public void putSocialIntegration(PutSocialIntegrationRequest putSocialIntegrationRequest) throws PSException {
-		if (putSocialIntegrationRequest.getLoginToken() == null)
-			throw new PSException(HttpStatus.NOT_FOUND, "Login token not provided");
-
-		WebAccount webAccount = webAccountRepository.findByLoginToken(putSocialIntegrationRequest.getLoginToken());
-
-		if (webAccount == null)
-			throw new PSException(HttpStatus.NOT_FOUND, "Login token does not belong to a user");
-
+		WebAccount webAccount = this.getAccount(putSocialIntegrationRequest.getLoginToken());
 		SocialIntegration socialIntegration = webAccount.getSocialIntegration();
 
 		if (socialIntegration == null) {
@@ -129,7 +122,7 @@ public class WebAccountFunctions {
 		socialIntegration.setWebAccount(webAccount);
 		webAccount.setSocialIntegration(socialIntegration);
 
-		switch (putSocialIntegrationRequest.getIntegrationType()) {
+		switch (putSocialIntegrationRequest.getIntegrationName()) {
 			case DISCORD:
 				socialIntegration.setDiscord(putSocialIntegrationRequest.getData());
 				break;
@@ -138,6 +131,9 @@ public class WebAccountFunctions {
 				break;
 			case INSTAGRAM:
 				socialIntegration.setInstagram(putSocialIntegrationRequest.getData());
+				break;
+			default:
+				System.out.println("UNKNOWN CASE: " + putSocialIntegrationRequest.getIntegrationName());
 				break;
 		}
 

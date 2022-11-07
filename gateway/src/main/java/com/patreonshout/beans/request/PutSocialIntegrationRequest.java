@@ -22,8 +22,8 @@ public class PutSocialIntegrationRequest {
 	/**
 	 * An {@link IntegrationType} that will contain the type of social platform desired for this request
 	 */
-	@JsonProperty("integration_type")
-	IntegrationType integrationType;
+	@JsonProperty("integration_name")
+	IntegrationType integrationName;
 
 	/**
 	 * A {@link String} that will contain either a webhook URL or a token
