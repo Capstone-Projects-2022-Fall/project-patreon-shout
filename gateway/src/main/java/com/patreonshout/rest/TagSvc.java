@@ -59,7 +59,7 @@ public class TagSvc extends BaseSvc implements TagImpl {
             return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
         }
 
-        PostBean postBean = postsRepository.getPost(tagAddRequest.getUrl());
+        PostBean postBean = postsRepository.findPostBeanByUrl(tagAddRequest.getUrl());
 
         if (postBean == null) {
             return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid post url.");
@@ -86,7 +86,7 @@ public class TagSvc extends BaseSvc implements TagImpl {
             return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
         }
 
-        PostBean postBean = postsRepository.getPost(tagGetRequest.getUrl());
+        PostBean postBean = postsRepository.findPostBeanByUrl(tagGetRequest.getUrl());
 
         if (postBean == null) {
             return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid post url.");
@@ -113,7 +113,7 @@ public class TagSvc extends BaseSvc implements TagImpl {
             return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
         }
 
-        PostBean postBean = postsRepository.getPost(tagDeleteRequest.getUrl());
+        PostBean postBean = postsRepository.findPostBeanByUrl(tagDeleteRequest.getUrl());
 
         if (postBean == null) {
             return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid post url.");

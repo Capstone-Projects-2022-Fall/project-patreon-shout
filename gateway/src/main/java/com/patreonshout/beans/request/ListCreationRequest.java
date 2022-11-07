@@ -33,11 +33,4 @@ public class ListCreationRequest implements Serializable{
     @JsonProperty("description")
     private String description;
 
-    /**
-     * added_creators is the new list creators
-     */
-    @NotNull
-    @JsonProperty("added_creators")
-    private String added_creators;
-
 }

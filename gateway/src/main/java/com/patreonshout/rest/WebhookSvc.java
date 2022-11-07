@@ -122,10 +122,10 @@ public class WebhookSvc extends BaseSvc {
 				pbList.removeAll(existingPosts);
 
 				for (PostBean post : pbList) {
-					post.setCreator_page_url(pageUrl);
+					post.setCreatorPageUrl(pageUrl);
 					System.out.println("p: " + post);
 
-					postsRepository.putPost(post);
+					postsRepository.save(post);
 				}
 			}
 

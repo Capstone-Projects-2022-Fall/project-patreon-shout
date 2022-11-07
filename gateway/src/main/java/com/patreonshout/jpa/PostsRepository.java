@@ -27,48 +27,20 @@ public interface PostsRepository extends JpaRepository<PostBean, Long> {
     Page<PostBean> getMultipleCreatorPosts(List<String> creatorList, Pageable pageable);
 
     /**
-     * getCreatorPosts() gets the posts from a particular creator
+     * Returns a list of posts by the creator
      *
-     * @param creator_page_url is the creator who made the posts we want to get
-     * @return a List of {@link com.patreonshout.beans.PostBean} objects containing Patreon post information of a given creator
+     * @param creatorPageUrl is the creator's unique name
+     * @return a list of {@link com.patreonshout.beans.PostBean} objects
      */
-    List<PostBean> getCreatorPosts(String creator_page_url);
+    List<PostBean> findAllByCreatorPageUrl(String creatorPageUrl);
 
     /**
-     * getPost() gets a specific post based on the post url
+     * returns a post by the post's link
      *
-     * @param url is the url of the Patreon post
-     * @return a {@link com.patreonshout.beans.PostBean} object containing the Patreon post information of the given url
+     * @param url is the url of the post we want to find
+     * @return a {@link com.patreonshout.beans.PostBean} object
      */
-    PostBean getPost(String url);
-
-    /**
-     * getAllPosts() returns every post in the database
-     *
-     * @return a List of {@link com.patreonshout.beans.PostBean} containing every post in the database
-     */
-    List<PostBean> getAllPosts();
-
-    /**
-     * putPost() adds a new Post to the database
-     *
-     * @param pb is the post to be added to the database
-     */
-    void putPost(PostBean pb);
-
-    /**
-     * updatePost() updates an existing post in the database based on the post_id
-     *
-     * @param pb is the post to be updated in the database
-     */
-    void updatePost(PostBean pb);
-
-    /**
-     * removePost() removes a post in the database based on the post url
-     *
-     * @param url is the url of the Patreon post
-     */
-    void removePost(String url);
+    PostBean findPostBeanByUrl(String url);
 
     /**
      * getExistingPosts() checks what posts in the {@link com.patreonshout.beans.PostBean} object list are already in the database
