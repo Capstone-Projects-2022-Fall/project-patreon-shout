@@ -11,7 +11,7 @@ import lombok.Setter;
  */
 @Setter
 @Getter
-public class SocialIntegrationRequest {
+public class PutSocialIntegrationRequest {
 
 	/**
 	 * A {@link String} login token that belongs to a {@link WebAccount}

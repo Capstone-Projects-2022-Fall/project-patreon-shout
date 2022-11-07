@@ -2,10 +2,11 @@ package com.patreonshout.rest;
 
 import com.patreonshout.PSException;
 import com.patreonshout.beans.PatreonTokens;
+import com.patreonshout.beans.SocialIntegration;
 import com.patreonshout.beans.request.LoginRequest;
 import com.patreonshout.beans.request.RegisterRequest;
 import com.patreonshout.beans.request.ResetPasswordRequest;
-import com.patreonshout.beans.request.SocialIntegrationRequest;
+import com.patreonshout.beans.request.PutSocialIntegrationRequest;
 import com.patreonshout.beans.response.LoginResponse;
 import com.patreonshout.jpa.WebAccountFunctions;
 import com.patreonshout.rest.interfaces.WebAccountImpl;
@@ -13,12 +14,12 @@ import com.patreonshout.utils.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -70,9 +71,24 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	/**
 	 * {@inheritDoc}
 	 */
-	public HttpStatus Integration(@RequestBody SocialIntegrationRequest socialIntegrationRequest) throws PSException {
-		webAccountFunctions.putSocialIntegration(socialIntegrationRequest);
+	public HttpStatus PutSocialIntegration(@RequestBody PutSocialIntegrationRequest putSocialIntegrationRequest) throws PSException {
+		webAccountFunctions.putSocialIntegration(putSocialIntegrationRequest);
 		return HttpStatus.OK;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public ResponseEntity<?> GetSocialIntegration(@RequestParam(name = "login_token") String loginToken) throws PSException {
+		SocialIntegration socialIntegration = webAccountFunctions.getSocialIntegration(loginToken);
+
+		Map<String, String> response = new LinkedHashMap<>();
+
+		response.put("discord", socialIntegration.getDiscord());
+		response.put("instagram", socialIntegration.getTwitter());
+		response.put("twitter", socialIntegration.getInstagram());
+
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 	/**

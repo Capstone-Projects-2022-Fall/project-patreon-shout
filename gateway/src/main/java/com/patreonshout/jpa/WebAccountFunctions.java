@@ -2,7 +2,7 @@ package com.patreonshout.jpa;
 
 import com.patreonshout.PSException;
 import com.patreonshout.beans.*;
-import com.patreonshout.beans.request.SocialIntegrationRequest;
+import com.patreonshout.beans.request.PutSocialIntegrationRequest;
 import com.patreonshout.beans.request.LoginRequest;
 import com.patreonshout.beans.request.RegisterRequest;
 import com.patreonshout.config.SecurityConfiguration;
@@ -107,14 +107,14 @@ public class WebAccountFunctions {
 	/**
 	 * Adds a social integration
 	 *
-	 * @param socialIntegrationRequest {@link SocialIntegrationRequest} Integration request provided from RESTful call
+	 * @param putSocialIntegrationRequest {@link PutSocialIntegrationRequest} Integration request provided from RESTful call
 	 */
 	@Transactional
-	public void putSocialIntegration(SocialIntegrationRequest socialIntegrationRequest) throws PSException {
-		if (socialIntegrationRequest.getLoginToken() == null)
+	public void putSocialIntegration(PutSocialIntegrationRequest putSocialIntegrationRequest) throws PSException {
+		if (putSocialIntegrationRequest.getLoginToken() == null)
 			throw new PSException(HttpStatus.NOT_FOUND, "Login token not provided");
 
-		WebAccount webAccount = webAccountRepository.findByLoginToken(socialIntegrationRequest.getLoginToken());
+		WebAccount webAccount = webAccountRepository.findByLoginToken(putSocialIntegrationRequest.getLoginToken());
 
 		if (webAccount == null)
 			throw new PSException(HttpStatus.NOT_FOUND, "Login token does not belong to a user");
@@ -129,19 +129,44 @@ public class WebAccountFunctions {
 		socialIntegration.setWebAccount(webAccount);
 		webAccount.setSocialIntegration(socialIntegration);
 
-		switch (socialIntegrationRequest.getIntegrationType()) {
+		switch (putSocialIntegrationRequest.getIntegrationType()) {
 			case DISCORD:
-				socialIntegration.setDiscord(socialIntegrationRequest.getData());
+				socialIntegration.setDiscord(putSocialIntegrationRequest.getData());
 				break;
 			case TWITTER:
-				socialIntegration.setTwitter(socialIntegrationRequest.getData());
+				socialIntegration.setTwitter(putSocialIntegrationRequest.getData());
 				break;
 			case INSTAGRAM:
-				socialIntegration.setInstagram(socialIntegrationRequest.getData());
+				socialIntegration.setInstagram(putSocialIntegrationRequest.getData());
 				break;
 		}
 
 		webAccountRepository.save(webAccount);
+	}
+
+	/**
+	 * Gets a {@link WebAccount} from the given login token, then returns its {@link SocialIntegration}
+	 *
+	 * @param loginToken {@link WebAccount} login token
+	 * @return {@link SocialIntegration} belonging to a login token's {@link WebAccount}
+	 */
+	@Transactional
+	public SocialIntegration getSocialIntegration(String loginToken) throws PSException {
+		WebAccount webAccount = this.getAccount(loginToken);
+
+		SocialIntegration socialIntegration = webAccount.getSocialIntegration();
+
+		if (socialIntegration == null) {
+			socialIntegration = new SocialIntegration();
+			socialIntegration.setWebAccountId(webAccount.getWebAccountId());
+
+			socialIntegration.setWebAccount(webAccount);
+			webAccount.setSocialIntegration(socialIntegration);
+
+			webAccountRepository.save(webAccount);
+		}
+
+		return webAccount.getSocialIntegration();
 	}
 
 	/**
