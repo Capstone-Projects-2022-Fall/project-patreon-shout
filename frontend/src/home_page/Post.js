@@ -4,8 +4,10 @@ import {
     ListAlt,
     VerifiedUser,
 } from "@mui/icons-material";
-import React from "react";
+import React, {useState} from "react";
 import "./home_css/Post.css";
+import Popup from "reactjs-popup";
+import {getLists} from "../services/api/lists/getLists";
 
 /**
  * The post object which will appear in the feed
@@ -20,7 +22,7 @@ import "./home_css/Post.css";
  * @returns A single post component to be displayed in the feed
  */
 
-function Post({title, creator_page_url, url, content, published_at, is_public}) {
+function Post({title, creator_page_url, url, content, published_at, is_public, lists}) {
 
     // TODO: clean this shit up
     content = content.replace(/<p[^>]*>/g, "");
@@ -73,8 +75,26 @@ function Post({title, creator_page_url, url, content, published_at, is_public}) 
                     <div className="post__footerFavorite">
                         <FavoriteBorder fontSize="small"/>
                     </div>
-                    <div className="post__footerList">
-                        <ListAlt fontSize="small"/>
+                    <div className="post__footerList" onClick={() => {console.log("hello");}}>
+                        <Popup trigger={<ListAlt fontSize="small"/>} modal>
+                            {close => (
+                                <div className="modalBox">
+                                    <button className="close" onClick={close}>
+                                        &times;
+                                    </button>
+                                    <div className="header">
+                                        Lists
+                                    </div>
+                                    <div id="fields">
+                                        {lists.map((item) => (
+                                            <div>
+                                                {item.title}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </Popup>
                     </div>
                 </div>
             </div>
