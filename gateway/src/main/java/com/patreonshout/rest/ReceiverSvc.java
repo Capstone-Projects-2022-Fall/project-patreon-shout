@@ -175,26 +175,27 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		switch(patreonEvent) {
 			case "posts:publish":
 				System.out.println("Received: " + patreonEvent);
-				break;
-			case "posts:update":
 				// Convert the data attribute to a Patreon Post POJO
 				try {
 					patreonPost = objectMapper.convertValue(webhookRequest.getData().getAttributes(), PatreonPostV2.class);
 				} catch (Exception e) {
-					e.printStackTrace();
 					// * We want to catch these Exceptions and return 200 OK because if we time out 3 times, Patreon will stop using our webhook.
+					e.printStackTrace();
 					return new ResponseEntity<>(HttpStatus.OK);
 				}
 
 				discordWebhookUtil.setColor(patreonPost.getIsPublic() ? 0x00FF00 : 0xFF0000);
 				discordWebhookUtil.setTitle(patreonPost.getTitle(), "https://patreon.com" + patreonPost.getUrl());
-				discordWebhookUtil.setDescription(converter.convert(patreonPost.getContent()));
+				discordWebhookUtil.setDescription(patreonPost.getIsPublic() ? converter.convert(patreonPost.getContent()) : "This post is **private**");
 
 				// TODO: This seems to never be true as Patreon never sends us images/videos.
-				if  (patreonPost.getEmbedUrl() != null)
-					discordWebhookUtil.setImage(patreonPost.getEmbedUrl());
+//				if  (patreonPost.getEmbedUrl() != null)
+//					discordWebhookUtil.setImage(patreonPost.getEmbedUrl());
 
 				discordWebhookUtil.send();
+				break;
+			case "posts:update":
+
 				break;
 			case "posts:delete":
 				System.out.println("Received: " + patreonEvent);
