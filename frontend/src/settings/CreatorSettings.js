@@ -5,7 +5,6 @@ import DropDownListItem from "./DropDownListItem";
 import {getSocialIntegrations} from "../services/api/webaccount/getSocialIntegration";
 import {render} from "react-dom";
 
-
 function CreatorSettings() {
     const [socialIntegrations, setSocialIntegrations] = useState([]);
 
@@ -18,7 +17,7 @@ function CreatorSettings() {
             .then(items => {
                 if (!finished) {
                     setSocialIntegrations(items);
-                    render(htmlReturn(items), this); // Force Rerender this function component
+                    render(htmlReturn(socialIntegrations), this); // Force Rerender this function component
                 }
             })
         return () => finished = true;
@@ -27,8 +26,8 @@ function CreatorSettings() {
     return htmlReturn(socialIntegrations);
 }
 
-function htmlReturn(items) {
-    if (items.length === 0)
+function htmlReturn(socialIntegrations) {
+    if (socialIntegrations.length === 0)
         return "Loading..."; // TODO make this look better, or something...
 
     return (
@@ -41,24 +40,24 @@ function htmlReturn(items) {
                 name="Discord"
                 textfieldLabel="Webhook URL"
                 dropdown={true}
-                defaultChecked={typeof items.discord === 'string'}
-                defaultValue={items.discord}
+                defaultChecked={typeof socialIntegrations.discord === 'string'}
+                defaultValue={socialIntegrations.discord}
             />
 
             <DropDownListItem
                 name="Twitter"
                 textfieldLabel="Twitter Token"
                 dropdown={true}
-                defaultChecked={typeof items.twitter === 'string'}
-                defaultValue={items.twitter}
+                defaultChecked={typeof socialIntegrations.twitter === 'string'}
+                defaultValue={socialIntegrations.twitter}
             />
 
             <DropDownListItem
                 name="Instagram"
                 textfieldLabel="Instagram Token"
                 dropdown={true}
-                defaultChecked={typeof items.instagram === 'string'}
-                defaultValue={items.instagram}
+                defaultChecked={typeof socialIntegrations.instagram === 'string'}
+                defaultValue={socialIntegrations.instagram}
                 isDisabled={true}
             />
         </List>
