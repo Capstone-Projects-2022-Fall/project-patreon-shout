@@ -122,15 +122,17 @@ public class WebAccountFunctions {
 		socialIntegration.setWebAccount(webAccount);
 		webAccount.setSocialIntegration(socialIntegration);
 
+		String data = putSocialIntegrationRequest.getData().length() == 0 ? null : putSocialIntegrationRequest.getData();
+
 		switch (putSocialIntegrationRequest.getIntegrationName()) {
 			case DISCORD:
-				socialIntegration.setDiscord(putSocialIntegrationRequest.getData());
+				socialIntegration.setDiscord(data);
 				break;
 			case TWITTER:
-				socialIntegration.setTwitter(putSocialIntegrationRequest.getData());
+				socialIntegration.setTwitter(data);
 				break;
 			case INSTAGRAM:
-				socialIntegration.setInstagram(putSocialIntegrationRequest.getData());
+				socialIntegration.setInstagram(data);
 				break;
 			default:
 				System.out.println("UNKNOWN CASE: " + putSocialIntegrationRequest.getIntegrationName());
