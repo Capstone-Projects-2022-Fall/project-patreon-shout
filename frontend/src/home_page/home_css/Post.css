@@ -71,3 +71,8 @@
 .post__avatar {
     padding: 20px;
 }
+
+#buttonLocation {
+    display: flex;
+    justify-content: center;
+}
