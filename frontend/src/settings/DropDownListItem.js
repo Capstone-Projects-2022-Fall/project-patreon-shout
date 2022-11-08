@@ -2,31 +2,17 @@ import React, {useState} from 'react';
 import {Button, ListItem, ListItemText, Switch} from '@mui/material';
 import './setting_css/DropDownListItem.css';
 import TextField from '@mui/material/TextField';
+import {putSocialIntegration} from "../services/api/webaccount/putSocialIntegration";
 
-function DropDownListItem({dropdown, name}) {
+function DropDownListItem({name, textfieldLabel, dropdown, defaultChecked, defaultValue, isDisabled}) {
+    const [checked, setChecked] = useState(defaultChecked);
+    const [showDropdown, setShowDropdown] = useState(defaultChecked && dropdown ? "show" : "hide");
+    const [textfieldValue, setTextfieldValue] = useState(defaultValue);
 
-
-    const [checked, setChecked] = useState([]);
-    const [showDropdown, setShowDropdown] = useState("hide");
-
-    const handleToggle = (value) => () => {
-        const currentIndex = checked.indexOf(value);
-        const newChecked = [...checked];
-
-        if (currentIndex === -1) {
-            newChecked.push(value);
-        } else {
-            newChecked.splice(currentIndex, 1);
-        }
-
-        if (newChecked.includes({name}.toString().toLowerCase()) && dropdown === "true") {
-            setShowDropdown("show");
-        } else {
-            setShowDropdown("hide");
-        }
-
-        setChecked(newChecked);
-
+    // Button and switch toggling
+    const handleToggle = () => () => {
+        setChecked(!checked);
+        setShowDropdown(checked && dropdown ? "hide" : "show");
     };
 
     return (
@@ -36,8 +22,9 @@ function DropDownListItem({dropdown, name}) {
                     <ListItemText primary={name}/>
                     <Switch
                         edge="end"
-                        onChange={handleToggle({name}.toString().toLowerCase())}
-                        checked={checked.indexOf({name}.toString().toLowerCase()) !== -1}
+                        onChange={handleToggle()}
+                        checked={checked}
+                        disabled={isDisabled}
                         inputProps={{
                             'aria-labelledby': 'switch-list-label-' + {name},
                         }}
@@ -45,11 +32,32 @@ function DropDownListItem({dropdown, name}) {
                 </div>
                 <div className={showDropdown}>
                     <div className="dropdown">
-                        <TextField id="outlined-basic" label={"WebHook"} size={"small"} variant="outlined"/>
-                        <Button sx={{borderRadius: 10}} color="primary" type="submit" variant="contained"
-                                size={"medium"} onClick={() => {
-                            console.log("hello");
-                        }}>
+                        <TextField
+                            id={name.toLowerCase() + "-textfield"}
+                            label={textfieldLabel}
+                            size="small"
+                            variant="outlined"
+                            value={textfieldValue}
+                            disabled={isDisabled}
+                            onChange={(e) => setTextfieldValue(e.target.value)}
+                        />
+                        <Button
+                            sx={{borderRadius: 10}}
+                            color="primary"
+                            type="submit"
+                            variant="contained"
+                            size={"medium"}
+                            disabled={isDisabled}
+                            onClick={async () => {
+                                const tokenString = localStorage.getItem('token');
+                                const message = await putSocialIntegration({
+                                    login_token: JSON.parse(tokenString).token,
+                                    integration_name: name.toUpperCase(),
+                                    data: textfieldValue
+                                })
+
+                                console.log(message)
+                            }}>
                             Submit
                         </Button>
                     </div>
