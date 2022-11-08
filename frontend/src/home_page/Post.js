@@ -12,6 +12,8 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import {getListsFromPost} from "../services/api/lists/getListsFromPost";
 import {Button} from "@mui/material";
 import CheckBox from "../components/CheckBox";
+import {updateListsForPost} from "../services/api/lists/updateListsForPost";
+import ReactDOM from "react-dom";
 
 /**
  * The post object which will appear in the feed
@@ -52,26 +54,16 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
         window.open(url, "_blank");
     }
 
-    const [thisPostLists, setThisPostLists] = useState([]);
-
-    useEffect(() => {
-        let mounted = true;
-        const tokenString = localStorage.getItem('token');
-        const loginToken = JSON.parse(tokenString).token;
-        getListsFromPost(loginToken, url)
-            .then(items => {
-                if (mounted) {
-                    setThisPostLists(items);
-                }
-            })
-        return () => mounted = false;
-    }, [])
+    // const [thisPostLists, setThisPostLists] = useState([]); // TODO: when the user sets the lists they want for their post this should update
+    let thisPostLists = [];
 
     const checkPostInList = (list_id) => {
         let insideList = false;
 
         thisPostLists.forEach((list) => {
             if (list.list_id === list_id && insideList === false) {
+                console.log("list_id: " + list_id);
+                console.log("check against: " + list.list_id);
                 insideList = true;
             }
         })
@@ -81,10 +73,71 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
     const handleListSave = (event) => {
         event.preventDefault();
 
+        let list_updates = [];
+        let dom_list_updates = [];
+
         for (let i = 0; i < lists.length; i++) {
-            console.log(lists[i]);
-            console.log(event.target[i].checked);
+            list_updates.push({"list_id": lists[i].list_id.toString(), "update": event.target[i].checked.toString()})
+
+            if (event.target[i].checked.toString() === "true") {
+                dom_list_updates.push(lists[i]);
+            }
         }
+
+        // reload react dom
+        thisPostLists = dom_list_updates;
+        // setThisPostLists(dom_list_updates);
+
+        console.log(dom_list_updates);
+        ReactDOM.render(popup, document.getElementById("popup"));
+
+        updateListsRequest(list_updates).then(r => {
+
+        })
+    }
+
+    const popup = (
+        <form id="fields" onSubmit={handleListSave}>
+            <FormGroup id="popup">
+                {lists.map((item) => (
+                    <FormControlLabel
+                        control={<CheckBox list={item} checkPostInList={checkPostInList}/>}
+                        value={item}
+                        label=""/>
+                ))}
+            </FormGroup>
+            <br/>
+            <div id="buttonLocation">
+                <Button disableElevation type="submit" variant="contained">Save</Button>
+            </div>
+        </form>
+    );
+
+
+    useEffect(() => {
+        let mounted = true;
+        const tokenString = localStorage.getItem('token');
+        const loginToken = JSON.parse(tokenString).token;
+        getListsFromPost(loginToken, url)
+            .then(items => {
+                if (mounted) {
+                    thisPostLists = items;
+                    // setThisPostLists(items);
+                }
+            })
+        return () => mounted = false;
+    }, [])
+
+
+    const updateListsRequest = async (list_updates) => {
+        const tokenString = localStorage.getItem('token');
+        const login_token = JSON.parse(tokenString).token;
+
+        const message = await updateListsForPost({
+            url,
+            login_token,
+            list_updates
+        });
     }
 
 
@@ -128,20 +181,9 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
                                         Lists
                                     </div>
                                     <br/>
-                                    <form id="fields" onSubmit={handleListSave}>
-                                        <FormGroup>
-                                            {lists.map((item) => (
-                                                <FormControlLabel
-                                                    control={<CheckBox list={item} checkedDefault={checkPostInList(item.list_id)}/>}
-                                                    value={item}
-                                                    label=""/>
-                                            ))}
-                                        </FormGroup>
-                                        <br/>
-                                        <div id="buttonLocation">
-                                            <Button disableElevation type="submit" variant="contained">Save</Button>
-                                        </div>
-                                    </form>
+                                    <div id="popup">
+                                        {popup}
+                                    </div>
                                 </div>
                             )}
                         </Popup>
@@ -151,5 +193,9 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
         </div>
     );
 }
+
+
+
+
 
 export default Post;

@@ -4,9 +4,9 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 
 
 
-function CheckBox({list, checkedDefault}) {
+function CheckBox({list, checkPostInList}) {
 
-    const [checked, setChecked] = useState(checkedDefault);
+    const [checked, setChecked] = useState(checkPostInList(list.list_id));
 
     const handleChange = (event) => {
         setChecked(event.target.checked);
