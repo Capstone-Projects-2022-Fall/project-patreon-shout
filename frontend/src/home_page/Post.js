@@ -4,13 +4,14 @@ import {
     ListAlt,
     VerifiedUser,
 } from "@mui/icons-material";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import "./home_css/Post.css";
 import Popup from "reactjs-popup";
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import {getLists} from "../services/api/lists/getLists";
-import Checkbox from '@mui/material/Checkbox';
+import {getListsFromPost} from "../services/api/lists/getListsFromPost";
+import {Button} from "@mui/material";
+import CheckBox from "../components/CheckBox";
 
 /**
  * The post object which will appear in the feed
@@ -51,6 +52,40 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
         window.open(url, "_blank");
     }
 
+    const [thisPostLists, setThisPostLists] = useState([]);
+
+    useEffect(() => {
+        let mounted = true;
+        const tokenString = localStorage.getItem('token');
+        const loginToken = JSON.parse(tokenString).token;
+        getListsFromPost(loginToken, url)
+            .then(items => {
+                if (mounted) {
+                    setThisPostLists(items);
+                }
+            })
+        return () => mounted = false;
+    }, [])
+
+    const checkPostInList = (list_id) => {
+        let insideList = false;
+
+        thisPostLists.forEach((list) => {
+            if (list.list_id === list_id && insideList === false) {
+                insideList = true;
+            }
+        })
+        return insideList;
+    }
+
+    const handleListSave = (event) => {
+        event.preventDefault();
+
+        for (let i = 0; i < lists.length; i++) {
+            console.log(lists[i]);
+            console.log(event.target[i].checked);
+        }
+    }
 
 
 
@@ -83,7 +118,7 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
                     </div>
 
                     <div className="post__footerList">  {/*TODO*/}
-                        <Popup onOpen={() => {console.log("send http request to see what lists this post is apart of")}} trigger={<ListAlt fontSize="small"/>} modal>
+                        <Popup trigger={<ListAlt fontSize="small"/>} modal>
                             {close => (
                                 <div className="modalBox">
                                     <button className="close" onClick={close}>
@@ -92,13 +127,21 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
                                     <div className="header">
                                         Lists
                                     </div>
-                                    <div id="fields">
+                                    <br/>
+                                    <form id="fields" onSubmit={handleListSave}>
                                         <FormGroup>
                                             {lists.map((item) => (
-                                                <FormControlLabel control={<Checkbox label="hello" />} label={item.title}/>
+                                                <FormControlLabel
+                                                    control={<CheckBox list={item} checkedDefault={checkPostInList(item.list_id)}/>}
+                                                    value={item}
+                                                    label=""/>
                                             ))}
                                         </FormGroup>
-                                    </div>
+                                        <br/>
+                                        <div id="buttonLocation">
+                                            <Button disableElevation type="submit" variant="contained">Save</Button>
+                                        </div>
+                                    </form>
                                 </div>
                             )}
                         </Popup>
