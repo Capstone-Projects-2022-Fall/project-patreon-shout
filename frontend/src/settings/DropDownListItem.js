@@ -47,7 +47,7 @@ function DropDownListItem({name, textfieldLabel, dropdown, defaultChecked, defau
                             type="submit"
                             variant="contained"
                             size={"medium"}
-                            disabled={isDisabled}
+                            disabled={isDisabled || !textfieldValue}
                             onClick={async () => {
                                 const tokenString = localStorage.getItem('token');
                                 const message = await putSocialIntegration({
