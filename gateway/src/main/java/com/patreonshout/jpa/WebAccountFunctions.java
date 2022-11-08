@@ -174,14 +174,7 @@ public class WebAccountFunctions {
 	 */
 	@Transactional
 	public void putPatreonTokens(String accessToken, String refreshToken, String loginToken) throws PSException {
-		if (loginToken == null)
-			throw new PSException(HttpStatus.NOT_FOUND, "Login token not provided");
-
-		WebAccount webAccount = webAccountRepository.findByLoginToken(loginToken);
-
-		if (webAccount == null)
-			throw new PSException(HttpStatus.NOT_FOUND, "Login token does not belong to a user");
-
+		WebAccount webAccount = this.getAccount(loginToken);
 		PatreonTokens patreonTokens = webAccount.getCreatorTokens();
 
 		if (patreonTokens == null) {
@@ -208,14 +201,7 @@ public class WebAccountFunctions {
 	 */
 	@Transactional
 	public PatreonTokens getPatreonTokens(String loginToken) throws PSException {
-		if (loginToken == null)
-			throw new PSException(HttpStatus.NOT_FOUND, "Login token not provided");
-
-		WebAccount webAccount = webAccountRepository.findByLoginToken(loginToken);
-
-		if (webAccount == null)
-			throw new PSException(HttpStatus.NOT_FOUND, "Login token does not belong to a user");
-
+		WebAccount webAccount = this.getAccount(loginToken);
 		PatreonTokens patreonTokens = webAccount.getCreatorTokens();
 
 		if (patreonTokens == null) {
