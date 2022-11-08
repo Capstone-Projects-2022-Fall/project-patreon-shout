@@ -1,11 +1,16 @@
 package com.patreonshout.rest;
 
 import com.patreonshout.beans.ListBean;
+import com.patreonshout.beans.ListPost;
+import com.patreonshout.beans.PostBean;
 import com.patreonshout.beans.WebAccount;
 import com.patreonshout.beans.request.ListCreationRequest;
 import com.patreonshout.beans.request.ListDeleteRequest;
+import com.patreonshout.beans.request.ListPostUpdateRequest;
 import com.patreonshout.beans.request.ListUpdateRequest;
+import com.patreonshout.jpa.ListPostsRepository;
 import com.patreonshout.jpa.ListsRepository;
+import com.patreonshout.jpa.PostsRepository;
 import com.patreonshout.jpa.WebAccountFunctions;
 import com.patreonshout.rest.interfaces.ListImpl;
 import com.patreonshout.utils.ResponseUtil;
@@ -40,6 +45,17 @@ public class ListSvc extends BaseSvc implements ListImpl {
     @Autowired
     private WebAccountFunctions webAccountFunctions;
 
+    /**
+     * An autowired Spring component that endpoints utilize to send or receive data from the database
+     */
+    @Autowired
+    private PostsRepository postsRepository;
+
+    /**
+     * An autowired Spring component that endpoints utilize to send or receive data from the database
+     */
+    @Autowired
+    private ListPostsRepository listPostsRepository;
 
     /**
      * {@inheritDoc}
@@ -129,4 +145,80 @@ public class ListSvc extends BaseSvc implements ListImpl {
 
         return ResponseUtil.Generic(HttpStatus.OK, "List removed if the list existed.");
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public ResponseEntity<?> GetUserListsWithPost(String loginToken, String url) {
+        WebAccount userAccount = webAccountFunctions.findByLoginToken(loginToken);
+
+        if (userAccount == null) {
+            return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
+        }
+
+        // if no post matches to the databased, then return as if we didn't find any matching posts
+        if (postsRepository.findPostBeanByUrl(url) == null) {
+            return new ResponseEntity<>("[]", HttpStatus.FOUND);
+        }
+
+        // build response so ResponseEntity can parse the returned objects correctly
+        List<Map<String, String>> response = new ArrayList<>();
+
+        for (ListBean lb : userAccount.getListBean()) {
+            for (ListPost lp : lb.getListPosts()) {
+                if (lp.getPost().getUrl().equals(url)) {
+                    Map<String, String> listResponse = new HashMap<>();
+
+                    listResponse.put("title", lb.getTitle());
+                    listResponse.put("description", lb.getDescription());
+                    listResponse.put("list_id", String.valueOf(lb.getListId()));
+
+                    response.add(listResponse);
+                }
+            }
+        }
+
+        return new ResponseEntity<>(response, HttpStatus.FOUND);
+    }
+
+
+    public ResponseEntity<?> UpdateUserPostLists(ListPostUpdateRequest listPostUpdateRequest) {
+        WebAccount userAccount = webAccountFunctions.findByLoginToken(listPostUpdateRequest.getLoginToken());
+
+        if (userAccount == null) {
+            return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
+        }
+
+        // if no post matches to the databased, then return as if we didn't find any matching posts
+        PostBean pb;
+        if ((pb = postsRepository.findPostBeanByUrl(listPostUpdateRequest.getUrl())) == null) {
+            return new ResponseEntity<>("Post lists updated.", HttpStatus.OK);
+        }
+
+        for (ListPostUpdateRequest.ListUpdate listUpdate : listPostUpdateRequest.getListUpdates()) {
+            ListBean lb = listsRepository.getListByList_id(listUpdate.getListId());
+
+            ListPost listPost = new ListPost();
+            listPost.setList(lb);
+            listPost.setPost(pb);
+
+            if (listUpdate.isUpdate()) {
+                try {
+                    listPostsRepository.save(listPost);
+                }
+                catch (Exception e) { // if we try to save a duplicate post it will print the stack trace
+                    e.printStackTrace();
+                }
+
+            }
+            else {
+                listPostsRepository.delete(listPost);
+//                listPostsRepository.deleteByListAndPost(lb.getListId(), pb.getPostId());
+            }
+        }
+
+
+        return ResponseUtil.Generic(HttpStatus.OK, "Post lists updated.");
+    }
+
 }
