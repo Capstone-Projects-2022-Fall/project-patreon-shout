@@ -2,6 +2,7 @@ package com.patreonshout.rest.interfaces;
 
 import com.patreonshout.beans.request.ListCreationRequest;
 import com.patreonshout.beans.request.ListDeleteRequest;
+import com.patreonshout.beans.request.ListPostUpdateRequest;
 import com.patreonshout.beans.request.ListUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -45,6 +46,26 @@ public interface ListImpl {
     ResponseEntity<?> GetUserLists(@RequestParam(required = true, name = "loginToken") String loginToken);
 
     /**
+     * Endpoint that will get a list of {@link com.patreonshout.beans.ListBean} objects from the database that have a specific post in them
+     *
+     * @param loginToken is the login token provided to the user upon sign in
+     * @param url is the url of the post we want to get the lists of
+     * @return a json body of list objects for a user
+     */
+    @GetMapping("/post")
+    @Operation(summary = "Gets the Lists of the user that the provided post is apart of")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "302",
+                    description = "user lists returned",
+                    content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "400",
+                    description = "the login token provided doesn't match up with the owner of the requested list's login token",
+                    content = {@Content(mediaType = "application/json")}
+            )
+    })
+    ResponseEntity<?> GetUserListsWithPost(@RequestParam(name = "loginToken") String loginToken, @RequestParam(name = "url") String url);
+
+    /**
      * Endpoint that will add a new {@link com.patreonshout.beans.ListBean} object to the database
      *
      * @param listCreationRequest is the {@link com.patreonshout.beans.request.ListCreationRequest} object that contains {@link com.patreonshout.beans.ListBean} request parameters
@@ -72,11 +93,11 @@ public interface ListImpl {
      * @param listUpdateRequest is the {@link com.patreonshout.beans.request.ListUpdateRequest} object that contains {@link com.patreonshout.beans.ListBean} request parameters
      * @return {@link org.springframework.http.HttpStatus#OK} if successful, {@link org.springframework.http.HttpStatus#BAD_REQUEST} otherwise
      */
-    @PutMapping("list")
+    @PutMapping("/list")
     @Operation(summary = "Updates one of the user's lists")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201",
-                    description = "List created.",
+                    description = "List updated.",
                     content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "400",
                     description = "the login token provided doesn't match up with the owner of the requested list's login token",
@@ -91,7 +112,7 @@ public interface ListImpl {
      * @param listDeleteRequest is the {@link com.patreonshout.beans.request.ListDeleteRequest} object that contains {@link com.patreonshout.beans.ListBean} requests parameters
      * @return {@link org.springframework.http.HttpStatus#OK} if successful, {@link org.springframework.http.HttpStatus#BAD_REQUEST} otherwise
      */
-    @DeleteMapping("list")
+    @DeleteMapping("/list")
     @Operation(summary = "Deletes one of the user's lists")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
@@ -103,4 +124,23 @@ public interface ListImpl {
             )
     })
     ResponseEntity<?> DeleteUserList(@RequestBody ListDeleteRequest listDeleteRequest);
+
+    /**
+     * Updates the user's post lists
+     *
+     * @param listPostUpdateRequest is the {@link com.patreonshout.beans.request.ListPostUpdateRequest} object that contains {@link com.patreonshout.beans.ListPost} requests parameters
+     * @return {@link org.springframework.http.HttpStatus#OK} if successful, {@link org.springframework.http.HttpStatus#BAD_REQUEST} otherwise
+     */
+    @PutMapping("/post")
+    @Operation(summary = "Updates the lists of the specified post in the json request")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201",
+                    description = "Post lists updated.",
+                    content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "400",
+                    description = "the login token provided doesn't match up with the owner of the requested list's login token",
+                    content = {@Content(mediaType = "application/json")}
+            )
+    })
+    ResponseEntity<?> UpdateUserPostLists(@RequestBody ListPostUpdateRequest listPostUpdateRequest);
 }
