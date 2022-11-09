@@ -1,23 +1,12 @@
 package com.patreonshout.beans;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Type;
 import com.patreon.resources.shared.BaseResource;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 /**
@@ -39,32 +28,53 @@ public class PostBean extends BaseResource {
     @Column(name="post_id")
     protected int postId;
 
+    /**
+     * Platform app id. Can be null
+     */
     @Column(name="app_id")
     protected String appId;
 
+    /**
+     * Processing status of the post. Can be null
+     */
     @Column(name="app_status")
     protected String appStatus;
 
+    /**
+     * The content of the Patreon post. Can be null
+     */
+    @Column(name="content")
+    protected String content;
+
+    /**
+     * An object containing embed data if media is embedded in the post, or none if there is no embed
+     */
     @Column(name="embed_data")
     protected String embedData;
 
+    /**
+     * Embed media url. Can be null
+     */
     @Column(name="embed_url")
     protected String embedUrl;
 
+    /**
+     * True if the post incurs a bill as part of a pay-per-post campaign. TODO: Can be null
+     */
     @Column(name="is_paid")
-    protected String isPaid;
+    protected Boolean isPaid;
 
     /**
-     * creator is the name of the content creator who made the Patreon post
+     * True if the post is viewable by anyone. TODO: Can be null
      */
-    @Column(name="creator_page_url")
-    protected String creatorPageUrl;
+    @Column(name="is_public")
+    protected Boolean isPublic;
 
     /**
-     * publishdate is the date at which a Patreonpost was published
+     * Datetime that the creator most recently published (made publicly visible) the post. Can be null
      */
-    @Column(name="publishdate")
-    protected String publishDate;
+    @Column(name="publishdate") // TODO: This should be published_at
+    protected String publishDate; // TODO: This should be publishedAt and in UTC ISO format
 
     /**
      * title is the title of the Patreon post
@@ -73,22 +83,16 @@ public class PostBean extends BaseResource {
     protected String title;
 
     /**
+     * Name of the content creator who made the Patreon post
+     */
+    @Column(name="creator_page_url")
+    protected String creatorPageUrl;
+
+    /**
      * url is the url of the Patreon post
      */
     @Column(name="url")
     protected String url;
-
-    /**
-     * content is the content of the Patreon post
-     */
-    @Column(name="content")
-    protected String content;
-
-    /**
-     * isprivate denotes whether the Patreon post is private or public
-     */
-    @Column(name="is_public")
-    protected boolean isPublic;
 
     /**
      * tags is the list of {@link com.patreonshout.beans.Tag} objects linked with this PostBean object
