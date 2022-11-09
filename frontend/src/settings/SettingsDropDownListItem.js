@@ -8,7 +8,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import SaveIcon from '@mui/icons-material/Save';
 import {putSocialIntegration} from "../services/api/webaccount/putSocialIntegration";
 
-function DropDownListItem({name, textfieldLabel, dropdown, defaultChecked, defaultValue, isDisabled}) {
+function SettingsDropDownListItem({name, textfieldLabel, dropdown, defaultChecked, defaultValue, isDisabled}) {
     const [checked, setChecked] = useState(defaultChecked);
     const [showDropdown, setShowDropdown] = useState(defaultChecked && dropdown ? "show" : "hide");
     const [textfieldValue, setTextfieldValue] = useState(defaultValue);
@@ -90,4 +90,4 @@ function DropDownListItem({name, textfieldLabel, dropdown, defaultChecked, defau
     );
 }
 
-export default DropDownListItem;
+export default SettingsDropDownListItem;

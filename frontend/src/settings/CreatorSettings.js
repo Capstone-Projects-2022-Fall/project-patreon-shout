@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {List, Typography} from '@mui/material';
 import PatreonConnect from "../components/PatreonConnect";
-import DropDownListItem from "./DropDownListItem";
+import SettingsDropDownListItem from "./SettingsDropDownListItem";
 import {getSocialIntegrations} from "../services/api/webaccount/getSocialIntegration";
 import {render} from "react-dom";
 
@@ -36,7 +36,7 @@ function htmlReturn(socialIntegrations) {
                 <PatreonConnect/>
             </Typography>
 
-            <DropDownListItem
+            <SettingsDropDownListItem
                 name="Discord"
                 textfieldLabel="Webhook URL"
                 dropdown={true}
@@ -44,7 +44,7 @@ function htmlReturn(socialIntegrations) {
                 defaultValue={socialIntegrations.discord}
             />
 
-            <DropDownListItem
+            <SettingsDropDownListItem
                 name="Twitter"
                 textfieldLabel="Twitter Token"
                 dropdown={true}
@@ -52,7 +52,7 @@ function htmlReturn(socialIntegrations) {
                 defaultValue={socialIntegrations.twitter}
             />
 
-            <DropDownListItem
+            <SettingsDropDownListItem
                 name="Instagram"
                 textfieldLabel="Instagram Token"
                 dropdown={true}
