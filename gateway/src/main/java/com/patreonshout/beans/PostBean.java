@@ -5,6 +5,8 @@ import com.patreon.resources.shared.BaseResource;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.util.List;
@@ -99,6 +101,13 @@ public class PostBean extends BaseResource {
      */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "postBean")
     List<Tag> tags;
+
+    /**
+     * listPosts is the List of {@link com.patreonshout.beans.ListPost} objects linked with this ListBean object
+     */
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "post")
+    List<ListPost> listPosts;
 
     /**
      * Used to check if a {@link com.patreonshout.beans.PostBean} is equal to another PostBean object
