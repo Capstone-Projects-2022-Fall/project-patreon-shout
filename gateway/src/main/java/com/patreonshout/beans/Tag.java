@@ -1,5 +1,6 @@
 package com.patreonshout.beans;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -41,14 +42,14 @@ public class Tag {
     /**
      * webAccount is the {@link com.patreonshout.beans.WebAccount} object linked with this object
      */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "webaccount_id", nullable = false)
     protected WebAccount webAccount;
 
     /**
      * postBean is the {@link com.patreonshout.beans.PostBean} object linked with this object
      */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "post_id", nullable = false)
     protected PostBean postBean;
 }

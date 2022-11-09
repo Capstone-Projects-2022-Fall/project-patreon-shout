@@ -1,22 +1,39 @@
 import React, {useState} from "react";
 import "./list_css/ListButton.css";
 import ListConfigModal from "./ListConfigModal";
+import {deleteList} from "../services/api/lists/deleteList";
+import {getPosts} from "../services/api/posts";
+import {getLists} from "../services/api/lists/getLists";
 
-function ListButton({ setPosts, setLists, added_creators, id, title, description }) {
+function ListButton({ setPostData, setPosts, setLists, added_creators, id, title, description }) {
 
     const [listCreators, setListCreators] = useState(added_creators);
     const [listId, setListId] = useState(id);
     const [listTitle, setListTitle] = useState(title);
     const [listDesc, setListDesc] = useState(description);
 
-    const openList = () => {
-        console.log("open list");
-        console.log(listCreators);
-        setPosts("show");
-        setLists("hide");
+    // TODO: change getPosts with a request to get the posts for a particular listId
+    const getListPosts = () => {
+        let mounted = true;
+        getPosts("alexzwicky")
+            .then(items => {
+                if (mounted) {
+                    console.log(items);
+                    setPostData(items)
+                }
+            })
+        return () => mounted = false;
     }
 
 
+    const openList = () => {
+        console.log("open list");
+        console.log(listCreators);
+
+        getListPosts();
+        setPosts("show");
+        setLists("hide");
+    }
 
     return (
         <div className="listbutton">
@@ -34,7 +51,6 @@ function ListButton({ setPosts, setLists, added_creators, id, title, description
                 setListTitle={setListTitle}
                 setListDesc={setListDesc}
             />
-            {/*<MoreHorizIcon id="listSetting" onClick={listSettings}/>*/}
         </div>
     )
 }
