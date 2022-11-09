@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 /**
  * Component that contains functions for WebAccount endpoints that allow interaction with the database
@@ -43,6 +44,18 @@ public class WebAccountFunctions {
 			throw new PSException(HttpStatus.NOT_FOUND, "Login token does not belong to a user");
 
 		return webAccount;
+	}
+
+	public WebAccount getAccount(Long id) throws PSException {
+		if (id == null)
+			throw new PSException(HttpStatus.NOT_FOUND, "WebAccount ID not provided");
+
+		Optional<WebAccount> webAccount = webAccountRepository.findById(id);
+
+		if (webAccount.isEmpty())
+			throw new PSException(HttpStatus.NOT_FOUND, "WebAccount ID does not belong to a user");
+
+		return webAccount.get();
 	}
 
 	/**
