@@ -141,6 +141,7 @@ public class ListSvc extends BaseSvc implements ListImpl {
 
         System.out.println("lb: " + lb);
         System.out.println("wb: " + lb.getWebAccount());
+        // TODO: delete all posts in list_posts associated with this list
         listsRepository.deleteListByList_id(listDeleteRequest.getList_id());
 
         return ResponseUtil.Generic(HttpStatus.OK, "List removed if the list existed.");
@@ -212,8 +213,7 @@ public class ListSvc extends BaseSvc implements ListImpl {
 
             }
             else {
-                listPostsRepository.delete(listPost);
-//                listPostsRepository.deleteByListAndPost(lb.getListId(), pb.getPostId());
+                listPostsRepository.deleteByListAndPost(lb.getListId(), pb.getPostId());
             }
         }
 
