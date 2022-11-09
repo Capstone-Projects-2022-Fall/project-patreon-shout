@@ -1,14 +1,13 @@
-import { config } from "../../../Constants";
+import { config } from "../../../../Constants";
 
 /**
- * Deletes a user list
+ * Deletes a post from a list
  *
  * @param request is the request json body sent to the endpoint
  * @returns {Promise<any>} is the json data returned
  */
-
-export async function deleteList(request) {
-    return fetch(config.url.API_URL + '/lists/list', {
+export async function deletePostFromFavoritesList(request) {
+    return fetch(config.url.API_URL + '/lists/favorite', {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
