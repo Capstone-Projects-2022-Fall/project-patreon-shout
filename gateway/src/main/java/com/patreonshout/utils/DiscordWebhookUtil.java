@@ -1,12 +1,15 @@
 package com.patreonshout.utils;
 
 import club.minnced.discord.webhook.WebhookClient;
+import club.minnced.discord.webhook.exception.HttpException;
+import club.minnced.discord.webhook.receive.ReadonlyMessage;
 import club.minnced.discord.webhook.send.WebhookEmbed;
 import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
 import com.patreonshout.beans.patreon_api.PatreonPostV2;
 import com.vladsch.flexmark.html2md.converter.FlexmarkHtmlConverter;
 
 import java.time.OffsetDateTime;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Sends Discord embed's to specified channels using webhooks
@@ -40,6 +43,13 @@ public class DiscordWebhookUtil {
 	 */
 	public DiscordWebhookUtil(String webhookUrl) {
 		client = WebhookClient.withUrl(webhookUrl);
+
+		// * Blocks errors from forcefully outputting -- instead, we catch them in a traditional try/catch block
+		client.setErrorHandler((client, message, throwable) -> {
+			if (throwable instanceof HttpException)
+				client.close();
+		});
+
 		embed = new WebhookEmbedBuilder();
 		embed.setTimestamp(OffsetDateTime.now()); // this line might not be useful, its just to test what we can currently do
 //		embed.setAuthor(new WebhookEmbed.EmbedAuthor("PDA", "https://i.imgur.com/KlveixN.png", "https://github.com/cis3296s22/patreon-discord-announcer"));
@@ -62,8 +72,8 @@ public class DiscordWebhookUtil {
 	/**
 	 * sends the embed to the designated channel via the webhook
 	 */
-	public void send() {
-		client.send(embed.build());
+	public CompletableFuture<ReadonlyMessage> send() {
+		return client.send(embed.build());
 	}
 
 	/**
