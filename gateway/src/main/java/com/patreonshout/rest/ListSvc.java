@@ -1,9 +1,11 @@
 package com.patreonshout.rest;
 
+import com.patreonshout.PSException;
 import com.patreonshout.beans.ListBean;
 import com.patreonshout.beans.ListPost;
 import com.patreonshout.beans.PostBean;
 import com.patreonshout.beans.WebAccount;
+import com.patreonshout.beans.request.FavoriteListRequest;
 import com.patreonshout.beans.request.ListCreationRequest;
 import com.patreonshout.beans.request.ListDeleteRequest;
 import com.patreonshout.beans.request.ListPostUpdateRequest;
@@ -182,7 +184,9 @@ public class ListSvc extends BaseSvc implements ListImpl {
         return new ResponseEntity<>(response, HttpStatus.FOUND);
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     public ResponseEntity<?> UpdateUserPostLists(ListPostUpdateRequest listPostUpdateRequest) {
         WebAccount userAccount = webAccountFunctions.findByLoginToken(listPostUpdateRequest.getLoginToken());
 
@@ -219,6 +223,75 @@ public class ListSvc extends BaseSvc implements ListImpl {
 
 
         return ResponseUtil.Generic(HttpStatus.OK, "Post lists updated.");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public ResponseEntity<?> GetPostsFromList(String loginToken, int list_id) {
+
+
+
+        return new ResponseEntity<>("hello", HttpStatus.FOUND);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public ResponseEntity<?> AddPostToFavoritesList(FavoriteListRequest favoriteListRequest) throws PSException {
+        WebAccount userAccount = webAccountFunctions.getAccount(favoriteListRequest.getLoginToken());
+
+        if (userAccount == null) {
+            return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
+        }
+
+        ListBean favList = listsRepository.findListBeanByWebAccountAndTitle(userAccount, "Favorites");
+
+        // if there is no favorites list, then create one
+        if (favList == null) {
+            favList = new ListBean();
+
+            favList.setWebAccount(userAccount);
+            favList.setTitle("Favorites");
+            favList.setDescription("Your favorite posts");
+
+            listsRepository.save(favList);
+            favList = listsRepository.findListBeanByWebAccountAndTitle(userAccount, "Favorites"); // if it is a new list, make sure we get the newly assigned list_id from the database
+        }
+
+        ListPost listPost = new ListPost();
+        listPost.setList(favList);
+
+        PostBean favPost = postsRepository.findPostBeanByUrl(favoriteListRequest.getUrl());
+        listPost.setPost(favPost);
+
+        listPostsRepository.save(listPost);
+
+        return ResponseUtil.Generic(HttpStatus.OK, "Favorites lists updated.");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public ResponseEntity<?> DeletePostFromFavoritesList(FavoriteListRequest favoriteListRequest) throws PSException {
+        WebAccount userAccount = webAccountFunctions.getAccount(favoriteListRequest.getLoginToken());
+
+        if (userAccount == null) {
+            return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
+        }
+
+        ListBean favList = listsRepository.findListBeanByWebAccountAndTitle(userAccount, "Favorites");
+
+        // if there is no favorites list
+        if (favList == null) {
+            return ResponseUtil.Generic(HttpStatus.OK, "Favorites lists updated.");
+        }
+
+        PostBean favPost = postsRepository.findPostBeanByUrl(favoriteListRequest.getUrl());
+
+        listPostsRepository.deleteByListAndPost(favList.getListId(), favPost.getPostId());
+
+        return ResponseUtil.Generic(HttpStatus.OK, "Favorites lists updated.");
     }
 
 }

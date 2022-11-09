@@ -12,6 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface ListPostsRepository extends JpaRepository<ListPost, Integer> {
 
+    /**
+     * Deletes a {@link com.patreonshout.beans.ListPost} in the database by it's list_id and post_id
+     *
+     * @param list_id the id of the list
+     * @param post_id the id of the post
+     */
     @Modifying
     @Query(value = "DELETE FROM list_posts WHERE list_id = ?1 AND post_id = ?2",
             nativeQuery = true)

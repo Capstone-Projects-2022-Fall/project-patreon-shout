@@ -1,5 +1,7 @@
 package com.patreonshout.rest.interfaces;
 
+import com.patreonshout.PSException;
+import com.patreonshout.beans.request.FavoriteListRequest;
 import com.patreonshout.beans.request.ListCreationRequest;
 import com.patreonshout.beans.request.ListDeleteRequest;
 import com.patreonshout.beans.request.ListPostUpdateRequest;
@@ -143,4 +145,32 @@ public interface ListImpl {
             )
     })
     ResponseEntity<?> UpdateUserPostLists(@RequestBody ListPostUpdateRequest listPostUpdateRequest);
+
+    /**
+     * Gets the post from a specific list for a specific user
+     *
+     * @param loginToken is the login token provided to the user upon sign in
+     * @param list_id is the id of the list we want to get the posts of
+     * @return a list of {@link com.patreonshout.beans.PostBean} objects from the specified list_id
+     */
+    @GetMapping("list")
+    ResponseEntity<?> GetPostsFromList(@RequestParam(name = "loginToken") String loginToken, @RequestParam(name = "list_id") int list_id);
+
+    /**
+     * Adds a post to the favorites list
+     *
+     * @param favoriteListAddRequest is the {@link com.patreonshout.beans.request.FavoriteListRequest} object that contains {@link com.patreonshout.beans.ListPost} requests parameters
+     * @return TODO
+     */
+    @PostMapping("/favorite")
+    ResponseEntity<?> AddPostToFavoritesList(@RequestBody FavoriteListRequest favoriteListAddRequest) throws PSException;
+
+    /**
+     * Deletes a post from the favorites list
+     *
+     * @param favoriteListDeleteRequest is the {@link com.patreonshout.beans.request.FavoriteListRequest} object that contains {@link com.patreonshout.beans.ListPost} requests parameters
+     * @return TODO
+     */
+    @DeleteMapping("/favorite")
+    ResponseEntity<?> DeletePostFromFavoritesList(@RequestBody FavoriteListRequest favoriteListDeleteRequest) throws PSException;
 }
