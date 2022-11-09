@@ -124,7 +124,7 @@ public class WebAccountFunctions {
 
 		String data = putSocialIntegrationRequest.getData();
 
-		if (data.isEmpty())
+		if (data != null && data.isEmpty())
 			data = null;
 
 		switch (putSocialIntegrationRequest.getIntegrationName()) {
