@@ -3,6 +3,8 @@ package com.patreonshout.utils;
 import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.send.WebhookEmbed;
 import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
+import com.patreonshout.beans.patreon_api.PatreonPostV2;
+import com.vladsch.flexmark.html2md.converter.FlexmarkHtmlConverter;
 
 import java.time.OffsetDateTime;
 
@@ -27,6 +29,11 @@ public class DiscordWebhookUtil {
 	private final WebhookEmbedBuilder embed;
 
 	/**
+	 * Used to convert {@link String} HTML objects to Markdown format
+	 */
+	FlexmarkHtmlConverter converter = FlexmarkHtmlConverter.builder().build();
+
+	/**
 	 * Instantiates client and embed with necessary information
 	 *
 	 * @param webhookUrl is the webhook url provided to client to know where to send data to
@@ -37,6 +44,19 @@ public class DiscordWebhookUtil {
 		embed.setTimestamp(OffsetDateTime.now()); // this line might not be useful, its just to test what we can currently do
 //		embed.setAuthor(new WebhookEmbed.EmbedAuthor("PDA", "https://i.imgur.com/KlveixN.png", "https://github.com/cis3296s22/patreon-discord-announcer"));
 		// TODO: the "https://i.imgur.com/KlveixN.png" needs to be changed/fixed
+	}
+
+	public DiscordWebhookUtil(String webhookUrl, PatreonPostV2 patreonPost) {//, String title, String titleUrl, String content, Boolean isPublic) {
+		this(webhookUrl);
+		this.setColor(patreonPost.getIsPublic() ? 0x00FF00 : 0xFF0000);
+		this.setTitle(patreonPost.getTitle(), patreonPost.getUrl());
+
+		String outputContent = patreonPost.getContent() != null ? converter.convert(patreonPost.getContent()) : "This post has no text content";
+		this.setDescription(patreonPost.getIsPublic() ? outputContent : "This post is **private**");
+
+		// TODO: This seems to never be true as Patreon never sends us images/videos.
+//				if  (patreonPost.getEmbedUrl() != null)
+//					discordWebhookUtil.setImage(patreonPost.getEmbedUrl());
 	}
 
 	/**
