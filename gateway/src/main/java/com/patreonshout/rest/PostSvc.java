@@ -1,6 +1,5 @@
 package com.patreonshout.rest;
 
-import com.patreonshout.beans.ListBean;
 import com.patreonshout.beans.PostBean;
 import com.patreonshout.beans.WebAccount;
 import com.patreonshout.beans.request.PostGetMultipleRequest;
@@ -8,7 +7,6 @@ import com.patreonshout.jpa.PostsRepository;
 import com.patreonshout.jpa.WebAccountFunctions;
 import com.patreonshout.rest.interfaces.PostImpl;
 import com.patreonshout.utils.ResponseUtil;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -51,7 +49,7 @@ public class PostSvc extends BaseSvc implements PostImpl {
         List<Map<String, String>> response = new ArrayList<>();
 
         for (PostBean pb : posts) {
-            if (!pb.isPublic()) {
+            if (!pb.getIsPublic()) {
                 pb.setContent("This post is private");
             }
 
@@ -61,7 +59,7 @@ public class PostSvc extends BaseSvc implements PostImpl {
             listResponse.put("url", pb.getUrl());
             listResponse.put("content", pb.getContent());
             listResponse.put("published_at", pb.getPublishDate());
-            listResponse.put("is_public", String.valueOf(pb.isPublic()));
+            listResponse.put("is_public", String.valueOf(pb.getIsPublic()));
 
             response.add(listResponse);
         }
@@ -82,7 +80,7 @@ public class PostSvc extends BaseSvc implements PostImpl {
         Page<PostBean> page = postsRepository.getMultipleCreatorPosts(postGetMultipleRequest.getCreators(), PageRequest.of(postGetMultipleRequest.getPage(), 5).withSort(Sort.Direction.ASC, "publishdate"));
 
         for (PostBean pb : page.getContent()) {
-            if (!pb.isPublic()) {
+            if (!pb.getIsPublic()) {
                 pb.setContent("This post is private");
             }
         }
