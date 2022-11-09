@@ -232,11 +232,40 @@ public class ListSvc extends BaseSvc implements ListImpl {
     /**
      * {@inheritDoc}
      */
-    public ResponseEntity<?> GetPostsFromList(String loginToken, int list_id) {
+    public ResponseEntity<?> GetPostsFromList(String loginToken, int list_id) throws PSException {
+        WebAccount userAccount = webAccountFunctions.getAccount(loginToken);
 
+        if (userAccount == null) {
+            return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
+        }
 
+        ListBean lb = listsRepository.getListByList_id(list_id);
+        List<ListPost> listPosts = listPostsRepository.findAllByList(lb);
 
-        return new ResponseEntity<>("hello", HttpStatus.FOUND);
+        // build response so ResponseEntity can parse the returned objects correctly
+        List<Map<String, String>> response = new ArrayList<>();
+
+        for (ListPost post : listPosts) {
+            Map<String, String> postResponse = new HashMap<>();
+
+            PostBean pb = post.getPost();
+
+            postResponse.put("creator_page_url", pb.getCreatorPageUrl());
+            postResponse.put("published_at", pb.getPublishDate());
+            postResponse.put("title", pb.getTitle());
+            postResponse.put("url", pb.getUrl());
+            postResponse.put("content", pb.getContent());
+            postResponse.put("is_public", String.valueOf(pb.getIsPublic()));
+            postResponse.put("app_id", pb.getAppId());
+            postResponse.put("app_status", pb.getAppStatus());
+            postResponse.put("embed_data", pb.getEmbedData());
+            postResponse.put("embed_url", pb.getEmbedUrl());
+            postResponse.put("is_paid", String.valueOf(pb.getIsPaid()));
+
+            response.add(postResponse);
+        }
+
+        return new ResponseEntity<>(response, HttpStatus.FOUND);
     }
 
     /**
