@@ -5,6 +5,7 @@ import com.patreon.PatreonOAuth;
 import com.patreon.resources.Campaign;
 import com.patreonshout.PSException;
 import com.patreonshout.beans.PostBean;
+import com.patreonshout.beans.WebAccount;
 import com.patreonshout.beans.patreon_api.PatreonCampaignV2;
 import com.patreonshout.beans.patreon_api.PatreonPostV2;
 import com.patreonshout.beans.request.receivers.patreon.WebhookRequest;
@@ -19,10 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
@@ -64,10 +62,6 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	@Autowired
 	ObjectMapper objectMapper;
 
-	/**
-	 * TODO
-	 */
-	FlexmarkHtmlConverter converter = FlexmarkHtmlConverter.builder().build();
 
 	/**
 	 * {@inheritDoc}
@@ -159,14 +153,13 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 			}
 		}
 	}
-	/**
-	 * {@inheritDoc}
-	 */
+
 	public ResponseEntity<?> PatreonWebhook(
 			@RequestHeader("x-patreon-signature") String patreonSignature,
 			@RequestHeader("x-patreon-event") String patreonEvent,
 			@RequestHeader(HttpHeaders.USER_AGENT) String userAgent,
-			@RequestBody WebhookRequest webhookRequest
+			@RequestBody WebhookRequest webhookRequest,
+			@PathVariable String webaccountId
 	) {
 		// Ensure someone that isn't Patreon is hitting this endpoint
 		if (!userAgent.equals("Patreon HTTP Robot")) {
@@ -181,31 +174,34 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		   webhook event. Webhook secrets should not be shared.
 		 */
 
+		WebAccount webAccount;
+
+		try {
+			webAccount = webAccountFunctions.getAccount(webaccountId);
+		} catch (PSException ex) { // * getAccount() threw an error -- webaccountId does not exist in the database!
+
+			// TODO: Send a DELETE request to delete the webhook from Patreon
+		} catch (Exception ex) { // TODO: Unknown exception occurred...!  Return 200 OK so Patreon keeps using this Webhook until we fix whatever is wrong
+			ex.printStackTrace();
+			System.out.println("Unknown exception occurred");
+			return new ResponseEntity<>(HttpStatus.OK);
+		}
+
 		// Initiate post creation
-		DiscordWebhookUtil discordWebhookUtil = new DiscordWebhookUtil("https://discord.com/api/webhooks/1038528862289657906/zSVQAw3DI3AYdBVAL1BgQnD8lAavFvsZ-BItnQgrqH82XyfxuZQwRXSjA0cjPRK0-xCs");
 		PatreonPostV2 patreonPost;
+
+		// Convert the data attribute to a Patreon Post POJO
+		try {
+			patreonPost = objectMapper.convertValue(webhookRequest.getData().getAttributes(), PatreonPostV2.class);
+		} catch (Exception e) { // * We want to catch these Exceptions and return 200 OK because if we time out 3 times, Patreon will stop using our webhook.
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.OK);
+		}
 
 		switch(patreonEvent) {
 			case "posts:publish":
 				System.out.println("Received: " + patreonEvent);
-				// Convert the data attribute to a Patreon Post POJO
-				try {
-					patreonPost = objectMapper.convertValue(webhookRequest.getData().getAttributes(), PatreonPostV2.class);
-				} catch (Exception e) {
-					// * We want to catch these Exceptions and return 200 OK because if we time out 3 times, Patreon will stop using our webhook.
-					e.printStackTrace();
-					return new ResponseEntity<>(HttpStatus.OK);
-				}
-
-				discordWebhookUtil.setColor(patreonPost.getIsPublic() ? 0x00FF00 : 0xFF0000);
-				discordWebhookUtil.setTitle(patreonPost.getTitle(), "https://patreon.com" + patreonPost.getUrl());
-				discordWebhookUtil.setDescription(patreonPost.getIsPublic() ? converter.convert(patreonPost.getContent()) : "This post is **private**");
-
-				// TODO: This seems to never be true as Patreon never sends us images/videos.
-//				if  (patreonPost.getEmbedUrl() != null)
-//					discordWebhookUtil.setImage(patreonPost.getEmbedUrl());
-
-				discordWebhookUtil.send();
+				sendDiscordMessage(patreonPost);
 				break;
 			case "posts:update":
 
@@ -219,5 +215,13 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		}
 
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	void sendDiscordMessage(PatreonPostV2 patreonPost) {
+		// TODO: Get user's webhook urls
+		new DiscordWebhookUtil(
+				"https://discord.com/api/webhooks/1038528862289657906/zSVQAw3DI3AYdBVAL1BgQnD8lAavFvsZ-BItnQgrqH82XyfxuZQwRXSjA0cjPRK0-xCs",
+				patreonPost
+		).send();
 	}
 }

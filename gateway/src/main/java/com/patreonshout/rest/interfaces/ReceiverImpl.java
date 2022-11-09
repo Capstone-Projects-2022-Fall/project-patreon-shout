@@ -38,11 +38,11 @@ public interface ReceiverImpl {
 	) throws IOException, PSException;
 
 
-	@PostMapping("/patreon/webhook")
+	@PostMapping("/patreon/webhook/{webaccountId}")
 	ResponseEntity<?> PatreonWebhook(
 			@RequestHeader("x-patreon-signature") String patreonSignature,
 			@RequestHeader("x-patreon-event") String patreonEvent,
 			@RequestHeader(HttpHeaders.USER_AGENT) String userAgent,
-			@RequestBody WebhookRequest webhookRequest
-	);
+			@RequestBody WebhookRequest webhookRequest,
+			@PathVariable String webaccountId);
 }
