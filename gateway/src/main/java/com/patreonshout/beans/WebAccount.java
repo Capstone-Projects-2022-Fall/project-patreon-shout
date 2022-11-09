@@ -71,13 +71,6 @@ public class WebAccount {
 	OldPasswords oldPasswords;
 
 	/**
-	 * listBean is the List of {@link com.patreonshout.beans.ListBean} objects linked with this WebAccount object
-	 */
-	@LazyCollection(LazyCollectionOption.FALSE)
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "webAccount")
-	List<ListBean> listBean;
-
-	/**
 	 * searchFilters is the list of {@link com.patreonshout.beans.SearchFilter} objects linked with this WebAccount object
 	 */
 	@LazyCollection(LazyCollectionOption.FALSE)

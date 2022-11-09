@@ -33,16 +33,14 @@ public class ListPost {
     protected int listPostsId;
 
     /**
-     * list is the {@link com.patreonshout.beans.ListBean} object linked with this object
+     * listId is the id of the list associated with the list_posts
      */
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "list_id", nullable = false)
-    protected ListBean list;
+    @Column(name = "list_id")
+    protected int listId;
 
     /**
-     * list is the {@link com.patreonshout.beans.ListBean} object linked with this object
+     * postId is the id of the post associated with the list_posts
      */
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "post_id", nullable = false)
-    protected PostBean post;
+    @Column(name = "post_id")
+    protected int postId;
 }

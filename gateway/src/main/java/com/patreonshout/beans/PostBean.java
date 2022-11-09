@@ -103,13 +103,6 @@ public class PostBean extends BaseResource {
     List<Tag> tags;
 
     /**
-     * listPosts is the List of {@link com.patreonshout.beans.ListPost} objects linked with this ListBean object
-     */
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "post")
-    List<ListPost> listPosts;
-
-    /**
      * Used to check if a {@link com.patreonshout.beans.PostBean} is equal to another PostBean object
      *
      * @param o is the object we check the current object against

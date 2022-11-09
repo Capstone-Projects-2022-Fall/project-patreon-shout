@@ -1,5 +1,6 @@
 package com.patreonshout.rest.interfaces;
 
+import com.patreonshout.PSException;
 import com.patreonshout.beans.request.TagAddRequest;
 import com.patreonshout.beans.request.TagDeleteRequest;
 import com.patreonshout.beans.request.TagGetRequest;
@@ -50,7 +51,7 @@ public interface TagImpl {
                     content = {@Content(mediaType = "application/json")}
             )
     })
-    ResponseEntity<?> AddTag(@RequestBody TagAddRequest tagAddRequest);
+    ResponseEntity<?> AddTag(@RequestBody TagAddRequest tagAddRequest) throws PSException;
 
     /**
      * Endpoint that will get the user given tags of a post from the database
@@ -73,7 +74,7 @@ public interface TagImpl {
                     content = {@Content(mediaType = "application/json")}
             )
     })
-    ResponseEntity<?> GetUserTagsOnSinglePost(@RequestBody TagGetRequest tagGetRequest);
+    ResponseEntity<?> GetUserTagsOnSinglePost(@RequestBody TagGetRequest tagGetRequest) throws PSException;
 
     /**
      * Endpoint that will delete the user given tag of a post from the database
@@ -96,6 +97,6 @@ public interface TagImpl {
                     content = {@Content(mediaType = "application/json")}
             )
     })
-    ResponseEntity<?> DeleteUserTagOnSinglePost(@RequestBody TagDeleteRequest tagDeleteRequest);
+    ResponseEntity<?> DeleteUserTagOnSinglePost(@RequestBody TagDeleteRequest tagDeleteRequest) throws PSException;
 
 }
