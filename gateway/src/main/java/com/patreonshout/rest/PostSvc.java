@@ -1,5 +1,6 @@
 package com.patreonshout.rest;
 
+import com.patreonshout.PSException;
 import com.patreonshout.beans.PostBean;
 import com.patreonshout.beans.WebAccount;
 import com.patreonshout.beans.request.PostGetMultipleRequest;
@@ -70,12 +71,8 @@ public class PostSvc extends BaseSvc implements PostImpl {
     /**
      * {@inheritDoc}
      */
-    public ResponseEntity<?> GetMultipleCreatorPosts(@RequestBody PostGetMultipleRequest postGetMultipleRequest) {
-        WebAccount userAccount = webAccountFunctions.findByLoginToken(postGetMultipleRequest.getLoginToken());
-
-        if (userAccount == null) {
-            return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
-        }
+    public ResponseEntity<?> GetMultipleCreatorPosts(@RequestBody PostGetMultipleRequest postGetMultipleRequest) throws PSException {
+        WebAccount userAccount = webAccountFunctions.getAccount(postGetMultipleRequest.getLoginToken());
 
         Page<PostBean> page = postsRepository.getMultipleCreatorPosts(postGetMultipleRequest.getCreators(), PageRequest.of(postGetMultipleRequest.getPage(), 5).withSort(Sort.Direction.ASC, "publishdate"));
 

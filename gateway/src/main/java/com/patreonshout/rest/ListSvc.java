@@ -1,5 +1,6 @@
 package com.patreonshout.rest;
 
+import com.patreonshout.PSException;
 import com.patreonshout.beans.ListBean;
 import com.patreonshout.beans.ListPost;
 import com.patreonshout.beans.PostBean;
@@ -60,12 +61,8 @@ public class ListSvc extends BaseSvc implements ListImpl {
     /**
      * {@inheritDoc}
      */
-    public ResponseEntity<?> GetUserLists(@RequestParam(name = "loginToken") String loginToken) {
-        WebAccount userAccount = webAccountFunctions.findByLoginToken(loginToken);
-
-        if (userAccount == null) {
-            return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
-        }
+    public ResponseEntity<?> GetUserLists(@RequestParam(name = "loginToken") String loginToken) throws PSException {
+        WebAccount userAccount = webAccountFunctions.getAccount(loginToken);
 
         // build response so ResponseEntity can parse the returned objects correctly
         List<Map<String, String>> response = new ArrayList<>();
@@ -87,12 +84,8 @@ public class ListSvc extends BaseSvc implements ListImpl {
     /**
      * {@inheritDoc}
      */
-    public ResponseEntity<?> AddUserList(@RequestBody ListCreationRequest listCreationRequest) {
-        WebAccount userAccount = webAccountFunctions.findByLoginToken(listCreationRequest.getLoginToken());
-
-        if (userAccount == null) {
-            return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
-        }
+    public ResponseEntity<?> AddUserList(@RequestBody ListCreationRequest listCreationRequest) throws PSException {
+        WebAccount userAccount = webAccountFunctions.getAccount(listCreationRequest.getLoginToken());
 
         ListBean lb = new ListBean();
         lb.setTitle(listCreationRequest.getTitle());
@@ -150,12 +143,8 @@ public class ListSvc extends BaseSvc implements ListImpl {
     /**
      * {@inheritDoc}
      */
-    public ResponseEntity<?> GetUserListsWithPost(String loginToken, String url) {
-        WebAccount userAccount = webAccountFunctions.findByLoginToken(loginToken);
-
-        if (userAccount == null) {
-            return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
-        }
+    public ResponseEntity<?> GetUserListsWithPost(String loginToken, String url) throws PSException {
+        WebAccount userAccount = webAccountFunctions.getAccount(loginToken);
 
         // if no post matches to the databased, then return as if we didn't find any matching posts
         if (postsRepository.findPostBeanByUrl(url) == null) {
@@ -183,12 +172,8 @@ public class ListSvc extends BaseSvc implements ListImpl {
     }
 
 
-    public ResponseEntity<?> UpdateUserPostLists(ListPostUpdateRequest listPostUpdateRequest) {
-        WebAccount userAccount = webAccountFunctions.findByLoginToken(listPostUpdateRequest.getLoginToken());
-
-        if (userAccount == null) {
-            return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
-        }
+    public ResponseEntity<?> UpdateUserPostLists(ListPostUpdateRequest listPostUpdateRequest) throws PSException {
+        WebAccount userAccount = webAccountFunctions.getAccount(listPostUpdateRequest.getLoginToken());
 
         // if no post matches to the databased, then return as if we didn't find any matching posts
         PostBean pb;
