@@ -2,7 +2,7 @@ package com.patreonshout.beans.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.patreonshout.beans.WebAccount;
-import com.patreonshout.jpa.constants.IntegrationType;
+import com.patreonshout.jpa.constants.SocialIntegrationName;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,10 +20,10 @@ public class PutSocialIntegrationRequest {
 	String loginToken;
 
 	/**
-	 * An {@link IntegrationType} that will contain the type of social platform desired for this request
+	 * An {@link SocialIntegrationName} that will contain the type of social platform desired for this request
 	 */
 	@JsonProperty("integration_name")
-	IntegrationType integrationName;
+	SocialIntegrationName socialIntegrationName;
 
 	/**
 	 * A {@link String} that will contain either a webhook URL or a token
