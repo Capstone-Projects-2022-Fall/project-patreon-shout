@@ -33,6 +33,12 @@ public class WebAccountFunctions {
 	@Autowired
 	SecurityConfiguration securityConfiguration;
 
+	/**
+	 * Gets a {@link WebAccount} object from a specified login token
+	 *
+	 * @param loginToken is the user's session login token used to validate the user
+	 * @return {@link WebAccount} object holding data corresponding to the provided login token
+	 */
 	@Transactional
 	public WebAccount getAccount(String loginToken) throws PSException {
 		if (loginToken == null)
@@ -46,6 +52,13 @@ public class WebAccountFunctions {
 		return webAccount;
 	}
 
+	/**
+	 * Gets a {@link WebAccount} object from an id
+	 *
+	 * @param id is the webaccount's id
+	 * @return {@link WebAccount} object holding data corresponding to the provided login token
+	 */
+	@Transactional
 	public WebAccount getAccount(Long id) throws PSException {
 		if (id == null)
 			throw new PSException(HttpStatus.NOT_FOUND, "WebAccount ID not provided");
@@ -294,6 +307,13 @@ public class WebAccountFunctions {
 		webAccountRepository.save(webAccount);
 	}
 
+	@Transactional
+	public void testy(String loginToken) throws PSException {
+		WebAccount webAccount = this.getAccount(loginToken);
+
+
+	}
+
 	/**
 	 * Checks if the given raw password meets our password requirements
 	 *
@@ -304,15 +324,5 @@ public class WebAccountFunctions {
 		// ! Given new password does not meet our password requirements
 		if (!securityConfiguration.passwordIsValid(rawPassword))
 			throw new PSException(HttpStatus.UNAUTHORIZED, "New password does not meet password requirements");
-	}
-
-	/**
-	 * Gets a {@link com.patreonshout.beans.WebAccount} object from a specified login token
-	 *
-	 * @param loginToken is the user's session login token used to validate the user
-	 * @return {@link com.patreonshout.beans.WebAccount} object holding data corresponding to the provided login token
-	 */
-	public WebAccount findByLoginToken(String loginToken) {
-		return webAccountRepository.findByLoginToken(loginToken);
 	}
 }

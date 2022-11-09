@@ -10,12 +10,12 @@ import com.patreonshout.beans.patreon_api.PatreonCampaignV2;
 import com.patreonshout.beans.patreon_api.PatreonPostV2;
 import com.patreonshout.beans.request.receivers.patreon.WebhookRequest;
 import com.patreonshout.jpa.CreatorPageFunctions;
+import com.patreonshout.jpa.PatreonCampaignsFunctions;
 import com.patreonshout.jpa.PostsRepository;
 import com.patreonshout.jpa.WebAccountFunctions;
-import com.patreonshout.utils.DiscordWebhookUtil;
 import com.patreonshout.patreon.CustomPatreonAPI;
 import com.patreonshout.rest.interfaces.ReceiverImpl;
-import com.vladsch.flexmark.html2md.converter.FlexmarkHtmlConverter;
+import com.patreonshout.utils.DiscordWebhookUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -43,6 +43,9 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	 */
 	@Autowired
 	CreatorPageFunctions creatorPageFunctions;
+
+	@Autowired
+	PatreonCampaignsFunctions patreonCampaignsFunctions;
 
 	/**
 	 * An autowired Spring component that endpoints utilize to send or receive data from the database
@@ -112,13 +115,14 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 
 			// * End of TODO
 
-			String pageUrl = finalPatreonUrl[0].getAttributes().getVanity();
+			PatreonCampaignV2.Data campaign = finalPatreonUrl[0];
 
 			// Store their creator page information
-			creatorPageFunctions.putCreatorPage(pageUrl);
+			patreonCampaignsFunctions.putCampaign(campaign);
+//			creatorPageFunctions.putCreatorPage(campaign.getAttributes().getVanity()); // TODO: Phase this out
 
 			// put content creator posts in database
-			savePosts(accessToken, pageUrl);
+			savePosts(accessToken, campaign.getAttributes().getVanity());
 
 			// Put Patreon tokens in database
 			webAccountFunctions.putPatreonTokens(accessToken, refreshToken, state);
