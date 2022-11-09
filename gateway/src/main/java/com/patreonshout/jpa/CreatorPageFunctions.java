@@ -2,17 +2,9 @@ package com.patreonshout.jpa;
 
 import com.patreonshout.PSException;
 import com.patreonshout.beans.CreatorPage;
-import com.patreonshout.beans.PatreonTokens;
-import com.patreonshout.beans.SocialIntegration;
-import com.patreonshout.beans.WebAccount;
 import com.patreonshout.beans.constants.CreatorPageCategory;
-import com.patreonshout.beans.request.LoginRequest;
-import com.patreonshout.beans.request.RegisterRequest;
-import com.patreonshout.beans.request.SocialIntegrationRequest;
-import com.patreonshout.config.SecurityConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
