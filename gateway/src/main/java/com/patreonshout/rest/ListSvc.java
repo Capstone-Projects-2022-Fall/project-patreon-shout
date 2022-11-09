@@ -128,9 +128,13 @@ public class ListSvc extends BaseSvc implements ListImpl {
      * {@inheritDoc}
      */
     public ResponseEntity<?> DeleteUserList(@RequestBody ListDeleteRequest listDeleteRequest) {
-        ListBean lb = listsRepository.getListByList_id(listDeleteRequest.getList_id());
 
-        // TODO: fix the error messages for this (check login token first, then check if list exists) dont give any info for potential attacker
+        WebAccount userAccount = webAccountFunctions.findByLoginToken(listDeleteRequest.getLoginToken());
+        if (userAccount == null) {
+            return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
+        }
+
+        ListBean lb = listsRepository.getListByList_id(listDeleteRequest.getList_id());
         try {
             if(!lb.getWebAccount().getLoginToken().equals(listDeleteRequest.getLoginToken())) {
                 return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Specified login token does not match the requested list's user login token.");
@@ -140,10 +144,10 @@ public class ListSvc extends BaseSvc implements ListImpl {
             return ResponseUtil.Generic(HttpStatus.OK, "List removed if the list existed");
         }
 
+        for (ListPost listPost : listPostsRepository.findAllByList(lb)) {
+            listPostsRepository.deleteByListAndPost(lb.getListId(), listPost.getPost().getPostId());
+        }
 
-        System.out.println("lb: " + lb);
-        System.out.println("wb: " + lb.getWebAccount());
-        // TODO: delete all posts in list_posts associated with this list
         listsRepository.deleteListByList_id(listDeleteRequest.getList_id());
 
         return ResponseUtil.Generic(HttpStatus.OK, "List removed if the list existed.");
