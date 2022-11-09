@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Spring Data Repository for easy use of CRUD operations on the {@link com.patreonshout.beans.PostBean} object
  */
-public interface PostsRepository extends JpaRepository<PostBean, Long> {
+public interface PostsRepository extends JpaRepository<PostBean, Integer> {
 
     /**
      * Returns the posts from multiple creators in paginated json body
@@ -49,4 +49,14 @@ public interface PostsRepository extends JpaRepository<PostBean, Long> {
      * @return a list of {@link com.patreonshout.beans.PostBean} objects that were shown to be in the database
      */
     List<PostBean> getExistingPosts(List<PostBean> pbList);
+
+    /**
+     * find the posts in a list by list_id
+     *
+     * @param list_id is the id of a list
+     * @return a list of {@link com.patreonshout.beans.PostBean}
+     */
+    @Query(value = "SELECT * FROM list_posts RIGHT JOIN posts ON list_posts.post_id = posts.post_id where list_id = ?1",
+            nativeQuery = true)
+    List<Object[]> findPostsInListByListId(int list_id, String url);
 }

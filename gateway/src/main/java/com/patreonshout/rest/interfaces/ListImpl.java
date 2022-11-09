@@ -45,7 +45,7 @@ public interface ListImpl {
                     content = {@Content(mediaType = "application/json")}
             )
     })
-    ResponseEntity<?> GetUserLists(@RequestParam(required = true, name = "loginToken") String loginToken);
+    ResponseEntity<?> GetUserLists(@RequestParam(required = true, name = "loginToken") String loginToken) throws PSException;
 
     /**
      * Endpoint that will get a list of {@link com.patreonshout.beans.ListBean} objects from the database that have a specific post in them
@@ -63,9 +63,13 @@ public interface ListImpl {
             @ApiResponse(responseCode = "400",
                     description = "the login token provided doesn't match up with the owner of the requested list's login token",
                     content = {@Content(mediaType = "application/json")}
+            ),
+            @ApiResponse(responseCode = "400",
+                    description = "Cannot find post.",
+                    content = {@Content(mediaType = "application/json")}
             )
     })
-    ResponseEntity<?> GetUserListsWithPost(@RequestParam(name = "loginToken") String loginToken, @RequestParam(name = "url") String url);
+    ResponseEntity<?> GetUserListsWithPost(@RequestParam(name = "loginToken") String loginToken, @RequestParam(name = "url") String url) throws PSException;
 
     /**
      * Endpoint that will add a new {@link com.patreonshout.beans.ListBean} object to the database
@@ -87,7 +91,7 @@ public interface ListImpl {
                 content = {@Content(mediaType = "application/json")}
         )
     })
-    ResponseEntity<?> AddUserList(@RequestBody ListCreationRequest listCreationRequest);
+    ResponseEntity<?> AddUserList(@RequestBody ListCreationRequest listCreationRequest) throws PSException;
 
     /**
      * Endpoint that will update a {@link com.patreonshout.beans.ListBean} object in the database
@@ -123,9 +127,13 @@ public interface ListImpl {
             @ApiResponse(responseCode = "400",
                     description = "the login token provided doesn't match up with the owner of the requested list's login token",
                     content = {@Content(mediaType = "application/json")}
+            ),
+            @ApiResponse(responseCode = "400",
+                    description = "Cannot find post.",
+                    content = {@Content(mediaType = "application/json")}
             )
     })
-    ResponseEntity<?> DeleteUserList(@RequestBody ListDeleteRequest listDeleteRequest);
+    ResponseEntity<?> DeleteUserList(@RequestBody ListDeleteRequest listDeleteRequest) throws PSException;
 
     /**
      * Updates the user's post lists
@@ -144,7 +152,7 @@ public interface ListImpl {
                     content = {@Content(mediaType = "application/json")}
             )
     })
-    ResponseEntity<?> UpdateUserPostLists(@RequestBody ListPostUpdateRequest listPostUpdateRequest);
+    ResponseEntity<?> UpdateUserPostLists(@RequestBody ListPostUpdateRequest listPostUpdateRequest) throws PSException;
 
     /**
      * Gets the post from a specific list for a specific user
@@ -161,6 +169,10 @@ public interface ListImpl {
                     content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "400",
                     description = "the login token provided doesn't match up with the owner of the requested list's login token",
+                    content = {@Content(mediaType = "application/json")}
+            ),
+            @ApiResponse(responseCode = "400",
+                    description = "Cannot find post.",
                     content = {@Content(mediaType = "application/json")}
             )
     })

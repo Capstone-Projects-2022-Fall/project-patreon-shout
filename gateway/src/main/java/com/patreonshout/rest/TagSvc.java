@@ -1,5 +1,6 @@
 package com.patreonshout.rest;
 
+import com.patreonshout.PSException;
 import com.patreonshout.beans.PostBean;
 import com.patreonshout.beans.Tag;
 import com.patreonshout.beans.WebAccount;
@@ -52,8 +53,8 @@ public class TagSvc extends BaseSvc implements TagImpl {
     /**
      * {@inheritDoc}
      */
-    public ResponseEntity<?> AddTag(@RequestBody TagAddRequest tagAddRequest) {
-        WebAccount userAccount = webAccountFunctions.findByLoginToken(tagAddRequest.getLoginToken());
+    public ResponseEntity<?> AddTag(@RequestBody TagAddRequest tagAddRequest) throws PSException {
+        WebAccount userAccount = webAccountFunctions.getAccount(tagAddRequest.getLoginToken());
 
         if (userAccount == null) {
             return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
@@ -78,9 +79,9 @@ public class TagSvc extends BaseSvc implements TagImpl {
     /**
      * {@inheritDoc}
      */
-    public ResponseEntity<?> GetUserTagsOnSinglePost(@RequestBody TagGetRequest tagGetRequest) {
+    public ResponseEntity<?> GetUserTagsOnSinglePost(@RequestBody TagGetRequest tagGetRequest) throws PSException {
 
-        WebAccount userAccount = webAccountFunctions.findByLoginToken(tagGetRequest.getLoginToken());
+        WebAccount userAccount = webAccountFunctions.getAccount(tagGetRequest.getLoginToken());
 
         if (userAccount == null) {
             return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
@@ -105,9 +106,9 @@ public class TagSvc extends BaseSvc implements TagImpl {
     /**
      * {@inheritDoc}
      */
-    public ResponseEntity<?> DeleteUserTagOnSinglePost(@RequestBody TagDeleteRequest tagDeleteRequest) {
+    public ResponseEntity<?> DeleteUserTagOnSinglePost(@RequestBody TagDeleteRequest tagDeleteRequest) throws PSException {
 
-        WebAccount userAccount = webAccountFunctions.findByLoginToken(tagDeleteRequest.getLoginToken());
+        WebAccount userAccount = webAccountFunctions.getAccount(tagDeleteRequest.getLoginToken());
 
         if (userAccount == null) {
             return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");

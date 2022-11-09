@@ -1,6 +1,5 @@
 package com.patreonshout.jpa;
 
-import com.patreonshout.beans.ListBean;
 import com.patreonshout.beans.ListPost;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -29,8 +28,8 @@ public interface ListPostsRepository extends JpaRepository<ListPost, Integer> {
     /**
      * Finds all the posts in a list by it's {@link com.patreonshout.beans.ListBean}
      *
-     * @param list the list we want to find the posts of
+     * @param listId the id of the list we want to find the posts of
      * @return a list of {@link com.patreonshout.beans.ListPost}
      */
-    List<ListPost> findAllByList(ListBean list);
+    List<ListPost> findAllByListId(int listId);
 }

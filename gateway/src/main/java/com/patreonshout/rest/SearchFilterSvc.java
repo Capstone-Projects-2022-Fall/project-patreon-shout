@@ -1,5 +1,6 @@
 package com.patreonshout.rest;
 
+import com.patreonshout.PSException;
 import com.patreonshout.beans.SearchFilter;
 import com.patreonshout.beans.WebAccount;
 import com.patreonshout.beans.request.FilterAddRequest;
@@ -55,8 +56,8 @@ public class SearchFilterSvc extends BaseSvc implements SearchFilterImpl {
     /**
      * {@inheritDoc}
      */
-    public ResponseEntity<?> GetUserFilters(String loginToken) {
-        WebAccount userAccount = webAccountFunctions.findByLoginToken(loginToken);
+    public ResponseEntity<?> GetUserFilters(String loginToken) throws PSException {
+        WebAccount userAccount = webAccountFunctions.getAccount(loginToken);
 
         if (userAccount == null) {
             return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
@@ -81,8 +82,8 @@ public class SearchFilterSvc extends BaseSvc implements SearchFilterImpl {
     /**
      * {@inheritDoc}
      */
-    public ResponseEntity<?> AddFilter(FilterAddRequest filterAddRequest) {
-        WebAccount userAccount = webAccountFunctions.findByLoginToken(filterAddRequest.getLoginToken());
+    public ResponseEntity<?> AddFilter(FilterAddRequest filterAddRequest) throws PSException {
+        WebAccount userAccount = webAccountFunctions.getAccount(filterAddRequest.getLoginToken());
 
         if (userAccount == null) {
             return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");

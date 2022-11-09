@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Lists RESTful Endpoint Interface
@@ -62,8 +63,9 @@ public class ListSvc extends BaseSvc implements ListImpl {
     /**
      * {@inheritDoc}
      */
-    public ResponseEntity<?> GetUserLists(@RequestParam(name = "loginToken") String loginToken) {
-        WebAccount userAccount = webAccountFunctions.findByLoginToken(loginToken);
+    public ResponseEntity<?> GetUserLists(@RequestParam(name = "loginToken") String loginToken) throws PSException { // TODO: remove list and webaccount onetomany annotations
+        System.out.println("get user lists");
+        WebAccount userAccount = webAccountFunctions.getAccount(loginToken);
 
         if (userAccount == null) {
             return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
@@ -72,10 +74,10 @@ public class ListSvc extends BaseSvc implements ListImpl {
         // build response so ResponseEntity can parse the returned objects correctly
         List<Map<String, String>> response = new ArrayList<>();
 
-        for (ListBean lb : userAccount.getListBean()) {
+        for (ListBean lb : listsRepository.findListBeansByWebAccountId(userAccount.getWebAccountId())) {
             Map<String, String> listResponse = new HashMap<>();
 
-            listResponse.put("webaccount_id", String.valueOf(lb.getWebAccount().getWebAccountId()));
+            listResponse.put("webaccount_id", String.valueOf(lb.getWebAccountId()));
             listResponse.put("title", lb.getTitle());
             listResponse.put("description", lb.getDescription());
             listResponse.put("list_id", String.valueOf(lb.getListId()));
@@ -89,8 +91,9 @@ public class ListSvc extends BaseSvc implements ListImpl {
     /**
      * {@inheritDoc}
      */
-    public ResponseEntity<?> AddUserList(@RequestBody ListCreationRequest listCreationRequest) {
-        WebAccount userAccount = webAccountFunctions.findByLoginToken(listCreationRequest.getLoginToken());
+    public ResponseEntity<?> AddUserList(@RequestBody ListCreationRequest listCreationRequest) throws PSException {
+        System.out.println("add user list");
+        WebAccount userAccount = webAccountFunctions.getAccount(listCreationRequest.getLoginToken());
 
         if (userAccount == null) {
             return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
@@ -99,7 +102,7 @@ public class ListSvc extends BaseSvc implements ListImpl {
         ListBean lb = new ListBean();
         lb.setTitle(listCreationRequest.getTitle());
         lb.setDescription(listCreationRequest.getDescription());
-        lb.setWebAccount(userAccount);
+        lb.setWebAccountId(userAccount.getWebAccountId());
 
         listsRepository.save(lb);
 
@@ -110,9 +113,10 @@ public class ListSvc extends BaseSvc implements ListImpl {
      * {@inheritDoc}
      */
     public ResponseEntity<?> UpdateUserList(@RequestBody ListUpdateRequest listUpdateRequest) {
-        ListBean lb = listsRepository.getListByList_id(listUpdateRequest.getList_id());
+        System.out.println("update user list");
+        ListBean lb = listsRepository.getListByListId(listUpdateRequest.getList_id());
 
-        if (!lb.getWebAccount().getLoginToken().equals(listUpdateRequest.getLoginToken())) {
+        if (!webAccountFunctions.findByWebAccountId(lb.getWebAccountId()).getLoginToken().equals(listUpdateRequest.getLoginToken())) {
             return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Specified login token does not match the requested list's user login token.");
         }
 
@@ -127,16 +131,17 @@ public class ListSvc extends BaseSvc implements ListImpl {
     /**
      * {@inheritDoc}
      */
-    public ResponseEntity<?> DeleteUserList(@RequestBody ListDeleteRequest listDeleteRequest) {
-
-        WebAccount userAccount = webAccountFunctions.findByLoginToken(listDeleteRequest.getLoginToken());
+    public ResponseEntity<?> DeleteUserList(@RequestBody ListDeleteRequest listDeleteRequest) throws PSException {
+        System.out.println("delete user list");
+        WebAccount userAccount = webAccountFunctions.getAccount(listDeleteRequest.getLoginToken());
         if (userAccount == null) {
             return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
         }
 
-        ListBean lb = listsRepository.getListByList_id(listDeleteRequest.getList_id());
+        ListBean lb = listsRepository.getListByListId(listDeleteRequest.getList_id());
+
         try {
-            if(!lb.getWebAccount().getLoginToken().equals(listDeleteRequest.getLoginToken())) {
+            if(!webAccountFunctions.findByWebAccountId(lb.getWebAccountId()).getLoginToken().equals(listDeleteRequest.getLoginToken())) {
                 return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Specified login token does not match the requested list's user login token.");
             }
         }
@@ -144,11 +149,17 @@ public class ListSvc extends BaseSvc implements ListImpl {
             return ResponseUtil.Generic(HttpStatus.OK, "List removed if the list existed");
         }
 
-        for (ListPost listPost : listPostsRepository.findAllByList(lb)) {
-            listPostsRepository.deleteByListAndPost(lb.getListId(), listPost.getPost().getPostId());
+        for (ListPost listPost : listPostsRepository.findAllByListId(lb.getListId())) {
+            Optional<PostBean> pb = postsRepository.findById(listPost.getPostId());
+
+            if (pb.isEmpty()) {
+                return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Cannot find post.");
+            }
+
+            listPostsRepository.deleteByListAndPost(lb.getListId(), pb.get().getPostId());
         }
 
-        listsRepository.deleteListByList_id(listDeleteRequest.getList_id());
+        listsRepository.deleteListByListId(listDeleteRequest.getList_id());
 
         return ResponseUtil.Generic(HttpStatus.OK, "List removed if the list existed.");
     }
@@ -156,8 +167,9 @@ public class ListSvc extends BaseSvc implements ListImpl {
     /**
      * {@inheritDoc}
      */
-    public ResponseEntity<?> GetUserListsWithPost(String loginToken, String url) {
-        WebAccount userAccount = webAccountFunctions.findByLoginToken(loginToken);
+    public ResponseEntity<?> GetUserListsWithPost(String loginToken, String url) throws PSException { // TODO: make more efficient
+        System.out.println("get user lists with post");
+        WebAccount userAccount = webAccountFunctions.getAccount(loginToken);
 
         if (userAccount == null) {
             return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
@@ -171,9 +183,17 @@ public class ListSvc extends BaseSvc implements ListImpl {
         // build response so ResponseEntity can parse the returned objects correctly
         List<Map<String, String>> response = new ArrayList<>();
 
-        for (ListBean lb : userAccount.getListBean()) {
-            for (ListPost lp : lb.getListPosts()) {
-                if (lp.getPost().getUrl().equals(url)) {
+
+        for (ListBean lb : listsRepository.findListBeansByWebAccountId(userAccount.getWebAccountId())) {
+
+            for (ListPost lp : listPostsRepository.findAllByListId(lb.getListId())) {
+                Optional<PostBean> pb = postsRepository.findById(lp.getPostId());
+
+                if (pb.isEmpty()) {
+                    return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Cannot find post.");
+                }
+
+                if (pb.get().getUrl().equals(url)) {
                     Map<String, String> listResponse = new HashMap<>();
 
                     listResponse.put("title", lb.getTitle());
@@ -191,8 +211,9 @@ public class ListSvc extends BaseSvc implements ListImpl {
     /**
      * {@inheritDoc}
      */
-    public ResponseEntity<?> UpdateUserPostLists(ListPostUpdateRequest listPostUpdateRequest) {
-        WebAccount userAccount = webAccountFunctions.findByLoginToken(listPostUpdateRequest.getLoginToken());
+    public ResponseEntity<?> UpdateUserPostLists(ListPostUpdateRequest listPostUpdateRequest) throws PSException {
+        System.out.println("update user post lists");
+        WebAccount userAccount = webAccountFunctions.getAccount(listPostUpdateRequest.getLoginToken());
 
         if (userAccount == null) {
             return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
@@ -205,11 +226,11 @@ public class ListSvc extends BaseSvc implements ListImpl {
         }
 
         for (ListPostUpdateRequest.ListUpdate listUpdate : listPostUpdateRequest.getListUpdates()) {
-            ListBean lb = listsRepository.getListByList_id(listUpdate.getListId());
+            ListBean lb = listsRepository.getListByListId(listUpdate.getListId());
 
             ListPost listPost = new ListPost();
-            listPost.setList(lb);
-            listPost.setPost(pb);
+            listPost.setListId(lb.getListId());
+            listPost.setPostId(pb.getPostId());
 
             if (listUpdate.isUpdate()) {
                 try {
@@ -233,22 +254,28 @@ public class ListSvc extends BaseSvc implements ListImpl {
      * {@inheritDoc}
      */
     public ResponseEntity<?> GetPostsFromList(String loginToken, int list_id) throws PSException {
+        System.out.println("get posts from list");
         WebAccount userAccount = webAccountFunctions.getAccount(loginToken);
 
         if (userAccount == null) {
             return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
         }
 
-        ListBean lb = listsRepository.getListByList_id(list_id);
-        List<ListPost> listPosts = listPostsRepository.findAllByList(lb);
+        ListBean lb = listsRepository.getListByListId(list_id);
+        List<ListPost> listPosts = listPostsRepository.findAllByListId(lb.getListId());
 
         // build response so ResponseEntity can parse the returned objects correctly
         List<Map<String, String>> response = new ArrayList<>();
 
-        for (ListPost post : listPosts) {
+        for (ListPost lp : listPosts) {
             Map<String, String> postResponse = new HashMap<>();
 
-            PostBean pb = post.getPost();
+            Optional<PostBean> optionalPost = postsRepository.findById(lp.getPostId());
+
+            if (optionalPost.isEmpty()) {
+                return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Cannot find post.");
+            }
+            PostBean pb = optionalPost.get();
 
             postResponse.put("creator_page_url", pb.getCreatorPageUrl());
             postResponse.put("published_at", pb.getPublishDate());
@@ -272,33 +299,35 @@ public class ListSvc extends BaseSvc implements ListImpl {
      * {@inheritDoc}
      */
     public ResponseEntity<?> AddPostToFavoritesList(FavoriteListRequest favoriteListRequest) throws PSException {
+        System.out.println("add post to fav");
         WebAccount userAccount = webAccountFunctions.getAccount(favoriteListRequest.getLoginToken());
 
         if (userAccount == null) {
             return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
         }
 
-        ListBean favList = listsRepository.findListBeanByWebAccountAndTitle(userAccount, "Favorites");
+        ListBean favList = listsRepository.findListBeanByWebAccountIdAndTitle(userAccount.getWebAccountId(), "Favorites");
 
         // if there is no favorites list, then create one
         if (favList == null) {
             favList = new ListBean();
 
-            favList.setWebAccount(userAccount);
+            favList.setWebAccountId(userAccount.getWebAccountId());
             favList.setTitle("Favorites");
             favList.setDescription("Your favorite posts");
 
             listsRepository.save(favList);
-            favList = listsRepository.findListBeanByWebAccountAndTitle(userAccount, "Favorites"); // if it is a new list, make sure we get the newly assigned list_id from the database
+            favList = listsRepository.findListBeanByWebAccountIdAndTitle(userAccount.getWebAccountId(), "Favorites"); // if it is a new list, make sure we get the newly assigned list_id from the database
         }
 
         ListPost listPost = new ListPost();
-        listPost.setList(favList);
+        listPost.setListId(favList.getListId());
 
         PostBean favPost = postsRepository.findPostBeanByUrl(favoriteListRequest.getUrl());
-        listPost.setPost(favPost);
+        listPost.setPostId(favPost.getPostId());
 
         listPostsRepository.save(listPost);
+        System.out.println("added");
 
         return ResponseUtil.Generic(HttpStatus.OK, "Favorites lists updated.");
     }
@@ -307,13 +336,14 @@ public class ListSvc extends BaseSvc implements ListImpl {
      * {@inheritDoc}
      */
     public ResponseEntity<?> DeletePostFromFavoritesList(FavoriteListRequest favoriteListRequest) throws PSException {
+        System.out.println("delete post from fav");
         WebAccount userAccount = webAccountFunctions.getAccount(favoriteListRequest.getLoginToken());
 
         if (userAccount == null) {
             return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
         }
 
-        ListBean favList = listsRepository.findListBeanByWebAccountAndTitle(userAccount, "Favorites");
+        ListBean favList = listsRepository.findListBeanByWebAccountIdAndTitle(userAccount.getWebAccountId(), "Favorites");
 
         // if there is no favorites list
         if (favList == null) {
@@ -323,6 +353,7 @@ public class ListSvc extends BaseSvc implements ListImpl {
         PostBean favPost = postsRepository.findPostBeanByUrl(favoriteListRequest.getUrl());
 
         listPostsRepository.deleteByListAndPost(favList.getListId(), favPost.getPostId());
+        System.out.println("deleted");
 
         return ResponseUtil.Generic(HttpStatus.OK, "Favorites lists updated.");
     }

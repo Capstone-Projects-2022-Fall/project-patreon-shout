@@ -1,5 +1,6 @@
 package com.patreonshout.rest.interfaces;
 
+import com.patreonshout.PSException;
 import com.patreonshout.beans.request.PostGetMultipleRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -51,5 +52,5 @@ public interface PostImpl {
                     description = "Invalid login token.",
                     content = {@Content(mediaType = "application/json")})
     })
-    ResponseEntity<?> GetMultipleCreatorPosts(@RequestBody PostGetMultipleRequest postGetMultipleRequest);
+    ResponseEntity<?> GetMultipleCreatorPosts(@RequestBody PostGetMultipleRequest postGetMultipleRequest) throws PSException;
 }

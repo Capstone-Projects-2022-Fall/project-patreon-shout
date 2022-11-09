@@ -294,12 +294,12 @@ public class WebAccountFunctions {
 	}
 
 	/**
-	 * Gets a {@link com.patreonshout.beans.WebAccount} object from a specified login token
+	 * Gets a {@link com.patreonshout.beans.WebAccount} object from a specified web account id
 	 *
-	 * @param loginToken is the user's session login token used to validate the user
-	 * @return {@link com.patreonshout.beans.WebAccount} object holding data corresponding to the provided login token
+	 * @param webAccountId is the id of the web account
+	 * @return {@link com.patreonshout.beans.WebAccount} object holding data corresponding to the provided web account id
 	 */
-	public WebAccount findByLoginToken(String loginToken) {
-		return webAccountRepository.findByLoginToken(loginToken);
+	public WebAccount findByWebAccountId(int webAccountId) {
+		return webAccountRepository.findByWebAccountId(webAccountId);
 	}
 }
