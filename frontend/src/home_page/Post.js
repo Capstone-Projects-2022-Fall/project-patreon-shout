@@ -1,5 +1,6 @@
 import {
     FavoriteBorder,
+    Favorite,
     Language,
     ListAlt,
     VerifiedUser,
@@ -14,6 +15,7 @@ import {Button} from "@mui/material";
 import CheckBox from "../components/CheckBox";
 import {updateListsForPost} from "../services/api/lists/updateListsForPost";
 import ReactDOM from "react-dom";
+import {pink} from "@mui/material/colors";
 
 /**
  * The post object which will appear in the feed
@@ -54,7 +56,6 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
         window.open(url, "_blank");
     }
 
-    // const [thisPostLists, setThisPostLists] = useState([]); // TODO: when the user sets the lists they want for their post this should update
     let thisPostLists = [];
 
     const checkPostInList = (list_id) => {
@@ -62,8 +63,6 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
 
         thisPostLists.forEach((list) => {
             if (list.list_id === list_id && insideList === false) {
-                console.log("list_id: " + list_id);
-                console.log("check against: " + list.list_id);
                 insideList = true;
             }
         })
@@ -86,9 +85,6 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
 
         // reload react dom
         thisPostLists = dom_list_updates;
-        // setThisPostLists(dom_list_updates);
-
-        console.log(dom_list_updates);
         ReactDOM.render(popup, document.getElementById("popup"));
 
         updateListsRequest(list_updates).then(r => {
@@ -122,7 +118,6 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
             .then(items => {
                 if (mounted) {
                     thisPostLists = items;
-                    // setThisPostLists(items);
                 }
             })
         return () => mounted = false;
@@ -140,7 +135,34 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
         });
     }
 
+    const checkForFavoritesList = () => {
+        thisPostLists.every((element, index) => {
+            if (element.title === "Favorites") {
+                return true;
+            }
+        });
+        return false;
+    }
 
+
+
+
+
+    const [favorite, setFavorite] = useState(checkForFavoritesList);
+
+    const handleFavoriteClick = () => {
+        setFavorite(!favorite)
+
+        if (favorite === true) {
+
+
+
+            // TODO: add post to favorites list
+        }
+        else {
+            // TODO: remove post from favorites list
+        }
+    }
 
     return (
         <div className="post">
@@ -167,7 +189,10 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
                         <Language fontSize="small" type="button" onClick={handleRedirect} hover="true"/>
                     </div>
                     <div className="post__footerFavorite">
-                        <FavoriteBorder fontSize="small"/>
+                        <div onClick={() => {handleFavoriteClick();}}>
+                            {favorite ? <Favorite sx={{ color: pink[500] }} fontSize="small"/> : <FavoriteBorder sx={{ color: pink[500] }} fontSize="small"/>}
+                        </div>
+
                     </div>
 
                     <div className="post__footerList">  {/*TODO*/}
