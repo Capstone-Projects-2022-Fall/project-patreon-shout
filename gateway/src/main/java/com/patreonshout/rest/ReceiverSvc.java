@@ -123,19 +123,8 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 			// Store their creator page information
 			creatorPageFunctions.putCreatorPage(pageUrl);
 
-			for (Campaign campaign : client.fetchCampaigns().get()) {
-
-				List<PostBean> pbList = client.fetchPosts(campaign.getId()).get();
-				List<PostBean> existingPosts = postsRepository.getExistingPosts(pbList);
-				pbList.removeAll(existingPosts);
-
-				for (PostBean post : pbList) {
-					post.setCreator_page_url(pageUrl);
-					System.out.println("p: " + post);
-
-					postsRepository.putPost(post);
-				}
-			}
+			// put content creator posts in database
+			savePosts(accessToken, pageUrl);
 
 			// Put Patreon tokens in database
 			webAccountFunctions.putPatreonTokens(accessToken, refreshToken, state);
@@ -145,6 +134,30 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 
 		// Unknown case, but required for compilation
 		return "";
+	}
+
+	/**
+	 * fetches posts from patreon and saves them in the database
+	 *
+	 * @param accessToken Patreon access token for a creator
+	 * @param pageUrl Patreon creator's campaign page URL
+	 */
+	public void savePosts(String accessToken, String pageUrl) throws IOException {
+		CustomPatreonAPI client = new CustomPatreonAPI(accessToken);
+
+		for (Campaign campaign : client.fetchCampaigns().get()) {
+
+			List<PostBean> pbList = client.fetchPosts(campaign.getId()).get();
+			List<PostBean> existingPosts = postsRepository.getExistingPosts(pbList);
+			pbList.removeAll(existingPosts);
+
+			for (PostBean post : pbList) {
+				post.setCreatorPageUrl(pageUrl);
+				System.out.println("p: " + post);
+
+				postsRepository.save(post);
+			}
+		}
 	}
 	/**
 	 * {@inheritDoc}
