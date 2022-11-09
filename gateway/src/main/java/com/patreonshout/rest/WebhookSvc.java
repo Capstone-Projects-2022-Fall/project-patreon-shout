@@ -3,7 +3,6 @@ package com.patreonshout.rest;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.patreon.PatreonOAuth;
 import com.patreon.resources.Campaign;
-import com.patreon.resources.User;
 import com.patreonshout.PSException;
 import com.patreonshout.beans.PostBean;
 import com.patreonshout.jpa.CreatorPageFunctions;
@@ -76,15 +75,13 @@ public class WebhookSvc extends BaseSvc {
 			String accessToken = tokens.getAccessToken();
 			String refreshToken = tokens.getRefreshToken();
 
-			// put content creator posts in database
-			CustomPatreonAPI client = new CustomPatreonAPI(accessToken);
 
 
-			User user = client.fetchUser().get();
 
-			/**
-			 * TODO: Fix this!!  This is IMPROPER!
-			 * This patch resides here to allow others to work on extra functionality
+			/*
+			 TODO:
+			    Fix this!!  This is IMPROPER!
+			    This patch resides here to allow others to work on extra functionality
 			 */
 			// Send GET request to Patreon v2 web API
 			String baseUrl = "https://www.patreon.com/api/oauth2/v2/";
@@ -115,29 +112,41 @@ public class WebhookSvc extends BaseSvc {
 			// Store their creator page information
 			creatorPageFunctions.putCreatorPage(pageUrl);
 
-			for (Campaign campaign : client.fetchCampaigns().get()) {
-
-				List<PostBean> pbList = client.fetchPosts(campaign.getId()).get();
-				List<PostBean> existingPosts = postsRepository.getExistingPosts(pbList);
-				pbList.removeAll(existingPosts);
-
-				for (PostBean post : pbList) {
-					post.setCreator_page_url(pageUrl);
-					System.out.println("p: " + post);
-
-					postsRepository.putPost(post);
-				}
-			}
+			// put content creator posts in database
+			savePosts(accessToken, pageUrl);
 
 			// put patreon tokens in database
 			webAccountFunctions.putPatreonTokens(accessToken, refreshToken, state);
 
 			return "Patreon linked!  Close this pop-up and refresh the PatreonShout webpage.";
-//			throw new PSException(HttpStatus.CREATED, "Token created");
 		}
 
 		// Webhook
 		return "";
+	}
+
+	/**
+	 * fetches posts from patreon and saves them in the database
+	 *
+	 * @param accessToken Patreon access token for a creator
+	 * @param pageUrl Patreon creator's campaign page URL
+	 */
+	public void savePosts(String accessToken, String pageUrl) throws IOException {
+		CustomPatreonAPI client = new CustomPatreonAPI(accessToken);
+
+		for (Campaign campaign : client.fetchCampaigns().get()) {
+
+			List<PostBean> pbList = client.fetchPosts(campaign.getId()).get();
+			List<PostBean> existingPosts = postsRepository.getExistingPosts(pbList);
+			pbList.removeAll(existingPosts);
+
+			for (PostBean post : pbList) {
+				post.setCreatorPageUrl(pageUrl);
+				System.out.println("p: " + post);
+
+				postsRepository.save(post);
+			}
+		}
 	}
 }
 

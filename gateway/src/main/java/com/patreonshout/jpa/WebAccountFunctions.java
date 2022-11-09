@@ -2,7 +2,7 @@ package com.patreonshout.jpa;
 
 import com.patreonshout.PSException;
 import com.patreonshout.beans.*;
-import com.patreonshout.beans.request.SocialIntegrationRequest;
+import com.patreonshout.beans.request.PutSocialIntegrationRequest;
 import com.patreonshout.beans.request.LoginRequest;
 import com.patreonshout.beans.request.RegisterRequest;
 import com.patreonshout.config.SecurityConfiguration;
@@ -107,18 +107,11 @@ public class WebAccountFunctions {
 	/**
 	 * Adds a social integration
 	 *
-	 * @param socialIntegrationRequest {@link SocialIntegrationRequest} Integration request provided from RESTful call
+	 * @param putSocialIntegrationRequest {@link PutSocialIntegrationRequest} Integration request provided from RESTful call
 	 */
 	@Transactional
-	public void putSocialIntegration(SocialIntegrationRequest socialIntegrationRequest) throws PSException {
-		if (socialIntegrationRequest.getLoginToken() == null)
-			throw new PSException(HttpStatus.NOT_FOUND, "Login token not provided");
-
-		WebAccount webAccount = webAccountRepository.findByLoginToken(socialIntegrationRequest.getLoginToken());
-
-		if (webAccount == null)
-			throw new PSException(HttpStatus.NOT_FOUND, "Login token does not belong to a user");
-
+	public void putSocialIntegration(PutSocialIntegrationRequest putSocialIntegrationRequest) throws PSException {
+		WebAccount webAccount = this.getAccount(putSocialIntegrationRequest.getLoginToken());
 		SocialIntegration socialIntegration = webAccount.getSocialIntegration();
 
 		if (socialIntegration == null) {
@@ -129,19 +122,52 @@ public class WebAccountFunctions {
 		socialIntegration.setWebAccount(webAccount);
 		webAccount.setSocialIntegration(socialIntegration);
 
-		switch (socialIntegrationRequest.getIntegrationType()) {
+		String data = putSocialIntegrationRequest.getData();
+
+		if (data != null && data.isEmpty())
+			data = null;
+
+		switch (putSocialIntegrationRequest.getIntegrationName()) {
 			case DISCORD:
-				socialIntegration.setDiscord(socialIntegrationRequest.getData());
+				socialIntegration.setDiscord(data);
 				break;
 			case TWITTER:
-				socialIntegration.setTwitter(socialIntegrationRequest.getData());
+				socialIntegration.setTwitter(data);
 				break;
 			case INSTAGRAM:
-				socialIntegration.setInstagram(socialIntegrationRequest.getData());
+				socialIntegration.setInstagram(data);
+				break;
+			default:
+				System.out.println("UNKNOWN CASE: " + putSocialIntegrationRequest.getIntegrationName());
 				break;
 		}
 
 		webAccountRepository.save(webAccount);
+	}
+
+	/**
+	 * Gets a {@link WebAccount} from the given login token, then returns its {@link SocialIntegration}
+	 *
+	 * @param loginToken {@link WebAccount} login token
+	 * @return {@link SocialIntegration} belonging to a login token's {@link WebAccount}
+	 */
+	@Transactional
+	public SocialIntegration getSocialIntegration(String loginToken) throws PSException {
+		WebAccount webAccount = this.getAccount(loginToken);
+
+		SocialIntegration socialIntegration = webAccount.getSocialIntegration();
+
+		if (socialIntegration == null) {
+			socialIntegration = new SocialIntegration();
+			socialIntegration.setWebAccountId(webAccount.getWebAccountId());
+
+			socialIntegration.setWebAccount(webAccount);
+			webAccount.setSocialIntegration(socialIntegration);
+
+			webAccountRepository.save(webAccount);
+		}
+
+		return webAccount.getSocialIntegration();
 	}
 
 	/**
@@ -153,14 +179,7 @@ public class WebAccountFunctions {
 	 */
 	@Transactional
 	public void putPatreonTokens(String accessToken, String refreshToken, String loginToken) throws PSException {
-		if (loginToken == null)
-			throw new PSException(HttpStatus.NOT_FOUND, "Login token not provided");
-
-		WebAccount webAccount = webAccountRepository.findByLoginToken(loginToken);
-
-		if (webAccount == null)
-			throw new PSException(HttpStatus.NOT_FOUND, "Login token does not belong to a user");
-
+		WebAccount webAccount = this.getAccount(loginToken);
 		PatreonTokens patreonTokens = webAccount.getCreatorTokens();
 
 		if (patreonTokens == null) {
@@ -187,14 +206,7 @@ public class WebAccountFunctions {
 	 */
 	@Transactional
 	public PatreonTokens getPatreonTokens(String loginToken) throws PSException {
-		if (loginToken == null)
-			throw new PSException(HttpStatus.NOT_FOUND, "Login token not provided");
-
-		WebAccount webAccount = webAccountRepository.findByLoginToken(loginToken);
-
-		if (webAccount == null)
-			throw new PSException(HttpStatus.NOT_FOUND, "Login token does not belong to a user");
-
+		WebAccount webAccount = this.getAccount(loginToken);
 		PatreonTokens patreonTokens = webAccount.getCreatorTokens();
 
 		if (patreonTokens == null) {

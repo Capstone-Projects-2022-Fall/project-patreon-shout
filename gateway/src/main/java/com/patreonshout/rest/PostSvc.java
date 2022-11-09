@@ -1,5 +1,6 @@
 package com.patreonshout.rest;
 
+import com.patreonshout.beans.ListBean;
 import com.patreonshout.beans.PostBean;
 import com.patreonshout.beans.WebAccount;
 import com.patreonshout.beans.request.PostGetMultipleRequest;
@@ -18,7 +19,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Post RESTful Endpoint Interface
@@ -42,12 +46,24 @@ public class PostSvc extends BaseSvc implements PostImpl {
      * {@inheritDoc}
      */
     public ResponseEntity<?> GetCreatorPosts(@RequestParam(name = "creator") String creator) { // TODO: SOON TO BE DEPRECATED
-        List<PostBean> response = postsRepository.getCreatorPosts(creator);
+        List<PostBean> posts = postsRepository.findAllByCreatorPageUrl(creator);
 
-        for (PostBean pb : response) {
-            if (!pb.is_public()) {
+        List<Map<String, String>> response = new ArrayList<>();
+
+        for (PostBean pb : posts) {
+            if (!pb.isPublic()) {
                 pb.setContent("This post is private");
             }
+
+            Map<String, String> listResponse = new HashMap<>();
+            listResponse.put("title", pb.getTitle());
+            listResponse.put("creator_page_url", pb.getCreatorPageUrl());
+            listResponse.put("url", pb.getUrl());
+            listResponse.put("content", pb.getContent());
+            listResponse.put("published_at", pb.getPublishDate());
+            listResponse.put("is_public", String.valueOf(pb.isPublic()));
+
+            response.add(listResponse);
         }
 
         return new ResponseEntity<>(response, HttpStatus.FOUND);
@@ -66,11 +82,12 @@ public class PostSvc extends BaseSvc implements PostImpl {
         Page<PostBean> page = postsRepository.getMultipleCreatorPosts(postGetMultipleRequest.getCreators(), PageRequest.of(postGetMultipleRequest.getPage(), 5).withSort(Sort.Direction.ASC, "publishdate"));
 
         for (PostBean pb : page.getContent()) {
-            if (!pb.is_public()) {
+            if (!pb.isPublic()) {
                 pb.setContent("This post is private");
             }
         }
 
+        // TODO: might need to construct response since PostBean is related to other beans and jackson cannot correctly get the data from the other beans relating to PostBean (look at the endpoint above)
         return new ResponseEntity<>(page, HttpStatus.FOUND);
     }
 }

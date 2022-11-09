@@ -43,7 +43,7 @@ public class SearchFilter {
     /**
      * webAccount is the {@link com.patreonshout.beans.WebAccount} object linked with this object
      */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "webaccount_id", nullable = false)
     protected WebAccount webAccount;
 

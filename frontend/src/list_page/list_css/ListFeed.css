@@ -39,10 +39,6 @@ h2 {
     padding: 5px;
 }
 
-h2:hover {
-    cursor: pointer;
-    text-decoration: underline;
-}
 
 .listfeed__lists {
 
@@ -50,4 +46,13 @@ h2:hover {
 
 .listfeed__posts {
     display: none;
+}
+
+#backDiv {
+    display: flex;
+    align-items: center;
+}
+
+#backArrow:hover {
+    cursor: pointer;
 }

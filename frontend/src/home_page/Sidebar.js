@@ -6,7 +6,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutIcon from "@mui/icons-material/Logout";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {logoutUser} from "../services/api/logout";
 
 /**
@@ -16,6 +16,7 @@ import {logoutUser} from "../services/api/logout";
  */
 function Sidebar() {
 
+    const location = useLocation();
     const navigate = useNavigate();
     const [logout, setLogoutValue] = useState([]);
 
@@ -28,19 +29,29 @@ function Sidebar() {
             })
     }, [])
 
+    const refreshIfCurrentPath = navTo => {
+        if (navTo === location.pathname) {
+            navigate(0);
+        }
+    }
+
     const goToHome = () => {
+        refreshIfCurrentPath('/home')
         navigate('/home')
     }
 
     const goToExplore = () => {
+        refreshIfCurrentPath('/explore')
         navigate('/explore')
     }
 
     const goToLists = () => {
+        refreshIfCurrentPath('/lists')
         navigate('/lists')
     }
 
     const goToSettings = () => {
+        refreshIfCurrentPath('/settings')
         navigate('/settings')
     }
 

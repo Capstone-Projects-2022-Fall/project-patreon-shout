@@ -1,12 +1,13 @@
 .modalBox {
     overflow-y: auto;
-    height: 800px;
-    width: 600px;
-    padding: 20px;
+    height: fit-content;
+    width: fit-content;
+    padding: 50px;
     border-radius: 18px;
     border: 1px solid #cfcece;
     font-size: 20px;
-    background: #ffffff;
+    background-color: white;
+    box-shadow: 0 0 0 999999px rgba(0, 0, 0, .5);
 }
 
 .modalBox > .close {
@@ -42,4 +43,28 @@
     gap: 10px;
     align-items: center;
     justify-content: center;
+}
+
+.modalBox > .fields {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    justify-items: center;
+    gap: 20px;
+    padding-top: 20px;
+
+}
+
+.modalBox > .fields > .buttonContainer {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.modalBox > .fields > .buttonContainer > #deletebtn{
+    background-color: red;
+}
+
+.modalBox > .fields > .buttonContainer > #deletebtn:hover{
+    background-color: darkred;
 }
