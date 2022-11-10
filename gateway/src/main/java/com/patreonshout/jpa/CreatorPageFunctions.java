@@ -23,14 +23,8 @@ public class CreatorPageFunctions {
 	CreatorPageRepository creatorPageRepository;
 
 	@Transactional
-	public void putCreatorPage(int campaignId) throws PSException {
-		Optional<CreatorPage> creatorPageOpt = creatorPageRepository.findById((long) campaignId);
-		CreatorPage creatorPage = creatorPageOpt.orElse(null);
-
-		if (creatorPage == null) {
-			creatorPage = new CreatorPage();
-			creatorPage.setCampaignId(campaignId);
-		}
+	public void putCreatorPage(int campaignId) {
+		CreatorPage creatorPage = new CreatorPage();
 
 		creatorPage.setCampaignId(campaignId);
 		creatorPage.setPageName(String.valueOf(campaignId)); // TODO: Find a way to get the creator's Patreon Page name

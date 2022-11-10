@@ -102,6 +102,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 			patreonCampaignsFunctions.putCampaign(webAccount, campaign);
 
 			// put content creator posts in database
+			creatorPageFunctions.putCreatorPage(campaign.getId());
 			saveCampaignPosts(accessToken, campaign.getId());
 
 			System.out.println("Access token: " + accessToken);
@@ -185,7 +186,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	 * fetches posts from patreon and saves them in the database
 	 *
 	 * @param accessToken Patreon access token for a creator
-	 * @param campaignId Patreon creator's campaign ID
+	 * @param campaignId  Patreon creator's campaign ID
 	 */
 	public void saveCampaignPosts(String accessToken, int campaignId) throws IOException {
 		CustomPatreonAPI client = new CustomPatreonAPI(accessToken);
@@ -225,7 +226,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		   webhook event. Webhook secrets should not be shared.
 		 */
 
-		WebAccount webAccount;
+		WebAccount webAccount = null;
 
 		try {
 			webAccount = webAccountFunctions.getAccount(webaccountId);
@@ -238,40 +239,42 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		}
 
 		// * Initiate post creation
+		PatreonDataV2 patreonData;
 		PatreonPostV2 patreonPost;
 
 		// Convert the data attribute to a Patreon Post POJO
 		try {
-			patreonPost = objectMapper.convertValue(webhookRequest.getData().getAttributes(), PatreonPostV2.class);
-		} catch (Exception e) { // * We want to catch these Exceptions and return 200 OK because if we time out 3 times, Patreon will stop using our webhook.
+			patreonData = objectMapper.convertValue(webhookRequest.getData(), PatreonDataV2.class);
+			patreonPost = objectMapper.convertValue(patreonData.getAttributes(), PatreonPostV2.class);
+		} catch (
+				Exception e) { // * We want to catch these Exceptions and return 200 OK because if we time out 3 times, Patreon will stop using our webhook.
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 
 		// * Save a converted Post object to the database
-//		PostBean postBean = PostBean.builder()
-//				.postId(null) // TODO Get post ID
-//				.appId(patreonPost.getAppId())
-//				.appStatus(patreonPost.getAppStatus())
-//				.content(patreonPost.getContent())
-//				.creatorPageUrl(patreonPost.getUrl()) // TODO turn this into campaignId
-//				.embedData(patreonPost.getEmbedData())
-//				.embedUrl(patreonPost.getEmbedUrl())
-//				.isPaid(patreonPost.getIsPaid())
-//				.isPublic(patreonPost.getIsPublic())
-//				.publishDate(patreonPost.getPublishedAt())
-//				.title(patreonPost.getTitle())
-//				.url(patreonPost.getUrl())
-//				.build();
-//		postsRepository.save(postBean);
+		PostBean postBean = PostBean.builder()
+				.appId(patreonPost.getAppId())
+				.appStatus(patreonPost.getAppStatus())
+				.content(patreonPost.getContent())
+				.campaignId(patreonData.getRelationships().getCampaign().getData().getId())
+				.embedData(patreonPost.getEmbedData())
+				.embedUrl(patreonPost.getEmbedUrl())
+				.isPaid(patreonPost.getIsPaid())
+				.isPublic(patreonPost.getIsPublic())
+				.publishDate(patreonPost.getPublishedAt())
+				.title(patreonPost.getTitle())
+				.url(patreonPost.getUrl())
+				.build();
 
-		switch(patreonEvent) {
+		postsRepository.save(postBean);
+
+		switch (patreonEvent) {
 			case "posts:publish":
 				System.out.println("Received: " + patreonEvent);
-				sendDiscordMessage(patreonPost);
+				sendDiscordMessage(patreonPost, webAccount.getSocialIntegration().getDiscord());
 				break;
 			case "posts:update":
-
 				break;
 			case "posts:delete":
 				System.out.println("Received: " + patreonEvent);
@@ -284,10 +287,10 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	void sendDiscordMessage(PatreonPostV2 patreonPost) {
+	void sendDiscordMessage(PatreonPostV2 patreonPost, String webhookUrl) {
 		// TODO: Get user's webhook urls
 		new DiscordWebhookUtil(
-				"https://discord.com/api/webhooks/1038528862289657906/zSVQAw3DI3AYdBVAL1BgQnD8lAavFvsZ-BItnQgrqH82XyfxuZQwRXSjA0cjPRK0-xCs",
+				webhookUrl,
 				patreonPost
 		).send();
 	}

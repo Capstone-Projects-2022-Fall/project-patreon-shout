@@ -20,7 +20,7 @@ public class CreatorPage {
 	 * <b>id</b> is a {@link Integer} primary key for the webaccounts table in the database
 	 */
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+//	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="campaign_id", unique = true)
 	protected int campaignId;
 

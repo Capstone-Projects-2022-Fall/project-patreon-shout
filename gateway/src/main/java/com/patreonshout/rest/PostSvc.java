@@ -43,7 +43,7 @@ public class PostSvc extends BaseSvc implements PostImpl {
     /**
      * {@inheritDoc}
      */
-    public ResponseEntity<?> GetCreatorPosts(@RequestParam(name = "creator") int campaignId) { // TODO: SOON TO BE DEPRECATED
+    public ResponseEntity<?> GetCreatorPosts(@RequestParam(name = "campaign") int campaignId) { // TODO: SOON TO BE DEPRECATED
         List<PostBean> posts = postsRepository.findAllByCampaignId(campaignId); // TODO: FIX -- Must be campaign id
 
         List<Map<String, String>> response = new ArrayList<>();

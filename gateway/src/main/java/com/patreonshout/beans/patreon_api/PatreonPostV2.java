@@ -21,7 +21,7 @@ public class PatreonPostV2 {
 	String embedUrl;
 
 	@JsonProperty("is_paid")
-	String isPaid;
+	Boolean isPaid;
 
 	@JsonProperty("is_public")
 	Boolean isPublic;
