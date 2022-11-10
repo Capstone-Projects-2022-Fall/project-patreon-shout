@@ -93,7 +93,7 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
         // reload react dom
         favThisPostLists = dom_list_updates;
         setThisPostLists(dom_list_updates);
-        ReactDOM.render(popup, document.getElementById("popup"));
+        // ReactDOM.render(popup, document.getElementById("popup"));
 
         updateListsRequest(list_updates).then(r => {
 

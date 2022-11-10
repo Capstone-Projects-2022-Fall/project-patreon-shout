@@ -1,13 +1,14 @@
 .modalBox {
     overflow-y: auto;
     height: fit-content;
-    width: fit-content;
+    width: 400px;
     padding: 50px;
     border-radius: 18px;
     border: 1px solid #cfcece;
     font-size: 20px;
     background-color: white;
     box-shadow: 0 0 0 999999px rgba(0, 0, 0, .5);
+    overflow-wrap: break-word;
 }
 
 .modalBox > .close {
