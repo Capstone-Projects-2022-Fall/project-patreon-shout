@@ -1,5 +1,6 @@
 package com.patreonshout.rest.interfaces;
 
+import com.patreonshout.PSException;
 import com.patreonshout.beans.request.PostGetMultipleRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -23,7 +24,7 @@ public interface PostImpl {
     /**
      * Endpoint that will get a list of {@link com.patreonshout.beans.PostBean} objects from the database given a specified creator
      *
-     * @param creator is the creator of the posts we want to get
+     * @param campaignId is the creator of the posts we want to get
      * @return a json body of post objects from a given creator
      */
     @GetMapping("/creator")
@@ -33,7 +34,7 @@ public interface PostImpl {
                     description = "Creator posts returned",
                     content = {@Content(mediaType = "application/json")})
     })
-    ResponseEntity<?> GetCreatorPosts(@RequestParam(required = true, name = "creator") String creator);
+    ResponseEntity<?> GetCreatorPosts(@RequestParam(required = true, name = "campaign") int campaignId);
 
     /**
      * Endpoint that will get a list of {@link com.patreonshout.beans.PostBean} objects from the database given list of creators
@@ -51,5 +52,5 @@ public interface PostImpl {
                     description = "Invalid login token.",
                     content = {@Content(mediaType = "application/json")})
     })
-    ResponseEntity<?> GetMultipleCreatorPosts(@RequestBody PostGetMultipleRequest postGetMultipleRequest);
+    ResponseEntity<?> GetMultipleCreatorPosts(@RequestBody PostGetMultipleRequest postGetMultipleRequest) throws PSException;
 }

@@ -4,9 +4,16 @@ import {
     ListAlt,
     VerifiedUser,
 } from "@mui/icons-material";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import "./home_css/Post.css";
-import TagPopUp from "./TagPopUp";
+import Popup from "reactjs-popup";
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import {getListsFromPost} from "../services/api/lists/getListsFromPost";
+import {Button} from "@mui/material";
+import CheckBox from "../components/CheckBox";
+import {updateListsForPost} from "../services/api/lists/updateListsForPost";
+import ReactDOM from "react-dom";
 
 /**
  * The post object which will appear in the feed
@@ -17,11 +24,12 @@ import TagPopUp from "./TagPopUp";
  * @param {string} content - The message contained in the post
  * @param {string} url - The url of the creator
  * @param {Date} published_at - The date and time the post was published
+ * @param lists - The user's lists
  *
  * @returns A single post component to be displayed in the feed
  */
 
-function Post({title, creator_page_url, url, content, published_at, is_public}) {
+function Post({title, creator_page_url, url, content, published_at, is_public, lists}) {
 
     // TODO: clean this shit up
     content = content.replace(/<p[^>]*>/g, "");
@@ -45,6 +53,93 @@ function Post({title, creator_page_url, url, content, published_at, is_public}) 
     const handleRedirect = (e) => {
         window.open(url, "_blank");
     }
+
+    // const [thisPostLists, setThisPostLists] = useState([]); // TODO: when the user sets the lists they want for their post this should update
+    let thisPostLists = [];
+
+    const checkPostInList = (list_id) => {
+        let insideList = false;
+
+        thisPostLists.forEach((list) => {
+            if (list.list_id === list_id && insideList === false) {
+                console.log("list_id: " + list_id);
+                console.log("check against: " + list.list_id);
+                insideList = true;
+            }
+        })
+        return insideList;
+    }
+
+    const handleListSave = (event) => {
+        event.preventDefault();
+
+        let list_updates = [];
+        let dom_list_updates = [];
+
+        for (let i = 0; i < lists.length; i++) {
+            list_updates.push({"list_id": lists[i].list_id.toString(), "update": event.target[i].checked.toString()})
+
+            if (event.target[i].checked.toString() === "true") {
+                dom_list_updates.push(lists[i]);
+            }
+        }
+
+        // reload react dom
+        thisPostLists = dom_list_updates;
+        // setThisPostLists(dom_list_updates);
+
+        console.log(dom_list_updates);
+        ReactDOM.render(popup, document.getElementById("popup"));
+
+        updateListsRequest(list_updates).then(r => {
+
+        })
+    }
+
+    const popup = (
+        <form id="fields" onSubmit={handleListSave}>
+            <FormGroup id="popup">
+                {lists.map((item) => (
+                    <FormControlLabel
+                        control={<CheckBox list={item} checkPostInList={checkPostInList}/>}
+                        value={item}
+                        label=""/>
+                ))}
+            </FormGroup>
+            <br/>
+            <div id="buttonLocation">
+                <Button disableElevation type="submit" variant="contained">Save</Button>
+            </div>
+        </form>
+    );
+
+
+    useEffect(() => {
+        let mounted = true;
+        const tokenString = localStorage.getItem('token');
+        const loginToken = JSON.parse(tokenString).token;
+        getListsFromPost(loginToken, url)
+            .then(items => {
+                if (mounted) {
+                    thisPostLists = items;
+                    // setThisPostLists(items);
+                }
+            })
+        return () => mounted = false;
+    }, [])
+
+
+    const updateListsRequest = async (list_updates) => {
+        const tokenString = localStorage.getItem('token');
+        const login_token = JSON.parse(tokenString).token;
+
+        const message = await updateListsForPost({
+            url,
+            login_token,
+            list_updates
+        });
+    }
+
 
 
     return (
@@ -71,19 +166,36 @@ function Post({title, creator_page_url, url, content, published_at, is_public}) 
                     <div className="post__footerRedirect">
                         <Language fontSize="small" type="button" onClick={handleRedirect} hover="true"/>
                     </div>
-                    <div className="post__footerTag">
-                        <TagPopUp fontSize="small"/>
-                    </div>
                     <div className="post__footerFavorite">
                         <FavoriteBorder fontSize="small"/>
                     </div>
-                    <div className="post__footerList">
-                        <ListAlt fontSize="small"/>
+
+                    <div className="post__footerList">  {/*TODO*/}
+                        <Popup trigger={<ListAlt fontSize="small"/>} modal>
+                            {close => (
+                                <div className="modalBox">
+                                    <button className="close" onClick={close}>
+                                        &times;
+                                    </button>
+                                    <div className="header">
+                                        Lists
+                                    </div>
+                                    <br/>
+                                    <div id="popup">
+                                        {popup}
+                                    </div>
+                                </div>
+                            )}
+                        </Popup>
                     </div>
                 </div>
             </div>
         </div>
     );
 }
+
+
+
+
 
 export default Post;
