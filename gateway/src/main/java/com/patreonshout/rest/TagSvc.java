@@ -83,9 +83,7 @@ public class TagSvc extends BaseSvc implements TagImpl {
 
         WebAccount userAccount = webAccountFunctions.getAccount(tagGetRequest.getLoginToken());
 
-        if (userAccount == null) {
-            return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
-        }
+        WebAccount userAccount = webAccountFunctions.getAccount(tagGetRequest.getLoginToken());
 
         PostBean postBean = postsRepository.findPostBeanByUrl(tagGetRequest.getUrl());
 
@@ -110,9 +108,7 @@ public class TagSvc extends BaseSvc implements TagImpl {
 
         WebAccount userAccount = webAccountFunctions.getAccount(tagDeleteRequest.getLoginToken());
 
-        if (userAccount == null) {
-            return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
-        }
+        WebAccount userAccount = webAccountFunctions.getAccount(tagDeleteRequest.getLoginToken());
 
         PostBean postBean = postsRepository.findPostBeanByUrl(tagDeleteRequest.getUrl());
 

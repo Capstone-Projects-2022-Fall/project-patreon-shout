@@ -1,6 +1,5 @@
 package rest;
 
-import com.patreonshout.rest.WebhookSvc;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

@@ -70,6 +70,7 @@ public class ListSvc extends BaseSvc implements ListImpl {
             return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
         }
 
+
         // build response so ResponseEntity can parse the returned objects correctly
         List<Map<String, String>> response = new ArrayList<>();
 
