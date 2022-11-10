@@ -1,18 +1,14 @@
 package com.patreonshout.beans.patreon_api;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 
-
-/**
- * Class to store the data received from Patreon sending us an http request
- */
-@lombok.Data
+@Data
+@JsonIgnoreProperties
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class PatreonCampaignV2 {
-
-	@JsonProperty("vanity")
-	String vanity;
+public class PatreonObjectV2 {
 
 	@JsonProperty("data")
 	PatreonDataV2 data;

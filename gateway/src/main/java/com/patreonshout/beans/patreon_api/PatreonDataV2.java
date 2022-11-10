@@ -1,5 +1,7 @@
 package com.patreonshout.beans.patreon_api;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
@@ -10,6 +12,8 @@ import java.io.Serializable;
  * POJO that represents the "Data" object returned by Patreon API V2
  */
 @Data
+@JsonIgnoreProperties
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PatreonDataV2 implements Serializable {
 
 	/**
@@ -24,8 +28,8 @@ public class PatreonDataV2 implements Serializable {
 	@JsonProperty("id")
 	int id;
 
-//	@JsonProperty("relationships")
-//	PatreonRelationshipsV2 relationships;
+	@JsonProperty("relationships")
+	PatreonRelationshipsV2 relationships;
 
 	@JsonProperty("type")
 	String type;

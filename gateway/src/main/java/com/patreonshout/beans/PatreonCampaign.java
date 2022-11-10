@@ -17,11 +17,11 @@ import javax.persistence.*;
 public class PatreonCampaign {
 
 	@Column(name = "webaccount_id")
-	protected String webaccountId;
+	protected Integer webaccountId;
 
 	@Id
 	@Column(name = "campaign_id", unique = true)
-	protected String campaignId;
+	protected Integer campaignId;
 
 	@Column(name = "vanity")
 	protected String vanity;

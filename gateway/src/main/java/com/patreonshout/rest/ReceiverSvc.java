@@ -6,8 +6,7 @@ import com.patreon.resources.Campaign;
 import com.patreonshout.PSException;
 import com.patreonshout.beans.PostBean;
 import com.patreonshout.beans.WebAccount;
-import com.patreonshout.beans.patreon_api.PatreonCampaignV2;
-import com.patreonshout.beans.patreon_api.PatreonPostV2;
+import com.patreonshout.beans.patreon_api.*;
 import com.patreonshout.beans.request.receivers.patreon.WebhookRequest;
 import com.patreonshout.jpa.CreatorPageFunctions;
 import com.patreonshout.jpa.PatreonCampaignsFunctions;
@@ -19,8 +18,10 @@ import com.patreonshout.utils.DiscordWebhookUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
@@ -71,61 +72,45 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	 */
 	public String PatreonOAuth(
 			@RequestParam(required = false, name = "code") String code,
-			@RequestParam(required = false, name = "state") String state
+			@RequestParam(required = false, name = "state") String loginToken
 	) throws IOException, PSException {
 		// OAuth
-		if (code != null && state != null) {
+		if (code != null && loginToken != null) {
 			PatreonOAuth.TokensResponse tokens = oauthClient.getTokens(code); // Should we handle IOException?
+//					new PatreonOAuth.TokensResponse("Owt7HgouCPfQnXqcudbZes8wKj0IbG",
+//							"7cd1bd26e1fd771d002c48688acecf61b96ae392",
+//							1,
+//							"1",
+//							 "");
+
 
 			//Store the refresh TokensResponse in your data store
 			String accessToken = tokens.getAccessToken();
 			String refreshToken = tokens.getRefreshToken();
 
 			// put content creator posts in database
-			CustomPatreonAPI client = new CustomPatreonAPI(accessToken);
+//			CustomPatreonAPI client = new CustomPatreonAPI(accessToken);
 
-			/*
-			 TODO:
-			    Fix this!!  This is IMPROPER!
-			    This patch resides here to allow others to work on extra functionality
-			 */
-			// Send GET request to Patreon v2 web API
-			String baseUrl = "https://www.patreon.com/api/oauth2/v2/";
+			// Acquire campaign data
+			PatreonDataArrayEntryV2 campaign = objectMapper.convertValue(getCampaignData(accessToken), PatreonDataArrayEntryV2.class);
 
-			PatreonCampaignV2 patreonURL = WebClient
-					.create(baseUrl)
-					.get()
-					.uri(uriBuilder -> uriBuilder
-							.path("campaigns")
-							.queryParam("fields[campaign]", "vanity")
-							.build())
-					.headers(httpHeaders -> httpHeaders.setBearerAuth(accessToken))
-					.retrieve()
-					.bodyToMono(PatreonCampaignV2.class)
-					.share()
-					.block();
+			System.out.println("");
 
-			if (patreonURL == null)
-				throw new PSException(HttpStatus.BAD_REQUEST, "An error occurred while retrieving Patreon page URL for this user.");
-
-			PatreonCampaignV2.Data[] finalPatreonUrl = patreonURL.getData();
-
-			if (finalPatreonUrl.length == 0)
-				throw new PSException(HttpStatus.BAD_REQUEST, "Successfully retrieved Patreon Page URL object, but it was empty");
-
-			// * End of TODO
-
-			PatreonCampaignV2.Data campaign = finalPatreonUrl[0];
+			WebAccount webAccount = webAccountFunctions.getAccount(loginToken);
 
 			// Store their creator page information
-			patreonCampaignsFunctions.putCampaign(campaign);
-//			creatorPageFunctions.putCreatorPage(campaign.getAttributes().getVanity()); // TODO: Phase this out
+			patreonCampaignsFunctions.putCampaign(webAccount, campaign);
 
 			// put content creator posts in database
-			savePosts(accessToken, campaign.getAttributes().getVanity());
+			String campaignUrl = objectMapper.convertValue(campaign.getAttributes(), PatreonCampaignV2.class).getVanity();
+			saveCampaignPosts(accessToken, campaignUrl);
 
+			System.out.println("Access token: " + accessToken);
 			// Put Patreon tokens in database
-			webAccountFunctions.putPatreonTokens(accessToken, refreshToken, state);
+			webAccountFunctions.putPatreonTokens(loginToken, accessToken, refreshToken);
+
+			// Send Patreon a POST request to create a webhook for this user's campaign
+			createWebhookForPatreon(webAccount, accessToken, campaign.getId());
 
 			return "Patreon linked!  Close this pop-up and refresh the PatreonShout webpage.";
 		}
@@ -134,13 +119,76 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		return "";
 	}
 
+	private void createWebhookForPatreon(WebAccount webAccount, String accessToken, int campaignId) {
+		PatreonObjectV2 outputObject = new PatreonObjectV2();
+		PatreonDataV2 patreonData = new PatreonDataV2();
+		patreonData.setType("webhook");
+
+		PatreonWebhookV2 patreonWebhook = new PatreonWebhookV2();
+		patreonWebhook.setTriggers(new String[]{"posts:publish", "posts:update", "posts:delete"});
+		patreonWebhook.setUri("https://ayser.backend.outofstonk.com/receivers/patreon/webhook/" + webAccount.getWebAccountId());
+		patreonData.setAttributes(patreonWebhook);
+
+		PatreonRelationshipsV2 patreonRelationships = new PatreonRelationshipsV2();
+		PatreonCampaignV2 patreonCampaign = new PatreonCampaignV2();
+		PatreonDataV2 patreonCampaignData = new PatreonDataV2();
+		patreonCampaignData.setType("campaign");
+		patreonCampaignData.setId(campaignId);
+
+		patreonCampaign.setData(patreonCampaignData);
+		patreonRelationships.setCampaign(patreonCampaign);
+		patreonData.setRelationships(patreonRelationships);
+		outputObject.setData(patreonData);
+
+		PatreonObjectV2 retObject = WebClient
+				.create("https://www.patreon.com/api/oauth2/v2/")
+				.post()
+				.uri("webhooks")
+				.contentType(MediaType.APPLICATION_JSON)
+				.headers(httpHeaders -> httpHeaders.setBearerAuth(accessToken))
+				.body(BodyInserters.fromValue(outputObject))
+				.retrieve()
+				.bodyToMono(PatreonObjectV2.class)
+				.block();
+	}
+
+	private Object getCampaignData(String accessToken) throws PSException {
+		/*
+			 TODO:
+			    Fix this!!  This is IMPROPER!
+			    This patch resides here to allow others to work on extra functionality
+			 */
+		// Send GET request to Patreon v2 web API
+		PatreonObjectArrayV2 patreonURL = WebClient
+				.create("https://www.patreon.com/api/oauth2/v2/")
+				.get()
+				.uri(uriBuilder -> uriBuilder
+						.path("campaigns")
+						.queryParam("fields[campaign]", "vanity")
+						.build())
+				.headers(httpHeaders -> httpHeaders.setBearerAuth(accessToken))
+				.retrieve()
+				.bodyToMono(PatreonObjectArrayV2.class)
+				.share()
+				.block();
+
+		if (patreonURL == null)
+			throw new PSException(HttpStatus.BAD_REQUEST, "An error occurred while retrieving Patreon page URL for this user.");
+
+		if (patreonURL.getData() == null || patreonURL.getData().length == 0)
+			throw new PSException(HttpStatus.BAD_REQUEST, "Successfully retrieved Patreon Page URL object, but it was empty");
+		// * End of TODO
+
+		return objectMapper.convertValue(patreonURL.getData()[0], PatreonDataV2.class); //campaignData;
+	}
+
 	/**
 	 * fetches posts from patreon and saves them in the database
 	 *
 	 * @param accessToken Patreon access token for a creator
 	 * @param pageUrl Patreon creator's campaign page URL
 	 */
-	public void savePosts(String accessToken, String pageUrl) throws IOException {
+	public void saveCampaignPosts(String accessToken, String pageUrl) throws IOException {
 		CustomPatreonAPI client = new CustomPatreonAPI(accessToken);
 
 		for (Campaign campaign : client.fetchCampaigns().get()) {
@@ -183,7 +231,6 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		try {
 			webAccount = webAccountFunctions.getAccount(webaccountId);
 		} catch (PSException ex) { // * getAccount() threw an error -- webaccountId does not exist in the database!
-
 			// TODO: Send a DELETE request to delete the webhook from Patreon
 		} catch (Exception ex) { // TODO: Unknown exception occurred...!  Return 200 OK so Patreon keeps using this Webhook until we fix whatever is wrong
 			ex.printStackTrace();

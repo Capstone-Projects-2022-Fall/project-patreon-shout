@@ -153,7 +153,8 @@ public class WebAccountFunctions {
 			webAccount.setSocialIntegration(socialIntegration);
 		}
 
-		// * Ensure integration type was given...  This will throw an exception for us if any errors were found
+		// * Ensure integration type was given...
+		// ! This will throw an exception for us if any errors were found
 		validateSocialIntegration(putSocialIntegrationRequest);
 
 		// * Save data into database
@@ -267,29 +268,32 @@ public class WebAccountFunctions {
 	/**
 	 * Attempts to add Patreon access and refresh tokens into a {@link WebAccount} by checking for a matching login token
 	 *
+	 * @param loginToken   {@link WebAccount} login token
 	 * @param accessToken  Patreon access token - can be null
 	 * @param refreshToken Patreon refresh token - can be null
-	 * @param loginToken   {@link WebAccount} login token
 	 */
 	@Transactional
-	public void putPatreonTokens(String accessToken, String refreshToken, String loginToken) throws PSException {
+	public void putPatreonTokens(String loginToken, String accessToken, String refreshToken) throws PSException {
 		WebAccount webAccount = this.getAccount(loginToken);
+		this.putPatreonTokens(webAccount, accessToken, refreshToken);
+	}
+
+	@Transactional
+	public void putPatreonTokens(WebAccount webAccount, String accessToken, String refreshToken) throws PSException {
 		PatreonTokens patreonTokens = webAccount.getCreatorTokens();
 
 		if (patreonTokens == null) {
 			patreonTokens = new PatreonTokens();
 			patreonTokens.setWebAccountId(webAccount.getWebAccountId());
+			patreonTokens.setWebAccount(webAccount);
+			webAccount.setCreatorTokens(patreonTokens);
 		}
-
-		patreonTokens.setWebAccount(webAccount);
-		webAccount.setCreatorTokens(patreonTokens);
 
 		patreonTokens.setAccessToken(accessToken);
 		patreonTokens.setRefreshToken(refreshToken);
 
 		webAccountRepository.save(webAccount);
 	}
-
 	/**
 	 * Attempts to acquire Patreon access and refresh tokens by checking for a matching {@link WebAccountFunctions} with the
 	 * given login token
@@ -392,5 +396,15 @@ public class WebAccountFunctions {
 		// ! Given new password does not meet our password requirements
 		if (!securityConfiguration.passwordIsValid(rawPassword))
 			throw new PSException(HttpStatus.UNAUTHORIZED, "New password does not meet password requirements");
+	}
+
+	/**
+	 * Gets a {@link com.patreonshout.beans.WebAccount} object from a specified login token
+	 *
+	 * @param loginToken is the user's session login token used to validate the user
+	 * @return {@link com.patreonshout.beans.WebAccount} object holding data corresponding to the provided login token
+	 */
+	public WebAccount findByLoginToken(String loginToken) {
+		return webAccountRepository.findByLoginToken(loginToken);
 	}
 }
