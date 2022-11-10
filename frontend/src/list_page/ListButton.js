@@ -15,7 +15,7 @@ function ListButton({ setPostData, setPosts, setLists, added_creators, id, title
     // TODO: change getPosts with a request to get the posts for a particular listId
     const getListPosts = () => {
         let mounted = true;
-        getPosts("alexzwicky")
+        getPosts("8141072")
             .then(items => {
                 if (mounted) {
                     console.log(items);

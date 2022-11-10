@@ -45,4 +45,13 @@ public class SocialIntegration implements Serializable {
 	@MapsId
 	@JoinColumn(name = "webaccount_id")
 	protected WebAccount webAccount;
+
+	/**
+	 * Informs if this SocialIntegration object has any Social Integrations
+	 *
+	 * @return {@link Boolean#TRUE} if any social integrations are not null, false otherwise
+	 */
+	public Boolean isEmpty() {
+		return discord == null && twitter == null && instagram == null;
+	}
 }

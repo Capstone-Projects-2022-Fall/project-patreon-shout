@@ -1,12 +1,12 @@
 package com.patreonshout.rest;
 
+import com.patreonshout.PSException;
 import com.patreonshout.beans.PostBean;
 import com.patreonshout.beans.WebAccount;
 import com.patreonshout.beans.request.PostGetMultipleRequest;
 import com.patreonshout.jpa.PostsRepository;
 import com.patreonshout.jpa.WebAccountFunctions;
 import com.patreonshout.rest.interfaces.PostImpl;
-import com.patreonshout.utils.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -43,8 +43,8 @@ public class PostSvc extends BaseSvc implements PostImpl {
     /**
      * {@inheritDoc}
      */
-    public ResponseEntity<?> GetCreatorPosts(@RequestParam(name = "creator") String creator) { // TODO: SOON TO BE DEPRECATED
-        List<PostBean> posts = postsRepository.findAllByCreatorPageUrl(creator);
+    public ResponseEntity<?> GetCreatorPosts(@RequestParam(name = "campaign") int campaignId) { // TODO: SOON TO BE DEPRECATED
+        List<PostBean> posts = postsRepository.findAllByCampaignId(campaignId); // TODO: FIX -- Must be campaign id
 
         List<Map<String, String>> response = new ArrayList<>();
 
@@ -55,7 +55,7 @@ public class PostSvc extends BaseSvc implements PostImpl {
 
             Map<String, String> listResponse = new HashMap<>();
             listResponse.put("title", pb.getTitle());
-            listResponse.put("creator_page_url", pb.getCreatorPageUrl());
+            listResponse.put("campaign_id", String.valueOf(pb.getCampaignId()));
             listResponse.put("url", pb.getUrl());
             listResponse.put("content", pb.getContent());
             listResponse.put("published_at", pb.getPublishDate());
@@ -70,12 +70,8 @@ public class PostSvc extends BaseSvc implements PostImpl {
     /**
      * {@inheritDoc}
      */
-    public ResponseEntity<?> GetMultipleCreatorPosts(@RequestBody PostGetMultipleRequest postGetMultipleRequest) {
-        WebAccount userAccount = webAccountFunctions.findByLoginToken(postGetMultipleRequest.getLoginToken());
-
-        if (userAccount == null) {
-            return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
-        }
+    public ResponseEntity<?> GetMultipleCreatorPosts(@RequestBody PostGetMultipleRequest postGetMultipleRequest) throws PSException {
+        WebAccount userAccount = webAccountFunctions.getAccount(postGetMultipleRequest.getLoginToken());
 
         Page<PostBean> page = postsRepository.getMultipleCreatorPosts(postGetMultipleRequest.getCreators(), PageRequest.of(postGetMultipleRequest.getPage(), 5).withSort(Sort.Direction.ASC, "publishdate"));
 

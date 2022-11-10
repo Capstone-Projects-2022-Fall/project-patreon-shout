@@ -14,6 +14,7 @@ import com.patreonshout.utils.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -116,5 +117,20 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 		Map<String, String> response = new HashMap<>();
 		response.put("success", "true");
 		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	@PostMapping("webhook")
+	public ResponseEntity<?> Webhook(@RequestParam(name = "login_token") String loginToken) throws PSException {
+		webAccountFunctions.testy(loginToken);
+		/**
+		 * Requires:
+		 * 1) Webaccount ID
+		 * 2) Campaign ID
+		 */
+		String webhookUrl = "https://ayser.backend.outofstonk.com/receivers/patreon/" + 201;
+
+
+
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

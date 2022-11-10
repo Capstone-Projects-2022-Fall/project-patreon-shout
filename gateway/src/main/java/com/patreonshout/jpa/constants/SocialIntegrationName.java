@@ -8,7 +8,7 @@ import com.patreonshout.beans.WebAccount;
  * {@link #TWITTER}
  * {@link #INSTAGRAM}
  */
-public enum IntegrationType {
+public enum SocialIntegrationName {
 	/**
 	 * Discord platform
 	 */
