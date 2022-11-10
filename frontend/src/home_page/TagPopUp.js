@@ -44,7 +44,7 @@ function TagPopUp() {
                             <span onClick={() => removeTag(index)} className="close">&times;</span>
                         </div>
                     ))}
-                    <input onKeyDown={handleKeyDown} type="text" className= "tags-input" placeholder="Add a Tag"></input>
+                    <input onKeyDown={handleKeyDown} type="text" className= "tags-input" placeholder="Add a Tag"/>
                 </div>
             </div>
         </Popup>
