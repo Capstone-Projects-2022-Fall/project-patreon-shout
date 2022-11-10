@@ -1,5 +1,6 @@
 package com.patreonshout.rest;
 
+import com.patreonshout.PSException;
 import com.patreonshout.beans.PostBean;
 import com.patreonshout.beans.Tag;
 import com.patreonshout.beans.WebAccount;
@@ -52,12 +53,8 @@ public class TagSvc extends BaseSvc implements TagImpl {
     /**
      * {@inheritDoc}
      */
-    public ResponseEntity<?> AddTag(@RequestBody TagAddRequest tagAddRequest) {
-        WebAccount userAccount = webAccountFunctions.findByLoginToken(tagAddRequest.getLoginToken());
-
-        if (userAccount == null) {
-            return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
-        }
+    public ResponseEntity<?> AddTag(@RequestBody TagAddRequest tagAddRequest) throws PSException {
+        WebAccount userAccount = webAccountFunctions.getAccount(tagAddRequest.getLoginToken());
 
         PostBean postBean = postsRepository.findPostBeanByUrl(tagAddRequest.getUrl());
 
@@ -78,13 +75,9 @@ public class TagSvc extends BaseSvc implements TagImpl {
     /**
      * {@inheritDoc}
      */
-    public ResponseEntity<?> GetUserTagsOnSinglePost(@RequestBody TagGetRequest tagGetRequest) {
+    public ResponseEntity<?> GetUserTagsOnSinglePost(@RequestBody TagGetRequest tagGetRequest) throws PSException {
 
-        WebAccount userAccount = webAccountFunctions.findByLoginToken(tagGetRequest.getLoginToken());
-
-        if (userAccount == null) {
-            return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
-        }
+        WebAccount userAccount = webAccountFunctions.getAccount(tagGetRequest.getLoginToken());
 
         PostBean postBean = postsRepository.findPostBeanByUrl(tagGetRequest.getUrl());
 
@@ -105,13 +98,9 @@ public class TagSvc extends BaseSvc implements TagImpl {
     /**
      * {@inheritDoc}
      */
-    public ResponseEntity<?> DeleteUserTagOnSinglePost(@RequestBody TagDeleteRequest tagDeleteRequest) {
+    public ResponseEntity<?> DeleteUserTagOnSinglePost(@RequestBody TagDeleteRequest tagDeleteRequest) throws PSException {
 
-        WebAccount userAccount = webAccountFunctions.findByLoginToken(tagDeleteRequest.getLoginToken());
-
-        if (userAccount == null) {
-            return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
-        }
+        WebAccount userAccount = webAccountFunctions.getAccount(tagDeleteRequest.getLoginToken());
 
         PostBean postBean = postsRepository.findPostBeanByUrl(tagDeleteRequest.getUrl());
 

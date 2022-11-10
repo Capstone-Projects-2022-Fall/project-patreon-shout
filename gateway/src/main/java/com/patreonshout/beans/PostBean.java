@@ -2,9 +2,9 @@ package com.patreonshout.beans;
 
 import com.github.jasminb.jsonapi.annotations.Type;
 import com.patreon.resources.shared.BaseResource;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.util.List;
@@ -15,8 +15,10 @@ import java.util.List;
 @Entity
 @Table(name="posts")
 @Type("post")
-@Setter
-@Getter
+@Data
+@Builder
+@RequiredArgsConstructor
+@AllArgsConstructor
 @ToString
 public class PostBean extends BaseResource {
 
@@ -27,6 +29,12 @@ public class PostBean extends BaseResource {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="post_id")
     protected int postId;
+
+    /**
+     * Name of the content creator who made the Patreon post
+     */
+    @Column(name="campaign_id")
+    protected int campaignId;
 
     /**
      * Platform app id. Can be null
@@ -83,12 +91,6 @@ public class PostBean extends BaseResource {
     protected String title;
 
     /**
-     * Name of the content creator who made the Patreon post
-     */
-    @Column(name="creator_page_url")
-    protected String creatorPageUrl;
-
-    /**
      * url is the url of the Patreon post
      */
     @Column(name="url")
@@ -99,6 +101,13 @@ public class PostBean extends BaseResource {
      */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "postBean")
     List<Tag> tags;
+
+    /**
+     * listPosts is the List of {@link com.patreonshout.beans.ListPost} objects linked with this ListBean object
+     */
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "post")
+    List<ListPost> listPosts;
 
     /**
      * Used to check if a {@link com.patreonshout.beans.PostBean} is equal to another PostBean object

@@ -1,5 +1,6 @@
 package com.patreonshout.rest.interfaces;
 
+import com.patreonshout.PSException;
 import com.patreonshout.beans.request.FilterAddRequest;
 import com.patreonshout.beans.request.FilterDeleteRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -56,7 +57,7 @@ public interface SearchFilterImpl {
                     description = "user lists returned",
                     content = {@Content(mediaType = "application/json")})
     })
-    ResponseEntity<?> GetUserFilters(@RequestParam String loginToken);
+    ResponseEntity<?> GetUserFilters(@RequestParam String loginToken) throws PSException;
 
     /**
      * Endpoint that will add a new {@link com.patreonshout.beans.SearchFilter} to the database for a user
@@ -74,7 +75,7 @@ public interface SearchFilterImpl {
                     description = "Foreign key constraint failed.",
                     content = {@Content(mediaType = "application/json")})
     })
-    ResponseEntity<?> AddFilter(@RequestBody FilterAddRequest filterAddRequest);
+    ResponseEntity<?> AddFilter(@RequestBody FilterAddRequest filterAddRequest) throws PSException;
 
 
 }
