@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CreatorPageRepository extends JpaRepository<CreatorPage, Long> {
-	CreatorPage findByPageUrl(String pageUrl);
+//	CreatorPage findByPageUrl(String pageUrl);
 }

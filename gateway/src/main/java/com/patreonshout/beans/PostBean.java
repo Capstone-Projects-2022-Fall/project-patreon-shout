@@ -34,7 +34,7 @@ public class PostBean extends BaseResource {
      * Name of the content creator who made the Patreon post
      */
     @Column(name="campaign_id")
-    protected String campaignId;
+    protected int campaignId;
 
     /**
      * Platform app id. Can be null

@@ -102,8 +102,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 			patreonCampaignsFunctions.putCampaign(webAccount, campaign);
 
 			// put content creator posts in database
-			String campaignUrl = objectMapper.convertValue(campaign.getAttributes(), PatreonCampaignV2.class).getVanity();
-			saveCampaignPosts(accessToken, campaignUrl);
+			saveCampaignPosts(accessToken, campaign.getId());
 
 			System.out.println("Access token: " + accessToken);
 			// Put Patreon tokens in database
@@ -186,9 +185,9 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	 * fetches posts from patreon and saves them in the database
 	 *
 	 * @param accessToken Patreon access token for a creator
-	 * @param pageUrl Patreon creator's campaign page URL
+	 * @param campaignId Patreon creator's campaign ID
 	 */
-	public void saveCampaignPosts(String accessToken, String pageUrl) throws IOException {
+	public void saveCampaignPosts(String accessToken, int campaignId) throws IOException {
 		CustomPatreonAPI client = new CustomPatreonAPI(accessToken);
 
 		for (Campaign campaign : client.fetchCampaigns().get()) {
@@ -198,7 +197,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 			pbList.removeAll(existingPosts);
 
 			for (PostBean post : pbList) {
-				post.setCreatorPageUrl(pageUrl);
+				post.setCampaignId(campaignId);
 				System.out.println("p: " + post);
 
 				postsRepository.save(post);
