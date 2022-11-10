@@ -5,7 +5,6 @@ import Searchbar from "./Searchbar";
 //import { getPosts } from '../services/api/posts'
 import jsonPosts from "../data/posts.json";
 import Filter from "./Filter";
-import {addList} from "../services/api/lists/addList";
 import {getLists} from "../services/api/lists/getLists";
 
 /**
@@ -17,14 +16,14 @@ import {getLists} from "../services/api/lists/getLists";
 function Feed() {
 
     const [searchTerm, setSearchTerm] = useState([]);
-    const [filterChoice, setFilterChoice] = useState("");
+    const [filterChoices, setFilterChoices] = useState([]);
     const [dateRange, setDateRange] = useState([]);
     const [postList, setPostList] = useState(jsonPosts);
     const searchedList = [];
     var displayedList = [];
-
     let shouldSkip = false;
 
+    // Searchbar Functionality
     postList.forEach((post, index) => {
         const postInfo = (({title, creator_page_url, content}) => ({title, creator_page_url, content}))(post);
         Object.values(postInfo).every((onlyValues, valIndex) => {
@@ -38,22 +37,24 @@ function Feed() {
         shouldSkip = false;
     });
 
+    // Filter Functionality
     displayedList = [...searchedList];
-    console.log(filterChoice);
-    switch (filterChoice) {
-        case "newestdate":
+    console.log(filterChoices);
+
+    switch (filterChoices[0]) {
+        case "Date(new → old)":
             displayedList = displayedList.sort(function(b, a){return new Date(a.published_at).getTime() - new Date(b.published_at).getTime()});
             break;
-        case "oldestdate":
+        case "Date(old → new)":
             displayedList = displayedList.sort(function(a, b){return new Date(a.published_at).getTime() - new Date(b.published_at).getTime()});
             break;
-        case "privposts":
+        case "Private Only":
             displayedList = displayedList.filter(value => value.is_public === false);
             break;
-        case "pubposts":
+        case "Public Only":
             displayedList = displayedList.filter(value => value.is_public === true);
             break;
-        case "daterange":
+        case "Date Range":
             displayedList = displayedList.sort(function(b, a){return new Date(a.published_at).getTime() - new Date(b.published_at).getTime()});
             displayedList = displayedList.filter(value => (new Date(value.published_at).getTime() <= new Date(dateRange.endDate).getTime() && 
                 new Date(value.published_at).getTime() >= new Date(dateRange.startDate).getTime()));
@@ -72,7 +73,6 @@ function Feed() {
         getLists(userToken.token)
             .then(items => {
                 if (mounted) {
-                    console.log(items);
                     setUserLists(items)
                 }
             })
@@ -93,16 +93,16 @@ function Feed() {
     return (
         <div className="feed">
             <div className="feed__header">
-                <h2>Home</h2>
+                <h1>Patreon Shout</h1>
             </div>
             <div className="feed__filters">
                 <Searchbar
                     searchTerm={searchTerm}
                     setSearchTerm={setSearchTerm}
                 />
-                <Filter id="feed__filter" 
-                    filterChoice={filterChoice} 
-                    setFilterChoice={setFilterChoice}
+                <Filter id="feed__filter"
+                    filterChoices={filterChoices} 
+                    setFilterChoices={setFilterChoices}
                     dateRange={dateRange}
                     setDateRange={setDateRange}
                 />
