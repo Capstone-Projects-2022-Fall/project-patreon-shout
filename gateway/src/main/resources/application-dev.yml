@@ -8,14 +8,14 @@ spring:
     show-sql: true
 
 server:
-  port: 443
+  port: 5000
 
   # HTTPS Configuration
   # Tutorial:
   #   - Generate PEM files with: https://www.digitalocean.com/community/tutorials/how-to-acquire-a-let-s-encrypt-certificate-using-dns-validation-with-acme-dns-certbot-on-ubuntu-18-04
   #   - Convert PEM files to PKCS12 https://dzone.com/articles/spring-boot-secured-by-lets-encrypt
   ssl:
-    enabled: true
+    enabled: false
     key-store: classpath:ssl-dev/keystore.p12
     key-store-password: ENC(lK2PUwcQSfKYIGzkiu+9ZU4eTWSv1uBffigjXy3HbEwAYBaP0QL2h0qi71Gc09xmnPYilOajqwrhap/dCiI2Og==)
     key-store-type: PKCS12
@@ -24,9 +24,9 @@ server:
 # PatreonShout
 patreonshout:
   client: # Client Configuration
-    id: Aymjq1-b_ZkmaeejretFStklrikzMGcG-LEtCkt3GvOeiuOO2MY0_hluLoUzC4ce
-    secret: PgFjamxT-DlenUKEqlf2px49QgYFd3a-MlSzoYzuuUxQepgDK_ajCYs8xbqrsLLB
-    redirecturi: https://104.10.47.181:5000/receivers/patreonoauth
+    id: QshCpqHpThL5sckRQX88TwE9vPr4pEWOjdyZbAKVIJie1hhOdPbsp6Qaqrd9C7M6
+    secret: ORQ1gPXNsZ8StUBBYBrfuiomLFECnmLwzuVy57C3wNHkOgFJNOA3iFV4i6BRaV3h
+    redirecturi: http://localhost:5000/receivers/patreon/oauth
   server: # Server Configuration
     cors-origin: https://104.10.47.181:3000
   db: # Database Configuration
