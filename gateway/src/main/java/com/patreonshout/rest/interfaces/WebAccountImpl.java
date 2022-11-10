@@ -1,8 +1,9 @@
 package com.patreonshout.rest.interfaces;
 
 import com.patreonshout.PSException;
+import com.patreonshout.beans.SocialIntegration;
 import com.patreonshout.beans.request.ResetPasswordRequest;
-import com.patreonshout.beans.request.SocialIntegrationRequest;
+import com.patreonshout.beans.request.PutSocialIntegrationRequest;
 import com.patreonshout.beans.WebAccount;
 import com.patreonshout.beans.request.LoginRequest;
 import com.patreonshout.beans.request.RegisterRequest;
@@ -76,11 +77,11 @@ public interface WebAccountImpl {
 	/**
 	 * Endpoint that allows registering, updating or deleting integrations for social platforms.
 	 *
-	 * @param socialIntegrationRequest {@link SocialIntegrationRequest} object that contains {@link WebAccountFunctions} and request details.
-	 * @return {@link HttpStatus#OK} if successful, {@link HttpStatus#CONFLICT} if the provided {@link SocialIntegrationRequest}
+	 * @param putSocialIntegrationRequest {@link PutSocialIntegrationRequest} object that contains {@link WebAccountFunctions} and request details.
+	 * @return {@link HttpStatus#OK} if successful, {@link HttpStatus#CONFLICT} if the provided {@link PutSocialIntegrationRequest}
 	 * does not contain a valid {@link WebAccount} ID number.
 	 */
-	@PutMapping("/integration")
+	@PutMapping("/socialintegration")
 	@Operation(summary = "Registers WebAccounts during PatreonShout sign up")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200",
@@ -91,7 +92,22 @@ public interface WebAccountImpl {
 					content = {@Content(mediaType = "application/json")})
 	})
 	@ResponseStatus(code = HttpStatus.OK, reason = "Data saved successfully")
-	HttpStatus Integration(@RequestBody SocialIntegrationRequest socialIntegrationRequest) throws PSException;
+	HttpStatus PutSocialIntegration(@RequestBody PutSocialIntegrationRequest putSocialIntegrationRequest) throws PSException;
+
+	/**
+	 * Endpoint that returns the social integration tokens and webhook URLs for social platforms for a given login token
+	 *
+	 * @param loginToken Login token belonging to a {@link WebAccount}
+	 * @return {@link SocialIntegration} Social integration tokens and webhook URLs
+	 */
+	@GetMapping("/socialintegration")
+	@Operation(summary = "Registers WebAccounts during PatreonShout sign up")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200",
+					description = "Integrations returned",
+					content = {@Content(mediaType = "application/json")})
+	})
+	ResponseEntity<?> GetSocialIntegration(@RequestParam(name = "login_token") String loginToken) throws PSException;
 
 	/**
 	 * Endpoint that allows retrieval of Patreon access and refresh tokens for a {@link WebAccount} containing the given

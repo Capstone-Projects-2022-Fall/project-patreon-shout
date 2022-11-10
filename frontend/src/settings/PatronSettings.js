@@ -1,7 +1,6 @@
 import * as React from 'react';
 import ResetPassModal from "./ResetPassModal";
-import DropDownListItem from "./DropDownListItem";
-import {List, ListItem } from '@mui/material';
+import {List} from '@mui/material';
 
 function PatronSettings() {
 
@@ -23,26 +22,10 @@ function PatronSettings() {
     return (
 
         <List
-            sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+            sx={{width: '100%', maxWidth: 360, bgcolor: 'background.paper'}}
         >
 
-                <DropDownListItem
-                    name="Discord"
-                    dropdown="true"
-                />
-
-                <DropDownListItem
-                    name="Twitter"
-                    dropdown="false"
-                />
-
-
-                <DropDownListItem
-                    name="Instagram"
-                    dropdown="false"
-                />
-
-                <ResetPassModal/>
+            <ResetPassModal/>
 
         </List>
     );
