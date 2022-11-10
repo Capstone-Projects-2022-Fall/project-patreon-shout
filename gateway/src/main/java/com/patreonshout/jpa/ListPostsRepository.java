@@ -26,10 +26,18 @@ public interface ListPostsRepository extends JpaRepository<ListPost, Integer> {
     void deleteByListAndPost(int list_id, int post_id);
 
     /**
-     * Finds all the posts in a list by it's {@link com.patreonshout.beans.ListBean}
+     * Finds all the posts in a list by it's list_id
      *
      * @param listId the id of the list we want to find the posts of
      * @return a list of {@link com.patreonshout.beans.ListPost}
      */
     List<ListPost> findAllByListId(int listId);
+
+    /**
+     * Finds all the posts in any list by it's post_id
+     *
+     * @param post_id is the id of a post
+     * @return a list of {@link com.patreonshout.beans.ListPost}
+     */
+    List<ListPost> findAllByPostId(int post_id);
 }
