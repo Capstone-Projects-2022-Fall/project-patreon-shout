@@ -80,16 +80,16 @@ public interface ListImpl {
     @PostMapping("/list")
     @Operation(summary = "Adds a new list to the user's lists")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201",
-                description = "List created.",
-                content = {@Content(mediaType = "application/json")}),
-        @ApiResponse(responseCode = "409",
-                description = "Foreign key constraint failed.",
-                content = {@Content(mediaType = "application/json")}),
-        @ApiResponse(responseCode = "400",
-                description = "the login token provided doesn't match up with the owner of the requested list's login token",
-                content = {@Content(mediaType = "application/json")}
-        )
+            @ApiResponse(responseCode = "201",
+                    description = "List created.",
+                    content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "409",
+                    description = "Foreign key constraint failed.",
+                    content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "400",
+                    description = "the login token provided doesn't match up with the owner of the requested list's login token",
+                    content = {@Content(mediaType = "application/json")}
+            )
     })
     ResponseEntity<?> AddUserList(@RequestBody ListCreationRequest listCreationRequest) throws PSException;
 

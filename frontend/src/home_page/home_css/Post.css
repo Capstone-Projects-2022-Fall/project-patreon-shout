@@ -40,6 +40,12 @@
     margin-top: 10px;
 }
 
+.post__footerTag {
+    display: flex;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
 .post__badge {
     font-size: 14px !important;
     color: var(--main-color);
