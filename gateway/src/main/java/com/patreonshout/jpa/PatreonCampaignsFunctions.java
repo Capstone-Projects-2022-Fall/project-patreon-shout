@@ -1,9 +1,12 @@
 package com.patreonshout.jpa;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.patreonshout.PSException;
 import com.patreonshout.beans.CreatorPage;
 import com.patreonshout.beans.PatreonCampaign;
+import com.patreonshout.beans.WebAccount;
 import com.patreonshout.beans.patreon_api.PatreonCampaignV2;
+import com.patreonshout.beans.patreon_api.PatreonDataArrayEntryV2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +25,15 @@ public class PatreonCampaignsFunctions {
 	@Autowired
 	PatreonCampaignsRepository patreonCampaignsRepository;
 
+	@Autowired
+	WebAccountFunctions webAccountFunctions;
+
+	/**
+	 * Jackson object mapper that allows converting Java type {@link Object} to custom POJOs.
+	 */
+	@Autowired
+	ObjectMapper objectMapper;
+
 	public PatreonCampaign getCampaignByWebaccountId(Long id) {
 		return patreonCampaignsRepository.findByWebaccountId(id);
 	}
@@ -32,10 +44,27 @@ public class PatreonCampaignsFunctions {
 
 	}
 
-	public void putCampaign(PatreonCampaignV2.Data campaign) {
+//	public void putCampaign(PatreonCampaignV2.Data campaign) {
+//		PatreonCampaign patreonCampaign = new PatreonCampaign();
+//
+//		patreonCampaign.setCampaignId(campaign.getId());
+//		patreonCampaign.setVanity(campaign.getAttributes().getVanity());
+//	}
+
+	public void putCampaign(String loginToken, PatreonDataArrayEntryV2 campaign) throws PSException {
+		WebAccount webAccount = webAccountFunctions.getAccount(loginToken);
+		this.putCampaign(webAccount, campaign);
+	}
+
+	public void putCampaign(WebAccount webAccount, PatreonDataArrayEntryV2 campaignDataEntry) throws PSException {
 		PatreonCampaign patreonCampaign = new PatreonCampaign();
 
-		patreonCampaign.setCampaignId(campaign.getId());
-		patreonCampaign.setVanity(campaign.getAttributes().getVanity());
+		patreonCampaign.setWebaccountId(webAccount.getWebAccountId());
+		patreonCampaign.setCampaignId(campaignDataEntry.getId());
+
+		PatreonCampaignV2 convertedCampaign = objectMapper.convertValue(campaignDataEntry.getAttributes(), PatreonCampaignV2.class);
+		patreonCampaign.setVanity(convertedCampaign.getVanity());
+
+		patreonCampaignsRepository.save(patreonCampaign);
 	}
 }
