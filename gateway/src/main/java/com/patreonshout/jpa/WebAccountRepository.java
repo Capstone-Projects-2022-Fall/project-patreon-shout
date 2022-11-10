@@ -24,4 +24,12 @@ public interface WebAccountRepository extends JpaRepository<WebAccount, Long> {
 	 * @return {@link com.patreonshout.beans.WebAccount} object holding data corresponding to the provided login token
 	 */
 	WebAccount findByLoginToken(String loginToken);
+
+	/**
+	 * Gets a {@link com.patreonshout.beans.WebAccount} object from a specified web account id
+	 *
+	 * @param webAccountId is the id of the web account
+	 * @return {@link com.patreonshout.beans.WebAccount} object holding data corresponding to the provided web account id
+	 */
+	WebAccount findByWebAccountId(int webAccountId);
 }

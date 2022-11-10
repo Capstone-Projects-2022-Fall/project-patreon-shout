@@ -7,6 +7,7 @@ import com.patreonshout.beans.request.PostGetMultipleRequest;
 import com.patreonshout.jpa.PostsRepository;
 import com.patreonshout.jpa.WebAccountFunctions;
 import com.patreonshout.rest.interfaces.PostImpl;
+import com.patreonshout.utils.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -72,6 +73,10 @@ public class PostSvc extends BaseSvc implements PostImpl {
      */
     public ResponseEntity<?> GetMultipleCreatorPosts(@RequestBody PostGetMultipleRequest postGetMultipleRequest) throws PSException {
         WebAccount userAccount = webAccountFunctions.getAccount(postGetMultipleRequest.getLoginToken());
+
+        if (userAccount == null) {
+            return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
+        }
 
         Page<PostBean> page = postsRepository.getMultipleCreatorPosts(postGetMultipleRequest.getCreators(), PageRequest.of(postGetMultipleRequest.getPage(), 5).withSort(Sort.Direction.ASC, "publishdate"));
 

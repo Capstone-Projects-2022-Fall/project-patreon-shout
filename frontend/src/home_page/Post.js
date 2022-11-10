@@ -1,5 +1,6 @@
 import {
     FavoriteBorder,
+    Favorite,
     Language,
     ListAlt,
     VerifiedUser,
@@ -14,6 +15,9 @@ import {Button} from "@mui/material";
 import CheckBox from "../components/CheckBox";
 import {updateListsForPost} from "../services/api/lists/updateListsForPost";
 import ReactDOM from "react-dom";
+import {pink} from "@mui/material/colors";
+import {addPostToFavoritesList} from "../services/api/lists/favorites/addPostToFavoritesList";
+import {deletePostFromFavoritesList} from "../services/api/lists/favorites/deletePostFromFavoritesList";
 
 /**
  * The post object which will appear in the feed
@@ -54,21 +58,23 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
         window.open(url, "_blank");
     }
 
-    // const [thisPostLists, setThisPostLists] = useState([]); // TODO: when the user sets the lists they want for their post this should update
-    let thisPostLists = [];
+    useEffect(() => {
+        let mounted = true;
+        const tokenString = localStorage.getItem('token');
+        const loginToken = JSON.parse(tokenString).token;
+        getListsFromPost(loginToken, url)
+            .then(items => {
+                if (mounted) {
+                    favThisPostLists = items;
+                    setThisPostLists(items);
+                    checkForFavoritesList();
+                }
+            })
+        return () => mounted = false;
+    }, [])
 
-    const checkPostInList = (list_id) => {
-        let insideList = false;
-
-        thisPostLists.forEach((list) => {
-            if (list.list_id === list_id && insideList === false) {
-                console.log("list_id: " + list_id);
-                console.log("check against: " + list.list_id);
-                insideList = true;
-            }
-        })
-        return insideList;
-    }
+    let favThisPostLists = [];
+    const [thisPostLists, setThisPostLists] = useState([]);
 
     const handleListSave = (event) => {
         event.preventDefault();
@@ -85,15 +91,52 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
         }
 
         // reload react dom
-        thisPostLists = dom_list_updates;
-        // setThisPostLists(dom_list_updates);
-
-        console.log(dom_list_updates);
-        ReactDOM.render(popup, document.getElementById("popup"));
+        favThisPostLists = dom_list_updates;
+        setThisPostLists(dom_list_updates);
+        // ReactDOM.render(popup, document.getElementById("popup"));
 
         updateListsRequest(list_updates).then(r => {
 
         })
+    }
+
+
+    const [favorite, setFavorite] = useState(false); // checkForFavoritesList
+
+    const handleFavoriteClick = () => {
+        if (favorite === false) {
+            addPostToFavoritesRequest().then();
+        }
+        else {
+            deletePostFromFavoritesRequest().then();
+        }
+
+        setFavorite(!favorite)
+    }
+
+    // checks to see if the post is favorited
+    const checkForFavoritesList = () => {
+        let isFavoritePost = false;
+
+        favThisPostLists.forEach((element) => {
+            if (element.title === "Favorites") {
+                isFavoritePost = true;
+            }
+        });
+
+        setFavorite(isFavoritePost);
+    }
+
+
+    const checkPostInList = (list_id) => {
+        let insideList = false;
+
+        thisPostLists.forEach((list) => {
+            if (list.list_id === list_id && insideList === false) {
+                insideList = true;
+            }
+        })
+        return insideList;
     }
 
     const popup = (
@@ -114,21 +157,6 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
     );
 
 
-    useEffect(() => {
-        let mounted = true;
-        const tokenString = localStorage.getItem('token');
-        const loginToken = JSON.parse(tokenString).token;
-        getListsFromPost(loginToken, url)
-            .then(items => {
-                if (mounted) {
-                    thisPostLists = items;
-                    // setThisPostLists(items);
-                }
-            })
-        return () => mounted = false;
-    }, [])
-
-
     const updateListsRequest = async (list_updates) => {
         const tokenString = localStorage.getItem('token');
         const login_token = JSON.parse(tokenString).token;
@@ -140,6 +168,30 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
         });
     }
 
+
+    const addPostToFavoritesRequest = async e => {
+        const tokenString = localStorage.getItem('token');
+        const login_token = JSON.parse(tokenString).token;
+
+        const message = await addPostToFavoritesList({
+            login_token,
+            url
+        })
+
+        console.log(message);
+    }
+
+    const deletePostFromFavoritesRequest = async e => {
+        const tokenString = localStorage.getItem('token');
+        const login_token = JSON.parse(tokenString).token;
+
+        const message = await deletePostFromFavoritesList({
+            login_token,
+            url
+        })
+
+        console.log(message);
+    }
 
 
     return (
@@ -167,7 +219,10 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
                         <Language fontSize="small" type="button" onClick={handleRedirect} hover="true"/>
                     </div>
                     <div className="post__footerFavorite">
-                        <FavoriteBorder fontSize="small"/>
+                        <div onClick={() => {handleFavoriteClick();}}>
+                            {favorite ? <Favorite sx={{ color: pink[500] }} fontSize="small"/> : <FavoriteBorder sx={{ color: pink[500] }} fontSize="small"/>}
+                        </div>
+
                     </div>
 
                     <div className="post__footerList">  {/*TODO*/}

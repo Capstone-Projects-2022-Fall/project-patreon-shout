@@ -51,16 +51,8 @@ public class ListBean implements Serializable {
     protected String description;
 
     /**
-     * webAccount is the {@link com.patreonshout.beans.WebAccount} object linked with this object
+     * webAccount is the id corresponding our list to the user's {@link com.patreonshout.beans.WebAccount}
      */
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "webaccount_id", nullable = false)
-    protected WebAccount webAccount;
-
-    /**
-     * listPosts is the List of {@link com.patreonshout.beans.ListPost} objects linked with this ListBean object
-     */
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "list")
-    List<ListPost> listPosts;
+    @Column(name="webaccount_id")
+    protected int webAccountId;
 }

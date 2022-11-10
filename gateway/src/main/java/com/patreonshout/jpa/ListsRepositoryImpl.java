@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Repository
 @Transactional
-public class ListsRepositoryImpl extends BaseSvc implements ListsRepositoryCustom{
+public class ListsRepositoryImpl extends BaseSvc{
 
     /**
      * em is the {@link javax.persistence.EntityManager} that handles all the transactions with our database
