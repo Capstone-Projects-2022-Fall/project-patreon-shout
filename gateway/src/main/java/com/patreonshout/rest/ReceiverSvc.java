@@ -183,7 +183,6 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		try {
 			webAccount = webAccountFunctions.getAccount(webaccountId);
 		} catch (PSException ex) { // * getAccount() threw an error -- webaccountId does not exist in the database!
-
 			// TODO: Send a DELETE request to delete the webhook from Patreon
 		} catch (Exception ex) { // TODO: Unknown exception occurred...!  Return 200 OK so Patreon keeps using this Webhook until we fix whatever is wrong
 			ex.printStackTrace();
@@ -191,7 +190,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 
-		// Initiate post creation
+		// * Initiate post creation
 		PatreonPostV2 patreonPost;
 
 		// Convert the data attribute to a Patreon Post POJO
@@ -201,6 +200,10 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
+
+		// * Save a converted Post object to the database
+		PostBean postBean = objectMapper.convertValue(patreonPost, PostBean.class);
+		postsRepository.save(postBean);
 
 		switch(patreonEvent) {
 			case "posts:publish":
