@@ -42,3 +42,9 @@
     border: none;
     outline: none;
 }
+
+.tag-item{
+    justify-content: space-between;
+    align-items: center;
+    margin: auto;
+}

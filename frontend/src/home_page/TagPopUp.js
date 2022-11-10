@@ -26,7 +26,7 @@ function TagPopUp() {
     }
 
     function removeTag(index){
-        setTags(tags.filter((el, i) => i !== index))
+        setTags(tags.filter((el, i) => i !== index));
     }
 
     return (
@@ -45,6 +45,11 @@ function TagPopUp() {
                         </div>
                     ))}
                     <input onKeyDown={handleKeyDown} type="text" className= "tags-input" placeholder="Add a Tag"/>
+                    <div className="tag-limiter">
+                        <p>
+                            <span>5</span> Tags remaining
+                        </p>
+                    </div>
                 </div>
             </div>
         </Popup>

@@ -8,6 +8,7 @@ import {
 import React, {useEffect, useState} from "react";
 import "./home_css/Post.css";
 import Popup from "reactjs-popup";
+import TagPopUp from "./TagPopUp";
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import {getListsFromPost} from "../services/api/lists/getListsFromPost";
@@ -217,6 +218,9 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
                     </div>
                     <div className="post__footerRedirect">
                         <Language fontSize="small" type="button" onClick={handleRedirect} hover="true"/>
+                    </div>
+                    <div className="post__footerTag">
+                        <TagPopUp fontSize="small"/>
                     </div>
                     <div className="post__footerFavorite">
                         <div onClick={() => {handleFavoriteClick();}}>
