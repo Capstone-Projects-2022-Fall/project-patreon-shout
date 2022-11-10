@@ -42,13 +42,14 @@ public class SearchFilterSvc extends BaseSvc implements SearchFilterImpl {
      * {@inheritDoc}
      */
     public ResponseEntity<?> DeleteFilter(FilterDeleteRequest filterDeleteRequest) {
-        SearchFilter sf = searchFiltersRepository.getReferenceById((long) filterDeleteRequest.getFilterId());
+        SearchFilter sf = searchFiltersRepository.getReferenceById(filterDeleteRequest.getFilterId());
 
         if(!sf.getWebAccount().getLoginToken().equals(filterDeleteRequest.getLoginToken())) {
             return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Specified login token does not match the requested list's user login token.");
         }
 
-        searchFiltersRepository.delete(sf);
+//        searchFiltersRepository.delete(sf);
+        searchFiltersRepository.deleteSearchFilterByFilterId(filterDeleteRequest.getFilterId());
 
         return ResponseUtil.Generic(HttpStatus.OK, "Search filter removed.");
     }
