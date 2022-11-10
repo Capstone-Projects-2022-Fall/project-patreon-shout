@@ -83,8 +83,6 @@ public class TagSvc extends BaseSvc implements TagImpl {
 
         WebAccount userAccount = webAccountFunctions.getAccount(tagGetRequest.getLoginToken());
 
-        WebAccount userAccount = webAccountFunctions.getAccount(tagGetRequest.getLoginToken());
-
         PostBean postBean = postsRepository.findPostBeanByUrl(tagGetRequest.getUrl());
 
         if (postBean == null) {
@@ -105,8 +103,6 @@ public class TagSvc extends BaseSvc implements TagImpl {
      * {@inheritDoc}
      */
     public ResponseEntity<?> DeleteUserTagOnSinglePost(@RequestBody TagDeleteRequest tagDeleteRequest) throws PSException {
-
-        WebAccount userAccount = webAccountFunctions.getAccount(tagDeleteRequest.getLoginToken());
 
         WebAccount userAccount = webAccountFunctions.getAccount(tagDeleteRequest.getLoginToken());
 

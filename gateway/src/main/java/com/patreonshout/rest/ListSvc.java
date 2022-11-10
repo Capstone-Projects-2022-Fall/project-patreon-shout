@@ -282,7 +282,6 @@ public class ListSvc extends BaseSvc implements ListImpl {
             }
             PostBean pb = optionalPost.get();
 
-            postResponse.put("creator_page_url", pb.getCreatorPageUrl());
             postResponse.put("published_at", pb.getPublishDate());
             postResponse.put("title", pb.getTitle());
             postResponse.put("url", pb.getUrl());
