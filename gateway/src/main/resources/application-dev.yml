@@ -1,0 +1,34 @@
+spring:
+  datasource:
+    url: ENC(NIHnrI2i9J4FNQOSxSXOojUfWLMuAmUz4sYJuV8Hi+Y0HpZ9l3rsC9Zu6rudQxdndzNoyWAN7kx0oDv0AzHdothuE5C/ULX3JwH3Bj/ukPKL5zL2mWWaFv1LTzuHHph8/jpFJF3N5qRMKBaYhoaDh6ZzZ0gYgg/FiEgsyxZq3Qyl/7CVQm1e0Xbon2aQdd6JL6TWOrnpkCT4Ul1rgzXaOw==)
+    username: ENC(MFzOoQS5aBXmqmIYsx2bEfcKRuhNp+P4g4c+cANVlTF3qZTxz8XLf5zJ3I088ofx)
+    password: ENC(ySpRJnFcRFQXXLh+4FdrMpNEXyHsb2L6MieADLstMUDmRPxh3fWA6NjZXf+H5jC4)
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: true
+
+server:
+  port: 5000
+
+  # HTTPS Configuration
+  # Tutorial:
+  #   - Generate PEM files with: https://www.digitalocean.com/community/tutorials/how-to-acquire-a-let-s-encrypt-certificate-using-dns-validation-with-acme-dns-certbot-on-ubuntu-18-04
+  #   - Convert PEM files to PKCS12 https://dzone.com/articles/spring-boot-secured-by-lets-encrypt
+  ssl:
+    enabled: false
+    key-store: classpath:ssl-dev/keystore.p12
+    key-store-password: ENC(lK2PUwcQSfKYIGzkiu+9ZU4eTWSv1uBffigjXy3HbEwAYBaP0QL2h0qi71Gc09xmnPYilOajqwrhap/dCiI2Og==)
+    key-store-type: PKCS12
+    key-alias: tomcat
+
+# PatreonShout
+patreonshout:
+  client: # Client Configuration
+    id: QshCpqHpThL5sckRQX88TwE9vPr4pEWOjdyZbAKVIJie1hhOdPbsp6Qaqrd9C7M6
+    secret: ORQ1gPXNsZ8StUBBYBrfuiomLFECnmLwzuVy57C3wNHkOgFJNOA3iFV4i6BRaV3h
+    redirecturi: http://localhost:5000/receivers/patreon/oauth
+  server: # Server Configuration
+    cors-origin: https://104.10.47.181:3000
+  db: # Database Configuration
+    webaccount:
+      pepper: ENC(BLaHIgDKQVzb0giPFe+TXRCuUkKd/rwfraIpagzIyChf6fA+A/btX2xrPihjfQwo)

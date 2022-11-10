@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 /**
  * Component that contains functions for {@link CreatorPage} endpoints that allow interaction with the database
@@ -22,19 +23,11 @@ public class CreatorPageFunctions {
 	CreatorPageRepository creatorPageRepository;
 
 	@Transactional
-	public void putCreatorPage(String pageUrl) throws PSException {
-		if (pageUrl == null)
-			throw new PSException(HttpStatus.BAD_REQUEST, "Page/Vanity URL was null.");
+	public void putCreatorPage(int campaignId) {
+		CreatorPage creatorPage = new CreatorPage();
 
-		CreatorPage creatorPage = creatorPageRepository.findByPageUrl(pageUrl);
-
-		if (creatorPage == null) {
-			creatorPage = new CreatorPage();
-			creatorPage.setPageUrl(pageUrl);
-		}
-
-		creatorPage.setPageUrl(pageUrl);
-		creatorPage.setPageName(pageUrl); // TODO: Find a way to get the creator's Patreon Page name
+		creatorPage.setCampaignId(campaignId);
+		creatorPage.setPageName(String.valueOf(campaignId)); // TODO: Find a way to get the creator's Patreon Page name
 		creatorPage.setPageCategory(CreatorPageCategory.OTHER.name()); // TODO: Try to utilize enum instead of String...  Changing this to enum breaks logging in.
 
 		creatorPageRepository.save(creatorPage);

@@ -2,9 +2,7 @@ package com.patreonshout.beans;
 
 import com.github.jasminb.jsonapi.annotations.Type;
 import com.patreon.resources.shared.BaseResource;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -17,8 +15,10 @@ import java.util.List;
 @Entity
 @Table(name="posts")
 @Type("post")
-@Setter
-@Getter
+@Data
+@Builder
+@RequiredArgsConstructor
+@AllArgsConstructor
 @ToString
 public class PostBean extends BaseResource {
 
@@ -29,6 +29,12 @@ public class PostBean extends BaseResource {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="post_id")
     protected int postId;
+
+    /**
+     * Name of the content creator who made the Patreon post
+     */
+    @Column(name="campaign_id")
+    protected int campaignId;
 
     /**
      * Platform app id. Can be null
@@ -83,12 +89,6 @@ public class PostBean extends BaseResource {
      */
     @Column(name="title")
     protected String title;
-
-    /**
-     * Name of the content creator who made the Patreon post
-     */
-    @Column(name="creator_page_url")
-    protected String creatorPageUrl;
 
     /**
      * url is the url of the Patreon post

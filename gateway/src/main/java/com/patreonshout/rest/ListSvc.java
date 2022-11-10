@@ -63,13 +63,13 @@ public class ListSvc extends BaseSvc implements ListImpl {
     /**
      * {@inheritDoc}
      */
-    public ResponseEntity<?> GetUserLists(@RequestParam(name = "loginToken") String loginToken) throws PSException { // TODO: remove list and webaccount onetomany annotations
-        System.out.println("get user lists");
+    public ResponseEntity<?> GetUserLists(@RequestParam(name = "loginToken") String loginToken) throws PSException {
         WebAccount userAccount = webAccountFunctions.getAccount(loginToken);
 
         if (userAccount == null) {
             return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
         }
+
 
         // build response so ResponseEntity can parse the returned objects correctly
         List<Map<String, String>> response = new ArrayList<>();
@@ -92,7 +92,6 @@ public class ListSvc extends BaseSvc implements ListImpl {
      * {@inheritDoc}
      */
     public ResponseEntity<?> AddUserList(@RequestBody ListCreationRequest listCreationRequest) throws PSException {
-        System.out.println("add user list");
         WebAccount userAccount = webAccountFunctions.getAccount(listCreationRequest.getLoginToken());
 
         if (userAccount == null) {
@@ -113,7 +112,6 @@ public class ListSvc extends BaseSvc implements ListImpl {
      * {@inheritDoc}
      */
     public ResponseEntity<?> UpdateUserList(@RequestBody ListUpdateRequest listUpdateRequest) {
-        System.out.println("update user list");
         ListBean lb = listsRepository.getListByListId(listUpdateRequest.getList_id());
 
         if (!webAccountFunctions.findByWebAccountId(lb.getWebAccountId()).getLoginToken().equals(listUpdateRequest.getLoginToken())) {
@@ -132,7 +130,6 @@ public class ListSvc extends BaseSvc implements ListImpl {
      * {@inheritDoc}
      */
     public ResponseEntity<?> DeleteUserList(@RequestBody ListDeleteRequest listDeleteRequest) throws PSException {
-        System.out.println("delete user list");
         WebAccount userAccount = webAccountFunctions.getAccount(listDeleteRequest.getLoginToken());
         if (userAccount == null) {
             return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
@@ -168,7 +165,6 @@ public class ListSvc extends BaseSvc implements ListImpl {
      * {@inheritDoc}
      */
     public ResponseEntity<?> GetUserListsWithPost(String loginToken, String url) throws PSException { // TODO: make more efficient
-        System.out.println("get user lists with post");
         WebAccount userAccount = webAccountFunctions.getAccount(loginToken);
 
         if (userAccount == null) {
@@ -176,32 +172,43 @@ public class ListSvc extends BaseSvc implements ListImpl {
         }
 
         // if no post matches to the databased, then return as if we didn't find any matching posts
-        if (postsRepository.findPostBeanByUrl(url) == null) {
+        PostBean pb;
+        if ((pb = postsRepository.findPostBeanByUrl(url)) == null) {
             return new ResponseEntity<>("[]", HttpStatus.FOUND);
         }
 
         // build response so ResponseEntity can parse the returned objects correctly
         List<Map<String, String>> response = new ArrayList<>();
 
+        // find all the lists that this post is in
 
-        for (ListBean lb : listsRepository.findListBeansByWebAccountId(userAccount.getWebAccountId())) {
+        /*
+            post_id (find all lists where post_id = :post_id)
 
-            for (ListPost lp : listPostsRepository.findAllByListId(lb.getListId())) {
-                Optional<PostBean> pb = postsRepository.findById(lp.getPostId());
 
-                if (pb.isEmpty()) {
-                    return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Cannot find post.");
-                }
+            want list_id, title, desc
+         */
 
-                if (pb.get().getUrl().equals(url)) {
-                    Map<String, String> listResponse = new HashMap<>();
 
-                    listResponse.put("title", lb.getTitle());
-                    listResponse.put("description", lb.getDescription());
-                    listResponse.put("list_id", String.valueOf(lb.getListId()));
+        for (ListPost lp : listPostsRepository.findAllByPostId(pb.getPostId())) {
 
-                    response.add(listResponse);
-                }
+            Optional<ListBean> optionalList = listsRepository.findById(lp.getListId());
+            if (optionalList.isEmpty()) {
+                return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Cannot find list.");
+            }
+
+            ListBean list = optionalList.get();
+
+            WebAccount account = webAccountFunctions.findByWebAccountId(list.getWebAccountId());
+
+            if (account.getLoginToken().equals(loginToken)) {
+                Map<String, String> listResponse = new HashMap<>();
+
+                listResponse.put("title", list.getTitle());
+                listResponse.put("description", list.getDescription());
+                listResponse.put("list_id", String.valueOf(list.getListId()));
+
+                response.add(listResponse);
             }
         }
 
@@ -212,7 +219,6 @@ public class ListSvc extends BaseSvc implements ListImpl {
      * {@inheritDoc}
      */
     public ResponseEntity<?> UpdateUserPostLists(ListPostUpdateRequest listPostUpdateRequest) throws PSException {
-        System.out.println("update user post lists");
         WebAccount userAccount = webAccountFunctions.getAccount(listPostUpdateRequest.getLoginToken());
 
         if (userAccount == null) {
@@ -254,7 +260,6 @@ public class ListSvc extends BaseSvc implements ListImpl {
      * {@inheritDoc}
      */
     public ResponseEntity<?> GetPostsFromList(String loginToken, int list_id) throws PSException {
-        System.out.println("get posts from list");
         WebAccount userAccount = webAccountFunctions.getAccount(loginToken);
 
         if (userAccount == null) {
@@ -277,7 +282,6 @@ public class ListSvc extends BaseSvc implements ListImpl {
             }
             PostBean pb = optionalPost.get();
 
-            postResponse.put("creator_page_url", pb.getCreatorPageUrl());
             postResponse.put("published_at", pb.getPublishDate());
             postResponse.put("title", pb.getTitle());
             postResponse.put("url", pb.getUrl());
@@ -299,7 +303,6 @@ public class ListSvc extends BaseSvc implements ListImpl {
      * {@inheritDoc}
      */
     public ResponseEntity<?> AddPostToFavoritesList(FavoriteListRequest favoriteListRequest) throws PSException {
-        System.out.println("add post to fav");
         WebAccount userAccount = webAccountFunctions.getAccount(favoriteListRequest.getLoginToken());
 
         if (userAccount == null) {
@@ -336,7 +339,6 @@ public class ListSvc extends BaseSvc implements ListImpl {
      * {@inheritDoc}
      */
     public ResponseEntity<?> DeletePostFromFavoritesList(FavoriteListRequest favoriteListRequest) throws PSException {
-        System.out.println("delete post from fav");
         WebAccount userAccount = webAccountFunctions.getAccount(favoriteListRequest.getLoginToken());
 
         if (userAccount == null) {

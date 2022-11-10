@@ -83,10 +83,6 @@ public class TagSvc extends BaseSvc implements TagImpl {
 
         WebAccount userAccount = webAccountFunctions.getAccount(tagGetRequest.getLoginToken());
 
-        if (userAccount == null) {
-            return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
-        }
-
         PostBean postBean = postsRepository.findPostBeanByUrl(tagGetRequest.getUrl());
 
         if (postBean == null) {
@@ -109,10 +105,6 @@ public class TagSvc extends BaseSvc implements TagImpl {
     public ResponseEntity<?> DeleteUserTagOnSinglePost(@RequestBody TagDeleteRequest tagDeleteRequest) throws PSException {
 
         WebAccount userAccount = webAccountFunctions.getAccount(tagDeleteRequest.getLoginToken());
-
-        if (userAccount == null) {
-            return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
-        }
 
         PostBean postBean = postsRepository.findPostBeanByUrl(tagDeleteRequest.getUrl());
 
