@@ -1,7 +1,6 @@
 package com.patreonshout.rest.interfaces;
 
 import com.patreonshout.PSException;
-import com.patreonshout.beans.request.FavoriteListRequest;
 import com.patreonshout.beans.request.ListCreationRequest;
 import com.patreonshout.beans.request.ListDeleteRequest;
 import com.patreonshout.beans.request.ListPostUpdateRequest;
@@ -63,10 +62,6 @@ public interface ListImpl {
             @ApiResponse(responseCode = "400",
                     description = "the login token provided doesn't match up with the owner of the requested list's login token",
                     content = {@Content(mediaType = "application/json")}
-            ),
-            @ApiResponse(responseCode = "400",
-                    description = "Cannot find post.",
-                    content = {@Content(mediaType = "application/json")}
             )
     })
     ResponseEntity<?> GetUserListsWithPost(@RequestParam(name = "loginToken") String loginToken, @RequestParam(name = "url") String url) throws PSException;
@@ -127,13 +122,9 @@ public interface ListImpl {
             @ApiResponse(responseCode = "400",
                     description = "the login token provided doesn't match up with the owner of the requested list's login token",
                     content = {@Content(mediaType = "application/json")}
-            ),
-            @ApiResponse(responseCode = "400",
-                    description = "Cannot find post.",
-                    content = {@Content(mediaType = "application/json")}
             )
     })
-    ResponseEntity<?> DeleteUserList(@RequestBody ListDeleteRequest listDeleteRequest) throws PSException;
+    ResponseEntity<?> DeleteUserList(@RequestBody ListDeleteRequest listDeleteRequest);
 
     /**
      * Updates the user's post lists
@@ -153,69 +144,4 @@ public interface ListImpl {
             )
     })
     ResponseEntity<?> UpdateUserPostLists(@RequestBody ListPostUpdateRequest listPostUpdateRequest) throws PSException;
-
-    /**
-     * Gets the post from a specific list for a specific user
-     *
-     * @param loginToken is the login token provided to the user upon sign in
-     * @param list_id is the id of the list we want to get the posts of
-     * @return a list of {@link com.patreonshout.beans.PostBean} objects from the specified list_id
-     */
-    @GetMapping("list")
-    @Operation(summary = "Gets the posts from a user's list")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "302",
-                    description = "user posts returned",
-                    content = {@Content(mediaType = "application/json")}),
-            @ApiResponse(responseCode = "400",
-                    description = "the login token provided doesn't match up with the owner of the requested list's login token",
-                    content = {@Content(mediaType = "application/json")}
-            ),
-            @ApiResponse(responseCode = "400",
-                    description = "Cannot find post.",
-                    content = {@Content(mediaType = "application/json")}
-            )
-    })
-    ResponseEntity<?> GetPostsFromList(@RequestParam(name = "loginToken") String loginToken, @RequestParam(name = "list_id") int list_id) throws PSException;
-
-    /**
-     * Adds a post to the favorites list
-     *
-     * @param favoriteListAddRequest is the {@link com.patreonshout.beans.request.FavoriteListRequest} object that contains {@link com.patreonshout.beans.ListPost} requests parameters
-     * @return {@link org.springframework.http.HttpStatus#CREATED} if successful, {@link org.springframework.http.HttpStatus#CONFLICT} OR {@link org.springframework.http.HttpStatus#BAD_REQUEST} otherwise
-     */
-    @PostMapping("/favorite")
-    @Operation(summary = "Adds a post to the user's favorites list")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
-                    description = "Favorites lists updated.",
-                    content = {@Content(mediaType = "application/json")}),
-            @ApiResponse(responseCode = "409",
-                    description = "Foreign key constraint failed.",
-                    content = {@Content(mediaType = "application/json")}),
-            @ApiResponse(responseCode = "400",
-                    description = "the login token provided doesn't match up with the owner of the requested list's login token",
-                    content = {@Content(mediaType = "application/json")}
-            )
-    })
-    ResponseEntity<?> AddPostToFavoritesList(@RequestBody FavoriteListRequest favoriteListAddRequest) throws PSException;
-
-    /**
-     * Deletes a post from the favorites list
-     *
-     * @param favoriteListDeleteRequest is the {@link com.patreonshout.beans.request.FavoriteListRequest} object that contains {@link com.patreonshout.beans.ListPost} requests parameters
-     * @return {@link org.springframework.http.HttpStatus#CREATED} if successful, {@link org.springframework.http.HttpStatus#BAD_REQUEST} otherwise
-     */
-    @DeleteMapping("/favorite")
-    @Operation(summary = "Adds a post to the user's favorites list")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
-                    description = "Favorites lists updated.",
-                    content = {@Content(mediaType = "application/json")}),
-            @ApiResponse(responseCode = "400",
-                    description = "the login token provided doesn't match up with the owner of the requested list's login token",
-                    content = {@Content(mediaType = "application/json")}
-            )
-    })
-    ResponseEntity<?> DeletePostFromFavoritesList(@RequestBody FavoriteListRequest favoriteListDeleteRequest) throws PSException;
 }
