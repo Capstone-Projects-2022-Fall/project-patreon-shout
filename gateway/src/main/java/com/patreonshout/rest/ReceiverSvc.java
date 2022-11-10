@@ -250,8 +250,21 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		}
 
 		// * Save a converted Post object to the database
-		PostBean postBean = objectMapper.convertValue(patreonPost, PostBean.class);
-		postsRepository.save(postBean);
+//		PostBean postBean = PostBean.builder()
+//				.postId(null) // TODO Get post ID
+//				.appId(patreonPost.getAppId())
+//				.appStatus(patreonPost.getAppStatus())
+//				.content(patreonPost.getContent())
+//				.creatorPageUrl(patreonPost.getUrl()) // TODO turn this into campaignId
+//				.embedData(patreonPost.getEmbedData())
+//				.embedUrl(patreonPost.getEmbedUrl())
+//				.isPaid(patreonPost.getIsPaid())
+//				.isPublic(patreonPost.getIsPublic())
+//				.publishDate(patreonPost.getPublishedAt())
+//				.title(patreonPost.getTitle())
+//				.url(patreonPost.getUrl())
+//				.build();
+//		postsRepository.save(postBean);
 
 		switch(patreonEvent) {
 			case "posts:publish":
