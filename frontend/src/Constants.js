@@ -7,6 +7,7 @@ const prod = {
 
 const dev = {
     url: {
+        // API_URL: 'https://ayser.backend.outofstonk.com'
         API_URL: 'http://localhost:5000'
     }
 };
