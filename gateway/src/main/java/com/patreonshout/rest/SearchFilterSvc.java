@@ -59,6 +59,10 @@ public class SearchFilterSvc extends BaseSvc implements SearchFilterImpl {
     public ResponseEntity<?> GetUserFilters(String loginToken) throws PSException {
         WebAccount userAccount = webAccountFunctions.getAccount(loginToken);
 
+        if (userAccount == null) {
+            return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
+        }
+
         // build response so ResponseEntity can parse the returned objects correctly
         List<Map<String, String>> response = new ArrayList<>();
 
@@ -80,6 +84,10 @@ public class SearchFilterSvc extends BaseSvc implements SearchFilterImpl {
      */
     public ResponseEntity<?> AddFilter(FilterAddRequest filterAddRequest) throws PSException {
         WebAccount userAccount = webAccountFunctions.getAccount(filterAddRequest.getLoginToken());
+
+        if (userAccount == null) {
+            return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
+        }
 
         SearchFilter sf = new SearchFilter();
         sf.setFilter(filterAddRequest.getFilter());

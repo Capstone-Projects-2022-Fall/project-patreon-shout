@@ -5,6 +5,7 @@
     border-bottom: 1px solid var(--background);
     padding-top: 12px;
     padding-bottom: 12px;
+    overflow-wrap: break-word;
 }
 
 .listIdentifier {

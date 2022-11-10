@@ -38,6 +38,12 @@ function AddListModal() {
     const addListInit = () => {
 
         if (titleInput.replaceAll(" ", "") === "" || descInput.replaceAll(" ", "") === "") {
+            document.getElementById("errormsg").textContent = "Provide Title and Description";
+            return false;
+        }
+
+        if (titleInput.replaceAll(" ", "") === "Favorites") {
+            document.getElementById("errormsg").textContent = "Cannot Create List With Title \"Favorites\"";
             return false;
         }
 
@@ -72,7 +78,6 @@ function AddListModal() {
                                     close();
                                 }
                                 else {
-                                    document.getElementById("errormsg").textContent = "Provide Title and Description";
                                     showPopup("show");
                                 }
                                 }}>
