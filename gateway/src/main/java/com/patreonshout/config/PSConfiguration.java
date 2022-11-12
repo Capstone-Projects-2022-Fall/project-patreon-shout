@@ -1,6 +1,7 @@
 package com.patreonshout.config;
 
 import com.patreon.PatreonOAuth;
+import com.patreonshout.config.credentials.TwitterCredentials;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,6 +30,22 @@ public class PSConfiguration {
 	@Value("${patreonshout.client.redirecturi}") String redirectUri;
 
 	/**
+	 *
+	 */
+	@Value("${twitter.client.id}") String twitterClientId;
+
+	/**
+	 *
+	 */
+	@Value("${twitter.client.secret}") String twitterClientSecret;
+
+	/**
+	 *
+	 */
+	@Value("${twitter.client.redirecturi}") String twitterRedirectUri;
+
+
+	/**
 	 * Creates a new {@link com.patreon.PatreonOAuth} object using the clientId, clientSecret, and redirectUri
 	 *
 	 * @return a new PatreonOAuth object
@@ -36,5 +53,15 @@ public class PSConfiguration {
 	@Bean
 	public PatreonOAuth oauthClient() {
 		return new PatreonOAuth(clientId, clientSecret, redirectUri);
+	}
+
+	/**
+	 * Creates a new {@link com.patreonshout.config.credentials.TwitterCredentials} object holding our twitter application credentials
+	 *
+	 * @return a new TwitterCredentials object
+	 */
+	@Bean
+	public TwitterCredentials twitterClient() {
+		return new TwitterCredentials(twitterClientId, twitterClientSecret, twitterRedirectUri);
 	}
 }

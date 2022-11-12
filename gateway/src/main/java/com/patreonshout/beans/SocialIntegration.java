@@ -27,10 +27,16 @@ public class SocialIntegration implements Serializable {
 	protected String discord;
 
 	/**
-	 * twitter_data holds the Twitter token needed for integration
+	 * twitterAccessToken holds the Twitter access_token needed for integration
 	 */
-	@Column(name = "twitter")
-	protected String twitter;
+	@Column(name = "twitter_access_token")
+	protected String twitterAccessToken;
+
+	/**
+	 * twitterRefreshToken holds the Twitter refresh token needed for integration
+	 */
+	@Column(name = "twitter_refresh_token")
+	protected String twitterRefreshToken;
 
 	/**
 	 * instagram_data holds the Instagram token needed for integration
@@ -52,6 +58,6 @@ public class SocialIntegration implements Serializable {
 	 * @return {@link Boolean#TRUE} if any social integrations are not null, false otherwise
 	 */
 	public Boolean isEmpty() {
-		return discord == null && twitter == null && instagram == null;
+		return discord == null && twitterAccessToken == null && twitterRefreshToken == null && instagram == null;
 	}
 }

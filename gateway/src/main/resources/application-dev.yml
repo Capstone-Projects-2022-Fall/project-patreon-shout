@@ -32,3 +32,10 @@ patreonshout:
   db: # Database Configuration
     webaccount:
       pepper: ENC(BLaHIgDKQVzb0giPFe+TXRCuUkKd/rwfraIpagzIyChf6fA+A/btX2xrPihjfQwo)
+
+# Twitter
+twitter:
+  client: #Client Configuration
+    id: lJJZ3puupooOBr5iss2y0ZPi0
+    secret: tR0gt4KkjjhykIjlmilzgSiS8TdeRHjTg2E29WuXAmuS1GdjtS
+    redirecturi: http://localhost:5000/receivers/twitter/oauth
