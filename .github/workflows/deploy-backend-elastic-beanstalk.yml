@@ -23,7 +23,7 @@ jobs:
           maven-version: 3.8.2
 
       - name: Build with Maven
-        run: cd gateway && mvn clean install && cd ..
+        run: cd gateway && mvn clean install -Dmaven.test.skip=true && cd ..
 
       - name: Get current time
         uses: josStorer/get-current-time@v2.0.2
