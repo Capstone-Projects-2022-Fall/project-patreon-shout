@@ -229,7 +229,10 @@ public class WebAccountFunctions {
 				socialIntegration.setDiscord(data);
 				break;
 			case TWITTER:
-				// TODO: socialIntegration.setTwitter(data); is now access_token + refresh_token
+				// i didn't want to refactor everything so when you send social integration request to TWITTER, you do access_token:refresh_token in "data"
+				String[] tokens = data.split(":");
+				socialIntegration.setTwitterAccessToken(tokens[0]);
+				socialIntegration.setTwitterRefreshToken(tokens[1]);
 				break;
 			case INSTAGRAM:
 				socialIntegration.setInstagram(data);
