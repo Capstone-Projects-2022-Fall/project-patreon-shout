@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {List, Typography} from '@mui/material';
 import PatreonConnect from "../components/PatreonConnect";
 import SettingsDropDownListItem from "./SettingsDropDownListItem";
+import SettingsDropDownButton from "./SettingsDropDownButton";
 import {getSocialIntegrations} from "../services/api/webaccount/getSocialIntegration";
 import {render} from "react-dom";
 
@@ -44,12 +45,10 @@ function htmlReturn(socialIntegrations) {
                 defaultValue={socialIntegrations.discord}
             />
 
-            <SettingsDropDownListItem
+            <SettingsDropDownButton
                 name="Twitter"
-                textfieldLabel="Twitter Token"
                 dropdown={true}
-                defaultChecked={typeof socialIntegrations.twitter === 'string'}
-                defaultValue={socialIntegrations.twitter}
+                defaultChecked={false}
             />
 
             <SettingsDropDownListItem
