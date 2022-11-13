@@ -17,6 +17,7 @@ import com.patreonshout.rest.interfaces.ReceiverImpl;
 import com.patreonshout.utils.DiscordWebhookUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -62,6 +63,8 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	 */
 	@Autowired
 	private PatreonOAuth oauthClient;
+
+
 
 	/**
 	 * Jackson object mapper that allows converting Java type {@link Object} to custom POJOs.
@@ -122,6 +125,35 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		return "";
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public String TwitterOAuth(String code, String state) {
+
+		String redirectUri = "http://localhost:5000/receivers/twitter/oauth";
+
+		// get the access_token and refresh_token of the user
+		String response = WebClient.create("https://api.twitter.com/2/oauth2/token")
+				.method(HttpMethod.POST)
+				.uri(uriBuilder -> uriBuilder.path("").queryParam("code", code).queryParam("grant_type", "authorization_code").queryParam("redirect_uri", redirectUri).queryParam("code_verifier", "challenge").build())
+				.headers(httpHeaders -> {httpHeaders.setContentType(MediaType.valueOf("application/x-www-form-urlencoded")); httpHeaders.setBasicAuth("Basic V1ROclFTMTRiVWhwTWw4M2FVNWFkVGQyTldNNk1UcGphUTotUm9LeDN4NThKQThTbTlKSXQyZm1BanEzcTVHWC1icVozdmpKeFNlR3NkbUd0WEViUA==");})
+				.retrieve()
+				.bodyToMono(String.class)
+				.block();
+
+		System.out.println("res: " + response);
+
+
+		return "";
+	}
+
+	/**
+	 * TODO
+	 *
+	 * @param webAccount
+	 * @param accessToken
+	 * @param campaignId
+	 */
 	private void createWebhookForPatreon(WebAccount webAccount, String accessToken, int campaignId) {
 		PatreonObjectV2 outputObject = new PatreonObjectV2();
 		PatreonDataV2 patreonData = new PatreonDataV2();
@@ -155,6 +187,13 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 				.block();
 	}
 
+	/**
+	 * TODO
+	 *
+	 * @param accessToken
+	 * @return
+	 * @throws PSException
+	 */
 	private Object getCampaignData(String accessToken) throws PSException {
 		/*
 			 TODO:
@@ -209,6 +248,9 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public ResponseEntity<?> PatreonWebhook(
 			@RequestHeader("x-patreon-signature") String patreonSignature,
 			@RequestHeader("x-patreon-event") String patreonEvent,
@@ -296,10 +338,5 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 				webhookUrl,
 				patreonPost
 		).send();
-	}
-
-	public String TwitterOAuth() {
-
-		return "";
 	}
 }
