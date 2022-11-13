@@ -45,6 +45,9 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	@Autowired
 	CreatorPageFunctions creatorPageFunctions;
 
+	/**
+	 * An autowired Spring component that endpoints utilize to send or receive data from the database
+	 */
 	@Autowired
 	PatreonCampaignsFunctions patreonCampaignsFunctions;
 
@@ -293,5 +296,10 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 				webhookUrl,
 				patreonPost
 		).send();
+	}
+
+	public String TwitterOAuth() {
+
+		return "";
 	}
 }

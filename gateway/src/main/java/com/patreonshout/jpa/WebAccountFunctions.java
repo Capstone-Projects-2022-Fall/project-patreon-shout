@@ -229,7 +229,7 @@ public class WebAccountFunctions {
 				socialIntegration.setDiscord(data);
 				break;
 			case TWITTER:
-				socialIntegration.setTwitter(data);
+				// TODO: socialIntegration.setTwitter(data); is now access_token + refresh_token
 				break;
 			case INSTAGRAM:
 				socialIntegration.setInstagram(data);

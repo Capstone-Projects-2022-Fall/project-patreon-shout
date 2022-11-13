@@ -37,6 +37,9 @@ public interface ReceiverImpl {
 			@RequestParam(required = false, name = "state") String state
 	) throws IOException, PSException;
 
+	@GetMapping
+	String TwitterOAuth();
+
 
 	@PostMapping("/patreon/webhook/{webaccountId}")
 	ResponseEntity<?> PatreonWebhook(

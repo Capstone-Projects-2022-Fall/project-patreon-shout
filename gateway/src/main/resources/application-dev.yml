@@ -36,6 +36,6 @@ patreonshout:
 # Twitter
 twitter:
   client: #Client Configuration
-    id: lJJZ3puupooOBr5iss2y0ZPi0
-    secret: tR0gt4KkjjhykIjlmilzgSiS8TdeRHjTg2E29WuXAmuS1GdjtS
+    id: NWhrMFdaeE9Bd3diVXlTY19oYUg6MTpjaQ
+    secret: i6j1ui6NPylovtTnxho9EcRkVwESJ4DHHdS3RR7Ic334ehFt02
     redirecturi: http://localhost:5000/receivers/twitter/oauth
