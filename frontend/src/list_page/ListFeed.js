@@ -16,7 +16,7 @@ function ListFeed() {
     const [filterChoice, setFilterChoice] = useState("");
     const [dateRange, setDateRange] = useState([]);
     const searchedList = [];
-    var displayedList = [];
+    let displayedList = [];
 
     const [userLists, setUserLists] = useState([]);
     const [posts, setPosts] = useState("hide");

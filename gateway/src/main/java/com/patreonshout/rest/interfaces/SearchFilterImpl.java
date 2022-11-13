@@ -40,9 +40,17 @@ public interface SearchFilterImpl {
             @ApiResponse(responseCode = "400",
                     description = "the login token provided doesn't match up with the owner of the requested list's login token",
                     content = {@Content(mediaType = "application/json")}
+            ),
+            @ApiResponse(responseCode = "400",
+                    description = "Invalid filter_id.",
+                    content = {@Content(mediaType = "application/json")}
+            ),
+            @ApiResponse(responseCode = "400",
+                    description = "Invalid login token.",
+                    content = {@Content(mediaType = "application/json")}
             )
     })
-    ResponseEntity<?> DeleteFilter(@RequestBody FilterDeleteRequest filterDeleteRequest);
+    ResponseEntity<?> DeleteFilter(@RequestBody FilterDeleteRequest filterDeleteRequest) throws PSException;
 
     /**
      * Endpoint that will get every {@link com.patreonshout.beans.SearchFilter} from the database for a user
@@ -55,7 +63,12 @@ public interface SearchFilterImpl {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "302",
                     description = "user lists returned",
-                    content = {@Content(mediaType = "application/json")})
+                    content = {@Content(mediaType = "application/json")}
+            ),
+            @ApiResponse(responseCode = "400",
+                    description = "Invalid login token.",
+                    content = {@Content(mediaType = "application/json")}
+            )
     })
     ResponseEntity<?> GetUserFilters(@RequestParam String loginToken) throws PSException;
 
@@ -70,10 +83,16 @@ public interface SearchFilterImpl {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201",
                     description = "List created.",
-                    content = {@Content(mediaType = "application/json")}),
+                    content = {@Content(mediaType = "application/json")}
+            ),
             @ApiResponse(responseCode = "409",
                     description = "Foreign key constraint failed.",
-                    content = {@Content(mediaType = "application/json")})
+                    content = {@Content(mediaType = "application/json")}
+            ),
+            @ApiResponse(responseCode = "400",
+                    description = "Invalid login token.",
+                    content = {@Content(mediaType = "application/json")}
+            )
     })
     ResponseEntity<?> AddFilter(@RequestBody FilterAddRequest filterAddRequest) throws PSException;
 

@@ -39,17 +39,17 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
     // TODO: clean this shit up
     content = content.replace(/<p[^>]*>/g, "");
     content = content.replace(/<\/?p[^>]*>/g, "");
-    var posteddate = new Date(published_at);
-    var year = String(posteddate.getFullYear());
-    var month = String(posteddate.getMonth() + 1);
+    let posteddate = new Date(published_at);
+    let year = String(posteddate.getFullYear());
+    let month = String(posteddate.getMonth() + 1);
     if (month < 10) {month = "0" + month};
-    var day = String(posteddate.getDate());
+    let day = String(posteddate.getDate());
     if (day < 10) {day = "0" + day};
-    var minute = String(posteddate.getMinutes());
+    let minute = String(posteddate.getMinutes());
     if (minute < 10) {minute = "0" + minute};
-    var second = String(posteddate.getSeconds());
+    let second = String(posteddate.getSeconds());
     if (second < 10) {second = "0" + second};
-    var hour = String(posteddate.getHours());
+    let hour = String(posteddate.getHours());
     if (hour < 10) {hour = "0" + hour};
     if (hour === 0) {hour = "12"};
     if (hour >= 12) {hour = hour - 12; second = second + "pm"}
