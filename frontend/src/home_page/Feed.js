@@ -5,7 +5,6 @@ import Searchbar from "./Searchbar";
 //import { getPosts } from '../services/api/posts'
 import jsonPosts from "../data/posts.json";
 import Filter from "./Filter";
-import {addList} from "../services/api/lists/addList";
 import {getLists} from "../services/api/lists/getLists";
 
 /**
@@ -17,14 +16,16 @@ import {getLists} from "../services/api/lists/getLists";
 function Feed() {
 
     const [searchTerm, setSearchTerm] = useState([]);
-    const [filterChoice, setFilterChoice] = useState("");
+    const [filterChoices, setFilterChoices] = useState([]);
     const [dateRange, setDateRange] = useState([]);
     const [postList, setPostList] = useState(jsonPosts);
+    const [userLists, setUserLists] = useState([]);
     const searchedList = [];
-    var displayedList = [];
-
+    const avoidDefaults = ["Date(new → old)", "Date(old → new)", "Private Only", "Public Only", "Date Range"];
+    let displayedList = [];
     let shouldSkip = false;
 
+    // Searchbar Functionality
     postList.forEach((post, index) => {
         const postInfo = (({title, creator_page_url, content}) => ({title, creator_page_url, content}))(post);
         Object.values(postInfo).every((onlyValues, valIndex) => {
@@ -38,32 +39,47 @@ function Feed() {
         shouldSkip = false;
     });
 
+    // Filter Functionality
     displayedList = [...searchedList];
-    console.log(filterChoice);
-    switch (filterChoice) {
-        case "newestdate":
-            displayedList = displayedList.sort(function(b, a){return new Date(a.published_at).getTime() - new Date(b.published_at).getTime()});
-            break;
-        case "oldestdate":
-            displayedList = displayedList.sort(function(a, b){return new Date(a.published_at).getTime() - new Date(b.published_at).getTime()});
-            break;
-        case "privposts":
-            displayedList = displayedList.filter(value => value.is_public === false);
-            break;
-        case "pubposts":
-            displayedList = displayedList.filter(value => value.is_public === true);
-            break;
-        case "daterange":
-            displayedList = displayedList.sort(function(b, a){return new Date(a.published_at).getTime() - new Date(b.published_at).getTime()});
-            displayedList = displayedList.filter(value => (new Date(value.published_at).getTime() <= new Date(dateRange.endDate).getTime() && 
-                new Date(value.published_at).getTime() >= new Date(dateRange.startDate).getTime()));
-            break;
-        default:
-            displayedList = displayedList.sort(function(b, a){return new Date(a.published_at).getTime() - new Date(b.published_at).getTime()});
-            break;
+    console.log(filterChoices);
+    if (filterChoices.includes("Date(new → old)")) {
+        displayedList = displayedList.sort(function(b, a){return new Date(a.published_at).getTime() - new Date(b.published_at).getTime()});
+    }
+    if (filterChoices.includes("Date(old → new)")) {
+        console.log("hit");
+        displayedList = displayedList.sort(function(a, b){return new Date(a.published_at).getTime() - new Date(b.published_at).getTime()});
+    } else {displayedList = displayedList.sort(function(b, a){return new Date(a.published_at).getTime() - new Date(b.published_at).getTime()});}
+    if (filterChoices.includes("Private Only")) {
+        displayedList = displayedList.filter(value => value.is_public === false);
+    }
+    if (filterChoices.includes("Public Only")) {
+        displayedList = displayedList.filter(value => value.is_public === true);
+    }
+    if (filterChoices.includes("Date Range")) {
+        displayedList = displayedList.sort(function(b, a){return new Date(a.published_at).getTime() - new Date(b.published_at).getTime()});
+        displayedList = displayedList.filter(value => (new Date(value.published_at).getTime() <= new Date(dateRange.endDate).getTime() && 
+            new Date(value.published_at).getTime() >= new Date(dateRange.startDate).getTime()));
     }
 
-    const [userLists, setUserLists] = useState([]);
+    for(const element of filterChoices) {
+        if (!avoidDefaults.includes(element)) {
+            let afterFiltersList = [];
+            shouldSkip=false;
+            displayedList.forEach((post) => {
+                const postInfo = (({title, creator_page_url, content}) => ({title, creator_page_url, content}))(post);
+                Object.values(postInfo).every((onlyValues) => {
+                    if (shouldSkip) {return;}
+                    if (onlyValues.toLowerCase().includes(element)) {
+                        afterFiltersList.push(post);
+                        displayedList = afterFiltersList;
+                        shouldSkip = true;
+                    }
+                    return displayedList;
+                })
+                shouldSkip = false;
+            });
+        }
+    }  
 
     useEffect(() => {
         let mounted = true;
@@ -72,7 +88,6 @@ function Feed() {
         getLists(userToken.token)
             .then(items => {
                 if (mounted) {
-                    console.log(items);
                     setUserLists(items)
                 }
             })
@@ -93,30 +108,20 @@ function Feed() {
     return (
         <div className="feed">
             <div className="feed__header">
-                <h2>Home</h2>
+                <h1>Patreon Shout</h1>
             </div>
             <div className="feed__filters">
                 <Searchbar
                     searchTerm={searchTerm}
                     setSearchTerm={setSearchTerm}
                 />
-                <Filter id="feed__filter" 
-                    filterChoice={filterChoice} 
-                    setFilterChoice={setFilterChoice}
+                <Filter id="feed__filter"
+                    filterChoices={filterChoices} 
+                    setFilterChoices={setFilterChoices}
                     dateRange={dateRange}
                     setDateRange={setDateRange}
                 />
             </div>
-            {/* Unsearched map of posts, don't delete yet
-                {postList.map((item) => (
-                <Post
-                    displayName={item.displayName}
-                    username={item.username}
-                    verified={item.verified}
-                    text={item.text}
-                    avatar={item.avatar}
-                />
-            ))} */}
             {displayedList.map((item) => (
                 <Post
                     title={item.title}

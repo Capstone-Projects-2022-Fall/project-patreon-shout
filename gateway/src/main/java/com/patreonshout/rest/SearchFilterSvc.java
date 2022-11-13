@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * SearchFilter RESTful Endpoint Interface
@@ -41,14 +42,24 @@ public class SearchFilterSvc extends BaseSvc implements SearchFilterImpl {
     /**
      * {@inheritDoc}
      */
-    public ResponseEntity<?> DeleteFilter(FilterDeleteRequest filterDeleteRequest) {
-        SearchFilter sf = searchFiltersRepository.getReferenceById((long) filterDeleteRequest.getFilterId());
+    public ResponseEntity<?> DeleteFilter(FilterDeleteRequest filterDeleteRequest) throws PSException {
+        WebAccount userAccount = webAccountFunctions.getAccount(filterDeleteRequest.getLoginToken());
 
-        if(!sf.getWebAccount().getLoginToken().equals(filterDeleteRequest.getLoginToken())) {
+        if (userAccount == null) {
+            return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
+        }
+
+        Optional<SearchFilter> sf = searchFiltersRepository.findById((long) filterDeleteRequest.getFilterId());
+
+        if (sf.isEmpty()) {
+            return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid filter_id.");
+        }
+
+        if(sf.get().getWebaccountId() != userAccount.getWebAccountId()) {
             return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Specified login token does not match the requested list's user login token.");
         }
 
-        searchFiltersRepository.delete(sf);
+        searchFiltersRepository.deleteSearchFilterByFilterId(filterDeleteRequest.getFilterId());
 
         return ResponseUtil.Generic(HttpStatus.OK, "Search filter removed.");
     }
@@ -66,7 +77,7 @@ public class SearchFilterSvc extends BaseSvc implements SearchFilterImpl {
         // build response so ResponseEntity can parse the returned objects correctly
         List<Map<String, String>> response = new ArrayList<>();
 
-        for (SearchFilter sf : userAccount.getSearchFilters()) {
+        for (SearchFilter sf : searchFiltersRepository.findSearchFiltersByWebaccountId(userAccount.getWebAccountId())) {
             Map<String, String> listResponse = new HashMap<>();
 
             listResponse.put("filter_id", sf.getFilterId().toString());
@@ -92,7 +103,7 @@ public class SearchFilterSvc extends BaseSvc implements SearchFilterImpl {
         SearchFilter sf = new SearchFilter();
         sf.setFilter(filterAddRequest.getFilter());
         sf.setFilterName(filterAddRequest.getFilterName());
-        sf.setWebAccount(userAccount);
+        sf.setWebaccountId(userAccount.getWebAccountId());
 
         searchFiltersRepository.save(sf);
 
