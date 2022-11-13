@@ -41,10 +41,8 @@ public class SearchFilter {
     private String filterName;
 
     /**
-     * webAccount is the {@link com.patreonshout.beans.WebAccount} object linked with this object
+     * webaccountId is the id of the user's web account
      */
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "webaccount_id", nullable = false)
-    protected WebAccount webAccount;
-
+    @Column(name="webaccount_id")
+    private int webaccountId;
 }
