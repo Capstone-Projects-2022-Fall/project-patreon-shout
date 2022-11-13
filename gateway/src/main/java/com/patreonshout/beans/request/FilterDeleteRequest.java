@@ -17,5 +17,5 @@ public class FilterDeleteRequest extends FilterCommonRequest implements Serializ
      */
     @NotNull
     @JsonProperty("filter_id")
-    private int filterId;
+    private long filterId;
 }

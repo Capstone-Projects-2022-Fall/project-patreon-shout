@@ -78,6 +78,7 @@ function Filter({filterChoices, setFilterChoices, dateRange, setDateRange}) {
         });
         console.log(message);
         setAddedFilterNames(addedFilterNames.splice(index, 1));
+        window.location.reload();
     };
 
 
@@ -109,7 +110,7 @@ function Filter({filterChoices, setFilterChoices, dateRange, setDateRange}) {
           typeof value === 'string' ? value.split(',') : value,
         );
         setFilterChoices(value);
-      };
+    };
 
     // Handles React Date Picker
     let handleSelectDates = (ranges) => {
@@ -164,8 +165,8 @@ function Filter({filterChoices, setFilterChoices, dateRange, setDateRange}) {
                             {name}
                         </MenuItem>
                     ))}
-                    {addedFilterNames.map(({filter_name}) => (
-                        <MenuItem key={filter_name} value={filter_name} className="added-filters">
+                    {addedFilterNames.map(({filter_name, filter}) => (
+                        <MenuItem key={filter} value={filter} className="added-filters">
                             {filter_name}
                             <IconButton className="icon-delete-button" onClick={()=>{handleDeleteFilter(filter_name)}}><Close /></IconButton>
                         </MenuItem>

@@ -22,7 +22,7 @@ public interface SearchFiltersRepository extends JpaRepository<SearchFilter, Lon
     @Modifying
     @Query(value = "DELETE FROM search_filters WHERE filter_id = ?1",
             nativeQuery = true)
-    void deleteSearchFilterByFilterId(int filter_id);
+    void deleteSearchFilterByFilterId(long filter_id);
 
     /**
      * Finds all of the search filters associated with a user
