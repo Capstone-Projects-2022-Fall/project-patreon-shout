@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -54,7 +55,7 @@ public interface ReceiverImpl {
 	String TwitterOAuth(
 			@RequestParam(required = false, name = "code") String code,
 			@RequestParam(required = false, name = "state") String state
-	);
+	) throws ParseException, PSException;
 
 	/**
 	 * TODO
@@ -77,5 +78,5 @@ public interface ReceiverImpl {
 			@RequestHeader("x-patreon-event") String patreonEvent,
 			@RequestHeader(HttpHeaders.USER_AGENT) String userAgent,
 			@RequestBody WebhookRequest webhookRequest,
-			@PathVariable String webaccountId);
+			@PathVariable String webaccountId) throws PSException;
 }

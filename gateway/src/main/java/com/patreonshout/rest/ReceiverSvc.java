@@ -1,20 +1,29 @@
 package com.patreonshout.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonObject;
 import com.patreon.PatreonOAuth;
 import com.patreon.resources.Campaign;
 import com.patreonshout.PSException;
 import com.patreonshout.beans.PostBean;
+import com.patreonshout.beans.SocialIntegration;
 import com.patreonshout.beans.WebAccount;
 import com.patreonshout.beans.patreon_api.*;
+import com.patreonshout.beans.request.PutSocialIntegrationRequest;
 import com.patreonshout.beans.request.receivers.patreon.WebhookRequest;
+import com.patreonshout.config.credentials.TwitterCredentials;
 import com.patreonshout.jpa.CreatorPageFunctions;
 import com.patreonshout.jpa.PatreonCampaignsFunctions;
 import com.patreonshout.jpa.PostsRepository;
 import com.patreonshout.jpa.WebAccountFunctions;
+import com.patreonshout.jpa.constants.SocialIntegrationName;
 import com.patreonshout.patreon.CustomPatreonAPI;
 import com.patreonshout.rest.interfaces.ReceiverImpl;
 import com.patreonshout.utils.DiscordWebhookUtil;
+import com.patreonshout.utils.TwitterApiUtil;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -26,6 +35,7 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 
 /**
@@ -64,7 +74,11 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	@Autowired
 	private PatreonOAuth oauthClient;
 
-
+	/**
+	 * twitterCredentials is a Spring bean that holds our Twitter app credentials
+	 */
+	@Autowired
+	private TwitterCredentials twitterCredentials;
 
 	/**
 	 * Jackson object mapper that allows converting Java type {@link Object} to custom POJOs.
@@ -128,23 +142,31 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	/**
 	 * {@inheritDoc}
 	 */
-	public String TwitterOAuth(String code, String state) {
+	public String TwitterOAuth(String code, String state) throws ParseException, PSException {
 
-		String redirectUri = "http://localhost:5000/receivers/twitter/oauth";
+		String basicAuth = twitterCredentials.getClientID() + ":" + twitterCredentials.getClientSecret();
+		String finalBasicAuth = Base64.getEncoder().encodeToString(basicAuth.getBytes());
 
 		// get the access_token and refresh_token of the user
-		String response = WebClient.create("https://api.twitter.com/2/oauth2/token")
+		String response = WebClient.create("https://api.twitter.com/2/oauth2/")
 				.method(HttpMethod.POST)
-				.uri(uriBuilder -> uriBuilder.path("").queryParam("code", code).queryParam("grant_type", "authorization_code").queryParam("redirect_uri", redirectUri).queryParam("code_verifier", "challenge").build())
-				.headers(httpHeaders -> {httpHeaders.setContentType(MediaType.valueOf("application/x-www-form-urlencoded")); httpHeaders.setBasicAuth("Basic V1ROclFTMTRiVWhwTWw4M2FVNWFkVGQyTldNNk1UcGphUTotUm9LeDN4NThKQThTbTlKSXQyZm1BanEzcTVHWC1icVozdmpKeFNlR3NkbUd0WEViUA==");})
+				.uri(uriBuilder -> uriBuilder.path("token").queryParam("code", code).queryParam("grant_type", "authorization_code").queryParam("redirect_uri", twitterCredentials.getRedirectUri()).queryParam("code_verifier", "challenge").build())
+				.headers(httpHeaders -> {httpHeaders.setContentType(MediaType.valueOf("application/x-www-form-urlencoded")); httpHeaders.setBasicAuth(finalBasicAuth);})
 				.retrieve()
 				.bodyToMono(String.class)
 				.block();
 
-		System.out.println("res: " + response);
+		JSONParser parser = new JSONParser();
+		JSONObject objResponse = (JSONObject) parser.parse(response);
 
+		PutSocialIntegrationRequest putTwitter = new PutSocialIntegrationRequest();
+		putTwitter.setData(objResponse.get("access_token") + ":" + objResponse.get("refresh_token"));
+		putTwitter.setLoginToken(state);
+		putTwitter.setSocialIntegrationName(SocialIntegrationName.TWITTER);
 
-		return "";
+		webAccountFunctions.putSocialIntegration(putTwitter);
+
+		return "Twitter linked!  Close this pop-up and refresh the PatreonShout webpage.";
 	}
 
 	/**
@@ -257,7 +279,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 			@RequestHeader(HttpHeaders.USER_AGENT) String userAgent,
 			@RequestBody WebhookRequest webhookRequest,
 			@PathVariable String webaccountId
-	) {
+	) throws PSException {
 		// Ensure someone that isn't Patreon is hitting this endpoint
 		if (!userAgent.equals("Patreon HTTP Robot")) {
 			// TODO: Log the user agent for whoever hit this endpoint
@@ -317,7 +339,15 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		switch (patreonEvent) {
 			case "posts:publish":
 				System.out.println("Received: " + patreonEvent);
-				sendDiscordMessage(patreonPost, webAccount.getSocialIntegration().getDiscord());
+
+				String integration;
+				if ((integration = webAccount.getSocialIntegration().getDiscord()) != null) {
+					sendDiscordMessage(patreonPost, integration);
+				}
+				if (webAccount.getSocialIntegration().getTwitterAccessToken() != null) {
+					sendTwitterPost(patreonPost, webAccount);
+				}
+
 				break;
 			case "posts:update":
 				break;
@@ -338,5 +368,12 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 				webhookUrl,
 				patreonPost
 		).send();
+	}
+
+	void sendTwitterPost(PatreonPostV2 patreonPost, WebAccount webAccount) throws PSException {
+		SocialIntegration socialIntegration = webAccount.getSocialIntegration();
+		String body = "I just made a new Patreon Post!\n" + patreonPost.getTitle() + ": " + (patreonPost.getIsPublic() ? patreonPost.getContent() : "This post is private, go to the post to see more");
+
+		new TwitterApiUtil().sendTweet(twitterCredentials.getClientID(), twitterCredentials.getClientSecret(), socialIntegration.getTwitterAccessToken(), socialIntegration.getTwitterRefreshToken(), body);
 	}
 }

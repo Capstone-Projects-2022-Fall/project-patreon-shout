@@ -38,4 +38,4 @@ twitter:
   client: #Client Configuration
     id: NWhrMFdaeE9Bd3diVXlTY19oYUg6MTpjaQ
     secret: i6j1ui6NPylovtTnxho9EcRkVwESJ4DHHdS3RR7Ic334ehFt02
-    redirecturi: http://localhost:5000/receivers/twitter/oauth
+    redirecturi: http://127.0.0.1:5000/receivers/twitter/oauth
