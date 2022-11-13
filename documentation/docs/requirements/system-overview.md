@@ -6,16 +6,20 @@ sidebar_position: 1
 
 ## Project Abstract
 
-This document proposes a web application that allows content creators to have their Patreon posts automatically sent to other social platforms. Non-content creator users of this web application will also be able to see the posts of the Patreon creators they follow. This will improve creator outreach to users of the web application by showing recommended creators to follow.
+Patreon Shout is a web application that allows content creators to have their Patreon posts automatically sent to other social platforms. Patrons of this web application will also be able to see the posts of the Patreon creators they follow. This will improve creator outreach to users of the web application by showing recommended creators to follow based on the creators that users currently follow.
 
 ## Conceptual Design
 
-Patreon Shout will consist of a frontend web application and a Java-based backend. The frontend will be made using Bootstrap and the React Javascript library while the backend will be split into three different applications/services, each with their own unique purpose(s). 
-The first application will be a MySQL database that will hold all of the profile information, Patreon post data, and any creator tokens that need to be saved.
-The second part will be the backend that services the web application for both the creators and users. For creators, it will acquire their campaign’s posts by making HTTP GET requests through the Patreon API with a supplied creator token.  These acquired posts will then be saved into the MySQL database, and immediately published to other social platforms. For the patrons (the non-creator users), their desired Patreon creators (e.g., creators they currently have a pledge towards, or creators they’ve manually added through the web interface) posts will be sent to the Patreon Shout web application. Handling anything that all non-creator users will directly interface with, such as filtering and searching posts.
+Patreon Shout will consist of a frontend ReactJS-based web application and a Java-based backend. The frontend will be made using Bootstrap and the React Javascript library while the backend will be split into three different applications/services, each with their own distinct purpose(s).  
+  
+The first application will be a MySQL database that will hold all of the profile information, Patreon post data, and any creator tokens that need to be saved.  
+  
+The second part will be the backend that services the web application for both the creators and users. For creators, it will acquire their campaign’s posts by making HTTP GET requests through the Patreon API with a supplied creator token.  These acquired posts will then be saved into the MySQL database, and immediately published to other social platforms. For the patrons (the non-creator users), their desired Patreon creators (e.g., creators they currently have a pledge towards, or creators they’ve manually added through the web interface) posts will be sent to the Patreon Shout web application. Handling anything that all non-creator users will directly interface with, such as filtering and searching posts.   
+  
+The final part of the backend will be the web-scraping of Patreon creator posts. This is required to get and serve post data from creators who have not supplied their creator token to Patreon Shout. It will utilize the Selenium WebDriver to load Patreon creator pages in an automated headless Firefox browser and will run at scheduled times. When a Patreon creator page is loaded, it will read all creator posts and save all post data that has not yet been added to the MySQL database.  
+  
+When it comes to the application backend, it will be developed in Java. This gives the benefits of having the application be platform and architecture agnostic. It will utilize the Spring Boot framework. This will allow the application to take the shape of a RESTful API, have useful features when talking to the MySQL database, and to assist in dependency injection. Spring Boot uses an approach that gives control of dependency injection to itself which allows for loose coupling and management of components.  
 
-The final part of the backend will be the web-scraping of Patreon creator posts. This is required to get and serve post data from creators who have not supplied their creator token to Patreon Shout. It will utilize the Selenium WebDriver to load Patreon creator pages in an automated headless Firefox browser and will run at scheduled times. When a Patreon creator page is loaded, it will read all creator posts and save all post data that has not yet been added to the MySQL database.
-When it comes to the application backend, it will be developed in Java. This gives the benefits of having the application be platform and architecture agnostic. It will utilize the Spring Boot framework. This will allow the application to take the shape of a RESTful API, have useful features when talking to the MySQL database, and to assist in dependency injection. Spring Boot uses an approach that gives control of dependency injection to itself which allows for loose coupling and management of components.
 
 ## Background
 
