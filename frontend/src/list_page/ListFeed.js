@@ -13,36 +13,24 @@ import { getPosts } from '../services/api/posts';
 function ListFeed() {
 
     const [searchTerm, setSearchTerm] = useState([]);
-    const [filterChoice, setFilterChoice] = useState("");
+    const [filterChoices, setFilterChoices] = useState([]);
     const [dateRange, setDateRange] = useState([]);
+    const [postList, setPostList] = useState([]);
+    const [userLists, setUserLists] = useState([]);
     const searchedList = [];
+    const avoidDefaults = ["Date(new → old)", "Date(old → new)", "Private Only", "Public Only", "Date Range"];
     let displayedList = [];
 
-    const [userLists, setUserLists] = useState([]);
-    const [posts, setPosts] = useState("hide");
     const [lists, setLists] = useState("show");
-    const [postData, setPostData] = useState([]);
+    const [posts, setPosts] = useState("hide");
 
-    useEffect(() => {
-        let mounted = true;
-        const tokenString = localStorage.getItem('token');
-        const userToken = JSON.parse(tokenString);
-        getLists(userToken.token)
-            .then(items => {
-                if (mounted) {
-                    console.log(items);
-                    setUserLists(items)
-                }
-            })
-        return () => mounted = false;
-    }, [])
-
-
+    // Searchbar Functionality
     let shouldSkip = false;
-
-    postData.forEach((post, index) => {
-        const postInfo = (({title, creator_page_url, content}) => ({title, creator_page_url, content}))(post);
-        Object.values(postInfo).every((onlyValues, valIndex) => {
+    console.log(postList);
+    postList.forEach((post, index) => {
+        console.log(index);
+        const postInfo = (({title, content}) => ({title, content}))(post);
+        Object.values(postInfo).every((onlyValues) => {
             if (shouldSkip) {return;}
             if (onlyValues.toLowerCase().includes(searchTerm)) {
                 searchedList.push(post)
@@ -53,30 +41,60 @@ function ListFeed() {
         shouldSkip = false;
     });
 
+    // Filter Functionality
     displayedList = [...searchedList];
-    console.log(filterChoice);
-    switch (filterChoice) {
-        case "newestdate":
-            displayedList = displayedList.sort(function(b, a){return new Date(a.published_at).getTime() - new Date(b.published_at).getTime()});
-            break;
-        case "oldestdate":
-            displayedList = displayedList.sort(function(a, b){return new Date(a.published_at).getTime() - new Date(b.published_at).getTime()});
-            break;
-        case "privposts":
-            displayedList = displayedList.filter(value => (value.is_public === "true") === false);
-            break;
-        case "pubposts":
-            displayedList = displayedList.filter(value => (value.is_public === "true") === true);
-            break;
-        case "daterange":
-            displayedList = displayedList.sort(function(b, a){return new Date(a.published_at).getTime() - new Date(b.published_at).getTime()});
-            displayedList = displayedList.filter(value => (new Date(value.published_at).getTime() <= new Date(dateRange.endDate).getTime() &&
-                new Date(value.published_at).getTime() >= new Date(dateRange.startDate).getTime()));
-            break;
-        default:
-            displayedList = displayedList.sort(function(b, a){return new Date(a.published_at).getTime() - new Date(b.published_at).getTime()});
-            break;
+    console.log(filterChoices);
+    if (filterChoices.includes("Date(new → old)")) {
+        displayedList = displayedList.sort(function(b, a){return new Date(a.published_at).getTime() - new Date(b.published_at).getTime()});
     }
+    if (filterChoices.includes("Date(old → new)")) {
+        console.log("hit");
+        displayedList = displayedList.sort(function(a, b){return new Date(a.published_at).getTime() - new Date(b.published_at).getTime()});
+    } else {displayedList = displayedList.sort(function(b, a){return new Date(a.published_at).getTime() - new Date(b.published_at).getTime()});}
+    if (filterChoices.includes("Private Only")) {
+        displayedList = displayedList.filter(value => (value.is_public === "true") === false);
+    }
+    if (filterChoices.includes("Public Only")) {
+        displayedList = displayedList.filter(value => (value.is_public === "true") === true);
+    }
+    if (filterChoices.includes("Date Range")) {
+        displayedList = displayedList.sort(function(b, a){return new Date(a.published_at).getTime() - new Date(b.published_at).getTime()});
+        displayedList = displayedList.filter(value => (new Date(value.published_at).getTime() <= new Date(dateRange.endDate).getTime() &&
+            new Date(value.published_at).getTime() >= new Date(dateRange.startDate).getTime()));
+    }
+
+    for(const element of filterChoices) {
+        if (!avoidDefaults.includes(element)) {
+            let afterFiltersList = [];
+            shouldSkip=false;
+            displayedList.forEach((post) => {
+                const postInfo = (({title, creator_page_url, content}) => ({title, creator_page_url, content}))(post);
+                Object.values(postInfo).every((onlyValues) => {
+                    if (shouldSkip) {return;}
+                    if (onlyValues.toLowerCase().includes(element)) {
+                        afterFiltersList.push(post);
+                        displayedList = afterFiltersList;
+                        shouldSkip = true;
+                    } else {displayedList = afterFiltersList;}
+                    return displayedList;
+                })
+                shouldSkip = false;
+            });
+        }
+    }
+
+    useEffect(() => {
+        let mounted = true;
+        const tokenString = localStorage.getItem('token');
+        const userToken = JSON.parse(tokenString);
+        getLists(userToken.token)
+            .then(items => {
+                if (mounted) {
+                    setUserLists(items)
+                }
+            })
+        return () => mounted = false;
+    }, [])
 
 
     return (
@@ -84,7 +102,7 @@ function ListFeed() {
             <div className="listfeed__header">
                 <h2 className={lists}>Lists</h2>
                 <div id="backDiv">
-                    <ArrowBackIcon id="backArrow" fontSize="large" className={posts} onClick={() => {setPosts("hide"); setLists("show"); setPostData([]);}}/>
+                    <ArrowBackIcon id="backArrow" fontSize="large" className={posts} onClick={() => {setPosts("hide"); setLists("show"); setPostList([]);}}/>
                 </div>
                 <AddListModal />
             </div>
@@ -96,8 +114,8 @@ function ListFeed() {
                         setSearchTerm={setSearchTerm}
                     />
                     <Filter id="feed__filter"
-                            filterChoice={filterChoice}
-                            setFilterChoice={setFilterChoice}
+                            filterChoices={filterChoices}
+                            setFilterChoices={setFilterChoices}
                             dateRange={dateRange}
                             setDateRange={setDateRange}
                     />
@@ -112,6 +130,7 @@ function ListFeed() {
                         published_at={item.published_at}
                         url = {item.url}
                         lists = {userLists}
+                        displayedList = {displayedList}
                     />
                 ))}
             </div>
@@ -119,7 +138,7 @@ function ListFeed() {
             <div className={lists}>
                 {userLists.map((item) => (
                     <ListButton
-                        setPostData={setPostData}
+                        setPostData={setPostList}
                         setPosts={setPosts}
                         setLists={setLists}
                         id={item.list_id}
