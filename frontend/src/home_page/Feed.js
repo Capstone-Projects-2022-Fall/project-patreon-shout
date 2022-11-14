@@ -73,7 +73,7 @@ function Feed() {
                         afterFiltersList.push(post);
                         displayedList = afterFiltersList;
                         shouldSkip = true;
-                    }
+                    } else {displayedList = afterFiltersList;}
                     return displayedList;
                 })
                 shouldSkip = false;
