@@ -305,6 +305,8 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		try {
 			webAccount = webAccountFunctions.getAccount(webaccountId);
 		} catch (PSException ex) { // * getAccount() threw an error -- webaccountId does not exist in the database!
+			System.out.println("not good man");
+			return new ResponseEntity<>(HttpStatus.OK);
 			// TODO: Send a DELETE request to delete the webhook from Patreon
 		} catch (Exception ex) { // TODO: Unknown exception occurred...!  Return 200 OK so Patreon keeps using this Webhook until we fix whatever is wrong
 			ex.printStackTrace();
