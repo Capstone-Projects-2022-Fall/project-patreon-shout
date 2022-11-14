@@ -68,12 +68,12 @@ public class WebAccountFunctions {
 		if (id == 0)
 			throw new PSException(HttpStatus.NOT_FOUND, "WebAccount ID not provided");
 
-		Optional<WebAccount> webAccount = webAccountRepository.findById(id);
+		WebAccount webAccount = webAccountRepository.findByWebAccountId((int) id);
 
-		if (webAccount.isEmpty())
-			throw new PSException(HttpStatus.NOT_FOUND, "WebAccount ID does not belong to a user");
+//		if (webAccount.isEmpty())
+//			throw new PSException(HttpStatus.NOT_FOUND, "WebAccount ID does not belong to a user");
 
-		return webAccount.get();
+		return webAccount;
 	}
 
 	/**
