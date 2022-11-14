@@ -347,11 +347,11 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 			case "posts:publish":
 				System.out.println("Received: " + patreonEvent);
 
-				String integration;
-				if ((integration = webAccount.getSocialIntegration().getDiscord()) != null) {
-					sendDiscordMessage(patreonPost, integration);
+				SocialIntegration integration = webAccountFunctions.getSocialIntegration(webAccount.getLoginToken());
+				if (integration.getDiscord() != null) {
+					sendDiscordMessage(patreonPost, integration.getDiscord());
 				}
-				if (webAccount.getSocialIntegration().getTwitterAccessToken() != null) {
+				if (integration.getTwitterAccessToken() != null) {
 					sendTwitterPost(patreonPost, webAccount);
 				}
 
