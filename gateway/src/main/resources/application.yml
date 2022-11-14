@@ -25,3 +25,10 @@ patreonshout:
   db: # Database Configuration
     webaccount:
       pepper: ENC(BLaHIgDKQVzb0giPFe+TXRCuUkKd/rwfraIpagzIyChf6fA+A/btX2xrPihjfQwo)
+
+# Twitter
+twitter:
+  client: #Client Configuration
+    id: somethin
+    secret: somethin
+    redirecturi: somethin
