@@ -64,8 +64,8 @@ public class WebAccountFunctions {
 	 * @return {@link WebAccount} object holding data corresponding to the provided login token
 	 */
 	@Transactional
-	public WebAccount getAccount(Long id) throws PSException {
-		if (id == null)
+	public WebAccount getAccount(long id) throws PSException {
+		if (id == 0)
 			throw new PSException(HttpStatus.NOT_FOUND, "WebAccount ID not provided");
 
 		Optional<WebAccount> webAccount = webAccountRepository.findById(id);
