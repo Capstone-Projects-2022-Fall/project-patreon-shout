@@ -381,7 +381,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 
 	void sendTwitterPost(PatreonPostV2 patreonPost, WebAccount webAccount) throws PSException {
 		SocialIntegration socialIntegration = webAccount.getSocialIntegration();
-		String body = "https://www.patreon.com" + patreonPost.getUrl();
+		String body = "I just made a new Patreon Post!\nhttps://www.patreon.com" + patreonPost.getUrl();
 
 		new TwitterApiUtil().sendTweet(twitterCredentials.getClientID(), twitterCredentials.getClientSecret(), socialIntegration.getTwitterAccessToken(), socialIntegration.getTwitterRefreshToken(), body);
 	}
