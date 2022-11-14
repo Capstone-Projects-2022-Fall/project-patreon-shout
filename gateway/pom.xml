@@ -20,7 +20,7 @@
     </properties>
 
     <build>
-        <finalName>${project.artifactId}-${project.version}</finalName>
+        <finalName>${project.artifactId}</finalName>
 
         <plugins>
             <plugin>
@@ -199,7 +199,7 @@
             <version>1.6.2</version>
         </dependency>
 
-        <!-- Required for application.properties encrypting -->
+        <!-- Required for application.yml encrypting -->
         <!-- https://mvnrepository.com/artifact/com.github.ulisesbocchio/jasypt-spring-boot-starter -->
         <dependency>
             <groupId>com.github.ulisesbocchio</groupId>
