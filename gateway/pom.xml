@@ -214,5 +214,13 @@
             <artifactId>flexmark-all</artifactId>
             <version>0.64.0</version>
         </dependency>
+
+        <!-- Required for Java Twitter API -->
+        <!-- https://mvnrepository.com/artifact/com.twitter/twitter-api-java-sdk -->
+        <dependency>
+            <groupId>com.twitter</groupId>
+            <artifactId>twitter-api-java-sdk</artifactId>
+            <version>2.0.3</version>
+        </dependency>
     </dependencies>
 </project>

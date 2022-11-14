@@ -64,16 +64,16 @@ public class WebAccountFunctions {
 	 * @return {@link WebAccount} object holding data corresponding to the provided login token
 	 */
 	@Transactional
-	public WebAccount getAccount(Long id) throws PSException {
-		if (id == null)
+	public WebAccount getAccount(long id) throws PSException {
+		if (id == 0)
 			throw new PSException(HttpStatus.NOT_FOUND, "WebAccount ID not provided");
 
-		Optional<WebAccount> webAccount = webAccountRepository.findById(id);
+		WebAccount webAccount = webAccountRepository.findByWebAccountId((int) id);
 
-		if (webAccount.isEmpty())
-			throw new PSException(HttpStatus.NOT_FOUND, "WebAccount ID does not belong to a user");
+//		if (webAccount.isEmpty())
+//			throw new PSException(HttpStatus.NOT_FOUND, "WebAccount ID does not belong to a user");
 
-		return webAccount.get();
+		return webAccount;
 	}
 
 	/**
@@ -229,7 +229,10 @@ public class WebAccountFunctions {
 				socialIntegration.setDiscord(data);
 				break;
 			case TWITTER:
-				socialIntegration.setTwitter(data);
+				// i didn't want to refactor everything so when you send social integration request to TWITTER, you do access_token:refresh_token in "data"
+				String[] tokens = data.split(":");
+				socialIntegration.setTwitterAccessToken(tokens[0]);
+				socialIntegration.setTwitterRefreshToken(tokens[1]);
 				break;
 			case INSTAGRAM:
 				socialIntegration.setInstagram(data);

@@ -86,7 +86,8 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 		Map<String, String> response = new LinkedHashMap<>();
 
 		response.put("discord", socialIntegration.getDiscord());
-		response.put("twitter", socialIntegration.getTwitter());
+		response.put("twitter_access_token", socialIntegration.getTwitterAccessToken());
+		response.put("twitter_refresh_token", socialIntegration.getTwitterRefreshToken());
 		response.put("instagram", socialIntegration.getInstagram());
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
