@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    url: ENC(CEzgQy+aBpr9uWY1q7jbOghhORC/YrlCiIKIDogM4NBKP16aUCPmBdbqjOS06bNWbg/uo+DnOwa5JPS4At+XMKe0MT2nkTVSiyKqutwB9a80Vbcnij5NrsIICRoGNIKyk4d0x7UfASQS39QHDZIfPGZAyf+E5yYb3191hDiUT+Ec9rVBsHDBOQt9/AHTJTxkK6oDyGBMIIh7GNaVgqGV8g==)
+    username: ENC(Y09lm2M1M+zwDAt6nnbyiQPL31nnSscqCvpqchGX93XD0Vi3rJyniuzR/k8Ma7Ft)
+    password: ENC(9SU3CK03P/IVXqiU5wOtKm4tsrX87xL22cdTUaykRvYJ9q8g9796I3X8o4gEN7T7)
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: true
+
+server:
+  port: 5000
+  ssl:
+    enabled: false
+    key-store: classpath:ssl/keystore.p12
+    key-store-password: ENC(lK2PUwcQSfKYIGzkiu+9ZU4eTWSv1uBffigjXy3HbEwAYBaP0QL2h0qi71Gc09xmnPYilOajqwrhap/dCiI2Og==)
+    key-store-type: PKCS12
+    key-alias: tomcat
+
+# PatreonShout
+patreonshout:
+  client: # Client Configuration
+    id: ENC(IeSCl1uyHsUeuJYBzekh1hOQzzMoFJ+Suwc4uKmVD2MCTovERsRnUDMZUFVk3rePjs05ZZWJLgWnCuhxNaG4Rpj0Hq8jSbE/m10VjE6B2SBvs73PV4V+cQnUXBtnA3i0ANPcuQ+OYL/jAlug7QqEyg==)
+    secret: ENC(6YpB3GylnUOAR3U8gE6k9E58razkCJvBtoGMU9HYq0sHd6D3l3d6EAph1LwMko9WoftA++tq1kSVepusHj5Y7pshP/Qq2FOJoTHkAh6zQYuDvYKOKwMRFAf2MmHR7Y6PvTBp/Y2UJJ7mHXhjRGeuOg==)
+    redirecturi: https://backend.outofstonk.com/receivers/patreon/oauth
+  db: # Database Configuration
+    webaccount:
+      pepper: ENC(BLaHIgDKQVzb0giPFe+TXRCuUkKd/rwfraIpagzIyChf6fA+A/btX2xrPihjfQwo)

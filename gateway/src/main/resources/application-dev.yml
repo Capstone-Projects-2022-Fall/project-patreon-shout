@@ -16,7 +16,7 @@ server:
   #   - Convert PEM files to PKCS12 https://dzone.com/articles/spring-boot-secured-by-lets-encrypt
   ssl:
     enabled: false
-    key-store: classpath:ssl-dev/keystore.p12
+    key-store: classpath:ssl/keystore.p12
     key-store-password: ENC(lK2PUwcQSfKYIGzkiu+9ZU4eTWSv1uBffigjXy3HbEwAYBaP0QL2h0qi71Gc09xmnPYilOajqwrhap/dCiI2Og==)
     key-store-type: PKCS12
     key-alias: tomcat
