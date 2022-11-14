@@ -1,8 +1,6 @@
-name: PROD Deploy Backend
+name: DEV Deploy Backend
 on:
-  push:
-    branches:
-      - master
+  push
 
 jobs:
   build:
@@ -35,10 +33,10 @@ jobs:
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v20
         with:
-          aws_access_key: ${{ secrets.AWS_BACKEND_ACCESS_KEY_ID }}
-          aws_secret_key: ${{ secrets.AWS_BACKEND_SECRET_ACCESS_KEY }}
-          application_name: ${{ secrets.AWS_BACKEND_APPLICATION_NAME }}
-          environment_name: ${{ secrets.AWS_BACKEND_ENVIRONMENT_NAME }}
+          aws_access_key: ${{ secrets.AWS_DEV_BACKEND_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_DEV_BACKEND_SECRET_ACCESS_KEY }}
+          application_name: ${{ secrets.AWS_DEV_BACKEND_APPLICATION_NAME }}
+          environment_name: ${{ secrets.AWS_DEV_BACKEND_ENVIRONMENT_NAME }}
           version_label: ${{ github.run_attempt }}-${{ steps.date.outputs.date }}-${{ steps.current-time.outputs.ISOTime }}
           version_description: ${{github.SHA}}
           region: us-east-2
