@@ -8,7 +8,7 @@ spring:
     show-sql: true
 
 server:
-  port: 443
+  port: 5000
   ssl:
     enabled: false
     key-store: classpath:ssl/keystore.p12
