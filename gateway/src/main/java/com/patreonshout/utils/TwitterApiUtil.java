@@ -1,7 +1,6 @@
 package com.patreonshout.utils;
 
 import com.patreonshout.PSException;
-import com.patreonshout.beans.WebAccount;
 import com.twitter.clientlib.ApiException;
 import com.twitter.clientlib.TwitterCredentialsOAuth2;
 import com.twitter.clientlib.api.TwitterApi;
@@ -32,7 +31,7 @@ public class TwitterApiUtil {
     public void sendTweet(String clientId, String clientSecret, String userAccessToken, String userRefreshToken, String text) throws PSException {
 
         try {
-            client = new TwitterApi(new TwitterCredentialsOAuth2(clientId, clientSecret, userAccessToken, userRefreshToken, true));
+            client = new TwitterApi(new TwitterCredentialsOAuth2(clientId, clientSecret, userAccessToken, userRefreshToken));
         }
         catch (Exception e) {
             throw new PSException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to establish Twitter API connection.");
