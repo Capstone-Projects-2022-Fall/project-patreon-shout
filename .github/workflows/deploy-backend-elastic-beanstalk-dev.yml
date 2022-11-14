@@ -1,6 +1,8 @@
 name: DEV Deploy Backend
 on:
-  push
+  push:
+    branches:
+      - "feature/*"
 
 jobs:
   build:
