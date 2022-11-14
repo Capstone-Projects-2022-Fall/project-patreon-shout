@@ -11,6 +11,7 @@ import com.patreonshout.beans.WebAccount;
 import com.patreonshout.beans.patreon_api.*;
 import com.patreonshout.beans.request.PutSocialIntegrationRequest;
 import com.patreonshout.beans.request.receivers.patreon.WebhookRequest;
+import com.patreonshout.config.credentials.PatreonCredentials;
 import com.patreonshout.config.credentials.TwitterCredentials;
 import com.patreonshout.jpa.CreatorPageFunctions;
 import com.patreonshout.jpa.PatreonCampaignsFunctions;
@@ -79,6 +80,12 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	 */
 	@Autowired
 	private TwitterCredentials twitterCredentials;
+
+	/**
+	 * patreonCredentials is a Spring bean that holds our Patreon client credentials
+	 */
+	@Autowired
+	private PatreonCredentials patreonCredentials;
 
 	/**
 	 * Jackson object mapper that allows converting Java type {@link Object} to custom POJOs.
@@ -183,7 +190,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 
 		PatreonWebhookV2 patreonWebhook = new PatreonWebhookV2();
 		patreonWebhook.setTriggers(new String[]{"posts:publish", "posts:update", "posts:delete"});
-		patreonWebhook.setUri("https://ayser.backend.outofstonk.com/receivers/patreon/webhook/" + webAccount.getWebAccountId());
+		patreonWebhook.setUri(patreonCredentials.getRedirectUri() + "/receivers/patreon/webhook/" + webAccount.getWebAccountId());
 		patreonData.setAttributes(patreonWebhook);
 
 		PatreonRelationshipsV2 patreonRelationships = new PatreonRelationshipsV2();
@@ -329,7 +336,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 				.embedUrl(patreonPost.getEmbedUrl())
 				.isPaid(patreonPost.getIsPaid())
 				.isPublic(patreonPost.getIsPublic())
-				.publishDate(patreonPost.getPublishedAt())
+				.publishedAt(patreonPost.getPublishedAt())
 				.title(patreonPost.getTitle())
 				.url(patreonPost.getUrl())
 				.build();

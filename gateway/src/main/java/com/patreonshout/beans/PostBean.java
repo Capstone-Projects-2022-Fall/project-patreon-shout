@@ -81,8 +81,8 @@ public class PostBean extends BaseResource {
     /**
      * Datetime that the creator most recently published (made publicly visible) the post. Can be null
      */
-    @Column(name="publishdate") // TODO: This should be published_at
-    protected String publishDate; // TODO: This should be publishedAt and in UTC ISO format
+    @Column(name="published_at") // TODO: This should be published_at
+    protected String publishedAt; // TODO: This should be publishedAt and in UTC ISO format
 
     /**
      * title is the title of the Patreon post

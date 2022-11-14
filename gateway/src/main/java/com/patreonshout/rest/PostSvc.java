@@ -59,7 +59,7 @@ public class PostSvc extends BaseSvc implements PostImpl {
             listResponse.put("campaign_id", String.valueOf(pb.getCampaignId()));
             listResponse.put("url", pb.getUrl());
             listResponse.put("content", pb.getContent());
-            listResponse.put("published_at", pb.getPublishDate());
+            listResponse.put("published_at", pb.getPublishedAt());
             listResponse.put("is_public", String.valueOf(pb.getIsPublic()));
 
             response.add(listResponse);
