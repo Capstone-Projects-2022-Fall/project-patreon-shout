@@ -285,7 +285,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 			@RequestHeader("x-patreon-event") String patreonEvent,
 			@RequestHeader(HttpHeaders.USER_AGENT) String userAgent,
 			@RequestBody WebhookRequest webhookRequest,
-			@PathVariable String webaccountId
+			@PathVariable long webaccountId
 	) throws PSException {
 		// Ensure someone that isn't Patreon is hitting this endpoint
 		if (!userAgent.equals("Patreon HTTP Robot")) {
