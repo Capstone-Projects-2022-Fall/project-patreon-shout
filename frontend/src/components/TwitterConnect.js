@@ -21,7 +21,7 @@ function TwitterConnect() {
         "?response_type=code" +
         "&client_id=NWhrMFdaeE9Bd3diVXlTY19oYUg6MTpjaQ" +
         "&redirect_uri=http://127.0.0.1:5000/receivers/twitter/oauth " +
-        "&scope=tweet.read%20users.read%20follows.read%20follows.write%20offline.access" +
+        "&scope=tweet.read%20tweet.write%20users.read%20offline.access" +
         "&state=" + token +
         "&code_challenge=challenge" +
         "&code_challenge_method=plain";
