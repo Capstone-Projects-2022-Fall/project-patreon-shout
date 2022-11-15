@@ -6,6 +6,7 @@ import Searchbar from "./Searchbar";
 import jsonPosts from "../data/posts.json";
 import Filter from "./Filter";
 import {getLists} from "../services/api/lists/getLists";
+import { v4 } from 'uuid';
 
 /**
  * This is the Feed function which will appear on the home page
@@ -73,7 +74,7 @@ function Feed() {
                         afterFiltersList.push(post);
                         displayedList = afterFiltersList;
                         shouldSkip = true;
-                    }
+                    } else {displayedList = afterFiltersList;}
                     return displayedList;
                 })
                 shouldSkip = false;
@@ -124,6 +125,7 @@ function Feed() {
             </div>
             {displayedList.map((item) => (
                 <Post
+                    key={v4()}
                     title={item.title}
                     creator_page_url={item.creator_page_url}
                     is_public={item.is_public}

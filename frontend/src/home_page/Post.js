@@ -56,7 +56,7 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
     else {second = second + "am"};
 
     const handleRedirect = (e) => {
-        window.open(url, "_blank");
+        window.open("https://www.patreon.com" + url, "_blank");
     }
 
     useEffect(() => {
@@ -104,6 +104,7 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
 
     const [favorite, setFavorite] = useState(false); // checkForFavoritesList
 
+
     const handleFavoriteClick = () => {
         if (favorite === false) {
             addPostToFavoritesRequest().then();
@@ -119,7 +120,10 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
     const checkForFavoritesList = () => {
         let isFavoritePost = false;
 
+        // console.log(favThisPostLists);
+        // console.log("post: " + title);
         favThisPostLists.forEach((element) => {
+            // console.log("checking: " + element.title);
             if (element.title === "Favorites") {
                 isFavoritePost = true;
             }
@@ -193,7 +197,6 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
 
         console.log(message);
     }
-
 
     return (
         <div className="post">
