@@ -1,9 +1,7 @@
 import React, {useState} from "react";
 import "./list_css/ListButton.css";
 import ListConfigModal from "./ListConfigModal";
-import {deleteList} from "../services/api/lists/deleteList";
-import {getPosts} from "../services/api/posts";
-import {getLists} from "../services/api/lists/getLists";
+import {getPostsFromList} from "../services/api/lists/getPostsFromList";
 
 function ListButton({ setPostData, setPosts, setLists, added_creators, id, title, description }) {
 
@@ -14,11 +12,12 @@ function ListButton({ setPostData, setPosts, setLists, added_creators, id, title
 
     // TODO: change getPosts with a request to get the posts for a particular listId
     const getListPosts = () => {
+        const tokenString = localStorage.getItem('token');
+        const loginToken = JSON.parse(tokenString).token;
         let mounted = true;
-        getPosts("8432541")
+        getPostsFromList(loginToken, id)
             .then(items => {
                 if (mounted) {
-                    console.log(items);
                     setPostData(items)
                 }
             })

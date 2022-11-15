@@ -59,6 +59,8 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
         window.open("https://www.patreon.com" + url, "_blank");
     }
 
+    const [successMsg, setSuccessMsg] = useState("hide");
+
     useEffect(() => {
         let mounted = true;
         const tokenString = localStorage.getItem('token');
@@ -154,6 +156,10 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
                         label=""/>
                 ))}
             </FormGroup>
+            <div className={successMsg}>
+                <br/>
+                <p id="errormsg"> </p>
+            </div>
             <br/>
             <div id="buttonLocation">
                 <Button disableElevation type="submit" variant="contained">Save</Button>
@@ -171,6 +177,17 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
             login_token,
             list_updates
         });
+
+        console.log(message);
+
+        if (message.status === 200) {
+            document.getElementById("errormsg").textContent = "Lists successfully edited";
+            setSuccessMsg("show");
+        }
+        else {
+            document.getElementById("errormsg").textContent = "Error while editing lists";
+            setSuccessMsg("show");
+        }
     }
 
 
