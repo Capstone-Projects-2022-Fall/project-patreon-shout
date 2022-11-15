@@ -29,6 +29,6 @@ patreonshout:
 # Twitter
 twitter:
   client: #Client Configuration
-    id: somethin
-    secret: somethin
-    redirecturi: somethin
+    id: DEC(NWhrMFdaeE9Bd3diVXlTY19oYUg6MTpjaQ)
+    secret: DEC(i6j1ui6NPylovtTnxho9EcRkVwESJ4DHHdS3RR7Ic334ehFt02)
+    redirecturi: https://backend.outofstonk.com/receivers/twitter/oauth

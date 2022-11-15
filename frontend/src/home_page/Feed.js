@@ -6,6 +6,8 @@ import Searchbar from "./Searchbar";
 import jsonPosts from "../data/posts.json";
 import Filter from "./Filter";
 import {getLists} from "../services/api/lists/getLists";
+import { v4 } from 'uuid';
+import {getPosts} from "../services/api/posts";
 
 /**
  * This is the Feed function which will appear on the home page
@@ -18,7 +20,7 @@ function Feed() {
     const [searchTerm, setSearchTerm] = useState([]);
     const [filterChoices, setFilterChoices] = useState([]);
     const [dateRange, setDateRange] = useState([]);
-    const [postList, setPostList] = useState(jsonPosts);
+    const [postList, setPostList] = useState([]);
     const [userLists, setUserLists] = useState([]);
     const searchedList = [];
     const avoidDefaults = ["Date(new → old)", "Date(old → new)", "Private Only", "Public Only", "Date Range"];
@@ -66,14 +68,14 @@ function Feed() {
             let afterFiltersList = [];
             shouldSkip=false;
             displayedList.forEach((post) => {
-                const postInfo = (({title, creator_page_url, content}) => ({title, creator_page_url, content}))(post);
+                const postInfo = (({title, content}) => ({title, content}))(post);
                 Object.values(postInfo).every((onlyValues) => {
                     if (shouldSkip) {return;}
                     if (onlyValues.toLowerCase().includes(element)) {
                         afterFiltersList.push(post);
                         displayedList = afterFiltersList;
                         shouldSkip = true;
-                    }
+                    } else {displayedList = afterFiltersList;}
                     return displayedList;
                 })
                 shouldSkip = false;
@@ -94,16 +96,16 @@ function Feed() {
         return () => mounted = false;
     }, [])
 
-    // useEffect(() => {
-    //     let mounted = true;
-    //     getPosts("alexzwicky")
-    //         .then(items => {
-    //             if (mounted) {
-    //                 setPostList(items)
-    //             }
-    //         })
-    //     return () => mounted = false;
-    // }, [])
+    useEffect(() => {
+        let mounted = true;
+        getPosts("8432541")
+            .then(items => {
+                if (mounted) {
+                    setPostList(items)
+                }
+            })
+        return () => mounted = false;
+    }, [])
 
     return (
         <div className="feed">
@@ -124,6 +126,7 @@ function Feed() {
             </div>
             {displayedList.map((item) => (
                 <Post
+                    key={v4()}
                     title={item.title}
                     creator_page_url={item.creator_page_url}
                     is_public={item.is_public}

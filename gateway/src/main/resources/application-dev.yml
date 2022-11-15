@@ -26,7 +26,7 @@ patreonshout:
   client: # Client Configuration
     id: QshCpqHpThL5sckRQX88TwE9vPr4pEWOjdyZbAKVIJie1hhOdPbsp6Qaqrd9C7M6
     secret: ORQ1gPXNsZ8StUBBYBrfuiomLFECnmLwzuVy57C3wNHkOgFJNOA3iFV4i6BRaV3h
-    redirecturi: https://alex.backend.outofstonk.com
+    redirecturi: http://localhost:5000
   server: # Server Configuration
     cors-origin: https://104.10.47.181:3000
   db: # Database Configuration
