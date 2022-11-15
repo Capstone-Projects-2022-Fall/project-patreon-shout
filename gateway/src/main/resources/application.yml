@@ -19,8 +19,8 @@ server:
 # PatreonShout
 patreonshout:
   client: # Client Configuration
-    id: ENC(IeSCl1uyHsUeuJYBzekh1hOQzzMoFJ+Suwc4uKmVD2MCTovERsRnUDMZUFVk3rePjs05ZZWJLgWnCuhxNaG4Rpj0Hq8jSbE/m10VjE6B2SBvs73PV4V+cQnUXBtnA3i0ANPcuQ+OYL/jAlug7QqEyg==)
-    secret: ENC(6YpB3GylnUOAR3U8gE6k9E58razkCJvBtoGMU9HYq0sHd6D3l3d6EAph1LwMko9WoftA++tq1kSVepusHj5Y7pshP/Qq2FOJoTHkAh6zQYuDvYKOKwMRFAf2MmHR7Y6PvTBp/Y2UJJ7mHXhjRGeuOg==)
+    id: ENC(nMre8DN4MIfqWboHBpuhZ2uSt+ALas/qviUiENIBaEfFfhC7jl8codJpu/WOWCRet/j+Bj+dne/KMT5LYuMuknchRIOASP/M2URBj0CnVZfet16q/IBSvwDaR6+2ES1r9T+0ufrZTbfEOTfqbU/87A==)
+    secret: ENC(QKxPWLxCi3M5dc43o1LjTr4X/T4XIowYuuw3NxHR7Ch1Sp2Q5YuKKPJAo3hLx2n9kQ6WNfuQNcuRSar922Ca0ryJu6J5vXwMF4nP5b9mW/nDgk+6uDpAq74OOwLUhw+rE1j8evg02B9oFSGAyDN4+A==)
     redirecturi: https://prodprod.backend.outofstonk.com
   db: # Database Configuration
     webaccount:
