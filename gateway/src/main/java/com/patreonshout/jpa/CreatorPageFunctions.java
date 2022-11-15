@@ -23,11 +23,11 @@ public class CreatorPageFunctions {
 	CreatorPageRepository creatorPageRepository;
 
 	@Transactional
-	public void putCreatorPage(int campaignId) {
+	public void putCreatorPage(int campaignId, String vanity) {
 		CreatorPage creatorPage = new CreatorPage();
 
 		creatorPage.setCampaignId(campaignId);
-		creatorPage.setPageName(String.valueOf(campaignId)); // TODO: Find a way to get the creator's Patreon Page name
+		creatorPage.setPageName(vanity); // TODO: Find a way to get the creator's Patreon Page name
 		creatorPage.setPageCategory(CreatorPageCategory.OTHER.name()); // TODO: Try to utilize enum instead of String...  Changing this to enum breaks logging in.
 
 		creatorPageRepository.save(creatorPage);
