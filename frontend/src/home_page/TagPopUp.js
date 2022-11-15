@@ -33,7 +33,7 @@ function TagPopUp() {
         <Popup
             trigger={<div className="dropdown"><Tag/><div>{choice}</div>
             </div>}
-            position="bottom left"
+            position="bottom center"
             on="click"
             contentStyle={{padding: '0px', border: 'none'}}>
             <div className="App">
