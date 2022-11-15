@@ -1,7 +1,6 @@
 package com.patreonshout.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonObject;
 import com.patreon.PatreonOAuth;
 import com.patreon.resources.Campaign;
 import com.patreonshout.PSException;
@@ -120,6 +119,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 
 			// Acquire campaign data
 			PatreonDataArrayEntryV2 campaign = objectMapper.convertValue(getCampaignData(accessToken), PatreonDataArrayEntryV2.class);
+			PatreonCampaignV2 campaignData = objectMapper.convertValue(campaign.getAttributes(), PatreonCampaignV2.class);
 
 			System.out.println("");
 
@@ -129,7 +129,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 			patreonCampaignsFunctions.putCampaign(webAccount, campaign);
 
 			// put content creator posts in database
-			creatorPageFunctions.putCreatorPage(campaign.getId());
+			creatorPageFunctions.putCreatorPage(campaign.getId(), campaignData.getVanity());
 			saveCampaignPosts(accessToken, campaign.getId());
 
 			System.out.println("Access token: " + accessToken);
