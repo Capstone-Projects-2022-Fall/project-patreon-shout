@@ -21,7 +21,7 @@ patreonshout:
   client: # Client Configuration
     id: ENC(IeSCl1uyHsUeuJYBzekh1hOQzzMoFJ+Suwc4uKmVD2MCTovERsRnUDMZUFVk3rePjs05ZZWJLgWnCuhxNaG4Rpj0Hq8jSbE/m10VjE6B2SBvs73PV4V+cQnUXBtnA3i0ANPcuQ+OYL/jAlug7QqEyg==)
     secret: ENC(6YpB3GylnUOAR3U8gE6k9E58razkCJvBtoGMU9HYq0sHd6D3l3d6EAph1LwMko9WoftA++tq1kSVepusHj5Y7pshP/Qq2FOJoTHkAh6zQYuDvYKOKwMRFAf2MmHR7Y6PvTBp/Y2UJJ7mHXhjRGeuOg==)
-    redirecturi: https://prod.backend.outofstonk.com/receivers/patreon/oauth
+    redirecturi: https://prodprod.backend.outofstonk.com
   db: # Database Configuration
     webaccount:
       pepper: ENC(BLaHIgDKQVzb0giPFe+TXRCuUkKd/rwfraIpagzIyChf6fA+A/btX2xrPihjfQwo)
@@ -31,4 +31,4 @@ twitter:
   client: #Client Configuration
     id: ENC(z9gF7PIUw6A+OAIrLhyC5wZsStdhUrvbMHyoXYRAdJG92WwDtxBghPl4RiVzO2247pkt9zReUHJdyhgy8rLhOrjGNtUiDGQKFnsuj4uJrgk=)
     secret: ENC(HSrCIi/Bn8LX+hhz/RhnjMVjhMSuCROLIgZlBxZacFlMG+cn2WdK5oAOuO4Wm2FonJTUX7JzZwsJmJyjclfowngxj1Xv6DIOfS65ZPTjOOyNga4vYft3PmiqcsNR3yps)
-    redirecturi: https://prod.backend.outofstonk.com/receivers/twitter/oauth
+    redirecturi: https://prodprod.backend.outofstonk.com/receivers/twitter/oauth
