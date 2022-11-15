@@ -283,13 +283,19 @@ public class ListSvc extends BaseSvc implements ListImpl {
                 postResponse.put("published_at", pb.getPublishedAt());
                 postResponse.put("title", pb.getTitle());
                 postResponse.put("url", pb.getUrl());
-                postResponse.put("content", pb.getContent());
                 postResponse.put("is_public", String.valueOf(pb.getIsPublic()));
                 postResponse.put("app_id", pb.getAppId());
                 postResponse.put("app_status", pb.getAppStatus());
                 postResponse.put("embed_data", pb.getEmbedData());
                 postResponse.put("embed_url", pb.getEmbedUrl());
                 postResponse.put("is_paid", String.valueOf(pb.getIsPaid()));
+
+                if (pb.getIsPublic()) {
+                    postResponse.put("content", pb.getContent());
+                }
+                else {
+                    postResponse.put("content", "This post is private");
+                }
 
                 response.add(postResponse);
             }
