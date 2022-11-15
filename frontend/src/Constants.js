@@ -1,7 +1,7 @@
 
 const prod = {
     url: {
-        API_URL: 'http://patreon-shout-gateway.us-east-2.elasticbeanstalk.com'
+        API_URL: 'https://prodprod.backend.outofstonk.com'
     }
 };
 
@@ -13,4 +13,4 @@ const dev = {
 };
 
 // export const config = process.env.NODE_ENV === 'development' ? dev : prod;
-export const config = dev; // = prod
+export const config = prod; // = prod
