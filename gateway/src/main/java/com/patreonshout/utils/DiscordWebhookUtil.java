@@ -59,7 +59,7 @@ public class DiscordWebhookUtil {
 	public DiscordWebhookUtil(String webhookUrl, PatreonPostV2 patreonPost) {//, String title, String titleUrl, String content, Boolean isPublic) {
 		this(webhookUrl);
 		this.setColor(patreonPost.getIsPublic() ? 0x00FF00 : 0xFF0000);
-		this.setTitle(patreonPost.getTitle(), patreonPost.getUrl());
+		this.setTitle(patreonPost.getTitle(), "https://patreon.com" + patreonPost.getUrl());
 
 		String outputContent = patreonPost.getContent() != null ? converter.convert(patreonPost.getContent()) : "This post has no text content";
 		this.setDescription(patreonPost.getIsPublic() ? outputContent : "This post is **private**");
