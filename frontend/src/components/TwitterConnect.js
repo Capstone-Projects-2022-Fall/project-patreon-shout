@@ -26,11 +26,20 @@ function TwitterConnect() {
         "&code_challenge=challenge" +
         "&code_challenge_method=plain";
 
+    const twitterUrl = "https://twitter.com/i/oauth2/authorize" +
+        "?response_type=code" +
+        "&client_id=NWhrMFdaeE9Bd3diVXlTY19oYUg6MTpjaQ" +
+        "&redirect_uri=https://prodprod.backend.outofstonk.com/receivers/twitter/oauth " +
+        "&scope=tweet.read%20tweet.write%20users.read%20offline.access" +
+        "&state=" + token +
+        "&code_challenge=challenge" +
+        "&code_challenge_method=plain";
+
 
 
     return (
         <div className="PatreonConnect">
-            <Button target="_blank" href={twitterUrlDev} sx={ { borderRadius: 28 } } color="primary" type="submit" variant="contained">
+            <Button target="_blank" href={twitterUrl} sx={ { borderRadius: 28 } } color="primary" type="submit" variant="contained">
                 Connect To Twitter
             </Button>
         </div>);
