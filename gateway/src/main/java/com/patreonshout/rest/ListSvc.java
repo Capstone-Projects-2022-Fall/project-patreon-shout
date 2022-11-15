@@ -296,7 +296,6 @@ public class ListSvc extends BaseSvc implements ListImpl {
                 else {
                     postResponse.put("content", "This post is private");
                 }
-
                 response.add(postResponse);
             }
         }
