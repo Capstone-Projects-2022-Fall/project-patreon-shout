@@ -9,6 +9,7 @@ import Searchbar from "../home_page/Searchbar";
 import Filter from "../home_page/Filter";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { getPosts } from '../services/api/posts';
+import { v4 } from 'uuid';
 
 function ListFeed() {
 
@@ -68,7 +69,7 @@ function ListFeed() {
             let afterFiltersList = [];
             shouldSkip=false;
             displayedList.forEach((post) => {
-                const postInfo = (({title, creator_page_url, content}) => ({title, creator_page_url, content}))(post);
+                const postInfo = (({title, content}) => ({title, content}))(post);
                 Object.values(postInfo).every((onlyValues) => {
                     if (shouldSkip) {return;}
                     if (onlyValues.toLowerCase().includes(element)) {
@@ -121,18 +122,21 @@ function ListFeed() {
                     />
                 </div>
 
-                {displayedList.map((item) => (
-                    <Post
-                        title={item.title}
-                        creator_page_url={item.creator_page_url}
-                        is_public={(item.is_public === "true")} // converts the string to a boolean
-                        content={item.content}
-                        published_at={item.published_at}
-                        url = {item.url}
-                        lists = {userLists}
-                        displayedList = {displayedList}
-                    />
-                ))}
+                <div>
+                    {displayedList.map((item) => {
+                        return <Post
+                            key={v4()}
+                            title={item.title}
+                            creator_page_url={item.creator_page_url}
+                            is_public={(item.is_public === "true")} // converts the string to a boolean
+                            content={item.content}
+                            published_at={item.published_at}
+                            url={item.url}
+                            lists={userLists}
+                            displayedList={displayedList}
+                        />
+                    })}
+                </div>
             </div>
 
             <div className={lists}>
