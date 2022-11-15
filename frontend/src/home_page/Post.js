@@ -37,8 +37,13 @@ import {deletePostFromFavoritesList} from "../services/api/lists/favorites/delet
 function Post({title, creator_page_url, url, content, published_at, is_public, lists}) {
 
     // TODO: clean this shit up
-    content = content.replace(/<p[^>]*>/g, "");
-    content = content.replace(/<\/?p[^>]*>/g, "");
+    if (content) {
+        content = content.replace(/<p[^>]*>/g, "");
+        content = content.replace(/<\/?p[^>]*>/g, "");
+    }
+    else {
+        content = "No post content";
+    }
     let posteddate = new Date(published_at);
     let year = String(posteddate.getFullYear());
     let month = String(posteddate.getMonth() + 1);
