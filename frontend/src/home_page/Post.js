@@ -36,6 +36,7 @@ import {deletePostFromFavoritesList} from "../services/api/lists/favorites/delet
 
 function Post({title, creator_page_url, url, content, published_at, is_public, lists}) {
 
+    console.log("pub: " + is_public);
     // TODO: clean this shit up
     if (content) {
         content = content.replace(/<p[^>]*>/g, "");
@@ -228,6 +229,7 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
                         <h3>
                             {title}{" "}
                             <span className="post__headerSpecial">
+                                {is_public}
                                 {!is_public && <VerifiedUser className="post__badge"/>}
                                 @{creator_page_url}
                             </span>

@@ -52,10 +52,10 @@ function Feed() {
         displayedList = displayedList.sort(function(a, b){return new Date(a.published_at).getTime() - new Date(b.published_at).getTime()});
     } else {displayedList = displayedList.sort(function(b, a){return new Date(a.published_at).getTime() - new Date(b.published_at).getTime()});}
     if (filterChoices.includes("Private Only")) {
-        displayedList = displayedList.filter(value => value.is_public === false);
+        displayedList = displayedList.filter(value => (value.is_public === "true") === false);
     }
     if (filterChoices.includes("Public Only")) {
-        displayedList = displayedList.filter(value => value.is_public === true);
+        displayedList = displayedList.filter(value => (value.is_public === "true") === true);
     }
     if (filterChoices.includes("Date Range")) {
         displayedList = displayedList.sort(function(b, a){return new Date(a.published_at).getTime() - new Date(b.published_at).getTime()});
@@ -129,7 +129,7 @@ function Feed() {
                     key={v4()}
                     title={item.title}
                     creator_page_url={item.creator_page_url}
-                    is_public={item.is_public}
+                    is_public={(item.is_public === "true")}
                     content={item.content}
                     published_at={item.published_at}
                     url = {item.url}
