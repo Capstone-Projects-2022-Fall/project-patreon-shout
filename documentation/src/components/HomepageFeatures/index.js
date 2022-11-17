@@ -1,35 +1,37 @@
 import React from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.css';
-/*TODO: Change to your project's feature list*/
+/*TODO: Add images here bois*/
 const FeatureList = [
   {
-    title: 'Easy to Use',
+    title: 'Main Feed',
     Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        An easy to use feed for patrons to view all of their 
+        followed creators in the same space.
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
+    title: 'Cross Posting',
     Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        Whenever a creator decides they would like to post new
+        content on Patreon, they can now choose to enable crossposting
+        allowing that post to also be send to their Twitter and Discord.
       </>
     ),
   },
   {
-    title: 'Powered by React',
+    title: 'Post Interaction',
     Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        Users can now interact with their feed in all kinds of new and exciting
+        ways, such as searching, filtering, creating new filters, favoriting posts
+        tagging posts, and adding posts to lists.
       </>
     ),
   },

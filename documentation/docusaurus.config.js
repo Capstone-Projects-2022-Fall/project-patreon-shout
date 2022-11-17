@@ -8,7 +8,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
  * The URL or reference to your projects logo!
  * @type {string}
  */
-const logo = 'https://github.com/Capstone-Projects-2022-Fall/project-patreon-shout/blob/Jsmalriat-doc-patches/documentation/megaphone.png';
+const logo = 'https://github.com/Capstone-Projects-2022-Fall/project-patreon-shout/blob/Jsmalriat-doc-patches/documentation/megaphone.svg';
 
 const main_template_jira_scripts = () => {
   if (process.env.ORG_NAME === 'ApplebaumIan'){
@@ -182,16 +182,16 @@ const config = {
 
     }),
   plugins: [
-    [
-      '@docusaurus/plugin-content-docs',
-      {
-        id: 'tutorial',
-        path: 'tutorial',
-        routeBasePath: 'tutorial',
-        sidebarPath: require.resolve('./sidebars.js'),
-        // ... other options
-      },
-    ],
+//     [
+//       '@docusaurus/plugin-content-docs',
+//       {
+//         id: 'tutorial',
+//         path: 'tutorial',
+//         routeBasePath: 'tutorial',
+//         sidebarPath: require.resolve('./sidebars.js'),
+//         // ... other options
+//       },
+//     ],
     [
       "docusaurus2-dotenv",
       {
