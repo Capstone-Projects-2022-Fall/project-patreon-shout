@@ -182,16 +182,16 @@ const config = {
 
     }),
   plugins: [
-    [
-      '@docusaurus/plugin-content-docs',
-      {
-        id: 'tutorial',
-        path: 'tutorial',
-        routeBasePath: 'tutorial',
-        sidebarPath: require.resolve('./sidebars.js'),
-        // ... other options
-      },
-    ],
+//     [
+//       '@docusaurus/plugin-content-docs',
+//       {
+//         id: 'tutorial',
+//         path: 'tutorial',
+//         routeBasePath: 'tutorial',
+//         sidebarPath: require.resolve('./sidebars.js'),
+//         // ... other options
+//       },
+//     ],
     [
       "docusaurus2-dotenv",
       {
