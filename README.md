@@ -4,9 +4,6 @@
 [![Documentation Website Link](https://img.shields.io/badge/-Documentation%20Website-brightgreen)](https://capstone-projects-2022-fall.github.io/project-patreon-shout/)
 
 
-</div>
-
-
 # Project Abstract
 
 This document proposes a web application that allows content creators to have their Patreon posts automatically sent to other social platforms. Non-content creator users of this web application will also be able to see the posts of the Patreon creators they follow. This will improve creator outreach to users of the web application by showing recommended creators to follow.
