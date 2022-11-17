@@ -10,113 +10,680 @@ sidebar_position: 1
 ```mermaid
 classDiagram
 
-    class PostBean{
-        #int post_id
-        #String publishdate
+<!--         BEANS         -->
+<!--    REQUEST OBJECTS    -->
+<!-- SENDING HTTP REQUESTS -->
+<!-- ACTUAL JPA REPO STUFF -->
+<!--       ENDPOINTS       -->
+<!--         UTIL          -->
+<!--        CONFIG         -->
+<!--    OBJECT RESPONSES   -->
+<!--       EXCEPTIONS      -->
+
+
+    class PSApplication {
+        +void main(String[])
+    }
+
+<!--    BEANS-->
+    class PostBean {
+        #String embedUrl
+        #String appStatus
+        #int postId
+        #String appId
+        #Boolean isPublic
+        #List<Tag> tags
+        #String publishedAt
         #String title
-        #String url
+        #String embedData
         #String content
-        #boolean isprivate
-        #String creator
-        +getPost_id() int
-        +setPost_id(int)
-        +getPublishdate() String
-        +setPublishdate(String)
-        +getTitle() String
-        +setTitle(String)
-        +getUrl() String
-        +setUrl(String)
-        +getContent() String
-        +setContent(String)
-        +isIsprivate() boolean
-        +setIsprivate(boolean)
-        +getCreator() String
-        +setCreator(String)
-        +toString() String
+        #int campaignId
+        #Boolean isPaid
+        #String url
+        +equals() boolean
     }
-    class JPAConfiguration{
-        +String dsUrl
-        +String dsUsername
-        +String dsPassword
-        +dataSource() DataSource
-        +jpaTransactionManager() JpaTransactionManager
-        -vendorAdapter() HibernateJpaVendorAdapter
-        -jpaHibernateProperties() Properties
+
+    class PatreonPostV2 {
+        ~String embedUrl
+        ~String appId
+        ~String publishedAt
+        ~String content
+        ~Boolean isPublic
+        ~String embedData
+        ~String url
+        ~String title
+        ~Boolean isPaid
+        ~String appStatus
     }
-    class PSConfiguration{
-        +String clientId
-        +String clientSecret
-        +String redirectUri
-        +oauthClient() PatreonOAuth
+
+    class WebAccount {
+        ~SocialIntegration socialIntegration
+        #int webAccountId
+        #String username
+        #String loginToken
+        #String password
+        #String passwordSalt
+        ~List<Tag> tags
+        ~PatreonTokens creatorTokens
+        ~OldPasswords oldPasswords
     }
-    class Posts{
-        +getPost(String) PostBean
-        +getAllPosts() List<PostBean>
-        +putPost(PostBean)
-        +updatePost(PostBean)
-        +removePost(String)
-    }
-    class PostsRepository{
-        -EntityManager em
-        +getPost(String) PostBean
-        +getAllPosts() List<PostBean>
-        +putPost(PostBean)
-        +updatePost(PostBean)
-        +removePost(String)
-    }
-    class DiscordSender{
-        -WebhookClient client
-        -WebhookEmbedBuilder embed
-        +DiscordSender(String)
-        +send()
-        +setColor(int)
-        +setTitle(String)
-        +setDescription(String)
-        +addField(String, String)
-        +setImage(String)
-        +close()
-    }
-    class User{
+
+    class User {
         +Data data
         +Links links
     }
-    class Data{
-        +float id
-        +String type
-        +Attributes Attributes
-    }
-    class Attributes{
-        +String about
-        +Boolean can_see_nsfw
-        +String created
-        +String email
-        +String first_name
-        +String full_name
-        +Boolean hide_pledges
-        +String image_url
-        +Boolean is_email_verified
-        +String last_name
-        +Integer like_count
-        +Object social_connections
-        +String thumb_url
-        +String url
-        +String vanity
-    }
-    class Links{
+
+    class Links {
         +String self
     }
-    class EndpointWrapper{
-        -String baseUrl
-        +fetchUser(String) User
-        +socialSender(WebhookURL) Boolean
+
+    class Data {
+        +Attributes attributes
+        +float id
+        +String type
     }
-    class OAuth{
-        -PatreonOAuth oauthClient
-        +WebhookReceiver(String, String) String
+
+    class Attributes {
+        ~Integer like_count
+        ~String full_name
+        ~String last_name
+        ~String thumb_url
+        ~String first_name
+        ~Boolean can_see_nsfw
+        ~String image_url
+        ~String url
+        ~Object social_connections
+        ~String created
+        ~Boolean is_email_verified
+        ~String vanity
+        ~Boolean hide_pledges
+        ~String about
+        ~String email
     }
-    class PSApplication{
-        +main(String[])
+
+    class SocialIntegration {
+        #int webAccountId
+        #String twitterAccessToken
+        #String instagram
+        #String twitterRefreshToken
+        #String discord
+        #WebAccount webAccount
     }
+
+    class PatreonWebhookV2 {
+        ~Boolean paused
+        ~String uri
+        ~String secret
+        ~String lastAttemptedAt
+        ~String numConsecutiveTimesFailed
+        ~String[] triggers
+    }
+
+    class PatreonTokens {
+        #int webAccountId
+        #String refreshToken
+        #int expiresIn
+        #WebAccount webAccount
+        #String accessToken
+        #String scope
+    }
+
+    class PatreonDataV2 {
+        ~Object attributes
+        ~int id
+        ~PatreonRelationshipsV2 relationships
+        ~String type
+    }
+
+    class SearchFilter {
+        -String filter
+        -Long filterId
+        -String filterName
+        -int webAccountId
+    }
+
+    class OldPasswords {
+        #WebAccount webAccount
+        #int webAccountId
+        #String oldPasswordThree
+        #String oldPasswordTwo
+        #String oldPasswordOne
+    }
+
+    class PatreonDataArrayEntryV2 {
+        ~int id
+        ~Object attributes
+        ~String type
+    }
+
+    class ListBean {
+        #listId
+        #String title
+        #String description
+        #int webAccountId
+    }
+
+    class Tag {
+        #int tagId
+        #String tag
+        #WebAccount webAccount
+        #PostBean postBean
+    }
+
+    class PatreonObjectArrayV2 {
+        ~PatreonDataV2[] data
+        ~PatreonMetaV2 meta
+    }
+
+    class PatreonCampaignV2 {
+        ~String vanity
+        ~PatreonDataV2 data
+    }
+
+    class MembershipBean {
+        -boolean is_follower
+        -String patron_status
+        -int campaignid
+    }
+
+    class ListPost {
+        #int postId
+        #String listPostsId
+        #int listId
+    }
+
+    enum CreatorPageCategory {
+        +WRITING
+        +GAMES
+        +VIDEO
+        +MUSIC
+        +PODCASTS
+        +OTHER
+        +COMICS
+    }
+
+    enum SocialIntegrationName {
+        +TWITTER
+        +INSTAGRAM
+        +DISCORD
+    }
+
+    class PatreonCampaign {
+        #Integer webAccountId
+        #String vanity
+        #Integer campaignId
+    }
+
+    class CreatorPage {
+        #int campaignId
+        #String pageCategory
+        #String pageName
+    }
+
+    class PatreonMetaV2 {
+        ~PatreonPaginationV2 pagination
+    }
+
+    class PatreonRelationshipsV2 {
+        ~PatreonCampaignV2 campaign
+    }
+
+    class PatreonObjectV2 {
+        ~PatreonDataV2 data
+    }
+
+    class PatreonPaginationV2 {
+        ~int total
+    }
+
+    class PatreonLinksV2 {
+        ~String self
+    }
+
+
+<!--      REQUEST OBJECTS-->
+    class ListPostUpdateRequest {
+        ~List<ListUpdate> listUpdates
+        -String url
+        -String loginToken
+    }
+
+    class ListUpdate {
+        -boolean update
+        -int listId
+    }
+
+    class WebhookRequest {
+        ~PatreonDataV2 data
+        ~PatreonLinksV2 links
+    }
+
+    class PutSocialIntegrationRequest {
+        ~SocialIntegrationName socialIntegrationName
+        ~String data
+        ~String loginToken
+    }
+
+    class PostGetMultipleRequest {
+        -String loginToken
+        -List<String> creators
+        -int page
+    }
+
+    class ResetPasswordRequest {
+        ~String newPassword
+        ~String loginToken
+        ~String currentPassword
+    }
+
+    class ListCreationRequest {
+       -String loginToken
+       -String title
+       -String description
+    }
+
+    class TagDeleteRequest {
+        -String tag
+        -String url
+        -String loginToken
+    }
+
+    class TagAddRequest {
+        -String loginToken
+        -String url
+        -String tag
+    }
+
+    PostWebhookRequest {
+        -String loginToken
+        ~SocialIntegrationName socialIntegrationName
+    }
+
+    class FavoriteListRequest {
+        -String url
+        -String loginToken
+    }
+
+    class ListDeleteRequest {
+        -int list_id
+        -String loginToken
+    }
+
+    class FilterAddRequest {
+        -String filterName
+        -String filter
+    }
+
+    class LoginRequest {
+        -String username
+        -String password
+    }
+
+    class RegisterRequest {
+        ~String username
+        ~String password
+    }
+
+    class FilterCommonRequest {
+        -String loginToken
+    }
+
+    class FilterDeleteRequest {
+        -long filterId
+    }
+
+    class ListUpdateRequest {
+        -int list_id
+    }
+
+<!--      OBJECT RESPONSES-->
+    class BaseResponse {
+        -int status
+        -String message
+    }
+
+    class LoginResponse {
+        -String token
+    }
+
+
+<!--      SENDING HTTP REQUESTS-->
+    class CustomPatreonAPI {
+        -Logger log
+        -String accessToken
+        -ResourceConverter converter
+
+        +List<MembershipBean> fetchFollowingCampaigns()
+        -InputStream request(String, String, boolean)
+        +JSONAPIDocument<User> fetchUser()
+        +List<Pledge> fetchAllPledges(String)
+        +JSONAPIDocument<List<Pledge>> fetchPageOfPledges(String, int, String, Collection<PledgeField>)
+        +JSONAPIDocument<List<PostBean> fetchPosts(String)
+        +JSONAPIDocument<List<Pledge>> fetchPageOfPledges(String, int, String)
+        -String getVersion()
+        -URIBuilder addFieldsParam(URIBuilder, Class<BaseResource>, Collection<Field>)
+        +JSONAPIDocument<List<Campaign>> fetchCampaigns()
+        +String getNextCursorFromDocument(JSONAPIDocument)
+        -InputStream getDataStream(String, boolean)
+    }
+
+
+<!--      ACTUAL JPA REPO STUFF-->
+    class WebAccountFunctions {
+        ~WebAccountRepository webAccountRepository
+        ~SecurityConfiguration securityConfiguration
+
+        +void saveCampaignPosts(String, int)
+        ~void sendTwitterPost(PatreonPostV2, WebAccount)
+        +String PatreonOAuth(String, String)
+        +String TwitterOAuth(String, String)
+        -Object getCampaignData(String)
+        -void createWebhookForPatreon(WebAccount, String, int)
+        +ResponseEntity<?> PatreonWebhook(String, String, String, WebhookRequest, long)
+        ~void sendDiscordMessage(PatreonPostV2, String)
+    }
+
+    class CreatorPageFunctions {
+        ~CreatorPageRepository creatorPageRepository
+
+        +void putCreatorPage(int)
+    }
+
+    class PatreonCampaignFunctions {
+        ~PatreonCampaignsRepository patreonCampaignsRepository
+        ~WebAccountFunctions webAccountFunctions
+        ~ObjectMapper objectMapper
+
+        +void getCampaign(Long)
+        +PatreonCampaign getCampaignByWebaccountId(Long)
+        +void putCampaign(String, PatreonDataArrayEntryV2)
+        +void putCampaign(WebAccount, PatreonDataArrayEntryV2)
+    }
+
+    class PostsRepository {
+        +List<PostBean> findAllByCampaignId(int)
+        +Page<PostBean> getMultipleCreatorPosts(List<String>, Pageable)
+        +PostBean findPostBeanByUrl(String)
+        +List<PostBean> getExistingPosts(List<PostBean>)
+        +List<Object[]> findPostsInListByListId(int, String)
+    }
+
+    class PostsRepositoryImpl {
+        -EntityManager em
+
+        -String getUrlList(List<PostBean>)
+        +List<PostBean> getExistingPosts(List<PostBean>)
+    }
+
+    class ListsRepository {
+        +ListBean getListByListId(int)
+        +void deleteListByListId(int)
+        +ListBean findListBeanByWebAccountIdAndTitle(int, String)
+        +List<ListBean> findListBeansByWebAccountId(int)
+    }
+
+    class ListsRepositoryImpl {
+        -EntityManager em
+        +void deleteListByList_id(int)
+        +ListBean getListByList_id(int)
+    }
+
+    class WebAccountRepository {
+        +WebAccount findByUsername(String)
+        +WebAccount findByWebAccountId(int)
+        +WebAccount findByLoginToken(String)
+    }
+
+    class ListPostsRepository {
+        +List<ListPost> findAllByListId(int)
+        +List<ListPost> findAllByPostId(int)
+        +void deleteByListAndPost(int, int)
+    }
+
+    class TagsRepository {
+        +Tag findTagByPostBeanAndWebAccountAndTag(PostBean, WebAccount, String)
+        +List<Tag> findAllByPostBean(PostBean)
+    }
+
+    class SearchFiltersRepositoryImpl {
+
+    }
+
+    class CreatorPageRepository {
+
+    }
+
+
+<!--      ENDPOINTS-->
+    class ListSvc {
+        -PostsRepository postsRepository
+        -ListsRepository listsRepository
+        -ListPostsRepository listPostsRepository
+        -WebAccountFunctions webAccountFunctions
+
+        +ResponseEntity<?> GetUserListsWithPost(String, String)
+        +ResponseEntity<?> UpdateUserPostLists(ListPostUpdateRequest)
+        +ResponseEntity<?> GetPostsFromList(String, int)
+        +ResponseEntity<?> DeleteUserList(ListDeleteRequest)
+        +ResponseEntity<?> DeletePostFromFavoritesList(FavoriteListRequest)
+        +ResponseEntity<?> GetUserLists(String)
+        +ResponseEntity<?> UpdateUserList(ListUpdateRequest)
+        +ResponseEntity<?> AddPostToFavoritesList(FavoriteListRequest)
+        +ResponseEntity<?> AddUserList(ListCreationRequest)
+    }
+
+    class ListImpl {
+        +ResponseEntity<?> UpdateUserList(ListUpdateRequest)
+        +ResponseEntity<?> AddUserList(ListCreationRequest)
+        +ResponseEntity<?> AddPostToFavoritesList(FavoriteListRequest)
+        +ResponseEntity<?> DeletePostFromFavoritesList(FavoriteListRequest)
+        +ResponseEntity<?> GetUserListsWithPost(String, String)
+        +ResponseEntity<?> DeleteUserList(ListDeleteRequest)
+        +ResponseEntity<?> UpdateUserPostLists(ListPostUpdateRequest)
+        +ResponseEntity<?> GetUserLists(String)
+        +ResponseEntity<?> GetPostsFromList(String, int)
+    }
+
+    class WebAccountSvc {
+        ~WebAccountFunctions webAccountFunctions
+
+        +ResponseEntity<?> GetSocialIntegration(String)
+        +ResponseEntity<?> ResetPassword(ResetPasswordRequest)
+        +HttpStatus PutSocialIntegration(PutSocialIntegrationRequest)
+        +ResponseEntity<?> Login(LoginRequest)
+        +ResponseEntity<?> Logout(String)
+        +HttpStatus Register(RegisterRequest)
+        +ResponseEntity<?> Webhook(String)
+        +ResponseEntity<?> GetPatreonTokens(String)
+    }
+
+    class WebAccountImpl {
+        +ResponseEntity<?> Login(LoginRequest)
+        +ResponseEntity<?> GetSocialIntegration(String)
+        +ResponseEntity<?> GetPatreonTokens(String)
+        +HttpStatus PutSocialIntegration(PutSocialIntegrationRequest)
+        +HttpStatus Register(RegisterRequest)
+        +ResponseEntity<?> ResetPassword(ResetPasswordRequest)
+        +ResponseEntity<?> Logout(String)
+    }
+
+    class SearchFilterSvc {
+        -WebAccountFunctions webAccountFunctions
+        -SearchFiltersRepository searchFiltersRepository
+
+        +ResponseEntity<?> GetUserFilters(String)
+        +ResponseEntity<?> AddFilter(FilterAddRequest)
+        +ResponseEntity<?> DeleteFilter(FilterDeleteRequest)
+    }
+
+    class TagSvc {
+        ~PostsRepository postsRepository
+        ~TagsRepository tagsRepository
+        ~WebAccountFunctions webAccountFunctions
+
+        +ResponseEntity<?> AddTag(TagAddRequest)
+        +ResponseEntity<?> GetUserTagsOnSinglePost(String, String)
+        +ResponseEntity<?> DeleteUserTagOnSinglePost(TagDeleteRequest)
+    }
+
+    class PostImpl {
+        +ResponseEntity<?> GetCreatorPosts(int)
+        +ResponseEntity<?> GetMultipleCreatorPosts(PostGetMultipleRequest)
+    }
+
+    class PostSvc {
+        -WebAccountFunctions webAccountFunctions
+        ~PostsRepository postsRepository
+
+        +ResponseEntity<?> GetCreatorPosts(int)
+        +ResponseEntity<?> GetMultipleCreatorPosts(PostGetMultipleRequest)
+    }
+
+    class BaseSvc {
+        +ResponseEntity<?> catchSQLIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException)
+        +ResponseEntity<?> catchCustomException(PSException)
+    }
+
+    class ReceiverImpl {
+        +String TwitterOAuth(String, String)
+        +String PatreonOAuth(String, String)
+        +ResponseEntity<?> PatreonWebhook(String, String, String, WebhookRequest, long)
+    }
+
+    class TagImpl {
+        +ResponseEntity<?> GetUserTagsOnSinglePost(String, String)
+        +ResponseEntity<?> DeleteUserTagOnSinglePost(TagDeleteRequest)
+        +ResponseEntity<?> AddTag(TagAddRequest)
+    }
+
+    class SearchFilterImpl {
+        +ResponseEntity<?> AddFilter(FilterAddRequest)
+        +ResponseEntity<?> DeleteFilter(FilterDeleteRequest)
+        +ResponseEntity<?> GetUserFilters(String)
+    }
+
+    class ListPostsRepositoryImpl {
+        -EntityManager em
+    }
+
+    class TagsRepositoryImpl {
+        -EntityManager em
+    }
+
+
+<!--      UTIL -->
+    class DiscordWebhookUtil {
+        ~FlexmarkHtmlConverter converter
+        -WebhookEmbedBuilder embed
+        -WebhookClient client
+
+        +DiscordWebhookUtil(String)
+        +DiscordWebhookUtil(String, PatreonPostV2)
+        +void addField(String, String)
+        +void setTitle(String)
+        +void setTitle(String, String)
+        +void setImage(String)
+        +CompletableFuture<ReadonlyMessage> send()
+        +void setDescription(String)
+        +void close()
+        +void setColor(int)
+    }
+
+    class TwitterApiUtil {
+        ~TwitterApi client
+
+        +void send(String)
+        +void sendTweet(String, String, String, String, String)
+    }
+
+    class JSONUtil {
+        -ObjectMapper mapper
+
+        +JSONObject convertStringToJSONObject(String)
+        +Object getBeanFromJSON(String, Class<T>)
+    }
+
+    class ResponseUtil {
+        +ResponseEntity<?> Generic(HttpStatus, String)
+    }
+
+
+<!--      CONFIG-->
+    class PSConfiguration {
+        ~String twitterClientId
+        ~String redirectUri
+        ~String twitterClientSecret
+        ~String twitterRedirectUri
+        ~String clientId
+        ~String clientSecret
+
+        +PatreonOAuth oauthClient()
+        +TwitterCredentials twitterClient()
+        +PatreonCredentials patreonCredentials()
+    }
+
+    class JPAConfiguration {
+        ~String dsUrl
+        ~String dsUsername
+        ~String dsPassword
+
+        -HibernateJpaVendorAdapter vendorAdapter()
+        +DataSource dataSource()
+        ~LocalContainerEntityManagerFactoryBean entityManagerFactory()
+        -Properties jpaHibernateProperties()
+        +JpaTransactionManager transactionManager
+    }
+
+    class SecurityConfiguration {
+        +String pepper
+        ~PasswordValidator passwordValidator
+        ~SecureRandom secureRandom
+
+        +boolean passwordIsValid(String)
+        +String encodePassword(String, String)
+        +String SHA1Encoder(String)
+        +boolean passwordMatches(String, String, String)
+        +String createSalt()
+    }
+
+    class PatreonCredentials {
+        -String clientSecret
+        -String clientId
+        -String redirectUri
+    }
+
+    class TwitterCredentials {
+        -String redirectUri
+        -String clientID
+        -String clientSecret
+    }
+
+    class CorsFilter {
+        +void destroy()
+        +void doFilter(ServletRequest, ServletResponse, FilterChain)
+        +void init(FilterConfig)
+    }
+
+    class CORSConfiguration {
+        #void addCorsMapping(CorsRegistry)
+    }
+
+
+<!--      EXCEPTIONS-->
+    class PSException {
+        -HttpStatus httpStatus
+        -String message
+
+        +HttpStatus getHttpStatus()
+        +String getMessage()
+    }
+
+<!-- not including PostGetter.java, CreatorTokens.java, CreatorTokensRepository.java, TagGetRequest.java, EndpointWrapper.java, SearchFiltersCustom as they aren't used -->
+<!-- not including test classes: PostsTest.java, WebhookSvcTest.java -->
+
+
+
+
     User<|--Data
     User<|--Links
     Data<|--Attributes
