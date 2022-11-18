@@ -16,7 +16,7 @@ import "./comp_css/Creator.css";
  * @param verified
  *
  * @returns the Creator information
- * @constructor
+ *
  */
 function Creator({addedState, curCreatorList, setCreatorList, displayName, urlName, description, imgUrl, verified}) {
 

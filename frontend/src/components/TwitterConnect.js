@@ -7,7 +7,7 @@ import {Button} from "@mui/material";
  * This is the TwitterConnect function which will be used to connect to twitter for cross-posting
  *
  * @returns Connect to twitter button
- * @constructor
+ *
  */
 function TwitterConnect() {
     // const patreonUrl = "https://www.patreon.com/oauth2/authorize" +

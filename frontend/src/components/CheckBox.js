@@ -11,7 +11,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
  * @param checkPostInList
  *
  * @returns the formcontrol label material
- * @constructor
+ *
  */
 
 function CheckBox({list, checkPostInList}) {

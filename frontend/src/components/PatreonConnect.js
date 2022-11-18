@@ -8,7 +8,7 @@ import {config} from "../Constants";
  * This is the Patreon Connect function which will be used for patreon connect oauth button in the Creator settings
  *
  * @returns Connect to Patreon Button
- * @constructor
+ *
  */
 function PatreonConnect() {
     const patreonUrl = "https://www.patreon.com/oauth2/authorize" +
