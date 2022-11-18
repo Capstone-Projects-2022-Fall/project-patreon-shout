@@ -10,22 +10,22 @@ sidebar_position: 1
 ```mermaid
 classDiagram
 
-<!--         BEANS         -->
-<!--    REQUEST OBJECTS    -->
-<!-- SENDING HTTP REQUESTS -->
-<!-- ACTUAL JPA REPO STUFF -->
-<!--       ENDPOINTS       -->
-<!--         UTIL          -->
-<!--        CONFIG         -->
-<!--    OBJECT RESPONSES   -->
-<!--       EXCEPTIONS      -->
+%% <!--         BEANS         -->
+%% <!--    REQUEST OBJECTS    -->
+%% <!-- SENDING HTTP REQUESTS -->
+%% <!-- ACTUAL JPA REPO STUFF -->
+%% <!--       ENDPOINTS       -->
+%% <!--         UTIL          -->
+%% <!--        CONFIG         -->
+%% <!--    OBJECT RESPONSES   -->
+%% <!--       EXCEPTIONS      -->
 
 
     class PSApplication {
         +void main(String[])
     }
 
-<!--    BEANS-->
+%% <!--    BEANS-->
     class PostBean {
         #String embedUrl
         #String appStatus
@@ -42,7 +42,6 @@ classDiagram
         #String url
         +equals() boolean
     }
-
     class PatreonPostV2 {
         ~String embedUrl
         ~String appId
@@ -66,39 +65,6 @@ classDiagram
         ~List<Tag> tags
         ~PatreonTokens creatorTokens
         ~OldPasswords oldPasswords
-    }
-
-    class User {
-        +Data data
-        +Links links
-    }
-
-    class Links {
-        +String self
-    }
-
-    class Data {
-        +Attributes attributes
-        +float id
-        +String type
-    }
-
-    class Attributes {
-        ~Integer like_count
-        ~String full_name
-        ~String last_name
-        ~String thumb_url
-        ~String first_name
-        ~Boolean can_see_nsfw
-        ~String image_url
-        ~String url
-        ~Object social_connections
-        ~String created
-        ~Boolean is_email_verified
-        ~String vanity
-        ~Boolean hide_pledges
-        ~String about
-        ~String email
     }
 
     class SocialIntegration {
@@ -192,7 +158,7 @@ classDiagram
         #int listId
     }
 
-    enum CreatorPageCategory {
+    class CreatorPageCategory {
         +WRITING
         +GAMES
         +VIDEO
@@ -202,16 +168,10 @@ classDiagram
         +COMICS
     }
 
-    enum SocialIntegrationName {
+    class SocialIntegrationName {
         +TWITTER
         +INSTAGRAM
         +DISCORD
-    }
-
-    class PatreonCampaign {
-        #Integer webAccountId
-        #String vanity
-        #Integer campaignId
     }
 
     class CreatorPage {
@@ -241,7 +201,7 @@ classDiagram
     }
 
 
-<!--      REQUEST OBJECTS-->
+%% <!--      REQUEST OBJECTS-->
     class ListPostUpdateRequest {
         ~List<ListUpdate> listUpdates
         -String url
@@ -294,11 +254,6 @@ classDiagram
         -String tag
     }
 
-    PostWebhookRequest {
-        -String loginToken
-        ~SocialIntegrationName socialIntegrationName
-    }
-
     class FavoriteListRequest {
         -String url
         -String loginToken
@@ -336,7 +291,7 @@ classDiagram
         -int list_id
     }
 
-<!--      OBJECT RESPONSES-->
+%% <!--      OBJECT RESPONSES-->
     class BaseResponse {
         -int status
         -String message
@@ -347,7 +302,7 @@ classDiagram
     }
 
 
-<!--      SENDING HTTP REQUESTS-->
+%% <!--      SENDING HTTP REQUESTS-->
     class CustomPatreonAPI {
         -Logger log
         -String accessToken
@@ -368,7 +323,7 @@ classDiagram
     }
 
 
-<!--      ACTUAL JPA REPO STUFF-->
+%% <!--      ACTUAL JPA REPO STUFF-->
     class WebAccountFunctions {
         ~WebAccountRepository webAccountRepository
         ~SecurityConfiguration securityConfiguration
@@ -387,17 +342,6 @@ classDiagram
         ~CreatorPageRepository creatorPageRepository
 
         +void putCreatorPage(int)
-    }
-
-    class PatreonCampaignFunctions {
-        ~PatreonCampaignsRepository patreonCampaignsRepository
-        ~WebAccountFunctions webAccountFunctions
-        ~ObjectMapper objectMapper
-
-        +void getCampaign(Long)
-        +PatreonCampaign getCampaignByWebaccountId(Long)
-        +void putCampaign(String, PatreonDataArrayEntryV2)
-        +void putCampaign(WebAccount, PatreonDataArrayEntryV2)
     }
 
     class PostsRepository {
@@ -454,7 +398,7 @@ classDiagram
     }
 
 
-<!--      ENDPOINTS-->
+%% <!--      ENDPOINTS-->
     class ListSvc {
         -PostsRepository postsRepository
         -ListsRepository listsRepository
@@ -571,7 +515,7 @@ classDiagram
     }
 
 
-<!--      UTIL -->
+%% <!--      UTIL -->
     class DiscordWebhookUtil {
         ~FlexmarkHtmlConverter converter
         -WebhookEmbedBuilder embed
@@ -596,19 +540,12 @@ classDiagram
         +void sendTweet(String, String, String, String, String)
     }
 
-    class JSONUtil {
-        -ObjectMapper mapper
-
-        +JSONObject convertStringToJSONObject(String)
-        +Object getBeanFromJSON(String, Class<T>)
-    }
-
     class ResponseUtil {
         +ResponseEntity<?> Generic(HttpStatus, String)
     }
 
 
-<!--      CONFIG-->
+%% <!--      CONFIG-->
     class PSConfiguration {
         ~String twitterClientId
         ~String redirectUri
@@ -669,7 +606,7 @@ classDiagram
     }
 
 
-<!--      EXCEPTIONS-->
+%% <!--      EXCEPTIONS-->
     class PSException {
         -HttpStatus httpStatus
         -String message
@@ -678,25 +615,162 @@ classDiagram
         +String getMessage()
     }
 
-<!-- not including PostGetter.java, CreatorTokens.java, CreatorTokensRepository.java, TagGetRequest.java, EndpointWrapper.java, SearchFiltersCustom as they aren't used -->
-<!-- not including test classes: PostsTest.java, WebhookSvcTest.java -->
+%% <!-- not including PostGetter.java, CreatorTokens.java, CreatorTokensRepository.java, TagGetRequest.java, EndpointWrapper.java, SearchFiltersCustom.java, PostWebhookRequest.java, User.java, PatreonCampaignFunctions.java, PatreonCampaign.java, JSONUtil.java as they aren't used -->
+%% <!-- not including test classes: PostsTest.java, WebhookSvcTest.java -->
+
+%% psapplication
+    PSApplication-->PSConfiguration : Association
+    PSApplication-->BaseSvc : Assocation
+        BaseSvc-->PSException : Association
+
+        BaseSvc-->ResponseUtil : Association
+            ResponseUtil-->BaseResponse : Association
+
+%% config
+    PSConfiguration-->JPAConfiguration : Association
+
+    PSConfiguration-->SecurityConfiguration : Association
+
+    PSConfiguration-->CORSConfiguration : Association
+        CORSConfiguration-->CorsFilter : Association
+
+    PSConfiguration-->PatreonCredentials : Association
+
+    PSConfiguration-->TwitterCredentials : Association
+
+%% receiver
+    BaseSvc<|--ReceiverSvc : Inheritance
+        ReceiverSvc-->TwitterCredentials : Association
+
+        ReceiverSvc-->PatreonCredentials : Association
+
+        ReceiverSvc..|>ReceiverImpl : Realization
+
+        ReceiverSvc-->CreatorPageFunctions : Association
+            CreatorPageFunctions-->CreatorPageRepository : Association
+                CreatorPageRepository-->CreatorPage : Association
+
+            CreatorPageFunctions-->CreatorPageCategory : Association
+
+        ReceiverSvc-->PatreonPostV2 : Association
+
+        ReceiverSvc-->PatreonWebhookV2 : Association
+
+        ReceiverSvc-->CustomPatreonAPI : Association
+            CustomPatreonAPI-->MembershipBean : Association
+
+        ReceiverSvc-->DiscordWebhookUtil : Association
+
+        ReceiverSvc-->TwitterApiUtil : Association
+
+        ReceiverSvc-->PatreonObjectV2 : Association
+            PatreonObjectV2-->PatreonDataV2 : Association
+
+        ReceiverSvc-->WebhookRequest : Association
+            WebhookRequest-->PatreonDataV2 : Association
+                PatreonDataV2-->PatreonRelationshipsV2 : Association
+                    PatreonRelationshipsV2-->PatreonCampaignV2 : Association
+                        PatreonCampaignV2-->PatreonDataV2 : Association
+            WebhookRequest-->PatreonLinksV2 : Association
+
+        ReceiverSvc-->PatreonObjectArrayV2 : Association
+            PatreonObjectArrayV2-->PatreonDataV2 : Association
+
+            PatreonObjectArrayV2-->PatreonMetaV2 : Association
+                PatreonMetaV2-->PatreonPaginationV2 : Association
 
 
+        ReceiverSvc-->PatreonDataArrayEntryV2 : Association
+
+        ReceiverSvc-->PutSocialIntegrationRequest : Association
+            PutSocialIntegrationRequest-->SocialIntegrationName : Association
 
 
-    User<|--Data
-    User<|--Links
-    Data<|--Attributes
-    PSApplication<|--JPAConfiguration
-    PSApplication<|--PSConfiguration
-    PSConfiguration<|--OAuth
-    JPAConfiguration<|--PostsRepository
-    PostsRepository<|--Posts
-    PostBean<|--Posts
-    Posts<|--DiscordSender
-    EndpointWrapper<|--DiscordSender
-    PSApplication<|--EndpointWrapper
-    EndpointWrapper<|--User
+%% webaccount
+    BaseSvc<|--WebAccountSvc : Inheritance
+        WebAccountSvc-->PutSocialIntegrationRequest : Association
+
+        WebAccountSvc..|>WebAccountImpl : Realization
+
+        WebAccountSvc-->WebAccountFunctions : Association
+            WebAccountFunctions-->WebAccountRepository : Association
+                WebAccountRepository-->WebAccount : Association
+                WebAccountRepository-->OldPasswords : Association
+
+        WebAccountSvc-->SocialIntegration : Association
+
+        WebAccountSvc-->PatreonTokens : Association
+
+        WebAccountSvc-->RegisterRequest : Association
+
+        WebAccountSvc-->LoginRequest : Association
+
+        WebAccountSvc-->LoginResponse : Association
+
+        WebAccountSvc-->ResetPasswordRequest : Association
+
+
+%% tag
+    BaseSvc<|--TagSvc : Inheritance
+        TagSvc..|>TagImpl : Realization
+
+        TagSvc-->TagsRepository : Association
+            TagsRepository<|..TagsRepositoryImpl : Realization
+                TagsRepositoryImpl-->Tag : Association
+
+        TagSvc-->TagAddRequest : Association
+
+        TagSvc-->TagDeleteRequest : Association
+
+%% search filters
+    BaseSvc<|--SearchFilterSvc : Inheritance
+        SearchFilterSvc..|>SearchFilterImpl : Realization
+
+        SearchFilterSvc-->SearchFiltersRepository : Association
+            SearchFiltersRepository..|>SearchFiltersCustom : Realization
+                SearchFiltersCustom<|..SearchFiltersRepositoryImpl : Realization
+                SearchFiltersCustom-->SearchFilter : Association
+
+        SearchFilterSvc-->FilterDeleteRequest : Association
+            FilterDeleteRequest--|>FilterCommonRequest : Inheritance
+
+        SearchFilterSvc-->FilterAddRequest : Association
+            FilterAddRequest--|>FilterCommonRequest : Inheritance
+
+
+%% post
+    BaseSvc<|--PostSvc : Inheritance
+        PostSvc..|>PostImpl : Realization
+
+        PostSvc-->PostsRepository : Association
+            PostsRepository<|..PostsRepositoryImpl : Realization
+                PostsRepositoryImpl-->PostBean : Association
+
+        PostSvc-->PostGetMultipleRequest : Association
+
+%% list
+    BaseSvc<|--ListSvc : Inheritance
+        ListSvc..|>ListImpl : Realization
+
+        ListSvc-->ListsRepository : Association
+            ListsRepository<|..ListsRepositoryImpl : Realization
+                ListsRepositoryImpl-->ListBean : Association
+
+        ListSvc-->ListPostsRepository : Association
+            ListPostsRepository<|..ListPostsRepositoryImpl : Realization
+                ListPostsRepositoryImpl-->ListPost : Association
+
+        ListSvc-->ListUpdateRequest : Association
+            ListUpdateRequest--|>ListCreationRequest : Inheritance
+
+        ListSvc-->ListCreationRequest : Association
+
+        ListSvc-->ListDeleteRequest : Association
+
+        ListSvc-->ListPostUpdateRequest : Association
+            ListPostUpdateRequest-->ListUpdate : Association
+
+        ListSvc-->FavoriteListRequest : Association
 ```
 The gateway allows Patreon Shout to serve information from the database to the client. Everything begins in PSApplication, where Spring is first run. From here JPA is configured, which assists in handling storage and service of posts. PSConfiguration let's us handle OAuth requests using Client ID, Client secret, and a redirect URL. Spring handles a lot if it's data using endpoints. With EndpointWrapper we are able to send posts to platforms such as Discord, and recieve posts which can be broken down into smaller attributes to be served when requested.
 
