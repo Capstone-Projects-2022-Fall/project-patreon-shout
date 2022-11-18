@@ -18,12 +18,13 @@ As a user, I want to be able to forward my Patreon posts to Discord, Instagram, 
 [![](https://mermaid.ink/img/pako:eNqtWG1P40YQ_itTS6cWAackkIP4w0kooN61V0AYVLXKl409cVZxdtPdNYEi_ntn_Zb4lYSST453duaZl2d21i-OLwN0XEfjPzEKHy85CxVbTgTQb8WU4T5fMWHgQaOqv71lRqEU3lzGpr76J04vfF_G9OiheuQ-1mXu0Ef-iKpdwkM_Vtw8w1iKGQ_rApfMsCnT2AovXfj0qbwWMTOTilydCFq6w5Brk_tovYXjr18PSx66hRRIUVqBNU41NxkE5hv-yAxuBa0kTIqPG4Jj1QdcoW8gtvaVzYk2E1HR2hbWa0mLiodzA3LWqP9C63iJYOYkl3iimOHkSmYJfCkM40LDI4t4AFzYACUiqYW6zjRIlRS5MJ6jv9DAZxRyrddSBbBENHrz15okX5co6G2qvaIFjlvjdK9i7EaU14QL36-9q7t7il4qFSB5GOk9I2bzIRg9cA1CGmCRQhY8Z1FEhUGqMDfbgf1aAiollYb1HAXgE3ltuAgzoKmeADuz3eV7pWK_3d_fgmeYiTUMej24-b1WT3USl6vVKrWV7MIl16uIPcPE-UvGqojpnGmYIjnjU1QMBj9NnJobdSNbiylPEh7-kCEX3SQkESpNIzsYWKXbYTfdImt0w7fdCuvXq01VrbmZQ0h9TGS63ldmlpglLG8ycoeCs2H8WW8t7cllzygqz1_GsVJEVjDc0kDAHzyKiA2HiX7LjYN9WZwpTjIORi5QHOxJ6miz9WP514Qg0ViuxN-8m-t2N2osOs5oVNQd1fCSsgsztA0kqf9sE9xcxGbezYNxxP0FcdFDYx3QOeveYm8hX9LeopyyKDKo-Wnq7Nk_tpCXfW_wNX-1QU2pWLEQIUjR20ytUC251kQCXTZF9ZgRh8Sa3dt4dhFFcl2JWXo0V2cSt1iOUy7FgpOVFDfYCQqYCMpQaqVZhKt54qm-rYTtoWqxArsF93aB5rLUs1DrFNpRoUHhTKGelwr4DUx3WY-qBMdnyxXjIfVAIuNuMPP1hq3NGHbswu2doY6hpU2-ZT_rRAXytzp03fBODWnHVLAoKqBoICR0pPCCJPV5FLqDUahKN0VSrhITCk2sBAbpnFqR2hPuSmqTQvWzEybXt1G3H9pU5WZ3HXab5HsSblWUNXxMxu0PRTZXJg97FWSF7bY_lSj-UcW5V3kKXMM4D9wtBc7SbS7lIsl_U4PaqVq3u1w2gtpx0Co-aEdYP_MqjTLiYkHDLJmP0MYoj1_T2HnQffT-f81b03LzAdI6azfNoCmqh_SWmdhGnUyf6_S0zYaRiyCwU4NvL2xZprpHEo9asD8v9tAZf3PddgEuDyUVM_Bw9wMMPhmYyqekejV7RJjGxkjRObjcMp3emnI1Ow5RpL55gNqen9g0QvCqSHa7bdw-3IMnfc6i78JgqHa4V5ePuerR9PGzf62L5FnJ2GQT-g4UHzlyfzNmVb3PduRsPGcizLNFg1Nkj0QJoUIUe2zkdA-z-3z7XYNmdrXoruorUa0U58hZ0tjKeOC4zovdPXGIcEsqOpceA6uSyu-V5FhspPcsfMc1KsYjJ17ROJR_mXPcGYs0vV0x8beUy1yI_jrui_PkuP2z_ufhaHh2Njrtn49OhydHzrPjHp_2e59HveH5YHA2PBn1vgyGr0fOv4kGkj856X056Q_7w_NRvz8YvP4HEUDOmQ?type=png)](https://mermaid-js.github.io/mermaid-live-editor/edit#pako:eNqtWG1P40YQ_itTS6cWAackkIP4w0kooN61V0AYVLXKl409cVZxdtPdNYEi_ntn_Zb4lYSST453duaZl2d21i-OLwN0XEfjPzEKHy85CxVbTgTQb8WU4T5fMWHgQaOqv71lRqEU3lzGpr76J04vfF_G9OiheuQ-1mXu0Ef-iKpdwkM_Vtw8w1iKGQ_rApfMsCnT2AovXfj0qbwWMTOTilydCFq6w5Brk_tovYXjr18PSx66hRRIUVqBNU41NxkE5hv-yAxuBa0kTIqPG4Jj1QdcoW8gtvaVzYk2E1HR2hbWa0mLiodzA3LWqP9C63iJYOYkl3iimOHkSmYJfCkM40LDI4t4AFzYACUiqYW6zjRIlRS5MJ6jv9DAZxRyrddSBbBENHrz15okX5co6G2qvaIFjlvjdK9i7EaU14QL36-9q7t7il4qFSB5GOk9I2bzIRg9cA1CGmCRQhY8Z1FEhUGqMDfbgf1aAiollYb1HAXgE3ltuAgzoKmeADuz3eV7pWK_3d_fgmeYiTUMej24-b1WT3USl6vVKrWV7MIl16uIPcPE-UvGqojpnGmYIjnjU1QMBj9NnJobdSNbiylPEh7-kCEX3SQkESpNIzsYWKXbYTfdImt0w7fdCuvXq01VrbmZQ0h9TGS63ldmlpglLG8ycoeCs2H8WW8t7cllzygqz1_GsVJEVjDc0kDAHzyKiA2HiX7LjYN9WZwpTjIORi5QHOxJ6miz9WP514Qg0ViuxN-8m-t2N2osOs5oVNQd1fCSsgsztA0kqf9sE9xcxGbezYNxxP0FcdFDYx3QOeveYm8hX9LeopyyKDKo-Wnq7Nk_tpCXfW_wNX-1QU2pWLEQIUjR20ytUC251kQCXTZF9ZgRh8Sa3dt4dhFFcl2JWXo0V2cSt1iOUy7FgpOVFDfYCQqYCMpQaqVZhKt54qm-rYTtoWqxArsF93aB5rLUs1DrFNpRoUHhTKGelwr4DUx3WY-qBMdnyxXjIfVAIuNuMPP1hq3NGHbswu2doY6hpU2-ZT_rRAXytzp03fBODWnHVLAoKqBoICR0pPCCJPV5FLqDUahKN0VSrhITCk2sBAbpnFqR2hPuSmqTQvWzEybXt1G3H9pU5WZ3HXab5HsSblWUNXxMxu0PRTZXJg97FWSF7bY_lSj-UcW5V3kKXMM4D9wtBc7SbS7lIsl_U4PaqVq3u1w2gtpx0Co-aEdYP_MqjTLiYkHDLJmP0MYoj1_T2HnQffT-f81b03LzAdI6azfNoCmqh_SWmdhGnUyf6_S0zYaRiyCwU4NvL2xZprpHEo9asD8v9tAZf3PddgEuDyUVM_Bw9wMMPhmYyqekejV7RJjGxkjRObjcMp3emnI1Ow5RpL55gNqen9g0QvCqSHa7bdw-3IMnfc6i78JgqHa4V5ePuerR9PGzf62L5FnJ2GQT-g4UHzlyfzNmVb3PduRsPGcizLNFg1Nkj0QJoUIUe2zkdA-z-3z7XYNmdrXoruorUa0U58hZ0tjKeOC4zovdPXGIcEsqOpceA6uSyu-V5FhspPcsfMc1KsYjJ17ROJR_mXPcGYs0vV0x8beUy1yI_jrui_PkuP2z_ufhaHh2Njrtn49OhydHzrPjHp_2e59HveH5YHA2PBn1vgyGr0fOv4kGkj856X056Q_7w_NRvz8YvP4HEUDOmQ)
 
 ### Use Case 2
-As a user, I want to be able to filter through the creators I’m following on Patreon, so I can easily view specific content, like the category “gaming”, from my list of creators I follow.
-1. After logging into Patreon Shout, the user will be shown a Twitter-like feed of posts from the content creators they follow.
-2. To filter through posts, the user will see a "Filters" button to the side of the search bar at the top of the screen.
-3. In the “Filters” section, the user is shown a list of checkboxes to filter for specific categories and a search bar they can use to filter for specific words.
-4. After clicking a category in the “Filters” section, only that category of posts is shown to the user on the main feed
-5. After typing in the search bar in the “Filters” section, only the posts with the specific string of characters typed will show in the main feed to the user
+As a user, I want to be able to filter through Patreon posts, so I can easily view content that talks about the game "Minecraft".
+1. After logging into Patreon Shout, the user is shown a Twitter-like feed of Patreon posts.
+2. To filter through posts, the user sees "Filters" and "Add Filter" buttons to the side of the search bar at the top of the screen.
+3. The user types "Minecraft" into the searchbar and clicks "Add Filter".
+4. The user clicks the "Filters" button and Patreon Shout now shows "Minecraft" from the list of filters.
+5. User clicks the "Minecraft" filter from the list of filters.
+6. Posts with the word "Minecraft" in them are shown in the main feed to the user.
 
 
 ```mermaid
@@ -46,21 +47,27 @@ PatreonShout -->>- User: Filters the main feed with posts only containing the sp
 
 
 ### Use Case 3
-As a user, I want to be able to search for Patreon posts from the entire list of my following creators, so I can easily get to specific posts that I want to revisit.
-1. After logging into Patreon Shout, the user will be shown a Twitter-like feed of posts from the content creators they follow.
-2. To search for specific Patreon posts, the user will see a large search bar near the top of their post feed and typing in this search bar will provide relevant posts based on the input provided.
+As a user, I want to be able to save my favorite Patreon posts into a list, so I can easily see my favorite Patreon posts that I want to revisit in the future.
+1. After logging into Patreon Shout, the user is shown a Twitter-like feed of Patreon posts.
+2. The user sees a post they want to favorite and clicks the post's heart icon.
+3. The user clicks the "List" button to the left of the main feed.
+4. The user clicks the "Favorites" list button and is redirected to their saved favorite posts.
 
-```mermaid
-sequenceDiagram
-    participant User
-    participant PatreonShout
+[![](https://mermaid.ink/img/pako:eNrtlmtv2jAUhv-KZakaVaHlDs2HSr1t68Zo1TBNmvjiJifBarCZ7UBZ1f--kxAgIdyG-rEREsQ-583rcx4Hv1JHukAtquFPCMKBG858xYZ9QfAaMWW4w0dMGPJTg8qPPjCjQAp7IEOTn-1wbYgNaswdyM_-gqdLx5Gh2BJjgxMqbqbkWgqP-_mAG2bYE9OY2hdHR6QjfS5mUZFhUrq4OMmYtKIQwoWRmWEygSfNTeIgMxNL5L1a5BFcrsAxJIgeSlRUQZ1UIR8_05nbtciX2x5hSciEmwHx-RhEouWCYTzQM62uNEAU9weGSG-tk0utwyEQM4CsF-JIgUJCkzELuIvL9qQaMsNlUqO5HVJCd6W12lEZP-nU1PYFrjTMIrZRXPiF61ApwGDD0Sg6_MGDgGtyEusLNoTjme5K_hZjiXDccWLkM4jjfWt_17VvH3tJreLUvcvRlQSUkkqTyQDbBS_o16CPRHOzg1gxS-I3-767eRlZCOP0qFYp7pDhIXaXeABuwr_HxhLLFxkayTmMm3bCdcCdZx1jMwDcU4QjLwQ_LJW8fj-kd7ZFHu7tHjnDfhp9ljiAZXZ0peM37ygfTDJWiHvTS5Ujfe3usMeFezXtLES26x2-DbY5irWyhVqjsqtOyzVpNoZCVOQHbM7KKlZWkH3qXszmn76G2K_GjJBYZkJNquUyuf--g1Ucmeg0XR7u-wWtvoxcIMYxOnvBihJ92onD6f6ARi_bhM9w8T_2web7sRmtKZq_Aib01XQpcucWJqmb_8E2MdRZsrEXo_m0jXTecD0K2HQRnIVy_ibTMZ770_l5nncgocunfRD6voReBgEuC4OQyiD-OoDHRXtn09HL-AA8N6vspnV9Li3SIeDpjrt4nH-NtPoU_9qH0KcW_nSZeo6AfMM4FhppT4VDLY8FGoo0HLnMzM_-i1E8YP-WEu-NCme31HqlL9Sq1JqnrVat3Sy3K81GtVEr0im1StX6KQ61Gq16u3zebFYab0X6NxaonJbLtWq1fl5v1-rlSrPWfPsHBhIG8A?type=png)](https://mermaid-js.github.io/mermaid-live-editor/edit#pako:eNrtlmtv2jAUhv-KZakaVaHlDs2HSr1t68Zo1TBNmvjiJifBarCZ7UBZ1f--kxAgIdyG-rEREsQ-583rcx4Hv1JHukAtquFPCMKBG858xYZ9QfAaMWW4w0dMGPJTg8qPPjCjQAp7IEOTn-1wbYgNaswdyM_-gqdLx5Gh2BJjgxMqbqbkWgqP-_mAG2bYE9OY2hdHR6QjfS5mUZFhUrq4OMmYtKIQwoWRmWEygSfNTeIgMxNL5L1a5BFcrsAxJIgeSlRUQZ1UIR8_05nbtciX2x5hSciEmwHx-RhEouWCYTzQM62uNEAU9weGSG-tk0utwyEQM4CsF-JIgUJCkzELuIvL9qQaMsNlUqO5HVJCd6W12lEZP-nU1PYFrjTMIrZRXPiF61ApwGDD0Sg6_MGDgGtyEusLNoTjme5K_hZjiXDccWLkM4jjfWt_17VvH3tJreLUvcvRlQSUkkqTyQDbBS_o16CPRHOzg1gxS-I3-767eRlZCOP0qFYp7pDhIXaXeABuwr_HxhLLFxkayTmMm3bCdcCdZx1jMwDcU4QjLwQ_LJW8fj-kd7ZFHu7tHjnDfhp9ljiAZXZ0peM37ygfTDJWiHvTS5Ujfe3usMeFezXtLES26x2-DbY5irWyhVqjsqtOyzVpNoZCVOQHbM7KKlZWkH3qXszmn76G2K_GjJBYZkJNquUyuf--g1Ucmeg0XR7u-wWtvoxcIMYxOnvBihJ92onD6f6ARi_bhM9w8T_2web7sRmtKZq_Aib01XQpcucWJqmb_8E2MdRZsrEXo_m0jXTecD0K2HQRnIVy_ibTMZ770_l5nncgocunfRD6voReBgEuC4OQyiD-OoDHRXtn09HL-AA8N6vspnV9Li3SIeDpjrt4nH-NtPoU_9qH0KcW_nSZeo6AfMM4FhppT4VDLY8FGoo0HLnMzM_-i1E8YP-WEu-NCme31HqlL9Sq1JqnrVat3Sy3K81GtVEr0im1StX6KQ61Gq16u3zebFYab0X6NxaonJbLtWq1fl5v1-rlSrPWfPsHBhIG8A)
 
-User ->>+ PatreonShout: Log in
-PatreonShout -->>- User: Response with session cookie
-
-User ->>+ PatreonShout: Searches for content in the main search bar
-PatreonShout -->>- User: Replaces the main feed with posts and creators relevant to the typed words
-```
+### Use Case ?
+As a user, I want to be able to save specific posts to a custom list, so I can easily see these categorized posts that I want to revisit in the future
+1. After logging into Patreon Shout, the user is shown a Twitter-like feed of Patreon posts.
+2. The user clicks the "List" button to the left of the main feed.
+3. The user clicks the "Add List" icon to the top right of the screen.
+4. The user provides the custom list's Title and Description and clicks the "Create" button.
+5. The newly created list shows up on the List page.
+6. The user clicks "Home" to the left of the List page.
+7. The user sees a post they want to add to their custom list and clicks the post's list icon.
+8. A popup with all the user's lists shows and the user selects the checkbox to the left of the newly created list
+9. The user clicks the "Save" button and the popup is hidden from the screen
+10. The user clicks the "List" button to the left of the main feed.
+11. The user clicks the title of the newly created list and is redirected to the posts they saved to the list.
 
 
 ### Use Case 4
