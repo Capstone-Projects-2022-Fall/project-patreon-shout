@@ -1,5 +1,8 @@
 package com.patreonshout.beans.constants;
 
+/**
+ * Enum holding information about creator campaign categories
+ */
 public enum CreatorPageCategory {
 	/**
 	 * Video production/Youtuber

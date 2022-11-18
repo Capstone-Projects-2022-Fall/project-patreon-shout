@@ -58,20 +58,20 @@ public interface ReceiverImpl {
 	) throws ParseException, PSException;
 
 	/**
-	 * TODO
+	 * Receives post information from Patreon after a post is either published, updated, or deleted, initiates cross posting
 	 *
-	 * @param patreonSignature
-	 * @param patreonEvent
-	 * @param userAgent
-	 * @param webhookRequest
-	 * @param webaccountId
-	 * @return
+	 * @param patreonSignature is the HEX digest of the message body HMAC signed (with MD5) using your webhook's secret
+	 * @param patreonEvent is the event happening for the trigger request
+	 * @param userAgent is the user agent of the Patreon request
+	 * @param webhookRequest is the webhook request from Patreon
+	 * @param webaccountId is the user's web account id for the request
+	 * @return {@link org.springframework.http.HttpStatus#OK} if successful
 	 */
 	@PostMapping("/patreon/webhook/{webaccountId}")
 	@Operation(summary = "Receives post information from Patreon after a post is either published, updated, or deleted")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "", // TODO
-					description = "")
+			@ApiResponse(responseCode = "200",
+					description = "none (patreon doesn't care)")
 	})
 	ResponseEntity<?> PatreonWebhook(
 			@RequestHeader("x-patreon-signature") String patreonSignature,
