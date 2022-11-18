@@ -11,6 +11,12 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { getPosts } from '../services/api/posts';
 import { v4 } from 'uuid';
 
+/**
+ * This is the List feed function to display the list feed
+ *
+ * @returns The list feed interface
+ */
+
 function ListFeed() {
 
     const [searchTerm, setSearchTerm] = useState([]);

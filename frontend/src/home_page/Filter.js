@@ -26,6 +26,15 @@ const MenuProps = {
   },
 };
 
+/**
+ * This is the Filters function which will appear on the home page
+ * @param {array[]} filterChoices - The name of current filters
+ * @param {array[]} dateRange - The range of dates including start and end
+ * 
+ *
+ * @returns Visual representation of the filters component
+ */
+
 function Filter({filterChoices, setFilterChoices, dateRange, setDateRange}) {
     const [filterName, setFilterName] = React.useState([]);
     const [addedFilterNames, setAddedFilterNames] = useState([]);
