@@ -179,26 +179,4 @@ As a user, I want to be able to be notified of Patreon posts from my favorite cr
 3. User will now see a Twitter post on their Twitter feed anytime there is a new Patreon post published by the content creators they follow.
 4. The user will see a post uploaded by the creator notifying their followers about a new Patreon post, this Twitter post will not contain any information that a user would need a subscription to view.
 
-```mermaid
-sequenceDiagram
-    participant Patron
-    participant Twitter
-    participant Creator
-    participant Patreon
-    participant PatreonShout
-
-
-Patron ->>+ Twitter: Sends a follow request to a a content creator
-Twitter -->>- Patron: Accepts the follow request
-
-Creator ->>+ Patreon: Publishes post to Patreon
-Patreon ->>- PatreonShout: New Patron Post information
-activate PatreonShout
-
-Patron ->>+ Twitter: Opens Twitter feed
-
-PatreonShout -->> Twitter: Sends post to Twitter account via Twitter API
-deactivate PatreonShout
-
-Twitter -->>- Patron: Views notification about new Patreon post
-```
+[![](https://mermaid.ink/img/pako:eNqdVd9v2jAQ_ldOflmiASVAA_WkSu26B6SprQrdpIkX4xxgFezMdkhbxP8-hyQtJaHVmrw49-O7u-_Olw3hKkJCicG_CUqOV4LNNVtNJLgnZtoKLmImLdwyq5WsysepsBZ1VfFdI7NK1yNhHVShGC1UYqvaO-Qo1qhhhHotOFYtfuP0gnOVuONRm1tl3tFeMcumzDhN9uYlQ_P8_GtZJnW-MjLAYKaWS5WCznhzkFY5GQOupEUHxMviCz9oOpRmQSIFlybG1oBd4AFQFrdgLg9ckELhNpkuhVmggVjlAV-ILA7wEqNk0XndjMZwEueykxSnC6UeTjbuwHKqhtF2Ihm3Ys0sHrTgBXn3nedz2AbqJJHQyF05u2B3ZSEZuYfWOUa1URTmaAuZt5-c_y0Hyp6qWw5Xdo3CTMjo8unVbhh5npDWB_EGqHQoulKXzr1B_cXsqXLvuhR2GFVaahDe42R_MCkYtkYv6_MlMum_Zr5vdVj8MZ-Dat8GulaAWittIF2gBHxEnlgh5zC8Hv24G-cob6MeqfdDpE9MxEhxwZZDd6fcUrJCyWw2CsOW0_9UcyHH6gGl5_v_Myi12P5nJiSHgT0c89lRqYWq8lVzy4stcxGLeyuWnt8ybkuNU0TrZXN_dJndxChN-QkzxKh66Z3Hq8MHgSI8uknqF-EvgakBqayYCb4rGdg0CysxLSF2-24iSYOsUK-YiNzvapNxPCFuf65wQqg7Rkw_TMhEbp0dS6waPUlOqNUJNkgSRy6l4tdG6IwtjZO6jf9HqVVp5D4J3ZBHQpvBWdgKer1-NxwEnaAd9roN8kRoL2y5YxB2Bt32oN0-7Wwb5HmHELQ6vdOzbq8b9oP-2aDfDrf_AIMigVg?type=png)](https://mermaid-js.github.io/mermaid-live-editor/edit#pako:eNqdVd9v2jAQ_ldOflmiASVAA_WkSu26B6SprQrdpIkX4xxgFezMdkhbxP8-hyQtJaHVmrw49-O7u-_Olw3hKkJCicG_CUqOV4LNNVtNJLgnZtoKLmImLdwyq5WsysepsBZ1VfFdI7NK1yNhHVShGC1UYqvaO-Qo1qhhhHotOFYtfuP0gnOVuONRm1tl3tFeMcumzDhN9uYlQ_P8_GtZJnW-MjLAYKaWS5WCznhzkFY5GQOupEUHxMviCz9oOpRmQSIFlybG1oBd4AFQFrdgLg9ckELhNpkuhVmggVjlAV-ILA7wEqNk0XndjMZwEueykxSnC6UeTjbuwHKqhtF2Ihm3Ys0sHrTgBXn3nedz2AbqJJHQyF05u2B3ZSEZuYfWOUa1URTmaAuZt5-c_y0Hyp6qWw5Xdo3CTMjo8unVbhh5npDWB_EGqHQoulKXzr1B_cXsqXLvuhR2GFVaahDe42R_MCkYtkYv6_MlMum_Zr5vdVj8MZ-Dat8GulaAWittIF2gBHxEnlgh5zC8Hv24G-cob6MeqfdDpE9MxEhxwZZDd6fcUrJCyWw2CsOW0_9UcyHH6gGl5_v_Myi12P5nJiSHgT0c89lRqYWq8lVzy4stcxGLeyuWnt8ybkuNU0TrZXN_dJndxChN-QkzxKh66Z3Hq8MHgSI8uknqF-EvgakBqayYCb4rGdg0CysxLSF2-24iSYOsUK-YiNzvapNxPCFuf65wQqg7Rkw_TMhEbp0dS6waPUlOqNUJNkgSRy6l4tdG6IwtjZO6jf9HqVVp5D4J3ZBHQpvBWdgKer1-NxwEnaAd9roN8kRoL2y5YxB2Bt32oN0-7Wwb5HmHELQ6vdOzbq8b9oP-2aDfDrf_AIMigVg)
