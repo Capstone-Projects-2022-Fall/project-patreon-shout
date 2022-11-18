@@ -3,7 +3,21 @@ import {Avatar} from "@mui/material";
 import {VerifiedUser} from "@mui/icons-material";
 import "./comp_css/Creator.css";
 
-
+/**
+ * This is the Creator function which will populate the posts with the Creator information
+ *
+ * @param addedState
+ * @param curCreatorList
+ * @param setCreatorList
+ * @param displayName
+ * @param urlName
+ * @param description
+ * @param imgUrl
+ * @param verified
+ *
+ * @returns the Creator information
+ * @constructor
+ */
 function Creator({addedState, curCreatorList, setCreatorList, displayName, urlName, description, imgUrl, verified}) {
 
     const [added, setAdded] = useState(addedState);

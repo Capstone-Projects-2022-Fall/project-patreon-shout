@@ -3,6 +3,16 @@ import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 
 
+/**
+ *
+ * This is the checkbox function which will be used in the posts popups
+ *
+ * @param list
+ * @param checkPostInList
+ *
+ * @returns the formcontrol label material
+ * @constructor
+ */
 
 function CheckBox({list, checkPostInList}) {
 
