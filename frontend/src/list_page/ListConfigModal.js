@@ -7,6 +7,12 @@ import {updateList} from "../services/api/lists/updateList";
 import TextField from "@mui/material/TextField";
 import {Button} from "@mui/material";
 
+/**
+ * This is the List config modal function which creates the list options
+ *
+ * @returns The list options allowing users to create new lists and edit them
+ */
+
 function ListConfigModal({listCreators, setListCreators, listId, listTitle, listDesc, setListTitle, setListDesc}) {
 
     const [popup, showPopup] = React.useState("hide")

@@ -27,66 +27,67 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>import React, { useState } from 'react';
-import { TextField } from '@material-ui/core';
-import { useNavigate } from 'react-router-dom';
-import "./LoginForm.css"
-import FacebookIcon from '@material-ui/icons/Facebook';
-import TwitterIcon from '@material-ui/icons/Twitter';
-import GoogleIcon from '@mui/icons-material/Google';
+import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom'
+import "./login_css/LoginForm.css"
+import TextField from '@mui/material/TextField';
+import { loginUser } from '../services/api/login';
 
 /**
- * The LoginForm function which displays the login component on the login page
- * 
- * @returns The login component which holds a username and password to be verified on submission
+ * The Login Form, where users can login to the website
+ *
+ * @returns the login form
  */
-const LoginForm = () => {
+const LoginForm = ({setToken}) => {
 
     const [userName, setUserName] = useState('')
     const [userPassword, setPassword] = useState('')
     const [popupFailed, showPopup] = useState("hide")
     const navigate = useNavigate();
 
-
     //shows the login failed if username/pass != correct
-    const popup = () => {
-        if (!userName || !userPassword) {
+    const handleSubmit = async e => {
+        e.preventDefault();
+        const token = await loginUser({
+            userName,
+            userPassword
+        });
+        console.log(token);
+
+        if (!userName || !userPassword || !token.token) {
             showPopup("loginPop")
-            setTimeout(() => showPopup("hide"), 4000)
         }
         else {
-            navigate('/home');
+            setToken(token);
+            navigate("/home");
         }
     }
 
+
     return(
-    &lt;div className="cover">
-        &lt;h1>Sign in&lt;/h1>
-        &lt;TextField className='textInputLog' id="outlined-basic" label="Username" variant="outlined"
-                   value={userName} onChange={(e) => setUserName(e.target.value)}/>
+        &lt;div className="cover">
+            &lt;h1>Sign in&lt;/h1>
+            &lt;TextField className='textInputLog' id="outlined-basic" label="Username" variant="outlined"
+                       value={userName} onChange={(e) => setUserName(e.target.value)}/>
 
-        &lt;TextField className='textInputLog' id="outlined-basic" label="Password" type='password'
-                   variant="outlined" value={userPassword} onChange={(e) => setPassword(e.target.value)}/>
+            &lt;TextField className='textInputLog' id="outlined-basic" label="Password" type='password'
+                       variant="outlined" value={userPassword} onChange={(e) => setPassword(e.target.value)}/>
 
-        &lt;div className="loginButton" onClick={popup}>Sign in&lt;/div>
+            &lt;div className="loginButton" onClick={handleSubmit}>Sign in&lt;/div>
 
-        &lt;p className="text">Or sign in with with&lt;/p>
-
-        &lt;div className="OtherLogin">
-            &lt;TwitterIcon>&lt;/TwitterIcon>
-            &lt;FacebookIcon>&lt;/FacebookIcon>
-            &lt;GoogleIcon>&lt;/GoogleIcon>
+            &lt;div className={popupFailed}>
+                &lt;h3>Sign in Failed&lt;/h3>
+                &lt;p>Incorrect Username or Password. Please try again&lt;/p>
+            &lt;/div>
         &lt;/div>
-
-        &lt;div className={popupFailed}>
-            &lt;h3>Sign in Failed&lt;/h3>
-            &lt;p>Incorrect Username or Password. Please try again&lt;/p>
-
-        &lt;/div>
-    &lt;/div>
     )
 }
 
-export default LoginForm</code></pre>
+LoginForm.propTypes = {
+    setToken: PropTypes.func.isRequired
+};
+
+export default LoginForm;</code></pre>
         </article>
     </section>
 
@@ -96,13 +97,13 @@ export default LoginForm</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#Feed">Feed</a></li><li><a href="global.html#FormContainers">FormContainers</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#Post">Post</a></li><li><a href="global.html#RegistrationForm">RegistrationForm</a></li><li><a href="global.html#root">root</a></li><li><a href="global.html#Sidebar">Sidebar</a></li><li><a href="global.html#SidebarOption">SidebarOption</a></li><li><a href="global.html#TitleBox">TitleBox</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addFilter">addFilter</a></li><li><a href="global.html#addList">addList</a></li><li><a href="global.html#AddListModal">AddListModal</a></li><li><a href="global.html#addPostToFavoritesList">addPostToFavoritesList</a></li><li><a href="global.html#addTag">addTag</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#CheckBox">CheckBox</a></li><li><a href="global.html#Creator">Creator</a></li><li><a href="global.html#deleteFilter">deleteFilter</a></li><li><a href="global.html#deleteList">deleteList</a></li><li><a href="global.html#deletePostFromFavoritesList">deletePostFromFavoritesList</a></li><li><a href="global.html#deleteTag">deleteTag</a></li><li><a href="global.html#Explore">Explore</a></li><li><a href="global.html#Feed">Feed</a></li><li><a href="global.html#Filter">Filter</a></li><li><a href="global.html#FormContainers">FormContainers</a></li><li><a href="global.html#getFilters">getFilters</a></li><li><a href="global.html#getLists">getLists</a></li><li><a href="global.html#getListsFromPost">getListsFromPost</a></li><li><a href="global.html#getPosts">getPosts</a></li><li><a href="global.html#getPostsFromList">getPostsFromList</a></li><li><a href="global.html#getSocialIntegrations">getSocialIntegrations</a></li><li><a href="global.html#getTags">getTags</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#ListButton">ListButton</a></li><li><a href="global.html#ListConfigModal">ListConfigModal</a></li><li><a href="global.html#ListFeed">ListFeed</a></li><li><a href="global.html#ListPage">ListPage</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginPage">LoginPage</a></li><li><a href="global.html#loginUser">loginUser</a></li><li><a href="global.html#logoutUser">logoutUser</a></li><li><a href="global.html#PatreonConnect">PatreonConnect</a></li><li><a href="global.html#Post">Post</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#RegistrationForm">RegistrationForm</a></li><li><a href="global.html#resetPassword">resetPassword</a></li><li><a href="global.html#root">root</a></li><li><a href="global.html#Searchbar">Searchbar</a></li><li><a href="global.html#SettingsContainers">SettingsContainers</a></li><li><a href="global.html#Sidebar">Sidebar</a></li><li><a href="global.html#SidebarOption">SidebarOption</a></li><li><a href="global.html#TagPopUp">TagPopUp</a></li><li><a href="global.html#TwitterConnect">TwitterConnect</a></li><li><a href="global.html#updateList">updateList</a></li><li><a href="global.html#updateListsForPost">updateListsForPost</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Tue Oct 04 2022 19:42:45 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Thu Nov 17 2022 23:43:07 GMT-0500 (Eastern Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

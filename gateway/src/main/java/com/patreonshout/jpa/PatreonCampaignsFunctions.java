@@ -25,6 +25,9 @@ public class PatreonCampaignsFunctions {
 	@Autowired
 	PatreonCampaignsRepository patreonCampaignsRepository;
 
+	/**
+	 * An autowired Spring component that endpoints utilize to send or receive data from the database
+	 */
 	@Autowired
 	WebAccountFunctions webAccountFunctions;
 
@@ -34,6 +37,12 @@ public class PatreonCampaignsFunctions {
 	@Autowired
 	ObjectMapper objectMapper;
 
+	/**
+	 * gets a campaign id by the user's web account id
+	 *
+	 * @param id is the user's web account id
+	 * @return a {@link com.patreonshout.beans.PatreonCampaign} object
+	 */
 	public PatreonCampaign getCampaignByWebaccountId(Long id) {
 		return patreonCampaignsRepository.findByWebaccountId(id);
 	}
@@ -51,11 +60,25 @@ public class PatreonCampaignsFunctions {
 //		patreonCampaign.setVanity(campaign.getAttributes().getVanity());
 //	}
 
+	/**
+	 * wrapper for putting a {@link com.patreonshout.beans.PatreonCampaign} object into the database
+	 *
+	 * @param loginToken the user's login token
+	 * @param campaign the campaign we want to add to the database
+	 * @throws PSException in case there is a problem with the database or a user mismatch
+	 */
 	public void putCampaign(String loginToken, PatreonDataArrayEntryV2 campaign) throws PSException {
 		WebAccount webAccount = webAccountFunctions.getAccount(loginToken);
 		this.putCampaign(webAccount, campaign);
 	}
 
+	/**
+	 * puts a {@link com.patreonshout.beans.PatreonCampaign} object into the database
+	 *
+	 * @param webAccount is the user's {@link com.patreonshout.beans.WebAccount} object
+	 * @param campaignDataEntry is the information we want to put into the database for a campaign
+	 * @throws PSException in case there is a problem with the database or a user mismatch
+	 */
 	public void putCampaign(WebAccount webAccount, PatreonDataArrayEntryV2 campaignDataEntry) throws PSException {
 		PatreonCampaign patreonCampaign = new PatreonCampaign();
 

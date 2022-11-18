@@ -3,6 +3,12 @@ import "./list_css/ListButton.css";
 import ListConfigModal from "./ListConfigModal";
 import {getPostsFromList} from "../services/api/lists/getPostsFromList";
 
+/**
+ * This is the List button function which navigates to the list page
+ *
+ * @returns The list button allows users to add new lists and navigate to the lists page
+ */
+
 function ListButton({ setPostData, setPosts, setLists, added_creators, id, title, description }) {
 
     const [listCreators, setListCreators] = useState(added_creators);

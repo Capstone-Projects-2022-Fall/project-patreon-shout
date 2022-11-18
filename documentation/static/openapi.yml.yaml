@@ -6,50 +6,325 @@ servers:
   - url: http://localhost:5000
     description: Generated server url
 tags:
-  - name: Patreon Info service
-    description: Handles all Patreon Info related tasks for the database.
+  - name: Search Filter Service
+    description: Handles all Patreon Shout search filter related tasks for the database.
+  - name: Receiver Service
+    description: Handles all Webhook related functions.
+  - name: Tag Service
+    description: Handles all Patreon Shout post tag related tasks for the database.
+  - name: List Service
+    description: Handles all Patreon Shout list related tasks for the database.
+  - name: Post Service
+    description: Handles all Patreon post related tasks for the database.
   - name: Web Account Service
     description: Handles all Web Account related tasks for the database.
 paths:
-  /patreoninfo/put:
-    put:
-      tags:
-        - Patreon Info service
-      summary: Saves Content Creator Patreon Information
-      operationId: PutPatreonInfo
-      requestBody:
-        description: Patreon Info To Add
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatreonInfoBean'
-        required: true
-      responses:
-        '200':
-          description: Patreon Information was saved
-          content:
-            application/json: {}
-        '409':
-          description: Patreon Information was not saved
-          content:
-            application/json: {}
-  /webaccount/register:
+  /webaccount/socialintegration:
     get:
       tags:
         - Web Account Service
       summary: Registers WebAccounts during PatreonShout sign up
-      operationId: Register
+      operationId: GetSocialIntegration
       parameters:
-        - name: user
+        - name: login_token
           in: query
           required: true
           schema:
             type: string
-        - name: pass
+      responses:
+        '200':
+          description: Integrations returned
+          content:
+            application/json: {}
+    put:
+      tags:
+        - Web Account Service
+      summary: Registers WebAccounts during PatreonShout sign up
+      operationId: PutSocialIntegration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PutSocialIntegrationRequest'
+        required: true
+      responses:
+        '200':
+          description: Integration has been saved
+          content:
+            application/json: {}
+        '409':
+          description: WebAccount ID does not exist
+          content:
+            application/json: {}
+  /webaccount/resetpassword:
+    put:
+      tags:
+        - Web Account Service
+      summary: >-
+        Retrieves Patreon access and refresh tokens for a WebAccount containing
+        the given login token
+      operationId: ResetPassword
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordRequest'
+        required: true
+      responses:
+        '200':
+          description: Tokens retrieved
+          content:
+            application/json: {}
+        '401':
+          description: Tokens retrieved
+          content:
+            application/json: {}
+  /lists/post:
+    get:
+      tags:
+        - List Service
+      summary: Gets the Lists of the user that the provided post is apart of
+      operationId: GetUserListsWithPost
+      parameters:
+        - name: loginToken
           in: query
           required: true
           schema:
             type: string
+        - name: url
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '302':
+          description: user lists returned
+          content:
+            application/json: {}
+        '400':
+          description: >-
+            the login token provided doesn't match up with the owner of the
+            requested list's login token
+          content:
+            application/json: {}
+    put:
+      tags:
+        - List Service
+      summary: Updates the lists of the specified post in the json request
+      operationId: UpdateUserPostLists
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListPostUpdateRequest'
+        required: true
+      responses:
+        '201':
+          description: Post lists updated.
+          content:
+            application/json: {}
+        '400':
+          description: >-
+            the login token provided doesn't match up with the owner of the
+            requested list's login token
+          content:
+            application/json: {}
+  /lists/list:
+    get:
+      tags:
+        - List Service
+      summary: Gets the posts from a user's list
+      operationId: GetPostsFromList
+      parameters:
+        - name: loginToken
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: list_id
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '302':
+          description: user posts returned
+          content:
+            application/json: {}
+        '400':
+          description: >-
+            the login token provided doesn't match up with the owner of the
+            requested list's login token
+          content:
+            application/json: {}
+    put:
+      tags:
+        - List Service
+      summary: Updates one of the user's lists
+      operationId: UpdateUserList
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListUpdateRequest'
+        required: true
+      responses:
+        '201':
+          description: List updated.
+          content:
+            application/json: {}
+        '400':
+          description: >-
+            the login token provided doesn't match up with the owner of the
+            requested list's login token
+          content:
+            application/json: {}
+    post:
+      tags:
+        - List Service
+      summary: Adds a new list to the user's lists
+      operationId: AddUserList
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListCreationRequest'
+        required: true
+      responses:
+        '201':
+          description: List created.
+          content:
+            application/json: {}
+        '400':
+          description: >-
+            the login token provided doesn't match up with the owner of the
+            requested list's login token
+          content:
+            application/json: {}
+        '409':
+          description: Foreign key constraint failed.
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - List Service
+      summary: Deletes one of the user's lists
+      operationId: DeleteUserList
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListDeleteRequest'
+        required: true
+      responses:
+        '200':
+          description: List removed.
+          content:
+            application/json: {}
+        '400':
+          description: >-
+            the login token provided doesn't match up with the owner of the
+            requested list's login token
+          content:
+            application/json: {}
+  /filters:
+    get:
+      tags:
+        - Search Filter Service
+      summary: Gets all of the user's filters from the database
+      operationId: GetUserFilters
+      parameters:
+        - name: loginToken
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '302':
+          description: user lists returned
+          content:
+            application/json: {}
+        '400':
+          description: Invalid login token.
+          content:
+            application/json: {}
+    put:
+      tags:
+        - Search Filter Service
+      summary: Adds a user filter to the database
+      operationId: AddFilter
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FilterAddRequest'
+        required: true
+      responses:
+        '201':
+          description: List created.
+          content:
+            application/json: {}
+        '400':
+          description: Invalid login token.
+          content:
+            application/json: {}
+        '409':
+          description: Foreign key constraint failed.
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - Search Filter Service
+      summary: Deletes one of the user's filters from the database
+      operationId: DeleteFilter
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FilterDeleteRequest'
+        required: true
+      responses:
+        '200':
+          description: List removed.
+          content:
+            application/json: {}
+        '400':
+          description: >-
+            the login token provided doesn't match up with the owner of the
+            requested list's login token
+          content:
+            application/json: {}
+  /webaccount/webhook:
+    post:
+      tags:
+        - Web Account Service
+      operationId: Webhook
+      parameters:
+        - name: login_token
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /webaccount/register:
+    post:
+      tags:
+        - Web Account Service
+      summary: Registers WebAccounts during PatreonShout sign up
+      operationId: Register
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+        required: true
       responses:
         '200':
           description: WebAccount has been registered
@@ -59,11 +334,209 @@ paths:
           description: Username already exists
           content:
             application/json: {}
-  /v1/webhook:
+  /webaccount/login:
+    post:
+      tags:
+        - Web Account Service
+      summary: Retrieves a login token given valid WebAccount details
+      operationId: Login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+        required: true
+      responses:
+        '200':
+          description: Token retrieved
+          content:
+            application/json: {}
+  /tags:
     get:
       tags:
-        - o-auth-test
-      operationId: WebhookReceiver
+        - Tag Service
+      summary: Gets the tags that a user has for a specific post
+      operationId: GetUserTagsOnSinglePost
+      parameters:
+        - name: tagGetRequest
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/TagGetRequest'
+      responses:
+        '302':
+          description: user lists returned
+          content:
+            application/json: {}
+        '400':
+          description: >-
+            the login token provided doesn't match up with the owner of the
+            requested list's login token
+          content:
+            application/json: {}
+    post:
+      tags:
+        - Tag Service
+      summary: Adds a new tag to the user's tag for a specific post
+      operationId: AddTag
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TagAddRequest'
+        required: true
+      responses:
+        '201':
+          description: Tag created.
+          content:
+            application/json: {}
+        '400':
+          description: Invalid login token.
+          content:
+            application/json: {}
+        '409':
+          description: Duplicate primary key.
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - Tag Service
+      summary: Deletes a tag that a user has for a specific post
+      operationId: DeleteUserTagOnSinglePost
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TagDeleteRequest'
+        required: true
+      responses:
+        '200':
+          description: Tag Removed
+          content:
+            application/json: {}
+        '400':
+          description: >-
+            the login token provided doesn't match up with the owner of the
+            requested list's login token
+          content:
+            application/json: {}
+  /receivers/patreon/webhook/{webaccountId}:
+    post:
+      tags:
+        - Receiver Service
+      summary: >-
+        Receives post information from Patreon after a post is either published,
+        updated, or deleted
+      operationId: PatreonWebhook
+      parameters:
+        - name: x-patreon-signature
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-patreon-event
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: User-Agent
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: webaccountId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookRequest'
+        required: true
+      responses:
+        '200':
+          description: none (patreon doesn't care)
+          content:
+            '*/*':
+              schema:
+                type: object
+  /lists/favorite:
+    post:
+      tags:
+        - List Service
+      summary: Adds a post to the user's favorites list
+      operationId: AddPostToFavoritesList
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FavoriteListRequest'
+        required: true
+      responses:
+        '200':
+          description: Favorites lists updated.
+          content:
+            application/json: {}
+        '400':
+          description: >-
+            the login token provided doesn't match up with the owner of the
+            requested list's login token
+          content:
+            application/json: {}
+        '409':
+          description: Foreign key constraint failed.
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - List Service
+      summary: Adds a post to the user's favorites list
+      operationId: DeletePostFromFavoritesList
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FavoriteListRequest'
+        required: true
+      responses:
+        '200':
+          description: Favorites lists updated.
+          content:
+            application/json: {}
+        '400':
+          description: >-
+            the login token provided doesn't match up with the owner of the
+            requested list's login token
+          content:
+            application/json: {}
+  /webaccount/patreontokens:
+    get:
+      tags:
+        - Web Account Service
+      summary: >-
+        Retrieves Patreon access and refresh tokens for a WebAccount containing
+        the given login token
+      operationId: GetPatreonTokens
+      parameters:
+        - name: login_token
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Tokens retrieved
+          content:
+            application/json: {}
+  /receivers/twitter/oauth:
+    get:
+      tags:
+        - Receiver Service
+      summary: Receives information from Twitter after OAuth
+      operationId: TwitterOAuth
       parameters:
         - name: code
           in: query
@@ -77,19 +550,348 @@ paths:
             type: string
       responses:
         '200':
-          description: OK
+          description: HTML message saying 'Twitter linked!'
+          content:
+            '*/*':
+              schema:
+                type: string
+  /receivers/patreon/oauth:
+    get:
+      tags:
+        - Receiver Service
+      summary: Receives information from Patreon after OAuth
+      operationId: PatreonOAuth
+      parameters:
+        - name: code
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: state
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: HTML message saying 'Patreon linked!'
+          content:
+            '*/*':
+              schema:
+                type: string
+  /posts/creators:
+    get:
+      tags:
+        - Post Service
+      summary: Gets the saved Patreon posts of a specified creator
+      operationId: GetMultipleCreatorPosts
+      parameters:
+        - name: postGetMultipleRequest
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/PostGetMultipleRequest'
+      responses:
+        '302':
+          description: Creator posts returned
+          content:
+            application/json: {}
+        '400':
+          description: Invalid login token.
+          content:
+            application/json: {}
+  /posts/creator:
+    get:
+      tags:
+        - Post Service
+      summary: Gets the saved Patreon posts of a specified creator
+      operationId: GetCreatorPosts
+      parameters:
+        - name: campaign
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '302':
+          description: Creator posts returned
+          content:
+            application/json: {}
+  /lists/user:
+    get:
+      tags:
+        - List Service
+      summary: Gets the Lists of the user via login token
+      operationId: GetUserLists
+      parameters:
+        - name: loginToken
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '302':
+          description: user lists returned
+          content:
+            application/json: {}
+        '400':
+          description: >-
+            the login token provided doesn't match up with the owner of the
+            requested list's login token
+          content:
+            application/json: {}
+  /webaccount/logout:
+    delete:
+      tags:
+        - Web Account Service
+      summary: Deletes a login token from a WebAccount if it exists
+      operationId: Logout
+      parameters:
+        - name: login_token
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Token deleted, if it existed
+          content:
+            application/json: {}
 components:
   schemas:
-    PatreonInfoBean:
+    PutSocialIntegrationRequest:
       type: object
       properties:
-        patreon_info_id:
+        login_token:
+          type: string
+        integration_name:
+          type: string
+          enum:
+            - DISCORD
+            - TWITTER
+            - INSTAGRAM
+        data:
+          type: string
+    ResetPasswordRequest:
+      required:
+        - current_password
+        - login_token
+        - new_password
+      type: object
+      properties:
+        login_token:
+          type: string
+        current_password:
+          type: string
+        new_password:
+          type: string
+    ListPostUpdateRequest:
+      required:
+        - list_updates
+        - login_token
+        - url
+      type: object
+      properties:
+        url:
+          type: string
+        login_token:
+          type: string
+        list_updates:
+          type: array
+          items:
+            $ref: '#/components/schemas/ListUpdate'
+    ListUpdate:
+      required:
+        - list_id
+        - update
+      type: object
+      properties:
+        list_id:
           type: integer
           format: int32
-        access_token:
+        update:
+          type: boolean
+    ListUpdateRequest:
+      required:
+        - description
+        - list_id
+        - loginToken
+        - title
+      type: object
+      properties:
+        loginToken:
           type: string
-        scope:
+        title:
           type: string
-        expires_in:
+        description:
+          type: string
+        list_id:
           type: integer
           format: int32
+    FilterAddRequest:
+      required:
+        - filter
+        - filter_name
+        - loginToken
+      type: object
+      properties:
+        loginToken:
+          type: string
+        filter:
+          type: string
+        filter_name:
+          type: string
+    RegisterRequest:
+      required:
+        - pass
+        - user
+      type: object
+      properties:
+        user:
+          type: string
+        pass:
+          type: string
+    LoginRequest:
+      required:
+        - userName
+        - userPassword
+      type: object
+      properties:
+        userName:
+          type: string
+        userPassword:
+          type: string
+    TagAddRequest:
+      required:
+        - login_token
+        - tag
+        - url
+      type: object
+      properties:
+        tag:
+          type: string
+        login_token:
+          type: string
+        url:
+          type: string
+    PatreonCampaignV2:
+      type: object
+      properties:
+        vanity:
+          type: string
+        data:
+          $ref: '#/components/schemas/PatreonDataV2'
+    PatreonDataV2:
+      type: object
+      properties:
+        attributes:
+          type: object
+        id:
+          type: integer
+          format: int32
+        relationships:
+          $ref: '#/components/schemas/PatreonRelationshipsV2'
+        type:
+          type: string
+    PatreonLinksV2:
+      type: object
+      properties:
+        self:
+          type: string
+    PatreonRelationshipsV2:
+      type: object
+      properties:
+        campaign:
+          $ref: '#/components/schemas/PatreonCampaignV2'
+    WebhookRequest:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/PatreonDataV2'
+        links:
+          $ref: '#/components/schemas/PatreonLinksV2'
+    ListCreationRequest:
+      required:
+        - description
+        - loginToken
+        - title
+      type: object
+      properties:
+        loginToken:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+    FavoriteListRequest:
+      required:
+        - login_token
+        - url
+      type: object
+      properties:
+        login_token:
+          type: string
+        url:
+          type: string
+    TagGetRequest:
+      required:
+        - login_token
+        - url
+      type: object
+      properties:
+        login_token:
+          type: string
+        url:
+          type: string
+    PostGetMultipleRequest:
+      required:
+        - creators
+        - loginToken
+        - page
+      type: object
+      properties:
+        loginToken:
+          type: string
+        creators:
+          type: array
+          items:
+            type: string
+        page:
+          type: integer
+          format: int32
+    TagDeleteRequest:
+      required:
+        - login_token
+        - tag
+        - url
+      type: object
+      properties:
+        tag:
+          type: string
+        login_token:
+          type: string
+        url:
+          type: string
+    ListDeleteRequest:
+      required:
+        - list_id
+        - loginToken
+      type: object
+      properties:
+        list_id:
+          type: integer
+          format: int32
+        loginToken:
+          type: string
+    FilterDeleteRequest:
+      required:
+        - filter_id
+        - loginToken
+      type: object
+      properties:
+        loginToken:
+          type: string
+        filter_id:
+          type: integer
+          format: int64

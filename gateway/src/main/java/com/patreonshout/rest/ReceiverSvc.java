@@ -177,11 +177,11 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	}
 
 	/**
-	 * TODO
+	 * Creates the Patreon webhook trigger needed to get post information when a post is published
 	 *
-	 * @param webAccount
-	 * @param accessToken
-	 * @param campaignId
+	 * @param webAccount is the user's {@link com.patreonshout.beans.WebAccount} object
+	 * @param accessToken is the access token of the user
+	 * @param campaignId is the Patreon campaign id of the user
 	 */
 	private void createWebhookForPatreon(WebAccount webAccount, String accessToken, int campaignId) {
 		PatreonObjectV2 outputObject = new PatreonObjectV2();
@@ -217,11 +217,11 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	}
 
 	/**
-	 * TODO
+	 * Gets the campaign data for a content creator on patreon
 	 *
-	 * @param accessToken
-	 * @return
-	 * @throws PSException
+	 * @param accessToken the content creator's access token, needed to gain information
+	 * @return an {@link com.patreonshout.beans.patreon_api.PatreonDataV2} object
+	 * @throws PSException in case there is a problem with the database or a user mismatch
 	 */
 	private Object getCampaignData(String accessToken) throws PSException {
 		/*
@@ -371,6 +371,12 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
+	/**
+	 * sends a message to Discord for a specific content creator
+	 *
+	 * @param patreonPost is the post data we want to send
+	 * @param webhookUrl is the Discord webhook url, used for sending a message to a specific Discord channel
+	 */
 	void sendDiscordMessage(PatreonPostV2 patreonPost, String webhookUrl) {
 		// TODO: Get user's webhook urls
 		new DiscordWebhookUtil(
@@ -379,6 +385,13 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		).send();
 	}
 
+	/**
+	 * sends a message to Twitter for a specific content creator
+	 *
+	 * @param patreonPost is the post data we want to send
+	 * @param webAccount is the user we want to send a tweet for
+	 * @throws PSException in case of a database problem or a user mismatch
+	 */
 	void sendTwitterPost(PatreonPostV2 patreonPost, WebAccount webAccount) throws PSException {
 		SocialIntegration socialIntegration = webAccount.getSocialIntegration();
 		String body = "I just made a new Patreon Post!\nhttps://www.patreon.com" + patreonPost.getUrl();

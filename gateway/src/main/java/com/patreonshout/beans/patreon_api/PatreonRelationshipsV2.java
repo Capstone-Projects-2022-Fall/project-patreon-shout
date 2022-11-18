@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+/**
+ * POJO that holds the campaign data we want from the Patreon api
+ */
 @Data
 @JsonIgnoreProperties
 @JsonInclude(JsonInclude.Include.NON_NULL)

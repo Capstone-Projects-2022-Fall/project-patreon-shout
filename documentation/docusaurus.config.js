@@ -8,7 +8,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
  * The URL or reference to your projects logo!
  * @type {string}
  */
-const logo = 'https://upload.wikimedia.org/wikipedia/commons/1/17/Temple_T_logo.svg';
+const logo = 'https://github.com/Capstone-Projects-2022-Fall/project-patreon-shout/blob/Jsmalriat-doc-patches/documentation/megaphone.svg';
 
 const main_template_jira_scripts = () => {
   if (process.env.ORG_NAME === 'ApplebaumIan'){
@@ -22,8 +22,8 @@ const main_template_jira_scripts = () => {
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   /*TODO: Change to your project's title and tagline*/
-  title: 'CIS 4398 Documentation Template',
-  tagline: 'Owls are cool',
+  title: 'Patreon Shout',
+  tagline: 'Connecting content creators and patrons since 2022',
   /*Unless you move this website to a seperate repo don't change url and baseurl.*/
   url: 'https://'+process.env.ORG_NAME+'.github.io/',
   baseUrl: '/'+process.env.PROJECT_NAME+'/',
@@ -109,11 +109,6 @@ const config = {
             docId: 'intro',
             position: 'left',
             label: 'Documentation',
-          },{
-            to: '/tutorial/Intro',
-            label: 'Docusaurus Tutorial',
-            position: 'left',
-            activeBaseRegex: `/tutorial/`,
           },
           {
             href: 'https://github.com/'+process.env.ORG_NAME+'/'+process.env.PROJECT_NAME,
@@ -187,16 +182,16 @@ const config = {
 
     }),
   plugins: [
-    [
-      '@docusaurus/plugin-content-docs',
-      {
-        id: 'tutorial',
-        path: 'tutorial',
-        routeBasePath: 'tutorial',
-        sidebarPath: require.resolve('./sidebars.js'),
-        // ... other options
-      },
-    ],
+//     [
+//       '@docusaurus/plugin-content-docs',
+//       {
+//         id: 'tutorial',
+//         path: 'tutorial',
+//         routeBasePath: 'tutorial',
+//         sidebarPath: require.resolve('./sidebars.js'),
+//         // ... other options
+//       },
+//     ],
     [
       "docusaurus2-dotenv",
       {
