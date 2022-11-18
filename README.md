@@ -6,12 +6,12 @@
 
 # Project Abstract
 
-This document proposes a web application that allows content creators to have their Patreon posts automatically sent to other social platforms. Non-content creator users of this web application will also be able to see the posts of the Patreon creators they follow. This will improve creator outreach to users of the web application by showing recommended creators to follow.
+Patreon Shout is a web application that allows content creators to have their Patreon posts automatically sent to other social platforms. This feature makes posting new content simple and effective. Patreon Shout also caters to users who are not content creators, which we refer to as Patrons. With our main feed, Patrons are able to see and interact with the posts of the Patreon creators they follow with tools to sort and filter their feed the way they like. These features work in tandem to provide a way to improve creator outreach and user interaction.
 
 # High Level Requirement
 
 From a content creator standpoint, the web application will be given a Patreon creator token and a choice of which social platforms they want their Patreon posts sent to. Then the creator will provide all information and do all actions needed to have the web application send posts to a social platform. Afterwards, each time a Patreon post is created, the post will be sent to the indicated social platform(s). 
-From a patron standpoint, users will be able to sign up on the website and keep track of all the Patreon creators they follow in one place. The users will also be able to search through and filter their creator posts shown to them to find specific posts. There will also be a chance to find other Patreon creators through the use of a recommendation system based on their currently followed creators. 
+From a patron standpoint, users will be able to sign up on the website and keep track of all the Patreon creators they follow in one place. The users will also be able to search through and filter their creator posts shown to them to find specific posts.
 
 # Conceptual Design
 
@@ -19,13 +19,12 @@ Patreon Shout will consist of a frontend web application and a Java-based backen
 The first application will be a MySQL database that will hold all of the profile information, Patreon post data, and any creator tokens that need to be saved.
 The second part will be the backend that services the web application for both the creators and users. For creators, it will acquire their campaign’s posts by making HTTP GET requests through the Patreon API with a supplied creator token.  These acquired posts will then be saved into the MySQL database, and immediately published to other social platforms. For the patrons (the non-creator users), their desired Patreon creators (e.g., creators they currently have a pledge towards, or creators they’ve manually added through the web interface) posts will be sent to the Patreon Shout web application. Handling anything that all non-creator users will directly interface with, such as filtering and searching posts.
 
-The final part of the backend will be the web-scraping of Patreon creator posts. This is required to get and serve post data from creators who have not supplied their creator token to Patreon Shout. It will utilize the Selenium WebDriver to load Patreon creator pages in an automated headless Firefox browser and will run at scheduled times. When a Patreon creator page is loaded, it will read all creator posts and save all post data that has not yet been added to the MySQL database.
+When a Patreon creator page is loaded, it will read all creator posts and save all post data that has not yet been added to the MySQL database.
 When it comes to the application backend, it will be developed in Java. This gives the benefits of having the application be platform and architecture agnostic. It will utilize the Spring Boot framework. This will allow the application to take the shape of a RESTful API, have useful features when talking to the MySQL database, and to assist in dependency injection. Spring Boot uses an approach that gives control of dependency injection to itself which allows for loose coupling and management of components.
 
 # Background
 
 This software application will utilize several frameworks and APIs:  
-- Selenium framework – https://github.com/SeleniumHQ/selenium  
 - Spring Boot – https://spring.io/projects/spring-boot  
 - React Bootstrap – https://react-bootstrap.github.io  
   
@@ -52,19 +51,35 @@ The required resources for developing this project would be a Java IDE with Mave
 <table>
 <tr>
     <td align="center">
-        <a href="https://github.com/ApplebaumIan">
-            <img src="https://avatars.githubusercontent.com/u/9451941?v=4" width="100;" alt="ApplebaumIan"/>
+        <a href="https://github.com/Jsmalriat">
+            <img src="https://avatars.githubusercontent.com/u/53412105?s=100&v=4"/>
             <br />
-            <sub><b>Ian Tyler Applebaum</b></sub>
+            <sub><b>Jonah Malriat</b></sub>
         </a>
     </td>
     <td align="center">
-        <a href="https://github.com/leighflagg">
-            <img src="https://avatars.githubusercontent.com/u/77810293?v=4" width="100;" alt="leighflagg"/>
+        <a href="https://github.com/AyserJamshidi">
+            <img src="https://avatars.githubusercontent.com/u/1430409?s=100&v=4"/>
             <br />
-            <sub><b>Leigh Flagg</b></sub>
+            <sub><b>Ayser Jamshidi</b></sub>
         </a>
-    </td></tr>
+    </td>
+    <td align="center">
+        <a href="https://github.com/apsawicki">
+            <img src="https://avatars.githubusercontent.com/u/29709311?s=100&v=4"/>
+            <br />
+            <sub><b>Alex Sawicki</b></sub>
+        </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/csaputro">
+            <img src="https://avatars.githubusercontent.com/u/89764190?s=100&v=4"/>
+            <br />
+            <sub><b>Chris Saputro</b></sub>
+        </a>
+    </td>
+    
+</tr>
 </table>
 
 [//]: # ( readme: collaborators -end )
