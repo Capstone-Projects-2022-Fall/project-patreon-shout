@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: login_page/LoginForm.js</title>
+    <title>JSDoc: Source: services/api/login.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: login_page/LoginForm.js</h1>
+    <h1 class="page-title">Source: services/api/login.js</h1>
 
     
 
@@ -26,68 +26,27 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router-dom'
-import "./login_css/LoginForm.css"
-import TextField from '@mui/material/TextField';
-import { loginUser } from '../services/api/login';
+            <pre class="prettyprint source linenums"><code>import { config } from "../../Constants";
 
 /**
- * The Login Form, where users can login to the website
+ * Logs the user in using credentials
  *
- * @returns the login form
+ * @param credentials user login credentials
+ * @returns {Promise&lt;any>} is the json data returned
  */
-const LoginForm = ({setToken}) => {
 
-    const [userName, setUserName] = useState('')
-    const [userPassword, setPassword] = useState('')
-    const [popupFailed, showPopup] = useState("hide")
-    const navigate = useNavigate();
-
-    //shows the login failed if username/pass != correct
-    const handleSubmit = async e => {
-        e.preventDefault();
-        const token = await loginUser({
-            userName,
-            userPassword
-        });
-        console.log(token);
-
-        if (!userName || !userPassword || !token.token) {
-            showPopup("loginPop")
-        }
-        else {
-            setToken(token);
-            navigate("/home");
-        }
-    }
-
-
-    return(
-        &lt;div className="cover">
-            &lt;h1>Sign in&lt;/h1>
-            &lt;TextField className='textInputLog' id="outlined-basic" label="Username" variant="outlined"
-                       value={userName} onChange={(e) => setUserName(e.target.value)}/>
-
-            &lt;TextField className='textInputLog' id="outlined-basic" label="Password" type='password'
-                       variant="outlined" value={userPassword} onChange={(e) => setPassword(e.target.value)}/>
-
-            &lt;div className="loginButton" onClick={handleSubmit}>Sign in&lt;/div>
-
-            &lt;div className={popupFailed}>
-                &lt;h3>Sign in Failed&lt;/h3>
-                &lt;p>Incorrect Username or Password. Please try again&lt;/p>
-            &lt;/div>
-        &lt;/div>
-    )
-}
-
-LoginForm.propTypes = {
-    setToken: PropTypes.func.isRequired
-};
-
-export default LoginForm;</code></pre>
+export async function loginUser(credentials) {
+    return fetch(config.url.API_URL + '/webaccount/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Origin': config.url.API_URL
+        },
+        body: JSON.stringify(credentials)
+    })
+        .then(data => data.json())
+}</code></pre>
         </article>
     </section>
 

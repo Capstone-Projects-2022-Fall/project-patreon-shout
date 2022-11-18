@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: home_page/Feed.js</title>
+    <title>JSDoc: Source: list_page/ListFeed.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: home_page/Feed.js</h1>
+    <h1 class="page-title">Source: list_page/ListFeed.js</h1>
 
     
 
@@ -27,23 +27,25 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>import React, {useEffect, useState} from "react";
-import "./home_css/Feed.css";
-import Post from "./Post";
-import Searchbar from "./Searchbar";
-//import { getPosts } from '../services/api/posts'
-import jsonPosts from "../data/posts.json";
-import Filter from "./Filter";
+import ListButton from "./ListButton";
+import AddListModal from "./AddListModal";
+import Post from "../home_page/Post";
+import "./list_css/ListFeed.css";
 import {getLists} from "../services/api/lists/getLists";
+import jsonPosts from "../data/posts.json";
+import Searchbar from "../home_page/Searchbar";
+import Filter from "../home_page/Filter";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { getPosts } from '../services/api/posts';
 import { v4 } from 'uuid';
-import {getPosts} from "../services/api/posts";
 
 /**
- * This is the Main Feed function which will appear on the home page
+ * This is the List feed function to display the list feed
  *
- * @returns Visual representation of the list of posts
+ * @returns The list feed interface
  */
 
-function Feed() {
+function ListFeed() {
 
     const [searchTerm, setSearchTerm] = useState([]);
     const [filterChoices, setFilterChoices] = useState([]);
@@ -53,12 +55,17 @@ function Feed() {
     const searchedList = [];
     const avoidDefaults = ["Date(new → old)", "Date(old → new)", "Private Only", "Public Only", "Date Range"];
     let displayedList = [];
-    let shouldSkip = false;
+
+    const [lists, setLists] = useState("show");
+    const [posts, setPosts] = useState("hide");
 
     // Searchbar Functionality
+    let shouldSkip = false;
+    console.log(postList);
     postList.forEach((post, index) => {
-        const postInfo = (({title, creator_page_url, content}) => ({title, creator_page_url, content}))(post);
-        Object.values(postInfo).every((onlyValues, valIndex) => {
+        console.log(index);
+        const postInfo = (({title, content}) => ({title, content}))(post);
+        Object.values(postInfo).every((onlyValues) => {
             if (shouldSkip) {return;}
             if (onlyValues.toLowerCase().includes(searchTerm)) {
                 searchedList.push(post)
@@ -87,7 +94,7 @@ function Feed() {
     }
     if (filterChoices.includes("Date Range")) {
         displayedList = displayedList.sort(function(b, a){return new Date(a.published_at).getTime() - new Date(b.published_at).getTime()});
-        displayedList = displayedList.filter(value => (new Date(value.published_at).getTime() &lt;= new Date(dateRange.endDate).getTime() &amp;&amp; 
+        displayedList = displayedList.filter(value => (new Date(value.published_at).getTime() &lt;= new Date(dateRange.endDate).getTime() &amp;&amp;
             new Date(value.published_at).getTime() >= new Date(dateRange.startDate).getTime()));
     }
 
@@ -109,7 +116,7 @@ function Feed() {
                 shouldSkip = false;
             });
         }
-    }  
+    }
 
     useEffect(() => {
         let mounted = true;
@@ -124,50 +131,65 @@ function Feed() {
         return () => mounted = false;
     }, [])
 
-    useEffect(() => {
-        let mounted = true;
-        getPosts("8432541")
-            .then(items => {
-                if (mounted) {
-                    setPostList(items)
-                }
-            })
-        return () => mounted = false;
-    }, [])
 
     return (
-        &lt;div className="feed">
-            &lt;div className="feed__header">
-                &lt;h1>Patreon Shout&lt;/h1>
+        &lt;div className="listfeed">
+            &lt;div className="listfeed__header">
+                &lt;h2 className={lists}>Lists&lt;/h2>
+                &lt;div id="backDiv">
+                    &lt;ArrowBackIcon id="backArrow" fontSize="large" className={posts} onClick={() => {setPosts("hide"); setLists("show"); setPostList([]);}}/>
+                &lt;/div>
+                &lt;AddListModal />
             &lt;/div>
-            &lt;div className="feed__filters">
-                &lt;Searchbar
-                    searchTerm={searchTerm}
-                    setSearchTerm={setSearchTerm}
-                />
-                &lt;Filter id="feed__filter"
-                    filterChoices={filterChoices} 
-                    setFilterChoices={setFilterChoices}
-                    dateRange={dateRange}
-                    setDateRange={setDateRange}
-                />
+
+            &lt;div className={posts}> {/* hide until a list is chosen, then do http request to get list posts */}
+                &lt;div className="feed__filters">
+                    &lt;Searchbar
+                        searchTerm={searchTerm}
+                        setSearchTerm={setSearchTerm}
+                    />
+                    &lt;Filter id="feed__filter"
+                            filterChoices={filterChoices}
+                            setFilterChoices={setFilterChoices}
+                            dateRange={dateRange}
+                            setDateRange={setDateRange}
+                    />
+                &lt;/div>
+
+                &lt;div>
+                    {displayedList.map((item) => {
+                        return &lt;Post
+                            key={v4()}
+                            title={item.title}
+                            creator_page_url={item.creator_page_url}
+                            is_public={(item.is_public === "true")} // converts the string to a boolean
+                            content={item.content}
+                            published_at={item.published_at}
+                            url={item.url}
+                            lists={userLists}
+                            displayedList={displayedList}
+                        />
+                    })}
+                &lt;/div>
             &lt;/div>
-            {displayedList.map((item) => (
-                &lt;Post
-                    key={v4()}
-                    title={item.title}
-                    creator_page_url={item.creator_page_url}
-                    is_public={(item.is_public === "true")}
-                    content={item.content}
-                    published_at={item.published_at}
-                    url = {item.url}
-                    lists = {userLists}
-                />
-            ))}
+
+            &lt;div className={lists}>
+                {userLists.map((item) => (
+                    &lt;ListButton
+                        setPostData={setPostList}
+                        setPosts={setPosts}
+                        setLists={setLists}
+                        id={item.list_id}
+                        title={item.title}
+                        description={item.description}
+                    />
+                ))}
+            &lt;/div>
         &lt;/div>
     );
 }
-export default Feed;</code></pre>
+
+export default ListFeed;</code></pre>
         </article>
     </section>
 

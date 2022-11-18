@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: login_page/LoginForm.js</title>
+    <title>JSDoc: Source: components/PatreonConnect.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: login_page/LoginForm.js</h1>
+    <h1 class="page-title">Source: components/PatreonConnect.js</h1>
 
     
 
@@ -26,68 +26,49 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router-dom'
-import "./login_css/LoginForm.css"
-import TextField from '@mui/material/TextField';
-import { loginUser } from '../services/api/login';
+            <pre class="prettyprint source linenums"><code>import React from "react";
+import useToken from "../services/useToken";
+import Login from "../login_page/LoginPage";
+import {Button} from "@mui/material";
+import {config} from "../Constants";
 
 /**
- * The Login Form, where users can login to the website
+ * This is the Patreon Connect function which will be used for patreon connect oauth button in the Creator settings
  *
- * @returns the login form
+ * @returns Connect to Patreon Button
+ *
  */
-const LoginForm = ({setToken}) => {
 
-    const [userName, setUserName] = useState('')
-    const [userPassword, setPassword] = useState('')
-    const [popupFailed, showPopup] = useState("hide")
-    const navigate = useNavigate();
+function PatreonConnect() {
+    const patreonUrl = "https://www.patreon.com/oauth2/authorize" +
+        "?response_type=code" +
+        "&amp;client_id=Vti4zJZ3GT_wYu4uVMh-UdZDBdbjz8xzxlW3ejvtLGvCoh6cZDR30sYv7tNptFF4" +
+        "&amp;redirect_uri=" + config.url.API_URL + "/receivers/patreon/oauth" +
+        "&amp;scope=identity identity.memberships campaigns w:campaigns.webhook campaigns.members campaigns.members.address campaigns.posts" +
+        "&amp;state=";
 
-    //shows the login failed if username/pass != correct
-    const handleSubmit = async e => {
-        e.preventDefault();
-        const token = await loginUser({
-            userName,
-            userPassword
-        });
-        console.log(token);
+    const patreonUrlDev = "https://www.patreon.com/oauth2/authorize" +
+        "?response_type=code" +
+        "&amp;client_id=Aymjq1-b_ZkmaeejretFStklrikzMGcG-LEtCkt3GvOeiuOO2MY0_hluLoUzC4ce" +
+        "&amp;redirect_uri=" + config.url.API_URL + "/receivers/patreon/oauth" +
+        "&amp;scope=identity identity.memberships campaigns w:campaigns.webhook campaigns.members campaigns.members.address campaigns.posts" +
+        "&amp;state=";
 
-        if (!userName || !userPassword || !token.token) {
-            showPopup("loginPop")
-        }
-        else {
-            setToken(token);
-            navigate("/home");
-        }
+    const { token, setToken } = useToken();
+
+    if (!token) { // TODO: check if session token is also valid via http request to database
+        return &lt;Login setToken={setToken}/>
     }
 
-
-    return(
-        &lt;div className="cover">
-            &lt;h1>Sign in&lt;/h1>
-            &lt;TextField className='textInputLog' id="outlined-basic" label="Username" variant="outlined"
-                       value={userName} onChange={(e) => setUserName(e.target.value)}/>
-
-            &lt;TextField className='textInputLog' id="outlined-basic" label="Password" type='password'
-                       variant="outlined" value={userPassword} onChange={(e) => setPassword(e.target.value)}/>
-
-            &lt;div className="loginButton" onClick={handleSubmit}>Sign in&lt;/div>
-
-            &lt;div className={popupFailed}>
-                &lt;h3>Sign in Failed&lt;/h3>
-                &lt;p>Incorrect Username or Password. Please try again&lt;/p>
-            &lt;/div>
-        &lt;/div>
-    )
+    return (
+        &lt;div className="PatreonConnect">
+            &lt;Button target="_blank" href={patreonUrl + token} sx={ { borderRadius: 28 } } color="primary" type="submit" variant="contained">
+                Connect To Patreon
+        &lt;/Button>
+    &lt;/div>);
 }
 
-LoginForm.propTypes = {
-    setToken: PropTypes.func.isRequired
-};
-
-export default LoginForm;</code></pre>
+export default PatreonConnect;</code></pre>
         </article>
     </section>
 

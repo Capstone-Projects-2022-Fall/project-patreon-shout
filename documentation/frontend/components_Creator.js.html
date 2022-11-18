@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: login_page/LoginForm.js</title>
+    <title>JSDoc: Source: components/Creator.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: login_page/LoginForm.js</h1>
+    <h1 class="page-title">Source: components/Creator.js</h1>
 
     
 
@@ -26,68 +26,70 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router-dom'
-import "./login_css/LoginForm.css"
-import TextField from '@mui/material/TextField';
-import { loginUser } from '../services/api/login';
+            <pre class="prettyprint source linenums"><code>import React, {useState} from "react";
+import {Avatar} from "@mui/material";
+import {VerifiedUser} from "@mui/icons-material";
+import "./comp_css/Creator.css";
 
 /**
- * The Login Form, where users can login to the website
+ * This is the Creator function which will populate the posts with the Creator information
  *
- * @returns the login form
+ * @param {string} addedState
+ * @param {array} curCreatorList
+ * @param {string} displayName
+ * @param {string} urlName
+ * @param {string} description
+ * @param {string} imgUrl
+ * @param {bool} verified
+ *
+ * @returns Creator information
+ *
  */
-const LoginForm = ({setToken}) => {
 
-    const [userName, setUserName] = useState('')
-    const [userPassword, setPassword] = useState('')
-    const [popupFailed, showPopup] = useState("hide")
-    const navigate = useNavigate();
+function Creator({addedState, curCreatorList, setCreatorList, displayName, urlName, description, imgUrl, verified}) {
 
-    //shows the login failed if username/pass != correct
-    const handleSubmit = async e => {
-        e.preventDefault();
-        const token = await loginUser({
-            userName,
-            userPassword
-        });
-        console.log(token);
+    const [added, setAdded] = useState(addedState);
 
-        if (!userName || !userPassword || !token.token) {
-            showPopup("loginPop")
-        }
-        else {
-            setToken(token);
-            navigate("/home");
-        }
-    }
-
-
-    return(
-        &lt;div className="cover">
-            &lt;h1>Sign in&lt;/h1>
-            &lt;TextField className='textInputLog' id="outlined-basic" label="Username" variant="outlined"
-                       value={userName} onChange={(e) => setUserName(e.target.value)}/>
-
-            &lt;TextField className='textInputLog' id="outlined-basic" label="Password" type='password'
-                       variant="outlined" value={userPassword} onChange={(e) => setPassword(e.target.value)}/>
-
-            &lt;div className="loginButton" onClick={handleSubmit}>Sign in&lt;/div>
-
-            &lt;div className={popupFailed}>
-                &lt;h3>Sign in Failed&lt;/h3>
-                &lt;p>Incorrect Username or Password. Please try again&lt;/p>
+    return (
+        &lt;div className="creator">
+            &lt;div className="creator__img">
+                &lt;Avatar src={imgUrl}/>
+            &lt;/div>
+            &lt;div className="creator__body">
+                &lt;div className="creator__header">
+                    &lt;div className="creator__headerText">
+                        &lt;h3>
+                            {displayName}{" "}
+                            &lt;span className="creator__headerSpecial">
+                                {verified &amp;&amp; &lt;VerifiedUser className="post__badge"/>} @
+                                {urlName}
+                            &lt;/span>
+                        &lt;/h3>
+                    &lt;/div>
+                    &lt;div className="creator__headerDescription">
+                        &lt;p>{description}&lt;/p>
+                        &lt;div>
+                            {!added ? &lt;div className="creator__addButton" onClick={() => {
+                                setAdded(s => !s);
+                                setCreatorList(curCreatorList => [...curCreatorList, urlName]);
+                            }}>
+                                Add
+                            &lt;/div> : null}
+                            {added ? &lt;div className="creator__addButton" onClick={() => {
+                                setAdded(s => !s);
+                                setCreatorList(curCreatorList.filter(name => name !== urlName));
+                            }}>
+                                Remove
+                            &lt;/div> : null}
+                        &lt;/div>
+                    &lt;/div>
+                &lt;/div>
             &lt;/div>
         &lt;/div>
     )
 }
 
-LoginForm.propTypes = {
-    setToken: PropTypes.func.isRequired
-};
-
-export default LoginForm;</code></pre>
+export default Creator;</code></pre>
         </article>
     </section>
 

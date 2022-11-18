@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: login_page/LoginForm.js</title>
+    <title>JSDoc: Source: list_page/ListButton.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: login_page/LoginForm.js</h1>
+    <h1 class="page-title">Source: list_page/ListButton.js</h1>
 
     
 
@@ -26,68 +26,69 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router-dom'
-import "./login_css/LoginForm.css"
-import TextField from '@mui/material/TextField';
-import { loginUser } from '../services/api/login';
+            <pre class="prettyprint source linenums"><code>import React, {useState} from "react";
+import "./list_css/ListButton.css";
+import ListConfigModal from "./ListConfigModal";
+import {getPostsFromList} from "../services/api/lists/getPostsFromList";
 
 /**
- * The Login Form, where users can login to the website
+ * This is the List button function which navigates to the list page
  *
- * @returns the login form
+ * @returns The list button allows users to add new lists and navigate to the lists page
  */
-const LoginForm = ({setToken}) => {
 
-    const [userName, setUserName] = useState('')
-    const [userPassword, setPassword] = useState('')
-    const [popupFailed, showPopup] = useState("hide")
-    const navigate = useNavigate();
+function ListButton({ setPostData, setPosts, setLists, added_creators, id, title, description }) {
 
-    //shows the login failed if username/pass != correct
-    const handleSubmit = async e => {
-        e.preventDefault();
-        const token = await loginUser({
-            userName,
-            userPassword
-        });
-        console.log(token);
+    const [listCreators, setListCreators] = useState(added_creators);
+    const [listId, setListId] = useState(id);
+    const [listTitle, setListTitle] = useState(title);
+    const [listDesc, setListDesc] = useState(description);
 
-        if (!userName || !userPassword || !token.token) {
-            showPopup("loginPop")
-        }
-        else {
-            setToken(token);
-            navigate("/home");
-        }
+    // TODO: change getPosts with a request to get the posts for a particular listId
+    const getListPosts = () => {
+        const tokenString = localStorage.getItem('token');
+        const loginToken = JSON.parse(tokenString).token;
+        let mounted = true;
+        getPostsFromList(loginToken, id)
+            .then(items => {
+                if (mounted) {
+                    setPostData(items)
+                }
+            })
+        return () => mounted = false;
     }
 
 
-    return(
-        &lt;div className="cover">
-            &lt;h1>Sign in&lt;/h1>
-            &lt;TextField className='textInputLog' id="outlined-basic" label="Username" variant="outlined"
-                       value={userName} onChange={(e) => setUserName(e.target.value)}/>
+    const openList = () => {
+        console.log("open list");
+        console.log(listCreators);
 
-            &lt;TextField className='textInputLog' id="outlined-basic" label="Password" type='password'
-                       variant="outlined" value={userPassword} onChange={(e) => setPassword(e.target.value)}/>
+        getListPosts();
+        setPosts("show");
+        setLists("hide");
+    }
 
-            &lt;div className="loginButton" onClick={handleSubmit}>Sign in&lt;/div>
-
-            &lt;div className={popupFailed}>
-                &lt;h3>Sign in Failed&lt;/h3>
-                &lt;p>Incorrect Username or Password. Please try again&lt;/p>
+    return (
+        &lt;div className="listbutton">
+            &lt;div className="listIdentifier" onClick={openList}>
+                &lt;div id="listTitle">{listTitle}&lt;/div>
+                &lt;div id="listDescription">{listDesc}&lt;/div>
             &lt;/div>
+
+            &lt;ListConfigModal
+                listCreators={listCreators}
+                setListCreators={setListCreators}
+                listId={listId}
+                listTitle={listTitle}
+                listDesc={listDesc}
+                setListTitle={setListTitle}
+                setListDesc={setListDesc}
+            />
         &lt;/div>
     )
 }
 
-LoginForm.propTypes = {
-    setToken: PropTypes.func.isRequired
-};
-
-export default LoginForm;</code></pre>
+export default ListButton;</code></pre>
         </article>
     </section>
 

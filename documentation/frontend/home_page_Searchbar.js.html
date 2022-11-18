@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: login_page/LoginForm.js</title>
+    <title>JSDoc: Source: home_page/Searchbar.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: login_page/LoginForm.js</h1>
+    <h1 class="page-title">Source: home_page/Searchbar.js</h1>
 
     
 
@@ -26,68 +26,96 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router-dom'
-import "./login_css/LoginForm.css"
-import TextField from '@mui/material/TextField';
-import { loginUser } from '../services/api/login';
+            <pre class="prettyprint source linenums"><code>import { Button } from "@mui/material";
+import { SearchRounded, Add } from "@mui/icons-material";
+import React, { useState, useEffect } from "react";
+import "./home_css/Searchbar.css";
+import { addFilter } from "../services/api/filters/addFilter";
+
 
 /**
- * The Login Form, where users can login to the website
+ * This is the searchbar component above the main feed
  *
- * @returns the login form
+ * @param {string} searchTerm - The search term to filter posts for
+ *
+ * @returns A search term for filtering posts by
  */
-const LoginForm = ({setToken}) => {
 
-    const [userName, setUserName] = useState('')
-    const [userPassword, setPassword] = useState('')
-    const [popupFailed, showPopup] = useState("hide")
-    const navigate = useNavigate();
+function Searchbar({searchTerm, setSearchTerm}) {
 
-    //shows the login failed if username/pass != correct
-    const handleSubmit = async e => {
-        e.preventDefault();
-        const token = await loginUser({
-            userName,
-            userPassword
+    const [searchInput, setSearchInput] = useState("");
+    const [newSearchFilter, setNewSearchFilter] = useState("");
+
+    const addFilterRequest = async e => {
+        const tokenString = localStorage.getItem('token');
+        const loginToken = JSON.parse(tokenString).token;
+        const filter = newSearchFilter;
+        let filter_name = "";
+        if (filter.length > 10) {
+            filter_name = filter.slice(0, 10) + "...";
+        } else {filter_name = filter};
+
+        const message = await addFilter({
+            loginToken,
+            filter,
+            filter_name,
         });
-        console.log(token);
 
-        if (!userName || !userPassword || !token.token) {
-            showPopup("loginPop")
-        }
-        else {
-            setToken(token);
-            navigate("/home");
+        console.log(message);
+        window.location.reload();
+    }
+
+    let inputHandler = (e) => {
+        let input = e.target.value;
+        setSearchInput(input);
+        setSearchTerm(input.toLowerCase());
+
+        // For some ungodly reason updating here fixes the fact that React doesn't update 
+        // UseState variables immediately, having here solves the problem on line 46
+        setNewSearchFilter(input.toLowerCase());
+    }
+
+    let searchHandler = () => {
+        setSearchTerm(searchInput.toLowerCase());
+    }
+
+    let addFilterHandler = () => {
+        if (searchInput.length > 0) {
+            setNewSearchFilter(searchInput.toLowerCase());
+            addFilterRequest().then();
         }
     }
 
+    //This is currently preventing Enter from being the input method, only search button
+    const onSubmitForm = e => {
+        e.preventDefault();
+    }
 
-    return(
-        &lt;div className="cover">
-            &lt;h1>Sign in&lt;/h1>
-            &lt;TextField className='textInputLog' id="outlined-basic" label="Username" variant="outlined"
-                       value={userName} onChange={(e) => setUserName(e.target.value)}/>
-
-            &lt;TextField className='textInputLog' id="outlined-basic" label="Password" type='password'
-                       variant="outlined" value={userPassword} onChange={(e) => setPassword(e.target.value)}/>
-
-            &lt;div className="loginButton" onClick={handleSubmit}>Sign in&lt;/div>
-
-            &lt;div className={popupFailed}>
-                &lt;h3>Sign in Failed&lt;/h3>
-                &lt;p>Incorrect Username or Password. Please try again&lt;/p>
-            &lt;/div>
+    return (
+        &lt;div className="Searchbar">
+            &lt;form onSubmit={onSubmitForm}>
+                &lt;div className="Searchbar__input">
+                    &lt;input
+                        placeholder="Search PatreonShout..."
+                        onChange={inputHandler}
+                        value={searchInput}
+                        type="text"
+                    />
+                    &lt;Button className="Searchbar__button" onClick={(searchHandler)}>
+                        &lt;SearchRounded/>
+                    &lt;/Button>
+                    &lt;Button className="Addfilter__button" onClick={(addFilterHandler)}>
+                        Add Filter&lt;Add/>
+                    &lt;/Button>
+                &lt;/div>
+            &lt;/form>
         &lt;/div>
-    )
+
+    );
 }
 
-LoginForm.propTypes = {
-    setToken: PropTypes.func.isRequired
-};
-
-export default LoginForm;</code></pre>
+export default Searchbar;
+</code></pre>
         </article>
     </section>
 
