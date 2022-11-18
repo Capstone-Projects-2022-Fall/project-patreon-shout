@@ -6,6 +6,11 @@ import {addList} from "../services/api/lists/addList";
 import {Button} from "@mui/material";
 import TextField from "@mui/material/TextField";
 
+/**
+ * This is the Add List modal function which creates new lists
+ *
+ * @returns The list modal which adds new lists
+ */
 
 function AddListModal() {
 

@@ -26,59 +26,286 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { Avatar } from "@material-ui/core";
-import {
-  FavoriteBorder,
-  Language,
-  ListAlt,
-  VerifiedUser,
-} from "@material-ui/icons";
-import React from "react";
-import "./Post.css";
+            <pre class="prettyprint source linenums"><code>import {
+    FavoriteBorder,
+    Favorite,
+    Language,
+    ListAlt,
+    VerifiedUser,
+} from "@mui/icons-material";
+import React, {useEffect, useState} from "react";
+import "./home_css/Post.css";
+import Popup from "reactjs-popup";
+import TagPopUp from "./TagPopUp";
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import {getListsFromPost} from "../services/api/lists/getListsFromPost";
+import {Button} from "@mui/material";
+import CheckBox from "../components/CheckBox";
+import {updateListsForPost} from "../services/api/lists/updateListsForPost";
+import ReactDOM from "react-dom";
+import {pink} from "@mui/material/colors";
+import {addPostToFavoritesList} from "../services/api/lists/favorites/addPostToFavoritesList";
+import {deletePostFromFavoritesList} from "../services/api/lists/favorites/deletePostFromFavoritesList";
 
 /**
  * The post object which will appear in the feed
- * 
- * @param {string} displayName - The name displayed on the post
- * @param {string} username - The username displayed on the post
- * @param {boolean} verified - The checkmark display for users who have verified their Patreon with us
- * @param {string} text - The message contained in the post
- * @param {image} image - The embedded image of the post
- * @param {image} avatar - The avatar provided by the user
- * 
+ *
+ * @param {string} title - The name of the post
+ * @param {string} creator_page_url - The creator of the post
+ * @param {boolean} is_public - The checkmark display for private posts
+ * @param {string} content - The message contained in the post
+ * @param {string} url - The url of the creator
+ * @param {Date} published_at - The date and time the post was published
+ * @param lists - The user's lists
+ *
  * @returns A single post component to be displayed in the feed
  */
-function Post({ displayName, username, verified, text, image, avatar }) {
-  return (
-    &lt;div className="post">
-      &lt;div className="post__avatar">
-        &lt;Avatar src={avatar} />
-      &lt;/div>
-      &lt;div className="post__body">
-        &lt;div className="post__header">
-          &lt;div className="post__headerText">
-            &lt;h3>
-              {displayName}{" "}
-              &lt;span className="post__headerSpecial">
-                {verified &amp;&amp; &lt;VerifiedUser className="post__badge" />} @
-                {username}
-              &lt;/span>
-            &lt;/h3>
-          &lt;/div>
-          &lt;div className="post__headerDescription">
-            &lt;p>{text}&lt;/p>
-          &lt;/div>
+
+function Post({title, creator_page_url, url, content, published_at, is_public, lists}) {
+
+    const [successMsg, setSuccessMsg] = useState("hide");
+
+    // TODO: clean this shit up
+    if (content) {
+        content = content.replace(/&lt;p[^>]*>/g, "");
+        content = content.replace(/&lt;\/?p[^>]*>/g, "");
+    }
+    else {
+        content = "No post content";
+    }
+    creator_page_url = "Alex";
+    let posteddate = new Date(published_at);
+    let year = String(posteddate.getFullYear());
+    let month = String(posteddate.getMonth() + 1);
+    if (month &lt; 10) {month = "0" + month};
+    let day = String(posteddate.getDate());
+    if (day &lt; 10) {day = "0" + day};
+    let minute = String(posteddate.getMinutes());
+    if (minute &lt; 10) {minute = "0" + minute};
+    let second = String(posteddate.getSeconds());
+    if (second &lt; 10) {second = "0" + second};
+    let hour = String(posteddate.getHours());
+    if (hour &lt; 10) {hour = "0" + hour};
+    if (hour === 0) {hour = "12"};
+    if (hour >= 12) {hour = hour - 12; second = second + "pm"}
+    else {second = second + "am"};
+
+    const handleRedirect = (e) => {
+        window.open("https://www.patreon.com" + url, "_blank");
+    }
+
+    useEffect(() => {
+        let mounted = true;
+        const tokenString = localStorage.getItem('token');
+        const loginToken = JSON.parse(tokenString).token;
+        getListsFromPost(loginToken, url)
+            .then(items => {
+                if (mounted) {
+                    favThisPostLists = items;
+                    setThisPostLists(items);
+                    checkForFavoritesList();
+                }
+            })
+        return () => mounted = false;
+    }, [])
+
+    let favThisPostLists = [];
+    const [thisPostLists, setThisPostLists] = useState([]);
+
+    const handleListSave = (event) => {
+        event.preventDefault();
+
+        let list_updates = [];
+        let dom_list_updates = [];
+
+        for (let i = 0; i &lt; lists.length; i++) {
+            list_updates.push({"list_id": lists[i].list_id.toString(), "update": event.target[i].checked.toString()})
+
+            if (event.target[i].checked.toString() === "true") {
+                dom_list_updates.push(lists[i]);
+            }
+        }
+
+        // reload react dom
+        favThisPostLists = dom_list_updates;
+        setThisPostLists(dom_list_updates);
+        // ReactDOM.render(popup, document.getElementById("popup"));
+        updateListsRequest(list_updates).then(r => {
+
+        })
+    }
+
+
+    const [favorite, setFavorite] = useState(false); // checkForFavoritesList
+
+
+    const handleFavoriteClick = () => {
+        if (favorite === false) {
+            addPostToFavoritesRequest().then();
+        }
+        else {
+            deletePostFromFavoritesRequest().then();
+        }
+        setFavorite(!favorite)
+    }
+
+    // checks to see if the post is favorited
+    const checkForFavoritesList = () => {
+        let isFavoritePost = false;
+        // console.log(favThisPostLists);
+        // console.log("post: " + title);
+        favThisPostLists.forEach((element) => {
+            // console.log("checking: " + element.title);
+            if (element.title === "Favorites") {
+                isFavoritePost = true;
+            }
+        });
+        setFavorite(isFavoritePost);
+    }
+
+
+    const checkPostInList = (list_id) => {
+        let insideList = false;
+
+        thisPostLists.forEach((list) => {
+            if (list.list_id === list_id &amp;&amp; insideList === false) {
+                insideList = true;
+            }
+        })
+        return insideList;
+    }
+
+    const popup = (
+        &lt;form id="fields" onSubmit={handleListSave}>
+            &lt;FormGroup id="popup">
+                {lists.map((item) => (
+                    &lt;FormControlLabel
+                        control={&lt;CheckBox list={item} checkPostInList={checkPostInList}/>}
+                        value={item}
+                        label=""/>
+                ))}
+            &lt;/FormGroup>
+            &lt;div className={successMsg}>
+                &lt;br/>
+                &lt;p id="errormsg"> &lt;/p>
+            &lt;/div>
+            &lt;br/>
+            &lt;div id="buttonLocation">
+                &lt;Button disableElevation type="submit" variant="contained">Save&lt;/Button>
+            &lt;/div>
+        &lt;/form>
+    );
+
+
+    const updateListsRequest = async (list_updates) => {
+        const tokenString = localStorage.getItem('token');
+        const login_token = JSON.parse(tokenString).token;
+
+        const message = await updateListsForPost({
+            url,
+            login_token,
+            list_updates
+        });
+
+        console.log(message);
+
+        if (message.status === 200) {
+            document.getElementById("errormsg").textContent = "Lists successfully edited";
+            setSuccessMsg("show");
+        }
+        else {
+            document.getElementById("errormsg").textContent = "Error while editing lists";
+            setSuccessMsg("show");
+        }
+    }
+
+
+    const addPostToFavoritesRequest = async e => {
+        const tokenString = localStorage.getItem('token');
+        const login_token = JSON.parse(tokenString).token;
+
+        const message = await addPostToFavoritesList({
+            login_token,
+            url
+        })
+
+        console.log(message);
+    }
+
+    const deletePostFromFavoritesRequest = async e => {
+        const tokenString = localStorage.getItem('token');
+        const login_token = JSON.parse(tokenString).token;
+
+        const message = await deletePostFromFavoritesList({
+            login_token,
+            url
+        })
+
+        console.log(message);
+    }
+
+    return (
+        &lt;div className="post">
+            &lt;div className="post__body">
+                &lt;div className="post__header">
+                    &lt;div className="post__headerText">
+                        &lt;h3>
+                            {title}{" "}
+                            &lt;span className="post__headerSpecial">
+                                {!(is_public==="true") &amp;&amp; &lt;VerifiedUser className="post__badge"/>}
+                                @{creator_page_url}
+                            &lt;/span>
+                        &lt;/h3>
+                    &lt;/div>
+                    &lt;div className="post__headerDescription">
+                        {content}
+                    &lt;/div>
+                &lt;/div>
+                &lt;div className="post__footer">
+                    &lt;div className="post__footerDateTime">
+                        {month + "/" + day + "/" + year + "  " + hour + ":" + minute + ":" + second}
+                    &lt;/div>
+                    &lt;div className="post__footerRedirect">
+                        &lt;Language fontSize="small" type="button" onClick={handleRedirect} hover="true"/>
+                    &lt;/div>
+                    &lt;div className="post__footerTag">
+                        &lt;TagPopUp fontSize="small" url={url}/>
+                    &lt;/div>
+                    &lt;div className="post__footerFavorite">
+                        &lt;div onClick={() => {handleFavoriteClick();}}>
+                            {favorite ? &lt;Favorite sx={{ color: pink[500] }} fontSize="small"/> : &lt;FavoriteBorder sx={{ color: pink[500] }} fontSize="small"/>}
+                        &lt;/div>
+
+                    &lt;/div>
+
+                    &lt;div className="post__footerList">  {/*TODO*/}
+                        &lt;Popup trigger={&lt;ListAlt fontSize="small"/>} modal>
+                            {close => (
+                                &lt;div className="modalBox">
+                                    &lt;button className="close" onClick={close}>
+                                        &amp;times;
+                                    &lt;/button>
+                                    &lt;div className="header">
+                                        Lists
+                                    &lt;/div>
+                                    &lt;br/>
+                                    &lt;div id="popup">
+                                        {popup}
+                                    &lt;/div>
+                                &lt;/div>
+                            )}
+                        &lt;/Popup>
+                    &lt;/div>
+                &lt;/div>
+            &lt;/div>
         &lt;/div>
-        &lt;img src={image} alt="" />
-        &lt;div className="post__footer">
-          &lt;Language fontSize="small" />
-          &lt;FavoriteBorder fontSize="small" />
-          &lt;ListAlt fontSize="small" />
-        &lt;/div>
-      &lt;/div>
-    &lt;/div>
-  );
+    );
 }
+
+
+
+
 
 export default Post;</code></pre>
         </article>
@@ -90,13 +317,13 @@ export default Post;</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#Feed">Feed</a></li><li><a href="global.html#FormContainers">FormContainers</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#Post">Post</a></li><li><a href="global.html#RegistrationForm">RegistrationForm</a></li><li><a href="global.html#root">root</a></li><li><a href="global.html#Sidebar">Sidebar</a></li><li><a href="global.html#SidebarOption">SidebarOption</a></li><li><a href="global.html#TitleBox">TitleBox</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addFilter">addFilter</a></li><li><a href="global.html#addList">addList</a></li><li><a href="global.html#AddListModal">AddListModal</a></li><li><a href="global.html#addPostToFavoritesList">addPostToFavoritesList</a></li><li><a href="global.html#addTag">addTag</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#CheckBox">CheckBox</a></li><li><a href="global.html#Creator">Creator</a></li><li><a href="global.html#deleteFilter">deleteFilter</a></li><li><a href="global.html#deleteList">deleteList</a></li><li><a href="global.html#deletePostFromFavoritesList">deletePostFromFavoritesList</a></li><li><a href="global.html#deleteTag">deleteTag</a></li><li><a href="global.html#Explore">Explore</a></li><li><a href="global.html#Feed">Feed</a></li><li><a href="global.html#Filter">Filter</a></li><li><a href="global.html#FormContainers">FormContainers</a></li><li><a href="global.html#getFilters">getFilters</a></li><li><a href="global.html#getLists">getLists</a></li><li><a href="global.html#getListsFromPost">getListsFromPost</a></li><li><a href="global.html#getPosts">getPosts</a></li><li><a href="global.html#getPostsFromList">getPostsFromList</a></li><li><a href="global.html#getSocialIntegrations">getSocialIntegrations</a></li><li><a href="global.html#getTags">getTags</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#ListButton">ListButton</a></li><li><a href="global.html#ListConfigModal">ListConfigModal</a></li><li><a href="global.html#ListFeed">ListFeed</a></li><li><a href="global.html#ListPage">ListPage</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginPage">LoginPage</a></li><li><a href="global.html#loginUser">loginUser</a></li><li><a href="global.html#logoutUser">logoutUser</a></li><li><a href="global.html#PatreonConnect">PatreonConnect</a></li><li><a href="global.html#Post">Post</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#RegistrationForm">RegistrationForm</a></li><li><a href="global.html#resetPassword">resetPassword</a></li><li><a href="global.html#root">root</a></li><li><a href="global.html#Searchbar">Searchbar</a></li><li><a href="global.html#SettingsContainers">SettingsContainers</a></li><li><a href="global.html#Sidebar">Sidebar</a></li><li><a href="global.html#SidebarOption">SidebarOption</a></li><li><a href="global.html#TagPopUp">TagPopUp</a></li><li><a href="global.html#TwitterConnect">TwitterConnect</a></li><li><a href="global.html#updateList">updateList</a></li><li><a href="global.html#updateListsForPost">updateListsForPost</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Tue Oct 04 2022 19:42:45 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Thu Nov 17 2022 23:43:07 GMT-0500 (Eastern Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

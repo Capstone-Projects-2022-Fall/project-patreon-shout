@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: home_page/TagPopUp.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: home_page/TagPopUp.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect } from "react";
+import { Tag } from "@mui/icons-material";
+import Popup from "reactjs-popup";
+import "./tag_css/TagPopUp.css"
+import { deleteTag } from "../services/api/tags/deleteTag";
+import { addTag } from "../services/api/tags/addTag";
+import { getTags } from "../services/api/tags/getTags";
+
+
+/**
+ * This is the tag component for each post
+ *
+ * @param {string} url - The url for finding the correct post
+ *
+ * @returns The tags to be listed on each post
+ */
+
+function TagPopUp({url}) {
+
+    const [choice, setChoice] = useState();
+    const [remaining, setRemaining] = useState(5);
+    const [userTags, setUserTags] = useState([]);
+
+    function handleKeyDown(e){
+        if (remaining > 0) {
+            const value = e.target.value;
+            if (e.key !== 'Enter'){return;}
+            if (!value.trim()){return;}
+            if(!userTags.includes(value)) {
+                setUserTags([...userTags, value]);
+                addTagRequest(value);
+                setRemaining(remaining-1);
+            }
+            // setTags([...tags, value]);
+            e.target.value = ''; 
+        }  
+    }
+
+    function removeTag(tag, index){
+        setUserTags(userTags.filter((el, i) => i !== index));
+        // setTags(tags.filter((el, i) => i !== index));
+        deleteTagRequest(tag);
+        setRemaining(remaining+1);
+    }
+
+
+    useEffect(() => {
+        let mounted = true;
+        const tokenString = localStorage.getItem('token');
+        const login_token = JSON.parse(tokenString).token;
+        getTags(login_token, url)
+            .then(items => {
+                if (mounted) {
+                    setUserTags(items);
+                    setRemaining((5 - items.length));
+                }
+            })
+        return () => mounted = false;
+    }, []);
+
+    const deleteTagRequest = async(tag) => {
+        const tokenString = localStorage.getItem('token');
+        const login_token = JSON.parse(tokenString).token;
+        const message = await deleteTag({
+            login_token,
+            tag,
+            url
+        });
+
+        console.log(message);
+    };
+
+    const addTagRequest = async(value) => {
+        const tokenString = localStorage.getItem('token');
+        const login_token = JSON.parse(tokenString).token;
+        const tag = value;
+        const message = await addTag({
+            login_token,
+            tag,
+            url
+        });
+
+        console.log(message);
+    };
+
+    return (
+        &lt;Popup
+            trigger={&lt;div className="dropdown">&lt;Tag/>&lt;div>{choice}&lt;/div>
+            &lt;/div>}
+            position="bottom right"
+            on="click"
+            contentStyle={{padding: '0px', border: 'none'}}>
+            &lt;div className="App">
+                &lt;div className="tags-input-container">
+                    {userTags.map((tag, index) => (
+                        &lt;div className="tag-item" key={index}>
+                            &lt;span className="text">{tag}&lt;/span>
+                            &lt;span onClick={() => removeTag(tag, index)} className="close">&amp;times;&lt;/span>
+                        &lt;/div>
+                    ))}
+                    &lt;input onKeyDown={handleKeyDown} type="text" className= "tags-input" placeholder="Add a Tag"/>
+                    &lt;div className="tag-limiter">
+                        &lt;p>
+                            &lt;span>{remaining}&lt;/span> Tags Remaining
+                        &lt;/p>
+                    &lt;/div>
+                &lt;/div>
+            &lt;/div>
+        &lt;/Popup>
+    )
+}
+
+export default TagPopUp;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addFilter">addFilter</a></li><li><a href="global.html#addList">addList</a></li><li><a href="global.html#AddListModal">AddListModal</a></li><li><a href="global.html#addPostToFavoritesList">addPostToFavoritesList</a></li><li><a href="global.html#addTag">addTag</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#CheckBox">CheckBox</a></li><li><a href="global.html#Creator">Creator</a></li><li><a href="global.html#deleteFilter">deleteFilter</a></li><li><a href="global.html#deleteList">deleteList</a></li><li><a href="global.html#deletePostFromFavoritesList">deletePostFromFavoritesList</a></li><li><a href="global.html#deleteTag">deleteTag</a></li><li><a href="global.html#Explore">Explore</a></li><li><a href="global.html#Feed">Feed</a></li><li><a href="global.html#Filter">Filter</a></li><li><a href="global.html#FormContainers">FormContainers</a></li><li><a href="global.html#getFilters">getFilters</a></li><li><a href="global.html#getLists">getLists</a></li><li><a href="global.html#getListsFromPost">getListsFromPost</a></li><li><a href="global.html#getPosts">getPosts</a></li><li><a href="global.html#getPostsFromList">getPostsFromList</a></li><li><a href="global.html#getSocialIntegrations">getSocialIntegrations</a></li><li><a href="global.html#getTags">getTags</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#ListButton">ListButton</a></li><li><a href="global.html#ListConfigModal">ListConfigModal</a></li><li><a href="global.html#ListFeed">ListFeed</a></li><li><a href="global.html#ListPage">ListPage</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginPage">LoginPage</a></li><li><a href="global.html#loginUser">loginUser</a></li><li><a href="global.html#logoutUser">logoutUser</a></li><li><a href="global.html#PatreonConnect">PatreonConnect</a></li><li><a href="global.html#Post">Post</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#RegistrationForm">RegistrationForm</a></li><li><a href="global.html#resetPassword">resetPassword</a></li><li><a href="global.html#root">root</a></li><li><a href="global.html#Searchbar">Searchbar</a></li><li><a href="global.html#SettingsContainers">SettingsContainers</a></li><li><a href="global.html#Sidebar">Sidebar</a></li><li><a href="global.html#SidebarOption">SidebarOption</a></li><li><a href="global.html#TagPopUp">TagPopUp</a></li><li><a href="global.html#TwitterConnect">TwitterConnect</a></li><li><a href="global.html#updateList">updateList</a></li><li><a href="global.html#updateListsForPost">updateListsForPost</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Thu Nov 17 2022 23:43:07 GMT-0500 (Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

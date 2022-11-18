@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: login_page/LoginForm.js</title>
+    <title>JSDoc: Source: list_page/AddListModal.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: login_page/LoginForm.js</h1>
+    <h1 class="page-title">Source: list_page/AddListModal.js</h1>
 
     
 
@@ -26,68 +26,105 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router-dom'
-import "./login_css/LoginForm.css"
-import TextField from '@mui/material/TextField';
-import { loginUser } from '../services/api/login';
+            <pre class="prettyprint source linenums"><code>import React, {useState} from "react";
+import Popup from "reactjs-popup";
+import PostAddIcon from "@mui/icons-material/PostAdd";
+import "./list_css/AddListModal.css";
+import {addList} from "../services/api/lists/addList";
+import {Button} from "@mui/material";
+import TextField from "@mui/material/TextField";
 
 /**
- * The Login Form, where users can login to the website
+ * This is the Add List modal function which creates new lists
  *
- * @returns the login form
+ * @returns The list modal which adds new lists
  */
-const LoginForm = ({setToken}) => {
 
-    const [userName, setUserName] = useState('')
-    const [userPassword, setPassword] = useState('')
-    const [popupFailed, showPopup] = useState("hide")
-    const navigate = useNavigate();
+function AddListModal() {
 
-    //shows the login failed if username/pass != correct
-    const handleSubmit = async e => {
-        e.preventDefault();
-        const token = await loginUser({
-            userName,
-            userPassword
+    const [popup, showPopup] = React.useState("hide");
+
+    const [titleInput, setTitle] = useState("");
+    const [descInput, setDesc] = useState("");
+
+    const eraseInfo = () => {
+        setTitle("");
+        setDesc("");
+    }
+
+    const addListRequest = async e => {
+        const tokenString = localStorage.getItem('token');
+        const loginToken = JSON.parse(tokenString).token;
+        const title = titleInput;
+        const description = descInput;
+
+        const message = await addList({
+            loginToken,
+            title,
+            description,
         });
-        console.log(token);
 
-        if (!userName || !userPassword || !token.token) {
-            showPopup("loginPop")
+        console.log(message);
+        window.location.reload();
+    }
+
+    const addListInit = () => {
+
+        if (titleInput.replaceAll(" ", "") === "" || descInput.replaceAll(" ", "") === "") {
+            document.getElementById("errormsg").textContent = "Provide Title and Description";
+            return false;
         }
-        else {
-            setToken(token);
-            navigate("/home");
+
+        if (titleInput.replaceAll(" ", "") === "Favorites") {
+            document.getElementById("errormsg").textContent = "Cannot Create List With Title \"Favorites\"";
+            return false;
         }
+
+        addListRequest().then()
+
+        eraseInfo();
+        return true;
     }
 
 
-    return(
-        &lt;div className="cover">
-            &lt;h1>Sign in&lt;/h1>
-            &lt;TextField className='textInputLog' id="outlined-basic" label="Username" variant="outlined"
-                       value={userName} onChange={(e) => setUserName(e.target.value)}/>
+    return (
+        &lt;Popup trigger={&lt;PostAddIcon id="addListButton" />} onClose={eraseInfo} modal>
+            {close => (
+                &lt;div className="modalBox">
+                    &lt;button className="close" onClick={close}>
+                        &amp;times;
+                    &lt;/button>
+                    &lt;div className="header">
+                        Create a new List
+                    &lt;/div>
+                    &lt;div className="fields">
+                        &lt;TextField id="outlined-basic" label={"Title"} size={"small"} variant="outlined" value={titleInput} onChange={(e) => setTitle(e.target.value)}/>
+                        &lt;TextField id="outlined-basic" label={"Description"} size={"small"} variant="outlined" value={descInput} onChange={(e) => setDesc(e.target.value)}/>
 
-            &lt;TextField className='textInputLog' id="outlined-basic" label="Password" type='password'
-                       variant="outlined" value={userPassword} onChange={(e) => setPassword(e.target.value)}/>
+                        &lt;div className={popup}>
+                            &lt;p id="errormsg"> &lt;/p>
+                        &lt;/div>
 
-            &lt;div className="loginButton" onClick={handleSubmit}>Sign in&lt;/div>
-
-            &lt;div className={popupFailed}>
-                &lt;h3>Sign in Failed&lt;/h3>
-                &lt;p>Incorrect Username or Password. Please try again&lt;/p>
-            &lt;/div>
-        &lt;/div>
-    )
+                        &lt;div className="buttonContainer">
+                            &lt;Button id="createbtn" sx={ { borderRadius: 10 } } color="primary" type="submit" variant="contained" onClick={() => {
+                                if (addListInit()) {
+                                    close();
+                                }
+                                else {
+                                    showPopup("show");
+                                }
+                                }}>
+                                Create
+                            &lt;/Button>
+                        &lt;/div>
+                    &lt;/div>
+                &lt;/div>
+            )}
+        &lt;/Popup>
+    );
 }
 
-LoginForm.propTypes = {
-    setToken: PropTypes.func.isRequired
-};
-
-export default LoginForm;</code></pre>
+export default AddListModal;</code></pre>
         </article>
     </section>
 

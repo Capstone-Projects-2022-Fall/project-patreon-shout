@@ -1,4 +1,32 @@
-import React, {useEffect, useState} from "react";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: home_page/Filter.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: home_page/Filter.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, {useEffect, useState} from "react";
 import Box from '@mui/material/Box';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
@@ -101,17 +129,17 @@ function Filter({filterChoices, setFilterChoices, dateRange, setDateRange}) {
         } else {setHideCalendar(true); };
 
         // Handles letting user select conflicting chronological order
-        if ((value.includes("Date(new → old)")) && (value.includes("Date(old → new)"))) {
+        if ((value.includes("Date(new → old)")) &amp;&amp; (value.includes("Date(old → new)"))) {
             const ind1 = value.indexOf("Date(new → old)");
             const ind2 = value.indexOf("Date(old → new)");
-            if (ind1 < ind2) {value.splice(ind1, 1)} else {value.splice(ind2, 1)};
+            if (ind1 &lt; ind2) {value.splice(ind1, 1)} else {value.splice(ind2, 1)};
         }
 
         // Handles letting user select conflicting level of privacy
-        if ((value.includes("Private Only")) && (value.includes("Public Only"))) {
+        if ((value.includes("Private Only")) &amp;&amp; (value.includes("Public Only"))) {
             const ind1 = value.indexOf("Private Only");
             const ind2 = value.indexOf("Public Only");
-            if (ind1 < ind2) {value.splice(ind1, 1)} else {value.splice(ind2, 1)};
+            if (ind1 &lt; ind2) {value.splice(ind1, 1)} else {value.splice(ind2, 1)};
         }
 
         // Sets and sends filter name to feed
@@ -148,48 +176,70 @@ function Filter({filterChoices, setFilterChoices, dateRange, setDateRange}) {
     },[timePeriod]);
 
     return (
-        <div>
-            <div>
-                <FormControl sx={{ m: 1, width: 300 }}>
-                    <InputLabel id="filter">Filters</InputLabel>
-                    <Select
+        &lt;div>
+            &lt;div>
+                &lt;FormControl sx={{ m: 1, width: 300 }}>
+                    &lt;InputLabel id="filter">Filters&lt;/InputLabel>
+                    &lt;Select
                         className = "filter-chip-dropdown"
                         labelId="filter-chip-dropdown"
                         id="filter-chip"
                         multiple
                         value={filterName}
                         onChange={handleAddChip}
-                        input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+                        input={&lt;OutlinedInput id="select-multiple-chip" label="Chip" />}
                         renderValue={(selected) => (
-                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                            &lt;Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                             {selected.map((value) => (
-                                <Chip key={value} label={value} />
+                                &lt;Chip key={value} label={value} />
                             ))}
-                            </Box>
+                            &lt;/Box>
                         )}
                         MenuProps={MenuProps}
                     >
                     {filterNames.map((name) => (
-                        <MenuItem key={name} value={name}>
+                        &lt;MenuItem key={name} value={name}>
                             {name}
-                        </MenuItem>
+                        &lt;/MenuItem>
                     ))}
                     {addedFilterNames.map(({filter_name, filter}) => (
-                        <MenuItem key={filter} value={filter} className="added-filters">
+                        &lt;MenuItem key={filter} value={filter} className="added-filters">
                             {filter_name}
-                            <IconButton className="icon-delete-button" onClick={()=>{handleDeleteFilter(filter_name)}}><Close /></IconButton>
-                        </MenuItem>
+                            &lt;IconButton className="icon-delete-button" onClick={()=>{handleDeleteFilter(filter_name)}}>&lt;Close />&lt;/IconButton>
+                        &lt;/MenuItem>
                     ))}
-                    </Select>
-                </FormControl>
-            </div>
-            <div className="dateRangePopup" hidden={hideCalendar}>
-                <DateRangePicker
+                    &lt;/Select>
+                &lt;/FormControl>
+            &lt;/div>
+            &lt;div className="dateRangePopup" hidden={hideCalendar}>
+                &lt;DateRangePicker
                     onChange={handleSelectDates}
                     ranges={[timePeriod]} 
                 />
-            </div>
-        </div>
+            &lt;/div>
+        &lt;/div>
     );
 }
-export default Filter;
+export default Filter;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addFilter">addFilter</a></li><li><a href="global.html#addList">addList</a></li><li><a href="global.html#AddListModal">AddListModal</a></li><li><a href="global.html#addPostToFavoritesList">addPostToFavoritesList</a></li><li><a href="global.html#addTag">addTag</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#CheckBox">CheckBox</a></li><li><a href="global.html#Creator">Creator</a></li><li><a href="global.html#deleteFilter">deleteFilter</a></li><li><a href="global.html#deleteList">deleteList</a></li><li><a href="global.html#deletePostFromFavoritesList">deletePostFromFavoritesList</a></li><li><a href="global.html#deleteTag">deleteTag</a></li><li><a href="global.html#Explore">Explore</a></li><li><a href="global.html#Feed">Feed</a></li><li><a href="global.html#Filter">Filter</a></li><li><a href="global.html#FormContainers">FormContainers</a></li><li><a href="global.html#getFilters">getFilters</a></li><li><a href="global.html#getLists">getLists</a></li><li><a href="global.html#getListsFromPost">getListsFromPost</a></li><li><a href="global.html#getPosts">getPosts</a></li><li><a href="global.html#getPostsFromList">getPostsFromList</a></li><li><a href="global.html#getSocialIntegrations">getSocialIntegrations</a></li><li><a href="global.html#getTags">getTags</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#ListButton">ListButton</a></li><li><a href="global.html#ListConfigModal">ListConfigModal</a></li><li><a href="global.html#ListFeed">ListFeed</a></li><li><a href="global.html#ListPage">ListPage</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginPage">LoginPage</a></li><li><a href="global.html#loginUser">loginUser</a></li><li><a href="global.html#logoutUser">logoutUser</a></li><li><a href="global.html#PatreonConnect">PatreonConnect</a></li><li><a href="global.html#Post">Post</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#RegistrationForm">RegistrationForm</a></li><li><a href="global.html#resetPassword">resetPassword</a></li><li><a href="global.html#root">root</a></li><li><a href="global.html#Searchbar">Searchbar</a></li><li><a href="global.html#SettingsContainers">SettingsContainers</a></li><li><a href="global.html#Sidebar">Sidebar</a></li><li><a href="global.html#SidebarOption">SidebarOption</a></li><li><a href="global.html#TagPopUp">TagPopUp</a></li><li><a href="global.html#TwitterConnect">TwitterConnect</a></li><li><a href="global.html#updateList">updateList</a></li><li><a href="global.html#updateListsForPost">updateListsForPost</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Thu Nov 17 2022 23:43:07 GMT-0500 (Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
