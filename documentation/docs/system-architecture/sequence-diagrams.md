@@ -15,44 +15,7 @@ As a user, I want to be able to forward my Patreon posts to Discord, Instagram, 
 7. User provides Patreon Shout with the information needed to post on a social platform
 8. Whenever the user publishes a post on Patreon, the post will subsequently be published to the selected social platforms.
 
-
-```mermaid
-sequenceDiagram
-    participant User
-    participant PatreonShout
-    participant Patreon
-    participant Platform
-User ->>+ PatreonShout: Signs up
-PatreonShout -->> User: Response with session cookie
-PatreonShout -->>- User: Prompt to link their Patreon account
-
-User ->>+ Patreon: Allow OAuth authorization
-activate Patreon
-Patreon -->>+ PatreonShout: OAuth Response code
-deactivate Patreon
-PatreonShout ->>- Patreon: Request creator access token using Patreon API
-activate Patreon
-Patreon -->>+ PatreonShout: Response with creator access token
-deactivate Patreon
-PatreonShout -->>- User: Redirected to main feed
-
-User ->>+ PatreonShout: Clicks content creator settings
-PatreonShout -->>- User: Redirected to content creator settings
-
-User ->>+ PatreonShout: Selects a social platform
-PatreonShout -->>- User: Instructions needed to post on the platform returned
-
-User ->>+ PatreonShout: Provides information needed to post on a social platform and clicks "save"
-PatreonShout -->>- User: Tells the user that cross-posting is enabled
-
-User ->>+ Patreon: Publishes Patreon post
-Patreon -->>- PatreonShout: New Patreon post information
-activate PatreonShout
-PatreonShout ->>+ Platform: Post creation request
-deactivate PatreonShout
-Platform -->>- PatreonShout: Post creation request approved
-```
-
+[![](https://mermaid.ink/img/pako:eNqtWG1P40YQ_itTS6cWAackkIP4w0kooN61V0AYVLXKl409cVZxdtPdNYEi_ntn_Zb4lYSST453duaZl2d21i-OLwN0XEfjPzEKHy85CxVbTgTQb8WU4T5fMWHgQaOqv71lRqEU3lzGpr76J04vfF_G9OiheuQ-1mXu0Ef-iKpdwkM_Vtw8w1iKGQ_rApfMsCnT2AovXfj0qbwWMTOTilydCFq6w5Brk_tovYXjr18PSx66hRRIUVqBNU41NxkE5hv-yAxuBa0kTIqPG4Jj1QdcoW8gtvaVzYk2E1HR2hbWa0mLiodzA3LWqP9C63iJYOYkl3iimOHkSmYJfCkM40LDI4t4AFzYACUiqYW6zjRIlRS5MJ6jv9DAZxRyrddSBbBENHrz15okX5co6G2qvaIFjlvjdK9i7EaU14QL36-9q7t7il4qFSB5GOk9I2bzIRg9cA1CGmCRQhY8Z1FEhUGqMDfbgf1aAiollYb1HAXgE3ltuAgzoKmeADuz3eV7pWK_3d_fgmeYiTUMej24-b1WT3USl6vVKrWV7MIl16uIPcPE-UvGqojpnGmYIjnjU1QMBj9NnJobdSNbiylPEh7-kCEX3SQkESpNIzsYWKXbYTfdImt0w7fdCuvXq01VrbmZQ0h9TGS63ldmlpglLG8ycoeCs2H8WW8t7cllzygqz1_GsVJEVjDc0kDAHzyKiA2HiX7LjYN9WZwpTjIORi5QHOxJ6miz9WP514Qg0ViuxN-8m-t2N2osOs5oVNQd1fCSsgsztA0kqf9sE9xcxGbezYNxxP0FcdFDYx3QOeveYm8hX9LeopyyKDKo-Wnq7Nk_tpCXfW_wNX-1QU2pWLEQIUjR20ytUC251kQCXTZF9ZgRh8Sa3dt4dhFFcl2JWXo0V2cSt1iOUy7FgpOVFDfYCQqYCMpQaqVZhKt54qm-rYTtoWqxArsF93aB5rLUs1DrFNpRoUHhTKGelwr4DUx3WY-qBMdnyxXjIfVAIuNuMPP1hq3NGHbswu2doY6hpU2-ZT_rRAXytzp03fBODWnHVLAoKqBoICR0pPCCJPV5FLqDUahKN0VSrhITCk2sBAbpnFqR2hPuSmqTQvWzEybXt1G3H9pU5WZ3HXab5HsSblWUNXxMxu0PRTZXJg97FWSF7bY_lSj-UcW5V3kKXMM4D9wtBc7SbS7lIsl_U4PaqVq3u1w2gtpx0Co-aEdYP_MqjTLiYkHDLJmP0MYoj1_T2HnQffT-f81b03LzAdI6azfNoCmqh_SWmdhGnUyf6_S0zYaRiyCwU4NvL2xZprpHEo9asD8v9tAZf3PddgEuDyUVM_Bw9wMMPhmYyqekejV7RJjGxkjRObjcMp3emnI1Ow5RpL55gNqen9g0QvCqSHa7bdw-3IMnfc6i78JgqHa4V5ePuerR9PGzf62L5FnJ2GQT-g4UHzlyfzNmVb3PduRsPGcizLNFg1Nkj0QJoUIUe2zkdA-z-3z7XYNmdrXoruorUa0U58hZ0tjKeOC4zovdPXGIcEsqOpceA6uSyu-V5FhspPcsfMc1KsYjJ17ROJR_mXPcGYs0vV0x8beUy1yI_jrui_PkuP2z_ufhaHh2Njrtn49OhydHzrPjHp_2e59HveH5YHA2PBn1vgyGr0fOv4kGkj856X056Q_7w_NRvz8YvP4HEUDOmQ?type=png)](https://mermaid-js.github.io/mermaid-live-editor/edit#pako:eNqtWG1P40YQ_itTS6cWAackkIP4w0kooN61V0AYVLXKl409cVZxdtPdNYEi_ntn_Zb4lYSST453duaZl2d21i-OLwN0XEfjPzEKHy85CxVbTgTQb8WU4T5fMWHgQaOqv71lRqEU3lzGpr76J04vfF_G9OiheuQ-1mXu0Ef-iKpdwkM_Vtw8w1iKGQ_rApfMsCnT2AovXfj0qbwWMTOTilydCFq6w5Brk_tovYXjr18PSx66hRRIUVqBNU41NxkE5hv-yAxuBa0kTIqPG4Jj1QdcoW8gtvaVzYk2E1HR2hbWa0mLiodzA3LWqP9C63iJYOYkl3iimOHkSmYJfCkM40LDI4t4AFzYACUiqYW6zjRIlRS5MJ6jv9DAZxRyrddSBbBENHrz15okX5co6G2qvaIFjlvjdK9i7EaU14QL36-9q7t7il4qFSB5GOk9I2bzIRg9cA1CGmCRQhY8Z1FEhUGqMDfbgf1aAiollYb1HAXgE3ltuAgzoKmeADuz3eV7pWK_3d_fgmeYiTUMej24-b1WT3USl6vVKrWV7MIl16uIPcPE-UvGqojpnGmYIjnjU1QMBj9NnJobdSNbiylPEh7-kCEX3SQkESpNIzsYWKXbYTfdImt0w7fdCuvXq01VrbmZQ0h9TGS63ldmlpglLG8ycoeCs2H8WW8t7cllzygqz1_GsVJEVjDc0kDAHzyKiA2HiX7LjYN9WZwpTjIORi5QHOxJ6miz9WP514Qg0ViuxN-8m-t2N2osOs5oVNQd1fCSsgsztA0kqf9sE9xcxGbezYNxxP0FcdFDYx3QOeveYm8hX9LeopyyKDKo-Wnq7Nk_tpCXfW_wNX-1QU2pWLEQIUjR20ytUC251kQCXTZF9ZgRh8Sa3dt4dhFFcl2JWXo0V2cSt1iOUy7FgpOVFDfYCQqYCMpQaqVZhKt54qm-rYTtoWqxArsF93aB5rLUs1DrFNpRoUHhTKGelwr4DUx3WY-qBMdnyxXjIfVAIuNuMPP1hq3NGHbswu2doY6hpU2-ZT_rRAXytzp03fBODWnHVLAoKqBoICR0pPCCJPV5FLqDUahKN0VSrhITCk2sBAbpnFqR2hPuSmqTQvWzEybXt1G3H9pU5WZ3HXab5HsSblWUNXxMxu0PRTZXJg97FWSF7bY_lSj-UcW5V3kKXMM4D9wtBc7SbS7lIsl_U4PaqVq3u1w2gtpx0Co-aEdYP_MqjTLiYkHDLJmP0MYoj1_T2HnQffT-f81b03LzAdI6azfNoCmqh_SWmdhGnUyf6_S0zYaRiyCwU4NvL2xZprpHEo9asD8v9tAZf3PddgEuDyUVM_Bw9wMMPhmYyqekejV7RJjGxkjRObjcMp3emnI1Ow5RpL55gNqen9g0QvCqSHa7bdw-3IMnfc6i78JgqHa4V5ePuerR9PGzf62L5FnJ2GQT-g4UHzlyfzNmVb3PduRsPGcizLNFg1Nkj0QJoUIUe2zkdA-z-3z7XYNmdrXoruorUa0U58hZ0tjKeOC4zovdPXGIcEsqOpceA6uSyu-V5FhspPcsfMc1KsYjJ17ROJR_mXPcGYs0vV0x8beUy1yI_jrui_PkuP2z_ufhaHh2Njrtn49OhydHzrPjHp_2e59HveH5YHA2PBn1vgyGr0fOv4kGkj856X056Q_7w_NRvz8YvP4HEUDOmQ)
 
 ### Use Case 2
 As a user, I want to be able to filter through the creators I’m following on Patreon, so I can easily view specific content, like the category “gaming”, from my list of creators I follow.
