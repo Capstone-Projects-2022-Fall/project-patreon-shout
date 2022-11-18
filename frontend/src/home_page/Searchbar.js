@@ -4,6 +4,15 @@ import React, { useState, useEffect } from "react";
 import "./home_css/Searchbar.css";
 import { addFilter } from "../services/api/filters/addFilter";
 
+
+/**
+ * This is the searchbar component above the main feed
+ *
+ * @param {string} searchTerm - The search term to filter posts for
+ *
+ * @returns A search term for filtering posts by
+ */
+
 function Searchbar({searchTerm, setSearchTerm}) {
 
     const [searchInput, setSearchInput] = useState("");

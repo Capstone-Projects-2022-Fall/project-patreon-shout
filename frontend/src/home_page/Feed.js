@@ -10,7 +10,7 @@ import { v4 } from 'uuid';
 import {getPosts} from "../services/api/posts";
 
 /**
- * This is the Feed function which will appear on the home page
+ * This is the Main Feed function which will appear on the home page
  *
  * @returns Visual representation of the list of posts
  */

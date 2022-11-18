@@ -5,9 +5,9 @@ import './list_css/ListPage.css';
 
 
 /**
- * This is the Home function which creates the home page
+ * This is the List page function which creates the list page
  *
- * @returns The home page user interface
+ * @returns The list page user interface
  */
 function ListPage() {
     return (

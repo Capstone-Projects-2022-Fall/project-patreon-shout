@@ -26,125 +26,147 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import React, { useState } from "react";
-import "./Feed.css";
+            <pre class="prettyprint source linenums"><code>import React, {useEffect, useState} from "react";
+import "./home_css/Feed.css";
 import Post from "./Post";
+import Searchbar from "./Searchbar";
+//import { getPosts } from '../services/api/posts'
+import jsonPosts from "../data/posts.json";
+import Filter from "./Filter";
+import {getLists} from "../services/api/lists/getLists";
+import { v4 } from 'uuid';
+import {getPosts} from "../services/api/posts";
 
 /**
- * This is the Feed function which will appear on the home page
- * 
+ * This is the Main Feed function which will appear on the home page
+ *
  * @returns Visual representation of the list of posts
  */
+
 function Feed() {
-  const [posts] = useState([]);
 
-  return (
-    &lt;div className="feed">
-      &lt;div className="feed__header">
-        &lt;h2>Home&lt;/h2>
-      &lt;/div>
-      {posts.map((post) => (
-        &lt;Post
-          displayName={post.displayName}
-          username={post.username}
-          verified={post.verified}
-          text={post.text}
-          avatar={post.avatar}
-          image={post.image}
-        />
-      ))}
-      &lt;Post
-        displayName={"Jones"}
-        username={"BoneyJones"}
-        verified={"check"}
-        text={"Wow this is a cool website"}
-        avatar={"post.avatar"}
-        image={"post.image"}
-      />
-      &lt;Post
-        displayName={"Alex"}
-        username={"ALLLLLLEX"}
-        verified={false}
-        text={"I HATE THIS WEBSITE MAN"}
-        avatar={"post.avatar"}
-        image={"post.image"}
-      />
-      &lt;Post
-        displayName={"Chris"}
-        username={"ChrystalLite"}
-        verified={"check"}
-        text={"Man this needs a LOT of work"}
-        avatar={"post.avatar"}
-        image={"post.image"}
-      />
-      &lt;Post
-        displayName={"Jones"}
-        username={"BoneyJones"}
-        verified={"check"}
-        text={"Wow this is a cool website"}
-        avatar={"post.avatar"}
-        image={"post.image"}
-      />
-      &lt;Post
-        displayName={"Jones"}
-        username={"BoneyJones"}
-        verified={"check"}
-        text={"Wow this is a cool website"}
-        avatar={"post.avatar"}
-        image={"post.image"}
-      />
-      &lt;Post
-        displayName={"Jones"}
-        username={"BoneyJones"}
-        verified={"check"}
-        text={"Wow this is a cool website"}
-        avatar={"post.avatar"}
-        image={"post.image"}
-      />
-      &lt;Post
-        displayName={"Jones"}
-        username={"BoneyJones"}
-        verified={"check"}
-        text={"Wow this is a cool website"}
-        avatar={"post.avatar"}
-        image={"post.image"}
-      />
-      &lt;Post
-        displayName={"Jones"}
-        username={"BoneyJones"}
-        verified={"check"}
-        text={"Wow this is a cool website"}
-        avatar={"post.avatar"}
-        image={"post.image"}
-      />
-      &lt;Post
-        displayName={"Jones"}
-        username={"BoneyJones"}
-        verified={"check"}
-        text={"Wow this is a cool website"}
-        avatar={"post.avatar"}
-        image={"post.image"}
-      />
-      &lt;Post
-        displayName={"Jones"}
-        username={"BoneyJones"}
-        verified={"check"}
-        text={"Wow this is a cool website"}
-        avatar={"post.avatar"}
-        image={"post.image"}
-      />
-      &lt;Post
-        displayName={"Jones"}
-        username={"BoneyJones"}
-        verified={"check"}
-        text={"Wow this is a cool website"}
-        avatar={"post.avatar"}
-        image={"post.image"}
-      />
-    &lt;/div>
-  );
+    const [searchTerm, setSearchTerm] = useState([]);
+    const [filterChoices, setFilterChoices] = useState([]);
+    const [dateRange, setDateRange] = useState([]);
+    const [postList, setPostList] = useState([]);
+    const [userLists, setUserLists] = useState([]);
+    const searchedList = [];
+    const avoidDefaults = ["Date(new → old)", "Date(old → new)", "Private Only", "Public Only", "Date Range"];
+    let displayedList = [];
+    let shouldSkip = false;
+
+    // Searchbar Functionality
+    postList.forEach((post, index) => {
+        const postInfo = (({title, creator_page_url, content}) => ({title, creator_page_url, content}))(post);
+        Object.values(postInfo).every((onlyValues, valIndex) => {
+            if (shouldSkip) {return;}
+            if (onlyValues.toLowerCase().includes(searchTerm)) {
+                searchedList.push(post)
+                shouldSkip = true;
+            }
+            return searchedList;
+        })
+        shouldSkip = false;
+    });
+
+    // Filter Functionality
+    displayedList = [...searchedList];
+    console.log(filterChoices);
+    if (filterChoices.includes("Date(new → old)")) {
+        displayedList = displayedList.sort(function(b, a){return new Date(a.published_at).getTime() - new Date(b.published_at).getTime()});
+    }
+    if (filterChoices.includes("Date(old → new)")) {
+        console.log("hit");
+        displayedList = displayedList.sort(function(a, b){return new Date(a.published_at).getTime() - new Date(b.published_at).getTime()});
+    } else {displayedList = displayedList.sort(function(b, a){return new Date(a.published_at).getTime() - new Date(b.published_at).getTime()});}
+    if (filterChoices.includes("Private Only")) {
+        displayedList = displayedList.filter(value => (value.is_public === "true") === false);
+    }
+    if (filterChoices.includes("Public Only")) {
+        displayedList = displayedList.filter(value => (value.is_public === "true") === true);
+    }
+    if (filterChoices.includes("Date Range")) {
+        displayedList = displayedList.sort(function(b, a){return new Date(a.published_at).getTime() - new Date(b.published_at).getTime()});
+        displayedList = displayedList.filter(value => (new Date(value.published_at).getTime() &lt;= new Date(dateRange.endDate).getTime() &amp;&amp; 
+            new Date(value.published_at).getTime() >= new Date(dateRange.startDate).getTime()));
+    }
+
+    for(const element of filterChoices) {
+        if (!avoidDefaults.includes(element)) {
+            let afterFiltersList = [];
+            shouldSkip=false;
+            displayedList.forEach((post) => {
+                const postInfo = (({title, content}) => ({title, content}))(post);
+                Object.values(postInfo).every((onlyValues) => {
+                    if (shouldSkip) {return;}
+                    if (onlyValues.toLowerCase().includes(element)) {
+                        afterFiltersList.push(post);
+                        displayedList = afterFiltersList;
+                        shouldSkip = true;
+                    } else {displayedList = afterFiltersList;}
+                    return displayedList;
+                })
+                shouldSkip = false;
+            });
+        }
+    }  
+
+    useEffect(() => {
+        let mounted = true;
+        const tokenString = localStorage.getItem('token');
+        const userToken = JSON.parse(tokenString);
+        getLists(userToken.token)
+            .then(items => {
+                if (mounted) {
+                    setUserLists(items)
+                }
+            })
+        return () => mounted = false;
+    }, [])
+
+    useEffect(() => {
+        let mounted = true;
+        getPosts("8432541")
+            .then(items => {
+                if (mounted) {
+                    setPostList(items)
+                }
+            })
+        return () => mounted = false;
+    }, [])
+
+    return (
+        &lt;div className="feed">
+            &lt;div className="feed__header">
+                &lt;h1>Patreon Shout&lt;/h1>
+            &lt;/div>
+            &lt;div className="feed__filters">
+                &lt;Searchbar
+                    searchTerm={searchTerm}
+                    setSearchTerm={setSearchTerm}
+                />
+                &lt;Filter id="feed__filter"
+                    filterChoices={filterChoices} 
+                    setFilterChoices={setFilterChoices}
+                    dateRange={dateRange}
+                    setDateRange={setDateRange}
+                />
+            &lt;/div>
+            {displayedList.map((item) => (
+                &lt;Post
+                    key={v4()}
+                    title={item.title}
+                    creator_page_url={item.creator_page_url}
+                    is_public={(item.is_public === "true")}
+                    content={item.content}
+                    published_at={item.published_at}
+                    url = {item.url}
+                    lists = {userLists}
+                />
+            ))}
+        &lt;/div>
+    );
 }
-
 export default Feed;</code></pre>
         </article>
     </section>
@@ -155,13 +177,13 @@ export default Feed;</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#Feed">Feed</a></li><li><a href="global.html#FormContainers">FormContainers</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#Post">Post</a></li><li><a href="global.html#RegistrationForm">RegistrationForm</a></li><li><a href="global.html#root">root</a></li><li><a href="global.html#Sidebar">Sidebar</a></li><li><a href="global.html#SidebarOption">SidebarOption</a></li><li><a href="global.html#TitleBox">TitleBox</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addFilter">addFilter</a></li><li><a href="global.html#addList">addList</a></li><li><a href="global.html#AddListModal">AddListModal</a></li><li><a href="global.html#addPostToFavoritesList">addPostToFavoritesList</a></li><li><a href="global.html#addTag">addTag</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#CheckBox">CheckBox</a></li><li><a href="global.html#Creator">Creator</a></li><li><a href="global.html#deleteFilter">deleteFilter</a></li><li><a href="global.html#deleteList">deleteList</a></li><li><a href="global.html#deletePostFromFavoritesList">deletePostFromFavoritesList</a></li><li><a href="global.html#deleteTag">deleteTag</a></li><li><a href="global.html#Explore">Explore</a></li><li><a href="global.html#Feed">Feed</a></li><li><a href="global.html#Filter">Filter</a></li><li><a href="global.html#FormContainers">FormContainers</a></li><li><a href="global.html#getFilters">getFilters</a></li><li><a href="global.html#getLists">getLists</a></li><li><a href="global.html#getListsFromPost">getListsFromPost</a></li><li><a href="global.html#getPosts">getPosts</a></li><li><a href="global.html#getPostsFromList">getPostsFromList</a></li><li><a href="global.html#getSocialIntegrations">getSocialIntegrations</a></li><li><a href="global.html#getTags">getTags</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#ListButton">ListButton</a></li><li><a href="global.html#ListConfigModal">ListConfigModal</a></li><li><a href="global.html#ListFeed">ListFeed</a></li><li><a href="global.html#ListPage">ListPage</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginPage">LoginPage</a></li><li><a href="global.html#loginUser">loginUser</a></li><li><a href="global.html#logoutUser">logoutUser</a></li><li><a href="global.html#PatreonConnect">PatreonConnect</a></li><li><a href="global.html#Post">Post</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#RegistrationForm">RegistrationForm</a></li><li><a href="global.html#resetPassword">resetPassword</a></li><li><a href="global.html#root">root</a></li><li><a href="global.html#Searchbar">Searchbar</a></li><li><a href="global.html#SettingsContainers">SettingsContainers</a></li><li><a href="global.html#Sidebar">Sidebar</a></li><li><a href="global.html#SidebarOption">SidebarOption</a></li><li><a href="global.html#TagPopUp">TagPopUp</a></li><li><a href="global.html#TwitterConnect">TwitterConnect</a></li><li><a href="global.html#updateList">updateList</a></li><li><a href="global.html#updateListsForPost">updateListsForPost</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Tue Oct 04 2022 19:42:45 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Thu Nov 17 2022 23:43:07 GMT-0500 (Eastern Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

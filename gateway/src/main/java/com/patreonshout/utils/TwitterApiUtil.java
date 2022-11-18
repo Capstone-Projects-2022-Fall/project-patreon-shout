@@ -40,6 +40,11 @@ public class TwitterApiUtil {
         send(text);
     }
 
+    /**
+     * Sends a tweet to Twitter
+     *
+     * @param text is the text we want to send to twitter
+     */
     public void send(String text) {
         TweetCreateRequest request = new TweetCreateRequest();
         request.setText(text);

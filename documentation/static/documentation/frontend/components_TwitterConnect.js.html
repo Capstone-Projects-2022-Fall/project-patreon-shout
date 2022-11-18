@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/TwitterConnect.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/TwitterConnect.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from "react";
+import useToken from "../services/useToken";
+import Login from "../login_page/LoginPage";
+import {Button} from "@mui/material";
+
+/**
+ * This is the TwitterConnect function which will be used to connect to twitter for cross-posting
+ *
+ * @returns Connect to twitter button
+ *
+ */
+
+function TwitterConnect() {
+    // const patreonUrl = "https://www.patreon.com/oauth2/authorize" +
+    //     "?response_type=code" +
+    //     "&amp;client_id=Vti4zJZ3GT_wYu4uVMh-UdZDBdbjz8xzxlW3ejvtLGvCoh6cZDR30sYv7tNptFF4" +
+    //     "&amp;redirect_uri=http://patreon-shout-gateway.us-east-2.elasticbeanstalk.com/receivers/patreon/oauth" +
+    //     "&amp;scope=identity identity.memberships campaigns w:campaigns.webhook campaigns.members campaigns.members.address campaigns.posts" +
+    //     "&amp;state=";
+
+    const { token, setToken } = useToken();
+
+    if (!token) { // TODO: check if session token is also valid via http request to database
+        return &lt;Login setToken={setToken}/>
+    }
+
+    const twitterUrlDev = "https://twitter.com/i/oauth2/authorize" +
+        "?response_type=code" +
+        "&amp;client_id=NWhrMFdaeE9Bd3diVXlTY19oYUg6MTpjaQ" +
+        "&amp;redirect_uri=http://127.0.0.1:5000/receivers/twitter/oauth " +
+        "&amp;scope=tweet.read%20tweet.write%20users.read%20offline.access" +
+        "&amp;state=" + token +
+        "&amp;code_challenge=challenge" +
+        "&amp;code_challenge_method=plain";
+
+    const twitterUrl = "https://twitter.com/i/oauth2/authorize" +
+        "?response_type=code" +
+        "&amp;client_id=NWhrMFdaeE9Bd3diVXlTY19oYUg6MTpjaQ" +
+        "&amp;redirect_uri=https://prodprod.backend.outofstonk.com/receivers/twitter/oauth " +
+        "&amp;scope=tweet.read%20tweet.write%20users.read%20offline.access" +
+        "&amp;state=" + token +
+        "&amp;code_challenge=challenge" +
+        "&amp;code_challenge_method=plain";
+
+
+
+    return (
+        &lt;div className="PatreonConnect">
+            &lt;Button target="_blank" href={twitterUrl} sx={ { borderRadius: 28 } } color="primary" type="submit" variant="contained">
+                Connect To Twitter
+            &lt;/Button>
+        &lt;/div>);
+}
+
+export default TwitterConnect;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addFilter">addFilter</a></li><li><a href="global.html#addList">addList</a></li><li><a href="global.html#AddListModal">AddListModal</a></li><li><a href="global.html#addPostToFavoritesList">addPostToFavoritesList</a></li><li><a href="global.html#addTag">addTag</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#CheckBox">CheckBox</a></li><li><a href="global.html#Creator">Creator</a></li><li><a href="global.html#deleteFilter">deleteFilter</a></li><li><a href="global.html#deleteList">deleteList</a></li><li><a href="global.html#deletePostFromFavoritesList">deletePostFromFavoritesList</a></li><li><a href="global.html#deleteTag">deleteTag</a></li><li><a href="global.html#Explore">Explore</a></li><li><a href="global.html#Feed">Feed</a></li><li><a href="global.html#Filter">Filter</a></li><li><a href="global.html#FormContainers">FormContainers</a></li><li><a href="global.html#getFilters">getFilters</a></li><li><a href="global.html#getLists">getLists</a></li><li><a href="global.html#getListsFromPost">getListsFromPost</a></li><li><a href="global.html#getPosts">getPosts</a></li><li><a href="global.html#getPostsFromList">getPostsFromList</a></li><li><a href="global.html#getSocialIntegrations">getSocialIntegrations</a></li><li><a href="global.html#getTags">getTags</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#ListButton">ListButton</a></li><li><a href="global.html#ListConfigModal">ListConfigModal</a></li><li><a href="global.html#ListFeed">ListFeed</a></li><li><a href="global.html#ListPage">ListPage</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginPage">LoginPage</a></li><li><a href="global.html#loginUser">loginUser</a></li><li><a href="global.html#logoutUser">logoutUser</a></li><li><a href="global.html#PatreonConnect">PatreonConnect</a></li><li><a href="global.html#Post">Post</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#RegistrationForm">RegistrationForm</a></li><li><a href="global.html#resetPassword">resetPassword</a></li><li><a href="global.html#root">root</a></li><li><a href="global.html#Searchbar">Searchbar</a></li><li><a href="global.html#SettingsContainers">SettingsContainers</a></li><li><a href="global.html#Sidebar">Sidebar</a></li><li><a href="global.html#SidebarOption">SidebarOption</a></li><li><a href="global.html#TagPopUp">TagPopUp</a></li><li><a href="global.html#TwitterConnect">TwitterConnect</a></li><li><a href="global.html#updateList">updateList</a></li><li><a href="global.html#updateListsForPost">updateListsForPost</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Thu Nov 17 2022 23:43:07 GMT-0500 (Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

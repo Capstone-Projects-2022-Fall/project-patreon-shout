@@ -120,6 +120,13 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
+	/**
+	 * Test for a webhook endpoint
+	 *
+	 * @param loginToken is a user's loginToken
+	 * @return an {@link org.springframework.http.HttpStatus#OK}
+	 * @throws PSException in case of a database problem or a user mismatch
+	 */
 	@PostMapping("webhook")
 	public ResponseEntity<?> Webhook(@RequestParam(name = "login_token") String loginToken) throws PSException {
 		webAccountFunctions.testy(loginToken);

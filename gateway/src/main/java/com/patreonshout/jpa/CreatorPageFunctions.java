@@ -22,6 +22,12 @@ public class CreatorPageFunctions {
 	@Autowired
 	CreatorPageRepository creatorPageRepository;
 
+	/**
+	 * puts a {@link com.patreonshout.beans.CreatorPage} object into the database based on campaignId and vanity name
+	 *
+	 * @param campaignId is the user's Patreon campaign id
+	 * @param vanity is the user's Patreon url name
+	 */
 	@Transactional
 	public void putCreatorPage(int campaignId, String vanity) {
 		CreatorPage creatorPage = new CreatorPage();
