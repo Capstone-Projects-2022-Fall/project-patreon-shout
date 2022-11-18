@@ -115,29 +115,7 @@ As a user, I want to be able to view and be notified of Patreon posts of my favo
 2. After using the invite links to join every Discord server, the user will find the channel where Patreon notifications are output and will make sure to keep the channel unmuted for when notifications are sent out.
 3. User will now receive notifications on Discord anytime there is a new Patreon post published by the creators who own the Discord server.
 
-```mermaid
-sequenceDiagram
-    participant Patron
-    participant Discord
-    participant Creator
-    participant Patreon
-    participant PatreonShout
-
-
-Patron ->>+ Discord: Uses Discord invite link
-Discord -->>- Patron: Adds Patron to the discord server
-
-Creator ->>+ Patreon: Publishes post to Patreon
-Patreon ->>- PatreonShout: New Patron Post information
-activate PatreonShout
-
-Patron ->>+ Discord: Opens Discord channel
-
-PatreonShout -->> Discord: Sends post to Discord channel via webhook
-deactivate PatreonShout
-
-Discord -->>- Patron: Views notification about new Patreon post
-```
+[![](https://mermaid.ink/img/pako:eNqdVd9v2jAQ_ldOflmiAaWBZUkmVVrXPSBNbVXaVZryYpwDrIKd2Q60Q_zvc4jTUhI6rcmLcz--u_vufNkQJjMkCdH4u0DB8ILTmaLLVIB9cqoMZzynwsA1NUqKpvyCayZV1lR8U0iNVO1I2AblFOO5LExTe4MM-QoVjFGtOMOmxT1OvjImC3s8anMt9RvaC2rohGqrKd-qZOienX2sy0ysr8g0UJjKxUKuQZW8WUgjrYwCk8KgBWJ18c4Puhal60hMwKaJudFg5ngAVMZ1zFWBHSkJXBeTBddz1JDLKuAzke4AzzFqFq3X1fgWTvJKdrLGyVzKh5ONPdCKqlG2TQVlhq-owYMWPCPvvqt8DtuQWEnGFTJbzi7YTV1ISe6hdYXRbFQCMzRO5u0n53-pgMqn6eZ647qWwJSL7PzpxW6UeR4Xxgf-Cqh2cF1pS-dOo_qg91SVd1sKO4wmLS0Ib3GyP5gJaLpCr-zzOVLhv2S-b3VY_DGfg2pfB7qUgEpJpWE9RwH4iKwwXMxgdDn-fnNbobyOeqTefyK9YyLGknG6GNk7ZZeS4VKUs-EMe1b_Q864uJUPKDzf_59BacX23zMhFQzs4ej3jkorVJOvllvutsx9db3vDF94fk_bTeWVY390l13lKHT9CVPErHnnrceLw9txMjy6R9rX4E-Oaw1CGj7lbFcw0EkZVeC6hthtu1SQDlmiWlKe2Z_VpmQ4JXZ7LjEliT1mVD2kJBVba0cLI8dPgpHEqAI7pMgzm5L7sdVCu-5_Sbn_SZINeSRJN4jiXjAYxGEQD6N-P_rcIU8kCePesB8G_cEgiqM4HATbDvmzAzjtBWEQng7j8NNwEEXDINr-BQ2-ftE?type=png)](https://mermaid-js.github.io/mermaid-live-editor/edit#pako:eNqdVd9v2jAQ_ldOflmiAaWBZUkmVVrXPSBNbVXaVZryYpwDrIKd2Q60Q_zvc4jTUhI6rcmLcz--u_vufNkQJjMkCdH4u0DB8ILTmaLLVIB9cqoMZzynwsA1NUqKpvyCayZV1lR8U0iNVO1I2AblFOO5LExTe4MM-QoVjFGtOMOmxT1OvjImC3s8anMt9RvaC2rohGqrKd-qZOienX2sy0ysr8g0UJjKxUKuQZW8WUgjrYwCk8KgBWJ18c4Puhal60hMwKaJudFg5ngAVMZ1zFWBHSkJXBeTBddz1JDLKuAzke4AzzFqFq3X1fgWTvJKdrLGyVzKh5ONPdCKqlG2TQVlhq-owYMWPCPvvqt8DtuQWEnGFTJbzi7YTV1ISe6hdYXRbFQCMzRO5u0n53-pgMqn6eZ647qWwJSL7PzpxW6UeR4Xxgf-Cqh2cF1pS-dOo_qg91SVd1sKO4wmLS0Ib3GyP5gJaLpCr-zzOVLhv2S-b3VY_DGfg2pfB7qUgEpJpWE9RwH4iKwwXMxgdDn-fnNbobyOeqTefyK9YyLGknG6GNk7ZZeS4VKUs-EMe1b_Q864uJUPKDzf_59BacX23zMhFQzs4ej3jkorVJOvllvutsx9db3vDF94fk_bTeWVY390l13lKHT9CVPErHnnrceLw9txMjy6R9rX4E-Oaw1CGj7lbFcw0EkZVeC6hthtu1SQDlmiWlKe2Z_VpmQ4JXZ7LjEliT1mVD2kJBVba0cLI8dPgpHEqAI7pMgzm5L7sdVCu-5_Sbn_SZINeSRJN4jiXjAYxGEQD6N-P_rcIU8kCePesB8G_cEgiqM4HATbDvmzAzjtBWEQng7j8NNwEEXDINr-BQ2-ftE)
 
 
 ### Use Case 7
@@ -147,29 +125,7 @@ As a user, I want to be able to be notified of Patreon posts from my favorite cr
 3. User will now see an Instagram post on their Instagram feed anytime there is a new Patreon post published by the content creators they follow.
 4. The user will see a picture and description uploaded by the creator notifying their followers about a new Patreon post, this Instagram post will not contain any information that a user would need a subscription to view.
 
-```mermaid
-sequenceDiagram
-    participant Patron
-    participant Instagram
-    participant Creator
-    participant Patreon
-    participant PatreonShout
-
-
-Patron ->>+ Instagram: Sends a follow request to a a content creator
-Instagram -->>- Patron: Accepts the follow request
-
-Creator ->>+ Patreon: Publishes post to Patreon
-Patreon ->>- PatreonShout: New Patron Post information
-activate PatreonShout
-
-Patron ->>+ Instagram: Opens Instagram feed
-
-PatreonShout -->> Instagram: Sends post to Instagram account via Instagram API
-deactivate PatreonShout
-
-Instagram -->>- Patron: Views notification about new Patreon post
-```
+[![](https://mermaid.ink/img/pako:eNqdVd9v2jAQ_ldOflmiAaWho4knVWrXPSBNbVXaTZryYpwDrIKd2Q60Q_zvc0gClIRWa_Li3I_v7r47X1aEqwQJJQb_ZCg5Xgs20WweS3BPyrQVXKRMWrhjVitZlw-ksUdcvmlkVulmLGwCKxXDqcpsXXuPHMUCNQxRLwTHusUvHF1yrjJ3PGpzp8wb2mtm2YgZp8nfomhoX1x83hVKnbdMDDAYq9lMLUHn3DlQq5yMAVfSooPiVflbT2g7pHZJJQWXKqbWgJ3iAVQeu2SvCF4SQ-EuG82EmaKBVBUht2SWB9jGqJh0XrfDBzhJC9nJEkdTpZ5OVu7ACroGyTqWjFuxYBYP2rBF3nwX-Ry2gjpJIjRyV84m2H1VSE7woXWBUW8WhQnaUubtJ-d_LYDyp-5WwFWdozAWMrl62dkNEs8T0vogXgFVDmVXmtJ5NKg_mT1V4d2UwgajTksDwluc7A8nBcMW6OV9vkIm_V3m-1aHxR_zOaj2daAbBai10gaWU5SAz8gzK-QEBjfD7_cPBcrrqEfqfRfpAxMxVFyw2cDdKneJrFAyn43SsOP0P9REyAf1hNLz_f8ZlEZs_yMTUsDAHo756Kg0QtX5arjl2z1zmYpHK2ae3zFuU-V98_LBf2Oj3aYozU4AY8SkfvOd177Te_ESPLpRjq3EnwKXBqSyYiz4pnhgozy2xGUFstl8sSQtMkc9ZyJxv69VznZM3CadY0yoOyZMP8UklmtnxzKrhi-SE2p1hi2SpYlLqvzVETpmM-Okbv__VmpeGblPQlfkmdB2EEadoNeL-kF0Fna74XmLvBDajzpn3X7Q7fXCKIz6vWDdIn83AKedoB_0T8-isBudB9GXbrj-B_N2hsw?type=png)](https://mermaid-js.github.io/mermaid-live-editor/edit#pako:eNqdVd9v2jAQ_ldOflmiAaWho4knVWrXPSBNbVXaTZryYpwDrIKd2Q60Q_zvc0gClIRWa_Li3I_v7r47X1aEqwQJJQb_ZCg5Xgs20WweS3BPyrQVXKRMWrhjVitZlw-ksUdcvmlkVulmLGwCKxXDqcpsXXuPHMUCNQxRLwTHusUvHF1yrjJ3PGpzp8wb2mtm2YgZp8nfomhoX1x83hVKnbdMDDAYq9lMLUHn3DlQq5yMAVfSooPiVflbT2g7pHZJJQWXKqbWgJ3iAVQeu2SvCF4SQ-EuG82EmaKBVBUht2SWB9jGqJh0XrfDBzhJC9nJEkdTpZ5OVu7ACroGyTqWjFuxYBYP2rBF3nwX-Ry2gjpJIjRyV84m2H1VSE7woXWBUW8WhQnaUubtJ-d_LYDyp-5WwFWdozAWMrl62dkNEs8T0vogXgFVDmVXmtJ5NKg_mT1V4d2UwgajTksDwluc7A8nBcMW6OV9vkIm_V3m-1aHxR_zOaj2daAbBai10gaWU5SAz8gzK-QEBjfD7_cPBcrrqEfqfRfpAxMxVFyw2cDdKneJrFAyn43SsOP0P9REyAf1hNLz_f8ZlEZs_yMTUsDAHo756Kg0QtX5arjl2z1zmYpHK2ae3zFuU-V98_LBf2Oj3aYozU4AY8SkfvOd177Te_ESPLpRjq3EnwKXBqSyYiz4pnhgozy2xGUFstl8sSQtMkc9ZyJxv69VznZM3CadY0yoOyZMP8UklmtnxzKrhi-SE2p1hi2SpYlLqvzVETpmM-Okbv__VmpeGblPQlfkmdB2EEadoNeL-kF0Fna74XmLvBDajzpn3X7Q7fXCKIz6vWDdIn83AKedoB_0T8-isBudB9GXbrj-B_N2hsw)
 
 
 ### Use Case 8
