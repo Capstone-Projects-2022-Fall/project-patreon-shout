@@ -1,12 +1,18 @@
-unnamed package
 com.patreonshout
 com.patreonshout.beans
+com.patreonshout.beans.constants
+com.patreonshout.beans.patreon_api
+com.patreonshout.beans.request
+com.patreonshout.beans.request.receivers.patreon
+com.patreonshout.beans.response
 com.patreonshout.config
-com.patreonshout.interfaces
+com.patreonshout.config.credentials
+com.patreonshout.config.filters
 com.patreonshout.jpa
-com.patreonshout.output
+com.patreonshout.jpa.constants
 com.patreonshout.patreon
 com.patreonshout.patreon.endpoints
 com.patreonshout.patreon.endpoints.objects
 com.patreonshout.rest
+com.patreonshout.rest.interfaces
 com.patreonshout.utils
