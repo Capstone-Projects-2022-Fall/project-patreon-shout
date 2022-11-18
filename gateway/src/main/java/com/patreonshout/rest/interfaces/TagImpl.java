@@ -45,10 +45,6 @@ public interface TagImpl {
             @ApiResponse(responseCode = "400",
                     description = "Invalid login token.",
                     content = {@Content(mediaType = "application/json")}
-            ),
-            @ApiResponse(responseCode = "500",
-                    description = "Internal Server Error.",
-                    content = {@Content(mediaType = "application/json")}
             )
     })
     ResponseEntity<?> AddTag(@RequestBody TagAddRequest tagAddRequest) throws PSException;
@@ -68,10 +64,6 @@ public interface TagImpl {
             @ApiResponse(responseCode = "400",
                     description = "the login token provided doesn't match up with the owner of the requested list's login token",
                     content = {@Content(mediaType = "application/json")}
-            ),
-            @ApiResponse(responseCode = "500",
-                    description = "Internal Server Error.",
-                    content = {@Content(mediaType = "application/json")}
             )
     })
     ResponseEntity<?> GetUserTagsOnSinglePost(@RequestBody TagGetRequest tagGetRequest) throws PSException;
@@ -90,10 +82,6 @@ public interface TagImpl {
                     content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "400",
                     description = "the login token provided doesn't match up with the owner of the requested list's login token",
-                    content = {@Content(mediaType = "application/json")}
-            ),
-            @ApiResponse(responseCode = "500",
-                    description = "Internal Server Error.",
                     content = {@Content(mediaType = "application/json")}
             )
     })

@@ -25,12 +25,21 @@ public class PatreonDataV2 implements Serializable {
 	@JsonProperty("attributes")
 	Object attributes;
 
+	/**
+	 * id holds Patreon api id info
+	 */
 	@JsonProperty("id")
 	int id;
 
+	/**
+	 * relationships represent the object relationships to other objects in the Patreon api
+	 */
 	@JsonProperty("relationships")
 	PatreonRelationshipsV2 relationships;
 
+	/**
+	 * type holds Patreon api type info
+	 */
 	@JsonProperty("type")
 	String type;
 }

@@ -46,6 +46,9 @@ public class ListPostUpdateRequest {
         @JsonProperty("list_id")
         private int listId;
 
+        /**
+         * update is true if we want to add the specific post to a list, false if we want to remove the post from a list
+         */
         @NotNull
         @JsonProperty("update")
         private boolean update;
