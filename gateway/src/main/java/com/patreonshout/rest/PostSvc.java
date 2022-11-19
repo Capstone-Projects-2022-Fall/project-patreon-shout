@@ -86,7 +86,7 @@ public class PostSvc extends BaseSvc implements PostImpl {
             return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
         }
 
-        Page<PostBean> page = postsRepository.getMultipleCreatorPosts(postGetMultipleRequest.getCreators(), PageRequest.of(postGetMultipleRequest.getPage(), 5).withSort(Sort.Direction.ASC, "publishdate"));
+        Page<PostBean> page = postsRepository.getMultipleCreatorPosts(postGetMultipleRequest.getCreators(), PageRequest.of(postGetMultipleRequest.getPage(), 5).withSort(Sort.Direction.ASC, "published_at"));
 
         for (PostBean pb : page.getContent()) {
             if (!pb.getIsPublic()) {
