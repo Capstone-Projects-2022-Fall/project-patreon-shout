@@ -29,7 +29,7 @@ function Feed() {
 
     // Searchbar Functionality
     postList.forEach((post, index) => {
-        const postInfo = (({title, creator_page_url, content}) => ({title, creator_page_url, content}))(post);
+        const postInfo = (({title,  content}) => ({title, content}))(post);
         Object.values(postInfo).every((onlyValues, valIndex) => {
             if (shouldSkip) {return;}
             if (onlyValues.toLowerCase().includes(searchTerm)) {
