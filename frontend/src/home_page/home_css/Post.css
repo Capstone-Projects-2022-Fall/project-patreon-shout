@@ -87,3 +87,14 @@
     display: flex;
     justify-content: center;
 }
+
+#creatorPage:hover {
+    /*text-decoration: underline;*/
+    color: lightgray;
+    cursor: pointer;
+}
+
+#postPage:hover {
+    /*text-decoration: underline;*/
+    cursor: pointer;
+}
