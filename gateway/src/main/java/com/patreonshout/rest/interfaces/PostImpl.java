@@ -62,5 +62,16 @@ public interface PostImpl {
      */
     @GetMapping("/campaign")
     @Operation(summary = "Gets the saved Patreon posts of a specified creator")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "302",
+                    description = "Creator campaign returned.",
+                    content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404",
+                    description = "No campaign found.",
+                    content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "400",
+                    description = "Invalid login token.",
+                    content = {@Content(mediaType = "application/json")})
+    })
     ResponseEntity<?> GetCampaignInfoFromId(@RequestParam(required = true, name = "campaignId") int campaignId, @RequestParam(required = true, name = "loginToken") String loginToken) throws PSException;
 }
