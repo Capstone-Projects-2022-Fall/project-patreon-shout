@@ -231,8 +231,6 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
             login_token,
             url
         })
-
-        console.log(message);
     }
 
     return (
