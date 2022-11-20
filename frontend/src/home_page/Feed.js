@@ -133,6 +133,8 @@ function Feed() {
                     content={item.content}
                     published_at={item.published_at}
                     url = {item.url}
+                    campaignId = {item.campaign_id}
+                    creatorName = {item.creator_name}
                     lists = {userLists}
                 />
             ))}

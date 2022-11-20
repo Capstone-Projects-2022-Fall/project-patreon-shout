@@ -18,6 +18,7 @@ import ReactDOM from "react-dom";
 import {pink} from "@mui/material/colors";
 import {addPostToFavoritesList} from "../services/api/lists/favorites/addPostToFavoritesList";
 import {deletePostFromFavoritesList} from "../services/api/lists/favorites/deletePostFromFavoritesList";
+import {getCampaign} from "../services/api/campaign";
 
 /**
  * The post object which will appear in the feed
@@ -29,13 +30,13 @@ import {deletePostFromFavoritesList} from "../services/api/lists/favorites/delet
  * @param {string} url - The url of the creator
  * @param {Date} published_at - The date and time the post was published
  * @param lists - The user's lists
+ * @param campaignId - the post's campaign id
  *
  * @returns A single post component to be displayed in the feed
  */
 
-function Post({title, creator_page_url, url, content, published_at, is_public, lists}) {
+function Post({title, creator_page_url, url, content, published_at, is_public, lists, campaignId, creatorName}) {
 
-    console.log("pub: " + is_public);
     // TODO: clean this shit up
     if (content) {
         content = content.replace(/<p[^>]*>/g, "");
@@ -60,8 +61,8 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
     if (hour >= 12) {hour = hour - 12; second = second + "pm"}
     else {second = second + "am"};
 
-    const handleRedirect = (e) => {
-        window.open("https://www.patreon.com" + url, "_blank");
+    const handleRedirect = (target) => {
+        window.open("https://www.patreon.com" + target, "_blank");
     }
 
     const [successMsg, setSuccessMsg] = useState("hide");
@@ -80,6 +81,20 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
             })
         return () => mounted = false;
     }, [])
+
+    // useEffect(() => {
+    //     let mounted = true;
+    //     const tokenString = localStorage.getItem('token');
+    //     const loginToken = JSON.parse(tokenString).token;
+    //
+    //     getCampaign(campaignId, loginToken)
+    //         .then(items => {
+    //             if (mounted) {
+    //                 creator_page_url = items.pageName;
+    //             }
+    //         })
+    //     return () => mounted = false;
+    // })
 
     let favThisPostLists = [];
     const [thisPostLists, setThisPostLists] = useState([]);
@@ -226,11 +241,17 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
                 <div className="post__header">
                     <div className="post__headerText">
                         <h3>
-                            {title}{" "}
+                            <span id="postPage" onClick={() => {handleRedirect(url)}}>
+                                {title}
+                            </span>
+                            {" "}
                             <span className="post__headerSpecial">
                                 {is_public}
                                 {!is_public && <VerifiedUser className="post__badge"/>}
-                                @{creator_page_url}
+                                <span id="creatorPage" onClick={() => {handleRedirect("/" + creatorName)}}>
+                                    @{creatorName}
+                                </span>
+
                             </span>
                         </h3>
                     </div>
@@ -242,9 +263,9 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
                     <div className="post__footerDateTime">
                         {month + "/" + day + "/" + year + "  " + hour + ":" + minute + ":" + second}
                     </div>
-                    <div className="post__footerRedirect">
-                        <Language fontSize="small" type="button" onClick={handleRedirect} hover="true"/>
-                    </div>
+                    {/*<div className="post__footerRedirect">*/}
+                    {/*    <Language fontSize="small" type="button" onClick={handleRedirect} hover="true"/>*/}
+                    {/*</div>*/}
                     <div className="post__footerFavorite">
                         <div onClick={() => {handleFavoriteClick();}}>
                             {favorite ? <Favorite sx={{ color: pink[500] }} fontSize="small"/> : <FavoriteBorder sx={{ color: pink[500] }} fontSize="small"/>}
