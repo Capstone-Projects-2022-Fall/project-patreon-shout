@@ -52,8 +52,9 @@ public class PostSvc extends BaseSvc implements PostImpl {
     /**
      * {@inheritDoc}
      */
-    public ResponseEntity<?> GetCreatorPosts(@RequestParam(name = "campaign") int campaignId) { // TODO: SOON TO BE DEPRECATED
-        List<PostBean> posts = postsRepository.findAllByCampaignId(campaignId); // TODO: FIX -- Must be campaign id
+    public ResponseEntity<?> GetCreatorPosts(@RequestParam(name = "campaign") int campaignId) {
+        List<PostBean> posts = postsRepository.findAllByCampaignId(campaignId);
+        CreatorPage campaign = creatorPageFunctions.getCreatorPage(campaignId);
 
         List<Map<String, String>> response = new ArrayList<>();
 
@@ -69,6 +70,7 @@ public class PostSvc extends BaseSvc implements PostImpl {
             listResponse.put("content", pb.getContent());
             listResponse.put("published_at", pb.getPublishedAt());
             listResponse.put("is_public", String.valueOf(pb.getIsPublic()));
+            listResponse.put("creator_name", campaign.getPageName());
 
             response.add(listResponse);
         }
