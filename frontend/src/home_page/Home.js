@@ -11,7 +11,6 @@ import './home_css/Home.css';
 function Home() {
     return (
       <div className="Home">
-        <Sidebar />
         <Feed />
       </div>
     );
