@@ -1,6 +1,7 @@
 package com.patreonshout.rest;
 
 import com.patreonshout.PSException;
+import com.patreonshout.beans.CreatorPage;
 import com.patreonshout.beans.ListBean;
 import com.patreonshout.beans.ListPost;
 import com.patreonshout.beans.PostBean;
@@ -10,6 +11,7 @@ import com.patreonshout.beans.request.ListCreationRequest;
 import com.patreonshout.beans.request.ListDeleteRequest;
 import com.patreonshout.beans.request.ListPostUpdateRequest;
 import com.patreonshout.beans.request.ListUpdateRequest;
+import com.patreonshout.jpa.CreatorPageFunctions;
 import com.patreonshout.jpa.ListPostsRepository;
 import com.patreonshout.jpa.ListsRepository;
 import com.patreonshout.jpa.PostsRepository;
@@ -59,6 +61,9 @@ public class ListSvc extends BaseSvc implements ListImpl {
      */
     @Autowired
     private ListPostsRepository listPostsRepository;
+
+    @Autowired
+    private CreatorPageFunctions creatorPageFunctions;
 
     /**
      * {@inheritDoc}
@@ -280,6 +285,8 @@ public class ListSvc extends BaseSvc implements ListImpl {
             if (optionalPost.isPresent()) {
                 PostBean pb = optionalPost.get();
 
+                CreatorPage campaign = creatorPageFunctions.getCreatorPage(pb.getCampaignId());
+
                 postResponse.put("published_at", pb.getPublishedAt());
                 postResponse.put("title", pb.getTitle());
                 postResponse.put("url", pb.getUrl());
@@ -290,6 +297,7 @@ public class ListSvc extends BaseSvc implements ListImpl {
                 postResponse.put("embed_url", pb.getEmbedUrl());
                 postResponse.put("is_paid", String.valueOf(pb.getIsPaid()));
                 postResponse.put("content", (pb.getIsPublic() ? pb.getContent() : "This post is private"));
+                postResponse.put("creator_name", campaign.getPageName());
 
                 response.add(postResponse);
             }
