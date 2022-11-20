@@ -1,11 +1,43 @@
 body {
     --main-color: #e7aa38;
     --background: #e6ecf0;
-  }
-  .App {
+}
+
+.App:after {
+    content: "";
     display: flex;
+    clear: both;
+    /*float: left;*/
+    /*padding: 10px;*/
+    /*justify-content: center;*/
     /*height: 100vh;*/
     /*max-width: 1300px;*/
     /*margin-left: auto;*/
     /*margin-right: auto;*/
-  }
+}
+
+.column {
+    float: left;
+    padding: 10px;
+    border-style: solid;
+    border-color: red;
+}
+
+.main {
+    width: 50%;
+}
+
+.left, .right {
+    width: 25%;
+}
+
+@media only screen and (max-width: 1000px) {
+    .left, .right {
+        display: none;
+        visibility: hidden;
+    }
+
+    .main {
+        width: 100%;
+    }
+}

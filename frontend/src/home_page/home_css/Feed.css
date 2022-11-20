@@ -1,33 +1,21 @@
+/* entire feed component css*/
 .feed {
-    position: center;
-    padding-top: 20px;
-    padding-left: 340px;
-    padding-right: 400px;
-    flex: 0.4;
-    border-right: var(--background) 1px solid;
-    min-width: fit-content;
-    overflow-y: auto;
+    border-style: solid;
+
+    /* padding at bottom in case there is a bottom nav bar that would otherwise overlap on top of a post*/
+    padding-bottom: 100px;
 }
 
+/* header css */
 .feed__header {
-    position: sticky;
-    background-color: white;
-    z-index: 100;
-    border: 1px solid var(--background);
+    border: 2px solid var(--background);
     padding: 15px 20px;
 }
 
-.feed::-webkit-scrollbar {
-    display: none;
-}
-
-.feed__header > h2 {
-    font-size: 20px;
-    font-weight: 700;
-}
-
+/* filter css */
 .feed__filters {
     display: flex;
-    border-bottom: 8px solid var(--background);
+    border-bottom: 2px solid var(--background);
     align-items: center;
+    justify-content: space-between;
 }

@@ -149,10 +149,10 @@ function Filter({filterChoices, setFilterChoices, dateRange, setDateRange}) {
 
     return (
         <div>
-            <div>
-                <FormControl sx={{ m: 1, width: 300 }}>
+            <div className="filterContainer">
+                <FormControl sx={{ m: 1}}>
                     <InputLabel id="filter">Filters</InputLabel>
-                    <Select
+                    <Select sx={{ }}
                         className = "filter-chip-dropdown"
                         labelId="filter-chip-dropdown"
                         id="filter-chip"

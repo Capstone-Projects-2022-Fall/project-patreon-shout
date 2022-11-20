@@ -1,33 +1,45 @@
 .Searchbar {
-
-  }
-  .Searchbar > form {
     display: flex;
-    flex-direction: column;
-  }
-  .Searchbar__input {
+}
+
+
+.Searchbar__input {
     display: flex;
     padding: 20px;
-    width: 600px;
-  }
-  .Searchbar__input > input {
-    flex: 1;
-    margin-left: 20px;
-    font-weight: lighter;
-    font-size: 20px;
-    border: 10px, black;
-    border-radius: 10px;
-    width: 600px;
-  }
-  .Searchbar__input > input:focus {
-    outline: none;
-  }
-  .Searchbar__button {
+    align-items: center;
+    gap: 8px;
+}
+
+input[type=text] {
+    font-size: 18px;
+    width: 50%;
     border: none;
-    color: white;
-    font-weight: 400;
-    text-transform: inherit;
+}
+
+.Searchbar__input_filter {
+    white-space: nowrap;
+    display: flex;
+    justify-content: space-between;
+    border: 2px solid var(--background);
     border-radius: 20px;
-    margin-left: auto;
-    cursor: pointer;
-  }
+    padding: 5px;
+    align-content: center;
+    min-width: 200px;
+}
+
+.Searchbar__input_filter > input:focus {
+    outline: none;
+}
+
+.Addfilter__button {
+    border-radius: 50px;
+    align-content: center;
+}
+
+.Addfilter__button_content {
+    display: flex;
+    white-space: nowrap;
+    align-content: center;
+    padding-left: 10px;
+    border-radius: 50px;
+}

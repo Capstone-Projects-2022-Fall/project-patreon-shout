@@ -67,18 +67,20 @@ function Searchbar({searchTerm, setSearchTerm}) {
         <div className="Searchbar">
             <form onSubmit={onSubmitForm}>
                 <div className="Searchbar__input">
-                    <input
-                        placeholder="Search PatreonShout..."
-                        onChange={inputHandler}
-                        value={searchInput}
-                        type="text"
-                    />
-                    <Button className="Searchbar__button" onClick={(searchHandler)}>
-                        <SearchRounded/>
-                    </Button>
-                    <Button className="Addfilter__button" onClick={(addFilterHandler)}>
-                        Add Filter<Add/>
-                    </Button>
+                    <SearchRounded/>
+                    <div className="Searchbar__input_filter">
+                        <input
+                            placeholder="Search..."
+                            onChange={inputHandler}
+                            value={searchInput}
+                            type="text"
+                        />
+                        <Button className="Addfilter__button" onClick={(addFilterHandler)}>
+                            <div className="Addfilter__button_content">
+                                Add Filter<Add/>
+                            </div>
+                        </Button>
+                    </div>
                 </div>
             </form>
         </div>

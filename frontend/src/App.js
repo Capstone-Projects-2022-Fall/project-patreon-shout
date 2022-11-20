@@ -36,8 +36,10 @@ function App() {
 
     return (
         <div className="App">
-            <Sidebar/>
-            <div>
+            <div className="column left">
+                <Sidebar/>
+            </div>
+            <div className="column main">
                 <Routes>
                     <Route path="/" element={<LoginPage setToken={setToken}/>}/>
                     <Route path="/home" element={<Home/>}/>
@@ -45,6 +47,9 @@ function App() {
                     <Route path="/lists" element={<ListPage/>}/>
                     <Route path="/settings" element={<SettingsPage/>}/>
                 </Routes>
+            </div>
+            <div className="column right">
+
             </div>
         </div>
     );
