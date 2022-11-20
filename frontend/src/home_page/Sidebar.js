@@ -63,17 +63,18 @@ function Sidebar() {
     }
 
     return (
-        <ul className="sidebar">
-            <li onClick={goToHome} id="/home"><SidebarOption Icon={HomeIcon} text="Home" active="true"/></li>
 
-            <li onClick={goToExplore} id="/explore"><SidebarOption  Icon={SearchIcon} text="Explore"/></li>
+        <div className="sidebar">
+            <div onClick={goToHome} id="/home"> <SidebarOption Icon={HomeIcon} text="Home" active={location.pathname === "/home"}/> </div>
 
-            <li onClick={goToLists} id="/lists"><SidebarOption  Icon={ListAltIcon} text="Lists"/></li>
+            <div onClick={goToExplore} id="/explore"> <SidebarOption Icon={SearchIcon} text="Explore" active={location.pathname === "/explore"}/> </div>
 
-            <li onClick={goToSettings} id="/settings"><SidebarOption  Icon={SettingsIcon} text="Settings"/></li>
+            <div onClick={goToLists} id="/lists"> <SidebarOption Icon={ListAltIcon} text="Lists" active={location.pathname === "/lists"}/> </div>
 
-            <li onClick={logOut} id="/logout"><SidebarOption Icon={LogoutIcon} text="Logout"/></li>
-        </ul>
+            <div onClick={goToSettings} id="/settings"> <SidebarOption Icon={SettingsIcon} text="Settings" active={location.pathname === "/settings"}/> </div>
+
+            <div onClick={logOut} id="/logout"> <SidebarOption Icon={LogoutIcon} text="Logout" active={location.pathname === "/logout"}/> </div>
+        </div>
     );
 }
 

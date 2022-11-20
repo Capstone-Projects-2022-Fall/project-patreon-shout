@@ -37,13 +37,15 @@ function App() {
     return (
         <div className="App">
             <Sidebar/>
-            <Routes>
-                <Route path="/" element={<LoginPage setToken={setToken}/>}/>
-                <Route path="/home" element={<Home/>}/>
-                <Route path="/explore" element={<Explore/>}/>
-                <Route path="/lists" element={<ListPage/>}/>
-                <Route path="/settings" element={<SettingsPage/>}/>
-            </Routes>
+            <div>
+                <Routes>
+                    <Route path="/" element={<LoginPage setToken={setToken}/>}/>
+                    <Route path="/home" element={<Home/>}/>
+                    <Route path="/explore" element={<Explore/>}/>
+                    <Route path="/lists" element={<ListPage/>}/>
+                    <Route path="/settings" element={<SettingsPage/>}/>
+                </Routes>
+            </div>
         </div>
     );
 }
