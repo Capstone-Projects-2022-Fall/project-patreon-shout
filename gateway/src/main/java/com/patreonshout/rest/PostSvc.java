@@ -1,9 +1,11 @@
 package com.patreonshout.rest;
 
 import com.patreonshout.PSException;
+import com.patreonshout.beans.CreatorPage;
 import com.patreonshout.beans.PostBean;
 import com.patreonshout.beans.WebAccount;
 import com.patreonshout.beans.request.PostGetMultipleRequest;
+import com.patreonshout.jpa.CreatorPageFunctions;
 import com.patreonshout.jpa.PostsRepository;
 import com.patreonshout.jpa.WebAccountFunctions;
 import com.patreonshout.rest.interfaces.PostImpl;
@@ -36,6 +38,12 @@ public class PostSvc extends BaseSvc implements PostImpl {
     PostsRepository postsRepository;
 
     /**
+     * An autowired Spring component that endpoints utilize to send or receive data from the creator_pages table in the database
+     */
+    @Autowired
+    CreatorPageFunctions creatorPageFunctions;
+
+    /**
      * An autowired Spring component that endpoints utilize to send or receive data from the database
      */
     @Autowired
@@ -44,8 +52,9 @@ public class PostSvc extends BaseSvc implements PostImpl {
     /**
      * {@inheritDoc}
      */
-    public ResponseEntity<?> GetCreatorPosts(@RequestParam(name = "campaign") int campaignId) { // TODO: SOON TO BE DEPRECATED
-        List<PostBean> posts = postsRepository.findAllByCampaignId(campaignId); // TODO: FIX -- Must be campaign id
+    public ResponseEntity<?> GetCreatorPosts(@RequestParam(name = "campaign") int campaignId) {
+        List<PostBean> posts = postsRepository.findAllByCampaignId(campaignId);
+        CreatorPage campaign = creatorPageFunctions.getCreatorPage(campaignId);
 
         List<Map<String, String>> response = new ArrayList<>();
 
@@ -61,6 +70,7 @@ public class PostSvc extends BaseSvc implements PostImpl {
             listResponse.put("content", pb.getContent());
             listResponse.put("published_at", pb.getPublishedAt());
             listResponse.put("is_public", String.valueOf(pb.getIsPublic()));
+            listResponse.put("creator_name", campaign.getPageName());
 
             response.add(listResponse);
         }
@@ -78,7 +88,7 @@ public class PostSvc extends BaseSvc implements PostImpl {
             return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
         }
 
-        Page<PostBean> page = postsRepository.getMultipleCreatorPosts(postGetMultipleRequest.getCreators(), PageRequest.of(postGetMultipleRequest.getPage(), 5).withSort(Sort.Direction.ASC, "publishdate"));
+        Page<PostBean> page = postsRepository.getMultipleCreatorPosts(postGetMultipleRequest.getCreators(), PageRequest.of(postGetMultipleRequest.getPage(), 5).withSort(Sort.Direction.ASC, "published_at"));
 
         for (PostBean pb : page.getContent()) {
             if (!pb.getIsPublic()) {
@@ -89,4 +99,23 @@ public class PostSvc extends BaseSvc implements PostImpl {
         // TODO: might need to construct response since PostBean is related to other beans and jackson cannot correctly get the data from the other beans relating to PostBean (look at the endpoint above)
         return new ResponseEntity<>(page, HttpStatus.FOUND);
     }
+
+    public ResponseEntity<?> GetCampaignInfoFromId(int campaignId, String loginToken) throws PSException {
+
+        WebAccount userAccount = webAccountFunctions.getAccount(loginToken);
+
+        if (userAccount == null) {
+            return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
+        }
+
+
+        CreatorPage campaign = creatorPageFunctions.getCreatorPage(campaignId);
+
+        if (campaign == null) {
+            return ResponseUtil.Generic(HttpStatus.NOT_FOUND, "No campaign found.");
+        }
+
+        return new ResponseEntity<>(campaign, HttpStatus.FOUND);
+    }
+
 }

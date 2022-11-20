@@ -36,7 +36,7 @@ function ListFeed() {
     console.log(postList);
     postList.forEach((post, index) => {
         console.log(index);
-        const postInfo = (({title, content}) => ({title, content}))(post);
+        const postInfo = (({title, creator_name, content}) => ({title, creator_name, content}))(post);
         Object.values(postInfo).every((onlyValues) => {
             if (shouldSkip) {return;}
             if (onlyValues.toLowerCase().includes(searchTerm)) {
@@ -75,7 +75,7 @@ function ListFeed() {
             let afterFiltersList = [];
             shouldSkip=false;
             displayedList.forEach((post) => {
-                const postInfo = (({title, content}) => ({title, content}))(post);
+                const postInfo = (({title, creator_name, content}) => ({title, creator_name, content}))(post);
                 Object.values(postInfo).every((onlyValues) => {
                     if (shouldSkip) {return;}
                     if (onlyValues.toLowerCase().includes(element)) {
@@ -134,12 +134,13 @@ function ListFeed() {
                             key={v4()}
                             title={item.title}
                             creator_page_url={item.creator_page_url}
-                            is_public={(item.is_public === "true")} // converts the string to a boolean
+                            is_public={(item.is_public === "true")}
                             content={item.content}
                             published_at={item.published_at}
-                            url={item.url}
-                            lists={userLists}
-                            displayedList={displayedList}
+                            url = {item.url}
+                            campaignId = {item.campaign_id}
+                            creatorName = {item.creator_name}
+                            lists = {userLists}
                         />
                     })}
                 </div>

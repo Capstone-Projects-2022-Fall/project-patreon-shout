@@ -38,4 +38,17 @@ public class CreatorPageFunctions {
 
 		creatorPageRepository.save(creatorPage);
 	}
+
+	/**
+	 * gets a {@link com.patreonshout.beans.CreatorPage} object from the database based on it's campaignId
+	 *
+	 * @param campaignId the id of the creatorpage we want to get
+	 * @return a {@link com.patreonshout.beans.CreatorPage} object
+	 */
+	@Transactional
+	public CreatorPage getCreatorPage(int campaignId) {
+		Optional<CreatorPage> campaign = creatorPageRepository.findById(campaignId);
+
+		return campaign.orElse(null);
+	}
 }
