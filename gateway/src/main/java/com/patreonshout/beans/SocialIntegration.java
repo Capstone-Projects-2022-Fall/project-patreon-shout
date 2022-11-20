@@ -27,6 +27,12 @@ public class SocialIntegration implements Serializable {
 	protected String discord;
 
 	/**
+	 * Custom Discord message format
+	 */
+	@Column(name = "discord_message")
+	protected String discordMessage;
+
+	/**
 	 * twitterAccessToken holds the Twitter access_token needed for integration
 	 */
 	@Column(name = "twitter_access_token")
@@ -39,10 +45,22 @@ public class SocialIntegration implements Serializable {
 	protected String twitterRefreshToken;
 
 	/**
+	 * Custom Twitter message format
+	 */
+	@Column(name = "twitter_message")
+	protected String twitterMessage;
+
+	/**
 	 * instagram_data holds the Instagram token needed for integration
 	 */
 	@Column(name = "instagram")
 	protected String instagram;
+
+	/**
+	 * Custom Instagram message format
+	 */
+	@Column(name = "instagram_message")
+	protected String instagramMessage;
 
 	/**
 	 * webAccount is the {@link com.patreonshout.beans.WebAccount} object linked with this object
