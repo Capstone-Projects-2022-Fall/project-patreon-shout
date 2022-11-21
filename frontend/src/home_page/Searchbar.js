@@ -67,8 +67,8 @@ function Searchbar({searchTerm, setSearchTerm}) {
         <div className="Searchbar">
             <form onSubmit={onSubmitForm}>
                 <div className="Searchbar__input">
-                    <SearchRounded/>
                     <div className="Searchbar__input_filter">
+                        <SearchRounded/>
                         <input
                             placeholder="Search..."
                             onChange={inputHandler}

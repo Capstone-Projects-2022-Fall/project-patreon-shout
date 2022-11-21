@@ -9,8 +9,8 @@
     width: 200px;
 }
 
-@media only screen and (max-width: 1100px) {
+@media only screen and (max-width: 1265px) {
     .filter-chip-dropdown {
-        width: 150px;
+        width: 100px;
     }
 }

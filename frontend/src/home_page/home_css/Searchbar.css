@@ -19,12 +19,13 @@ input[type=text] {
 .Searchbar__input_filter {
     white-space: nowrap;
     display: flex;
+    align-items: center;
     justify-content: space-between;
     border: 2px solid var(--background);
     border-radius: 20px;
-    padding: 5px;
+    padding: 5px 5px 5px 10px;
     align-content: center;
-    min-width: 200px;
+    min-width: 210px;
 }
 
 .Searchbar__input_filter > input:focus {
