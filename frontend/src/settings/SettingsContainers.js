@@ -4,6 +4,7 @@ import PatronSettings from './PatronSettings';
 import './setting_css/SettingsContainers.css';
 import Sidebar from "../home_page/Sidebar";
 import {Tabs, Tab, Paper, Typography, Box} from '@mui/material';
+import TestSettings from "./TestSettings";
 
 
 /**
@@ -20,7 +21,7 @@ function SettingsContainers() {
     }
 
     function TabPanel(props) {
-        const { children, value, index, ...other } = props;
+        const {children, value, index, ...other} = props;
 
         return (
             <div
@@ -46,8 +47,9 @@ function SettingsContainers() {
                 <Paper elevation={20}>
 
                     <Tabs value={value} onChange={handleChange} centered>
-                        <Tab label="Creator Settings" />
-                        <Tab label="Patron Settings" />
+                        <Tab label="Creator Settings"/>
+                        <Tab label="Patron Settings"/>
+                        <Tab label="Test"/>
                     </Tabs>
 
                     <TabPanel value={value} index={0}>
@@ -55,7 +57,11 @@ function SettingsContainers() {
                     </TabPanel>
 
                     <TabPanel value={value} index={1}>
-                        <PatronSettings />
+                        <PatronSettings/>
+                    </TabPanel>
+
+                    <TabPanel value={value} index={2}>
+                        <TestSettings/>
                     </TabPanel>
 
                 </Paper>
