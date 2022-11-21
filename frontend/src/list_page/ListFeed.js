@@ -107,7 +107,7 @@ function ListFeed() {
     return (
         <div className="listfeed">
             <div className="listfeed__header">
-                <h2 className={lists}>Lists</h2>
+                <h1 className={lists}>Lists</h1>
                 <div id="backDiv">
                     <ArrowBackIcon id="backArrow" fontSize="large" className={posts} onClick={() => {setPosts("hide"); setLists("show"); setPostList([]);}}/>
                 </div>

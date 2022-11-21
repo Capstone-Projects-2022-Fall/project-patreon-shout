@@ -1,25 +1,25 @@
+/* entire feed component css*/
 .listfeed {
-    position: center;
-    padding-top: 20px;
-    padding-left: 340px;
-    padding-right: 400px;
-    flex: 0.4;
-    border-right: var(--background) 1px solid;
-    min-width: fit-content;
-    overflow-y: auto;
+    /*border-style: solid;*/
+
+    /* padding at bottom in case there is a bottom nav bar that would otherwise overlap on top of a post*/
+
 }
+
+/* header css */
 .listfeed__header {
+    /*border: 2px solid var(--background);*/
     display: flex;
-    position: sticky;
-    background-color: white;
-    z-index: 100;
-    border: 1px solid var(--background);
     padding: 15px 20px;
-    align-content: center;
     justify-content: space-between;
+    border-bottom: var(--background) 2px solid;
 }
-.listfeed::-webkit-scrollbar {
-    display: none;
+
+
+@media only screen and (max-width: 1000px) {
+    .listfeed {
+        padding-bottom: 100px;
+    }
 }
 
 #addListButton {
@@ -33,10 +33,6 @@
     background-color: #b1cffc73;
     transition: background-color 200ms ease;
     cursor: pointer;
-}
-
-h2 {
-    padding: 5px;
 }
 
 

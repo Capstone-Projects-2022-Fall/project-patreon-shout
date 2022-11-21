@@ -3,7 +3,7 @@
     /*border-style: solid;*/
 
     /* padding at bottom in case there is a bottom nav bar that would otherwise overlap on top of a post*/
-    padding-bottom: 100px;
+
 }
 
 /* header css */
@@ -18,4 +18,10 @@
     border-bottom: 2px solid var(--background);
     align-items: center;
     justify-content: space-between;
+}
+
+@media only screen and (max-width: 1000px) {
+    .feed {
+        padding-bottom: 100px;
+    }
 }

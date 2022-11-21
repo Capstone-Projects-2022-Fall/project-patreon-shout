@@ -7,19 +7,11 @@ body {
     content: "";
     display: flex;
     clear: both;
-    /*float: left;*/
-    /*padding: 10px;*/
-    /*justify-content: center;*/
-    /*height: 100vh;*/
-    /*max-width: 1300px;*/
-    /*margin-left: auto;*/
-    /*margin-right: auto;*/
 }
 
 .column {
     float: left;
     padding: 10px;
-    /*border-style: solid;*/
     border-color: red;
 }
 
