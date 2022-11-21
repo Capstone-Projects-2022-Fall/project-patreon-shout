@@ -3,10 +3,7 @@ package com.patreonshout.jpa;
 import club.minnced.discord.webhook.exception.HttpException;
 import club.minnced.discord.webhook.receive.ReadonlyMessage;
 import com.patreonshout.PSException;
-import com.patreonshout.beans.OldPasswords;
-import com.patreonshout.beans.PatreonTokens;
-import com.patreonshout.beans.SocialIntegration;
-import com.patreonshout.beans.WebAccount;
+import com.patreonshout.beans.*;
 import com.patreonshout.beans.request.LoginRequest;
 import com.patreonshout.beans.request.PutSocialIntegrationRequest;
 import com.patreonshout.beans.request.RegisterRequest;
@@ -104,6 +101,11 @@ public class WebAccountFunctions {
 		PatreonTokens patreonTokens = new PatreonTokens();
 		patreonTokens.setWebAccount(webAccount);
 		webAccount.setCreatorTokens(patreonTokens);
+
+		// Create SocialIntegrationMessages
+		SocialIntegrationMessages socialIntegrationMessages = new SocialIntegrationMessages();
+		socialIntegrationMessages.setWebAccount(webAccount);
+		webAccount.setSocialIntegrationMessages(socialIntegrationMessages);
 
 		webAccountRepository.save(webAccount);
 	}

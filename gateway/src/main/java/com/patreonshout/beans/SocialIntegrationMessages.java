@@ -31,4 +31,12 @@ public class SocialIntegrationMessages implements Serializable {
 	 */
 	@Column(name = "discord_private_message")
 	protected String discordPrivateMessage;
+
+	/**
+	 * {@link com.patreonshout.beans.WebAccount} object linked with this object
+	 */
+	@OneToOne
+	@MapsId
+	@JoinColumn(name = "webaccount_id")
+	protected WebAccount webAccount;
 }
