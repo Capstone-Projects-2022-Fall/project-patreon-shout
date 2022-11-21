@@ -1,0 +1,7 @@
+.discord-messages {
+    border-radius: .7em;
+}
+
+.discord-messages * {
+    font-family: Whitney, Roboto, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
