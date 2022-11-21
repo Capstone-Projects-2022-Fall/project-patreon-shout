@@ -40,9 +40,9 @@ function NavBar() {
         navigate('/home')
     }
 
-    const goToExplore = () => {
-        refreshIfCurrentPath('/explore')
-        navigate('/explore')
+    const goToOutreach = () => {
+        refreshIfCurrentPath('/outreach')
+        navigate('/outreach')
     }
 
     const goToLists = () => {
@@ -67,7 +67,7 @@ function NavBar() {
         <div className="navbar">
             <div onClick={goToHome} id="/home"> <SidebarOption size="large" Icon={HomeIcon} active={location.pathname === "/home"}/> </div>
 
-            <div onClick={goToExplore} id="/explore"> <SidebarOption size="large" Icon={SearchIcon} active={location.pathname === "/explore"}/> </div>
+            <div onClick={goToOutreach} id="/outreach"> <SidebarOption size="large" Icon={SearchIcon} active={location.pathname === "/outreach"}/> </div>
 
             <div onClick={goToLists} id="/lists"> <SidebarOption size="large" Icon={ListAltIcon} active={location.pathname === "/lists"}/> </div>
 

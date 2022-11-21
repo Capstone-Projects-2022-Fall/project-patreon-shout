@@ -40,9 +40,9 @@ function Sidebar() {
         navigate('/home')
     }
 
-    const goToExplore = () => {
-        refreshIfCurrentPath('/explore')
-        navigate('/explore')
+    const goToOutreach = () => {
+        refreshIfCurrentPath('/outreach')
+        navigate('/outreach')
     }
 
     const goToLists = () => {
@@ -67,7 +67,7 @@ function Sidebar() {
         <div className="sidebar">
             <div onClick={goToHome} id="/home"> <SidebarOption Icon={HomeIcon} text="Home" active={location.pathname === "/home"}/> </div>
 
-            <div onClick={goToExplore} id="/explore"> <SidebarOption Icon={SearchIcon} text="Explore" active={location.pathname === "/explore"}/> </div>
+            <div onClick={goToOutreach} id="/outreach"> <SidebarOption Icon={SearchIcon} text="Outreach" active={location.pathname === "/outreach"}/> </div>
 
             <div onClick={goToLists} id="/lists"> <SidebarOption Icon={ListAltIcon} text="Lists" active={location.pathname === "/lists"}/> </div>
 

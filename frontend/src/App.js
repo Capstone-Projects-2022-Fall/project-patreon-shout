@@ -2,7 +2,7 @@ import React from "react";
 import {Routes, Route, useLocation} from "react-router-dom";
 import './App.css';
 import Home from "./home_page/Home";
-import Explore from "./explore_page/Explore";
+import Outreach from "./outreach_page/Outreach";
 import LoginPage from "./login_page/LoginPage";
 import ListPage from "./list_page/ListPage";
 import SettingsPage from "./settings/SettingsContainers"
@@ -44,7 +44,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<LoginPage setToken={setToken}/>}/>
                     <Route path="/home" element={<Home/>}/>
-                    <Route path="/explore" element={<Explore/>}/>
+                    <Route path="/outreach" element={<Outreach/>}/>
                     <Route path="/lists" element={<ListPage/>}/>
                     <Route path="/settings" element={<SettingsPage/>}/>
                 </Routes>
