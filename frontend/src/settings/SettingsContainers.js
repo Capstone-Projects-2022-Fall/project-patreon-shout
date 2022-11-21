@@ -42,7 +42,6 @@ function SettingsContainers() {
 
     return (
         <div>
-            <Sidebar/>
             <div className='paperStyle'>
                 <Paper elevation={20}>
 

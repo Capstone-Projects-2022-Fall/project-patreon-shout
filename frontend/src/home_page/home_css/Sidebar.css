@@ -1,11 +1,40 @@
 .sidebar {
+
+    position: fixed;
+    top: 20%;
+    right: 61%;
+    transform: translateX(-85%);
+
     display: flex;
     flex-direction: column;
-    list-style-type: none;
-    position: absolute;
-    width: 300px;
-    block-size: 100px;
-    padding-top: 70px;
-    padding-left: 70px;
-    gap: 8px;
+
+    height: fit-content;
+    width: 200px;
+
+    /*       ^^^^ ---> down <---*/
+    padding: 20px;
+    gap: 5px;
 }
+
+.navbar {
+    display: none;
+
+}
+
+@media only screen and (max-width: 1000px) {
+    .navbar {
+        display: flex;
+
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+
+        padding: 20px 20px 30px;
+
+        gap: 20px;
+        justify-content: center;
+
+        background-color: var(--background);
+    }
+}
+

@@ -31,7 +31,7 @@ import {getCampaign} from "../services/api/campaign";
  * @param {Date} published_at - The date and time the post was published
  * @param lists - The user's lists
  * @param campaignId - the post's campaign id
- *
+ * @param creatorName - the name of the post's creator
  * @returns A single post component to be displayed in the feed
  */
 
@@ -231,8 +231,6 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
             login_token,
             url
         })
-
-        console.log(message);
     }
 
     return (

@@ -12,7 +12,6 @@ import './list_css/ListPage.css';
 function ListPage() {
     return (
         <div className="ListPage">
-            <Sidebar />
             <ListFeed />
         </div>
     );
