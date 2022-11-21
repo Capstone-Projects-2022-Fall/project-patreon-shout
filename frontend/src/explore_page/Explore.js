@@ -10,7 +10,7 @@ import Sidebar from "../home_page/Sidebar";
 function Explore() {
     return (
         <div className="Home">
-            <Sidebar />
+
         </div>
     );
 }

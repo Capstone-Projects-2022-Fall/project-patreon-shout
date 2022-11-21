@@ -1,6 +1,6 @@
 import React, {useState, useCallback} from "react";
-import "./home_css/Sidebar.css";
-import SidebarOption from "./SidebarOption";
+import "../home_page/home_css/Sidebar.css";
+import SidebarOption from "../home_page/SidebarOption";
 import HomeIcon from "@mui/icons-material/Home";
 import SearchIcon from "@mui/icons-material/Search";
 import ListAltIcon from "@mui/icons-material/ListAlt";
@@ -9,13 +9,13 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import {useLocation, useNavigate} from "react-router-dom";
 import {logoutUser} from "../services/api/logout";
 
-/**
- * This is the Sidebar Component of the website
- *
- * @returns Visual representation of the sidebar and it's options
- */
-function Sidebar() {
 
+/**
+ * This is the Navbar Component of the website
+ *
+ * @returns the navbar that is used whenever the page is too small for the sidebar
+ */
+function NavBar() {
     const location = useLocation();
     const navigate = useNavigate();
     const [logout, setLogoutValue] = useState([]);
@@ -62,20 +62,20 @@ function Sidebar() {
         console.log(logout);
     }
 
+
     return (
+        <div className="navbar">
+            <div onClick={goToHome} id="/home"> <SidebarOption size="large" Icon={HomeIcon} active={location.pathname === "/home"}/> </div>
 
-        <div className="sidebar">
-            <div onClick={goToHome} id="/home"> <SidebarOption Icon={HomeIcon} text="Home" active={location.pathname === "/home"}/> </div>
+            <div onClick={goToExplore} id="/explore"> <SidebarOption size="large" Icon={SearchIcon} active={location.pathname === "/explore"}/> </div>
 
-            <div onClick={goToExplore} id="/explore"> <SidebarOption Icon={SearchIcon} text="Explore" active={location.pathname === "/explore"}/> </div>
+            <div onClick={goToLists} id="/lists"> <SidebarOption size="large" Icon={ListAltIcon} active={location.pathname === "/lists"}/> </div>
 
-            <div onClick={goToLists} id="/lists"> <SidebarOption Icon={ListAltIcon} text="Lists" active={location.pathname === "/lists"}/> </div>
+            <div onClick={goToSettings} id="/settings"> <SidebarOption size="large" Icon={SettingsIcon} active={location.pathname === "/settings"}/> </div>
 
-            <div onClick={goToSettings} id="/settings"> <SidebarOption Icon={SettingsIcon} text="Settings" active={location.pathname === "/settings"}/> </div>
-
-            <div onClick={logOut} id="/logout"> <SidebarOption Icon={LogoutIcon} text="Logout" active={location.pathname === "/logout"}/> </div>
+            <div onClick={logOut} id="/logout"> <SidebarOption size="large" Icon={LogoutIcon} active={location.pathname === "/logout"}/> </div>
         </div>
     );
 }
 
-export default Sidebar;
+export default NavBar;

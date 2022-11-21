@@ -1,11 +1,39 @@
 body {
     --main-color: #e7aa38;
     --background: #e6ecf0;
-  }
-  .app {
+}
+
+.App:after {
+    content: "";
     display: flex;
-    height: 100vh;
-    max-width: 1300px;
-    margin-left: auto;
-    margin-right: auto;
-  }
+    clear: both;
+}
+
+.column {
+    float: left;
+    padding: 10px;
+    border-color: red;
+}
+
+.main {
+    width: 40%;
+    border-left: 2px solid var(--background);
+    border-right: 2px solid var(--background);
+}
+
+.left, .right {
+    width: 30%;
+}
+
+@media only screen and (max-width: 1000px) {
+    .left, .right {
+        display: none;
+        visibility: hidden;
+    }
+
+    .main {
+        width: 100%;
+        border-left-width: 0;
+        border-right-width: 0;
+    }
+}

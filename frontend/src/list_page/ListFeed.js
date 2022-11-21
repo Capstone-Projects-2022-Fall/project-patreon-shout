@@ -33,9 +33,9 @@ function ListFeed() {
 
     // Searchbar Functionality
     let shouldSkip = false;
-    console.log(postList);
+    // console.log(postList);
     postList.forEach((post, index) => {
-        console.log(index);
+        // console.log(index);
         const postInfo = (({title, creator_name, content}) => ({title, creator_name, content}))(post);
         Object.values(postInfo).every((onlyValues) => {
             if (shouldSkip) {return;}
@@ -50,12 +50,12 @@ function ListFeed() {
 
     // Filter Functionality
     displayedList = [...searchedList];
-    console.log(filterChoices);
+    // console.log(filterChoices);
     if (filterChoices.includes("Date(new → old)")) {
         displayedList = displayedList.sort(function(b, a){return new Date(a.published_at).getTime() - new Date(b.published_at).getTime()});
     }
     if (filterChoices.includes("Date(old → new)")) {
-        console.log("hit");
+        // console.log("hit");
         displayedList = displayedList.sort(function(a, b){return new Date(a.published_at).getTime() - new Date(b.published_at).getTime()});
     } else {displayedList = displayedList.sort(function(b, a){return new Date(a.published_at).getTime() - new Date(b.published_at).getTime()});}
     if (filterChoices.includes("Private Only")) {
@@ -107,7 +107,7 @@ function ListFeed() {
     return (
         <div className="listfeed">
             <div className="listfeed__header">
-                <h2 className={lists}>Lists</h2>
+                <h1 className={lists}>Lists</h1>
                 <div id="backDiv">
                     <ArrowBackIcon id="backArrow" fontSize="large" className={posts} onClick={() => {setPosts("hide"); setLists("show"); setPostList([]);}}/>
                 </div>
