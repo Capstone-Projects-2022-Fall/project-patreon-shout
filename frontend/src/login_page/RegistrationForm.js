@@ -61,11 +61,14 @@ const RegistrationForm = () => {
         <div className="mainPage">
             <h1>Register</h1>
 
-            <TextField className='textLog' id="outlined-basic" label="Username"
-                       variant="outlined" value={user} onChange={(e) => setRegUserName(e.target.value)}/>
+            <div className="registerInfo">
+                <TextField className='textLog' id="outlined-basic" label="Username"
+                           variant="outlined" value={user} onChange={(e) => setRegUserName(e.target.value)}/>
 
-            <TextField className='textLog' id="outlined-basic" label="Password" variant="outlined" type='password'
-                       value={pass} onChange={(e) => setRegPassword(e.target.value)}/>
+                <TextField className='textLog' id="outlined-basic" label="Password" variant="outlined" type='password'
+                           value={pass} onChange={(e) => setRegPassword(e.target.value)}/>
+
+            </div>
 
             <PasswordChecklist
                 rules={["minLength","capital","lowercase","number","specialChar"]}
