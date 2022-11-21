@@ -8,6 +8,7 @@ import ListPage from "./list_page/ListPage";
 import SettingsPage from "./settings/SettingsContainers"
 import useToken from './services/useToken';
 import Sidebar from "./home_page/Sidebar";
+import NavBar from "./components/NavBar";
 
 /**
  * The App function, where users can navigate to and from different pages
@@ -51,6 +52,7 @@ function App() {
             <div className="column right">
 
             </div>
+            <NavBar />
         </div>
     );
 }

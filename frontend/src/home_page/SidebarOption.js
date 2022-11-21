@@ -9,11 +9,11 @@ import "./home_css/SidebarOption.css";
  * @param {boolean} active - Determines which page you are currently on
  * @returns A sidebaroption component for use in the sidebar
  */
-function SidebarOption({text, Icon, active}) {
+function SidebarOption({text, Icon, active, size}) {
     return (
         <div className={`sidebarOption  ${active && "sidebarOption--active"}`}>
-            <Icon id="sideicon"/>
-            <h2 id="sidetext">{text}</h2>
+            <Icon fontSize={size} id="sideicon"/>
+            {text ? <h2 id="sidetext">{text}</h2> : ""}
         </div>
     );
 }
