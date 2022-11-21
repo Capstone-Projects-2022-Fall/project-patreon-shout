@@ -48,4 +48,13 @@ public class OldPasswords {
 	@MapsId
 	@JoinColumn(name = "webaccount_id")
 	protected WebAccount webAccount;
+
+	/**
+	 * Returns whether this entity contains any valid old passwords
+	 *
+	 * @return {@link Boolean#TRUE} if any old password is not null, {@link Boolean#FALSE} otherwise
+	 */
+	public boolean isEmpty() {
+		return oldPasswordOne == null && oldPasswordTwo == null && oldPasswordThree == null;
+	}
 }
