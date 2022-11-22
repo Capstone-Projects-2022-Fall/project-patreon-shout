@@ -5,3 +5,11 @@
 .discord-messages * {
     font-family: Whitney, Roboto, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
+
+.discord-embed .discord-embed-field .discord-field-title {
+    color: #01aff4;
+}
+
+.discord-embed .discord-embed-field .discord-field-title:hover {
+    text-decoration: underline;
+}
