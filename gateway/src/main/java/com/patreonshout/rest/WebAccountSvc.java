@@ -101,7 +101,17 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	 */
 	public ResponseEntity<?> GetSocialIntegrationMessages(@RequestParam(name = "login_token") String loginToken) throws PSException {
 		SocialIntegrationMessages socialIntegrationMessages = webAccountFunctions.getSocialIntegrationMessage(loginToken);
-		return new ResponseEntity<>(socialIntegrationMessages, HttpStatus.OK);
+
+		Map<String, String> response = new LinkedHashMap<>();
+
+		response.put("discord_public_message", socialIntegrationMessages.getDiscordPublicMessage());
+		response.put("discord_private_message", socialIntegrationMessages.getDiscordPrivateMessage());
+		response.put("twitter_public_message", socialIntegrationMessages.getTwitterPublicMessage());
+		response.put("twitter_private_message", socialIntegrationMessages.getTwitterPrivateMessage());
+		response.put("instagram_public_message", socialIntegrationMessages.getInstagramPublicMessage());
+		response.put("instagram_private_message", socialIntegrationMessages.getInstagramPrivateMessage());
+
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 	/**
