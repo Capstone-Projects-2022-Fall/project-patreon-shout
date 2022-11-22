@@ -43,3 +43,9 @@ input[type=text] {
     padding-left: 10px;
     border-radius: 50px;
 }
+
+@media only screen and (max-width: 1700px) {
+    .Searchbar__input_field {
+        width: 50%;
+    }
+}
