@@ -3,12 +3,14 @@ import DiscordConnect from "../components/DiscordConnect";
 
 import './outreach_css/Outreach.css';
 
-function DiscordOutreach() {
+function DiscordOutreach({webhook}) {
 
 
     return (
         <div className="outreachSettings">
-            <DiscordConnect />
+            <DiscordConnect
+                webhook={webhook}
+            />
         </div>
     );
 }

@@ -5,13 +5,16 @@
     flex-direction: column;
 
     /* put gap between tabs and tab content */
-    gap: 10px;
+    gap: 30px;
 
     padding: 20px;
 }
 
 .outreachSettings {
+    display: flex;
 
+    justify-content: center;
+    align-items: center;
 }
 
 .loading {

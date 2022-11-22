@@ -9,9 +9,10 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
 import SaveIcon from "@mui/icons-material/Save";
 
-function DiscordConnect() {
+function DiscordConnect({webhook}) {
 
-    const [textfieldValue, setTextfieldValue] = useState("");
+    console.log(webhook);
+    const [textfieldValue, setTextfieldValue] = useState(webhook);
     const [buttonColor, setButtonColor] = useState("primary");
     const [buttonIcon, setButtonIcon] = useState(<SaveIcon/>);
     const [isProcessing, setIsProcessing] = useState(null);

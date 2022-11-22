@@ -96,7 +96,9 @@ function HtmlReturn(socialIntegrations) {
 
             <div className="content">
                 <TabPanel value={value} index={0}>
-                    <DiscordOutreach/>
+                    <DiscordOutreach
+                        webhook={socialIntegrations.discord}
+                    />
                 </TabPanel>
 
                 <TabPanel value={value} index={1}>
