@@ -1,5 +1,6 @@
 package com.patreonshout.beans;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -24,7 +25,7 @@ public class SocialIntegrationMessages implements Serializable {
 	 * Custom Discord message for public Patreon posts
 	 */
 	@Column(name = "discord_public_message")
-	protected String discordMessage;
+	protected String discordPublicMessage;
 
 	/**
 	 * Custom Discord message for private Patreon posts
@@ -33,8 +34,33 @@ public class SocialIntegrationMessages implements Serializable {
 	protected String discordPrivateMessage;
 
 	/**
+	 * Custom Discord message for public Patreon posts
+	 */
+	@Column(name = "twitter_public_message")
+	protected String twitterPublicMessage;
+
+	/**
+	 * Custom Discord message for private Patreon posts
+	 */
+	@Column(name = "twitter_private_message")
+	protected String twitterPrivateMessage;
+
+	/**
+	 * Custom Discord message for public Patreon posts
+	 */
+	@Column(name = "instagram_public_message")
+	protected String instagramPublicMessage;
+
+	/**
+	 * Custom Discord message for private Patreon posts
+	 */
+	@Column(name = "instagram_private_message")
+	protected String instagramPrivateMessage;
+
+	/**
 	 * {@link com.patreonshout.beans.WebAccount} object linked with this object
 	 */
+	@JsonIgnore
 	@OneToOne
 	@MapsId
 	@JoinColumn(name = "webaccount_id")

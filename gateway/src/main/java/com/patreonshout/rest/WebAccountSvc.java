@@ -3,10 +3,8 @@ package com.patreonshout.rest;
 import com.patreonshout.PSException;
 import com.patreonshout.beans.PatreonTokens;
 import com.patreonshout.beans.SocialIntegration;
-import com.patreonshout.beans.request.LoginRequest;
-import com.patreonshout.beans.request.RegisterRequest;
-import com.patreonshout.beans.request.ResetPasswordRequest;
-import com.patreonshout.beans.request.PutSocialIntegrationRequest;
+import com.patreonshout.beans.SocialIntegrationMessages;
+import com.patreonshout.beans.request.*;
 import com.patreonshout.beans.response.LoginResponse;
 import com.patreonshout.jpa.WebAccountFunctions;
 import com.patreonshout.rest.interfaces.WebAccountImpl;
@@ -14,10 +12,7 @@ import com.patreonshout.utils.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -91,6 +86,22 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 		response.put("instagram", socialIntegration.getInstagram());
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public HttpStatus PutSocialIntegrationMessages(@RequestBody PutSocialIntegrationMessageRequest putSocialIntegrationMessageRequest) throws PSException {
+		webAccountFunctions.putSocialIntegrationMessages(putSocialIntegrationMessageRequest);
+		return HttpStatus.OK;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public ResponseEntity<?> GetSocialIntegrationMessages(@RequestParam(name = "login_token") String loginToken) throws PSException {
+		SocialIntegrationMessages socialIntegrationMessages = webAccountFunctions.getSocialIntegrationMessage(loginToken);
+		return new ResponseEntity<>(socialIntegrationMessages, HttpStatus.OK);
 	}
 
 	/**

@@ -5,6 +5,7 @@ import club.minnced.discord.webhook.receive.ReadonlyMessage;
 import com.patreonshout.PSException;
 import com.patreonshout.beans.*;
 import com.patreonshout.beans.request.LoginRequest;
+import com.patreonshout.beans.request.PutSocialIntegrationMessageRequest;
 import com.patreonshout.beans.request.PutSocialIntegrationRequest;
 import com.patreonshout.beans.request.RegisterRequest;
 import com.patreonshout.config.SecurityConfiguration;
@@ -260,6 +261,47 @@ public class WebAccountFunctions {
 		WebAccount webAccount = this.getAccount(loginToken);
 
 		return webAccount.getSocialIntegration();
+	}
+
+	/**
+	 * Saves social integration messages from a request into a {@link WebAccount}'s {@link SocialIntegrationMessages} object
+	 *
+	 * @param putSocialIntegrationMessageRequest {@link PutSocialIntegrationMessageRequest} object generated from Spring
+	 */
+	@Transactional
+	public void putSocialIntegrationMessages(PutSocialIntegrationMessageRequest putSocialIntegrationMessageRequest) throws PSException {
+		WebAccount webAccount = this.getAccount(putSocialIntegrationMessageRequest.getLoginToken());
+		SocialIntegrationMessages socialIntegrationMessages = webAccount.getSocialIntegrationMessages();
+
+		// * Check validity of token/webhook URL
+		switch (putSocialIntegrationMessageRequest.getSocialIntegrationName()) {
+			case DISCORD:
+				socialIntegrationMessages.setDiscordPublicMessage(putSocialIntegrationMessageRequest.getPublicMessage());
+				socialIntegrationMessages.setDiscordPrivateMessage(putSocialIntegrationMessageRequest.getPrivateMessage());
+				break;
+			case TWITTER:
+				socialIntegrationMessages.setTwitterPublicMessage(putSocialIntegrationMessageRequest.getPublicMessage());
+				socialIntegrationMessages.setTwitterPrivateMessage(putSocialIntegrationMessageRequest.getPrivateMessage());
+				break;
+			case INSTAGRAM:
+				socialIntegrationMessages.setInstagramPublicMessage(putSocialIntegrationMessageRequest.getPublicMessage());
+				socialIntegrationMessages.setInstagramPrivateMessage(putSocialIntegrationMessageRequest.getPrivateMessage());
+				break;
+		}
+
+		// * Save all changes to the WebAccount
+		webAccountRepository.save(webAccount);
+	}
+
+	/**
+	 * Acquires a {@link SocialIntegrationMessages} from the given login token's {@link WebAccount}
+	 *
+	 * @param loginToken {@link WebAccount}'s login token
+	 * @return {@link SocialIntegrationMessages} belonging to a login token's {@link WebAccount}
+	 */
+	@Transactional
+	public SocialIntegrationMessages getSocialIntegrationMessage(String loginToken) throws PSException {
+		return this.getAccount(loginToken).getSocialIntegrationMessages();
 	}
 
 	/**
