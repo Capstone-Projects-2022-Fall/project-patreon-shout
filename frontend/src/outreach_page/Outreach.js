@@ -1,14 +1,16 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import './outreach_css/Outreach.css';
-import SocialPostSetting from "./SocialPostSetting";
-import PropTypes from "prop-types";
-import TwitterConnect from "../components/TwitterConnect";
-import DiscordConnect from "../components/DiscordConnect";
-import PatreonConnect from "../components/PatreonConnect";
+import DiscordOutreach from "./DiscordOutreach";
+import TwitterOutreach from "./TwitterOutreach";
+import InstagramOutreach from "./InstagramOutreach";
+import RedditOutreach from "./RedditOutreach";
+import {getSocialIntegrations} from "../services/api/webaccount/getSocialIntegration";
+import {render} from "react-dom";
+import {CircularProgress} from "@mui/material";
 
 
 /**
@@ -18,15 +20,46 @@ import PatreonConnect from "../components/PatreonConnect";
  */
 function Outreach() {
 
-    // --------- tab functionality start ---------
+    const [socialIntegrations, setSocialIntegrations] = useState([]);
+
+    let finished = false;
+    useEffect(() => {
+        const tokenString = localStorage.getItem('token');
+        const loginToken = JSON.parse(tokenString).token;
+        getSocialIntegrations(loginToken)
+            .then(items => {
+                if (!finished) {
+                    setSocialIntegrations(items);
+                    render(HtmlReturn(socialIntegrations), this); // Force Rerender this function component
+                }
+            })
+        return () => finished = true;
+    }, []);
+
+    return HtmlReturn(socialIntegrations);
+
+}
+
+function HtmlReturn(socialIntegrations) {
     const [value, setValue] = React.useState(0)
+
+
+    if (socialIntegrations.length === 0) {
+        return (
+            <div className="loading">
+                <CircularProgress/>
+            </div>
+        );
+    }
+
+    // --------- tab functionality start ---------
 
     const handleChange = (event, newValue) => {
         setValue(newValue)
     }
 
     function TabPanel(props) {
-        const { children, value, index, ...other } = props;
+        const {children, value, index, ...other} = props;
 
         return (
             <div
@@ -44,9 +77,8 @@ function Outreach() {
             </div>
         );
     }
+
     // --------- tab functionality end ---------
-
-
 
 
     return (
@@ -63,37 +95,20 @@ function Outreach() {
 
 
             <div className="content">
-
                 <TabPanel value={value} index={0}>
-                    <SocialPostSetting
-                        platform="Discord"
-                    >
-                        <DiscordConnect />
-                    </SocialPostSetting>
+                    <DiscordOutreach/>
                 </TabPanel>
 
                 <TabPanel value={value} index={1}>
-                    <SocialPostSetting
-                        platform="Twitter"
-                    >
-                        <TwitterConnect />
-                    </SocialPostSetting>
+                    <TwitterOutreach/>
                 </TabPanel>
 
                 <TabPanel value={value} index={2}>
-                    <SocialPostSetting
-                        platform="Instagram"
-                    >
-
-                    </SocialPostSetting>
+                    <InstagramOutreach/>
                 </TabPanel>
 
                 <TabPanel value={value} index={3}>
-                    <SocialPostSetting
-                        platform="Reddit"
-                    >
-
-                    </SocialPostSetting>
+                    <RedditOutreach/>
                 </TabPanel>
             </div>
         </div>
