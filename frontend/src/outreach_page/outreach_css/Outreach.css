@@ -1,0 +1,15 @@
+.outreach {
+    display: flex;
+
+    /* make sure tabs are shown at top and content follows below */
+    flex-direction: column;
+
+    /* put gap between tabs and tab content */
+    gap: 10px;
+
+    padding: 20px;
+}
+
+.patreonInfo {
+    font-family: Arial, serif;
+}

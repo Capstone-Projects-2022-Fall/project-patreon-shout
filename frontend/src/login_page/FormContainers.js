@@ -10,7 +10,7 @@ import Box from '@mui/material/Box';
 import PropTypes from "prop-types";
 
 /**
- * Calls the files that holds the function LoginForm and RegistrationForm
+ * Calls the files that hold the function LoginForm and RegistrationForm
  *
  * @returns The header tab of sign in and registration form integrated
  */
