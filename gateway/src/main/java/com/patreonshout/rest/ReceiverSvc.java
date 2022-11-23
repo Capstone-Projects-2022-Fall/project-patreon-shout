@@ -6,6 +6,7 @@ import com.patreon.resources.Campaign;
 import com.patreonshout.PSException;
 import com.patreonshout.beans.PostBean;
 import com.patreonshout.beans.SocialIntegration;
+import com.patreonshout.beans.SocialIntegrationMessages;
 import com.patreonshout.beans.WebAccount;
 import com.patreonshout.beans.patreon_api.*;
 import com.patreonshout.beans.request.PutSocialIntegrationRequest;
@@ -121,8 +122,6 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 			PatreonDataArrayEntryV2 campaign = objectMapper.convertValue(getCampaignData(accessToken), PatreonDataArrayEntryV2.class);
 			PatreonCampaignV2 campaignData = objectMapper.convertValue(campaign.getAttributes(), PatreonCampaignV2.class);
 
-			System.out.println("");
-
 			WebAccount webAccount = webAccountFunctions.getAccount(loginToken);
 
 			// Store their creator page information
@@ -189,7 +188,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		patreonData.setType("webhook");
 
 		PatreonWebhookV2 patreonWebhook = new PatreonWebhookV2();
-		patreonWebhook.setTriggers(new String[]{"posts:publish", "posts:update", "posts:delete"});
+		patreonWebhook.setTriggers(new String[]{"posts:publish"});
 		patreonWebhook.setUri(patreonCredentials.getRedirectUri() + "/receivers/patreon/webhook/" + webAccount.getWebAccountId());
 		patreonData.setAttributes(patreonWebhook);
 
@@ -204,7 +203,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		patreonData.setRelationships(patreonRelationships);
 		outputObject.setData(patreonData);
 
-		PatreonObjectV2 retObject = WebClient
+		/*PatreonObjectV2 retObject = */WebClient
 				.create("https://www.patreon.com/api/oauth2/v2/")
 				.post()
 				.uri("webhooks")
@@ -300,7 +299,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		   webhook event. Webhook secrets should not be shared.
 		 */
 
-		WebAccount webAccount = null;
+		WebAccount webAccount;
 
 		try {
 			webAccount = webAccountFunctions.getAccount(webaccountId);
@@ -350,9 +349,11 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 				System.out.println("Received: " + patreonEvent);
 
 				SocialIntegration integration = webAccountFunctions.getSocialIntegration(webAccount.getLoginToken());
+				SocialIntegrationMessages socialIntegrationMessages = webAccountFunctions.getSocialIntegrationMessages(webAccount.getLoginToken());
 				if (integration.getDiscord() != null) {
-					sendDiscordMessage(patreonPost, integration.getDiscord());
+					sendDiscordMessage(integration.getDiscord(), patreonPost, socialIntegrationMessages);
 				}
+
 				if (integration.getTwitterAccessToken() != null) {
 					sendTwitterPost(patreonPost, webAccount);
 				}
@@ -377,11 +378,12 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	 * @param patreonPost is the post data we want to send
 	 * @param webhookUrl is the Discord webhook url, used for sending a message to a specific Discord channel
 	 */
-	void sendDiscordMessage(PatreonPostV2 patreonPost, String webhookUrl) {
+	void sendDiscordMessage(String webhookUrl, PatreonPostV2 patreonPost, SocialIntegrationMessages socialIntegrationMessages) {
 		// TODO: Get user's webhook urls
 		new DiscordWebhookUtil(
 				webhookUrl,
-				patreonPost
+				patreonPost,
+				socialIntegrationMessages
 		).send();
 	}
 

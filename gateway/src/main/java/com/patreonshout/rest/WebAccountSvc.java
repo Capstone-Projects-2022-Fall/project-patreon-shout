@@ -3,10 +3,8 @@ package com.patreonshout.rest;
 import com.patreonshout.PSException;
 import com.patreonshout.beans.PatreonTokens;
 import com.patreonshout.beans.SocialIntegration;
-import com.patreonshout.beans.request.LoginRequest;
-import com.patreonshout.beans.request.RegisterRequest;
-import com.patreonshout.beans.request.ResetPasswordRequest;
-import com.patreonshout.beans.request.PutSocialIntegrationRequest;
+import com.patreonshout.beans.SocialIntegrationMessages;
+import com.patreonshout.beans.request.*;
 import com.patreonshout.beans.response.LoginResponse;
 import com.patreonshout.jpa.WebAccountFunctions;
 import com.patreonshout.rest.interfaces.WebAccountImpl;
@@ -14,10 +12,7 @@ import com.patreonshout.utils.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -96,6 +91,32 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	/**
 	 * {@inheritDoc}
 	 */
+	public HttpStatus PutSocialIntegrationMessages(@RequestBody PutSocialIntegrationMessageRequest putSocialIntegrationMessageRequest) throws PSException {
+		webAccountFunctions.putSocialIntegrationMessages(putSocialIntegrationMessageRequest);
+		return HttpStatus.OK;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public ResponseEntity<?> GetSocialIntegrationMessages(@RequestParam(name = "login_token") String loginToken) throws PSException {
+		SocialIntegrationMessages socialIntegrationMessages = webAccountFunctions.getSocialIntegrationMessages(loginToken);
+
+		Map<String, String> response = new LinkedHashMap<>();
+
+		response.put("discord_public_message", socialIntegrationMessages.getDiscordPublicMessage());
+		response.put("discord_private_message", socialIntegrationMessages.getDiscordPrivateMessage());
+		response.put("twitter_public_message", socialIntegrationMessages.getTwitterPublicMessage());
+		response.put("twitter_private_message", socialIntegrationMessages.getTwitterPrivateMessage());
+		response.put("instagram_public_message", socialIntegrationMessages.getInstagramPublicMessage());
+		response.put("instagram_private_message", socialIntegrationMessages.getInstagramPrivateMessage());
+
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public ResponseEntity<?> GetPatreonTokens(@RequestParam(name = "login_token") String loginToken) throws PSException {
 		PatreonTokens tokens = webAccountFunctions.getPatreonTokens(loginToken);
 
@@ -118,27 +139,5 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 		Map<String, String> response = new HashMap<>();
 		response.put("success", "true");
 		return new ResponseEntity<>(response, HttpStatus.OK);
-	}
-
-	/**
-	 * Test for a webhook endpoint
-	 *
-	 * @param loginToken is a user's loginToken
-	 * @return an {@link org.springframework.http.HttpStatus#OK}
-	 * @throws PSException in case of a database problem or a user mismatch
-	 */
-	@PostMapping("webhook")
-	public ResponseEntity<?> Webhook(@RequestParam(name = "login_token") String loginToken) throws PSException {
-		webAccountFunctions.testy(loginToken);
-		/**
-		 * Requires:
-		 * 1) Webaccount ID
-		 * 2) Campaign ID
-		 */
-		String webhookUrl = "https://ayser.backend.outofstonk.com/receivers/patreon/" + 201;
-
-
-
-		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

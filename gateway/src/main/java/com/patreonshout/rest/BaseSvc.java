@@ -1,9 +1,7 @@
 package com.patreonshout.rest;
 
 import com.patreonshout.PSException;
-import com.patreonshout.beans.response.BaseResponse;
 import com.patreonshout.utils.ResponseUtil;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -36,6 +34,8 @@ public class BaseSvc {
 				return ResponseUtil.Generic(HttpStatus.CONFLICT, "Duplicate primary key.");
 			case 1452:
 				return ResponseUtil.Generic(HttpStatus.CONFLICT, "Foreign key constraint failed.");
+			case 1048:
+				return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Attempted to set a column's value to NULL when it does not allow it.");
 			default:
 				ex.printStackTrace();
 				return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "SQLIntegrityConstraintViolationException unknown SQL code");
