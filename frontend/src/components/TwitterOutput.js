@@ -5,7 +5,12 @@ import publicPost from "../img/twitter-public-post-embed.jpg";
 import privatePost from "../img/twitter-private-post-embed.jpg";
 import reactStringReplace from "react-string-replace";
 
-
+/**
+ * Shows a fake twitter post with the user's message details
+ *
+ * @param args holds "publicConfig": tells the user if we want to show a public or private post for the twitter component and "message" the message for the twitter component
+ * @returns Interface for the twitter post component
+ */
 function TwitterOutput(args) { // {publicConfig, message}
 
     const editDisplayMessage = (givenMessage) => {
