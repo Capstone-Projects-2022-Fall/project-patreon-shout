@@ -10,6 +10,7 @@ import Filter from "../home_page/Filter";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { getPosts } from '../services/api/posts';
 import { v4 } from 'uuid';
+import {CircularProgress} from "@mui/material";
 
 /**
  * This is the List feed function to display the list feed
@@ -19,11 +20,31 @@ import { v4 } from 'uuid';
 
 function ListFeed() {
 
+    const [userLists, setUserLists] = useState(["init"]);
+
+    useEffect(() => {
+        let mounted = true;
+        const tokenString = localStorage.getItem('token');
+        const userToken = JSON.parse(tokenString);
+        getLists(userToken.token)
+            .then(items => {
+                if (mounted) {
+                    setUserLists(items)
+                }
+            })
+        return () => mounted = false;
+    }, [])
+
+    return HtmlReturn(userLists);
+}
+
+function HtmlReturn(userLists) {
+
     const [searchTerm, setSearchTerm] = useState([]);
     const [filterChoices, setFilterChoices] = useState([]);
     const [dateRange, setDateRange] = useState([]);
-    const [postList, setPostList] = useState([]);
-    const [userLists, setUserLists] = useState([]);
+    const [postList, setPostList] = useState(["init"]);
+
     const searchedList = [];
     const avoidDefaults = ["Date(new → old)", "Date(old → new)", "Private Only", "Public Only", "Date Range"];
     let displayedList = [];
@@ -31,11 +52,23 @@ function ListFeed() {
     const [lists, setLists] = useState("show");
     const [posts, setPosts] = useState("hide");
 
+    if (userLists[0] === "init") {
+        return (
+            <div className="loading">
+                <CircularProgress/>
+            </div>
+        );
+    }
+
     // Searchbar Functionality
     let shouldSkip = false;
-    // console.log(postList);
     postList.forEach((post, index) => {
         // console.log(index);
+
+        if (post === "init") {
+            return;
+        }
+
         const postInfo = (({title, creator_name, content}) => ({title, creator_name, content}))(post);
         Object.values(postInfo).every((onlyValues) => {
             if (shouldSkip) {return;}
@@ -90,26 +123,20 @@ function ListFeed() {
         }
     }
 
-    useEffect(() => {
-        let mounted = true;
-        const tokenString = localStorage.getItem('token');
-        const userToken = JSON.parse(tokenString);
-        getLists(userToken.token)
-            .then(items => {
-                if (mounted) {
-                    setUserLists(items)
-                }
-            })
-        return () => mounted = false;
-    }, [])
-
+    if (posts === "show" && postList[0] === "init") {
+        return (
+            <div className="loading">
+                <CircularProgress/>
+            </div>
+        );
+    }
 
     return (
         <div className="listfeed">
             <div className="listfeed__header">
                 <h1 className={lists}>Lists</h1>
                 <div id="backDiv">
-                    <ArrowBackIcon id="backArrow" fontSize="large" className={posts} onClick={() => {setPosts("hide"); setLists("show"); setPostList([]);}}/>
+                    <ArrowBackIcon id="backArrow" fontSize="large" className={posts} onClick={() => {setPosts("hide"); setLists("show"); setPostList(["init"]);}}/>
                 </div>
                 <AddListModal />
             </div>

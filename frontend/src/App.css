@@ -3,6 +3,7 @@ body {
     --background: #e6ecf0;
 }
 
+
 .App:after {
     content: "";
     display: flex;
@@ -17,12 +18,19 @@ body {
 
 .main {
     width: 40%;
-    border-left: 2px solid var(--background);
-    border-right: 2px solid var(--background);
 }
 
 .left, .right {
     width: 30%;
+    /*border-style: solid;*/
+}
+
+.left {
+    /*border-right: 2px solid var(--background);*/
+}
+
+.right {
+    /*border-left: 2px solid var(--background);*/
 }
 
 @media only screen and (max-width: 1000px) {

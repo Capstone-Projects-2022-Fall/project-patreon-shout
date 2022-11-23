@@ -39,13 +39,18 @@ const LoginForm = ({setToken}) => {
     return(
         <div className="cover">
             <h1>Sign in</h1>
-            <TextField className='textInputLog' id="outlined-basic" label="Username" variant="outlined"
-                       value={userName} onChange={(e) => setUserName(e.target.value)}/>
 
-            <TextField className='textInputLog' id="outlined-basic" label="Password" type='password'
-                       variant="outlined" value={userPassword} onChange={(e) => setPassword(e.target.value)}/>
+            <div className="loginContent">
+                <TextField className='textInputLog' id="outlined-basic" label="Username" variant="outlined"
+                           value={userName} onChange={(e) => setUserName(e.target.value)}/>
 
-            <div className="loginButton" onClick={handleSubmit}>Sign in</div>
+                <TextField className='textInputLog' id="outlined-basic" label="Password" type='password'
+                           variant="outlined" value={userPassword} onChange={(e) => setPassword(e.target.value)}/>
+
+                <div className="loginButtonContainer">
+                    <div className="loginButton" onClick={handleSubmit}>Sign in</div>
+                </div>
+            </div>
 
             <div className={popupFailed}>
                 <h3>Sign in Failed</h3>

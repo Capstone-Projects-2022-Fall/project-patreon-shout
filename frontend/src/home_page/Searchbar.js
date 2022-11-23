@@ -74,6 +74,7 @@ function Searchbar({searchTerm, setSearchTerm}) {
                             onChange={inputHandler}
                             value={searchInput}
                             type="text"
+                            className="Searchbar__input_field"
                         />
                         <Button className="Addfilter__button" onClick={(addFilterHandler)}>
                             <div className="Addfilter__button_content">

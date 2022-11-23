@@ -89,12 +89,12 @@
 }
 
 #creatorPage:hover {
-    /*text-decoration: underline;*/
-    color: lightgray;
+    text-decoration: underline;
+    /*color: lightgray;*/
     cursor: pointer;
 }
 
 #postPage:hover {
-    /*text-decoration: underline;*/
+    text-decoration: underline;
     cursor: pointer;
 }

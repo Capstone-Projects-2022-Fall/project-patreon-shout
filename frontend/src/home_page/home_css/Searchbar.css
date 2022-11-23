@@ -12,7 +12,6 @@
 
 input[type=text] {
     font-size: 18px;
-    width: 50%;
     border: none;
 }
 
@@ -43,4 +42,10 @@ input[type=text] {
     align-content: center;
     padding-left: 10px;
     border-radius: 50px;
+}
+
+@media only screen and (max-width: 1700px) {
+    .Searchbar__input_field {
+        width: 50%;
+    }
 }
