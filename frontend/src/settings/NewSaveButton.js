@@ -6,6 +6,14 @@ import ErrorIcon from '@mui/icons-material/Error';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import SaveIcon from '@mui/icons-material/Save';
 
+/**
+ * Dynamic button that changes its looks based on the status of a given function and arguments
+ *
+ * @param givenFunc function to call
+ * @param funcArgs arguments for the given function
+ * @param isDisabled Boolean for if this button should be disabled
+ * @returns {JSX.Element}
+ */
 function NewSaveButton({givenFunc, funcArgs, isDisabled}) {
     const [buttonColor, setButtonColor] = useState("primary");
     const [buttonIcon, setButtonIcon] = useState(<SaveIcon/>);

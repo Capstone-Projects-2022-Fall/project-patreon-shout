@@ -8,6 +8,13 @@ import {
 import './setting_css/DiscordMessages.css';
 import reactStringReplace from 'react-string-replace';
 
+/**
+ * Function component that displays text given in a Discord-like fashion for users to understand how their text
+ * will look when redirected
+ *
+ * @param args publicMessage and privateMessage texts to be used in the public and private text fields
+ * @returns {JSX.Element}
+ */
 function DiscordOutput(args) {
     // Utility functions
     const editDisplayMessage = (givenMessage) => {
