@@ -8,6 +8,7 @@ import Filter from "./Filter";
 import {getLists} from "../services/api/lists/getLists";
 import { v4 } from 'uuid';
 import {getPosts} from "../services/api/posts";
+import {CircularProgress} from "@mui/material";
 
 /**
  * This is the Main Feed function which will appear on the home page
@@ -17,17 +18,56 @@ import {getPosts} from "../services/api/posts";
 
 function Feed() {
 
+    const [postList, setPostList] = useState(["init"]);
+    const [userLists, setUserLists] = useState([]);
+
+    useEffect(() => {
+        let mounted = true;
+        const tokenString = localStorage.getItem('token');
+        const userToken = JSON.parse(tokenString);
+        getLists(userToken.token)
+            .then(items => {
+                if (mounted) {
+                    setUserLists(items)
+                }
+            })
+        return () => mounted = false;
+    }, [])
+
+    useEffect(() => {
+        let mounted = true;
+        getPosts("8432541")
+            .then(items => {
+                if (mounted) {
+                    setPostList(items)
+                }
+            })
+        return () => mounted = false;
+    }, [])
+
+
+    return HtmlReturn(postList, userLists);
+}
+
+function HtmlReturn(postList, userLists) {
+
     const [searchTerm, setSearchTerm] = useState([]);
     const [filterChoices, setFilterChoices] = useState([]);
     const [dateRange, setDateRange] = useState([]);
-    const [postList, setPostList] = useState([]);
-    const [userLists, setUserLists] = useState([]);
     const searchedList = [];
     const avoidDefaults = ["Date(new → old)", "Date(old → new)", "Private Only", "Public Only", "Date Range"];
     let displayedList = [];
-    let shouldSkip = false;
+
+    if (postList[0] === "init") {
+        return (
+            <div className="loading">
+                <CircularProgress/>
+            </div>
+        );
+    }
 
     // Searchbar Functionality
+    let shouldSkip = false;
     postList.forEach((post, index) => {
         const postInfo = (({title, creator_name, content}) => ({title, creator_name, content}))(post);
         Object.values(postInfo).every((onlyValues, valIndex) => {
@@ -59,7 +99,7 @@ function Feed() {
     }
     if (filterChoices.includes("Date Range")) {
         displayedList = displayedList.sort(function(b, a){return new Date(a.published_at).getTime() - new Date(b.published_at).getTime()});
-        displayedList = displayedList.filter(value => (new Date(value.published_at).getTime() <= new Date(dateRange.endDate).getTime() && 
+        displayedList = displayedList.filter(value => (new Date(value.published_at).getTime() <= new Date(dateRange.endDate).getTime() &&
             new Date(value.published_at).getTime() >= new Date(dateRange.startDate).getTime()));
     }
 
@@ -81,31 +121,9 @@ function Feed() {
                 shouldSkip = false;
             });
         }
-    }  
+    }
 
-    useEffect(() => {
-        let mounted = true;
-        const tokenString = localStorage.getItem('token');
-        const userToken = JSON.parse(tokenString);
-        getLists(userToken.token)
-            .then(items => {
-                if (mounted) {
-                    setUserLists(items)
-                }
-            })
-        return () => mounted = false;
-    }, [])
 
-    useEffect(() => {
-        let mounted = true;
-        getPosts("8432541")
-            .then(items => {
-                if (mounted) {
-                    setPostList(items)
-                }
-            })
-        return () => mounted = false;
-    }, [])
 
     return (
         <div className="feed">
@@ -118,10 +136,10 @@ function Feed() {
                     setSearchTerm={setSearchTerm}
                 />
                 <Filter id="feed__filter"
-                    filterChoices={filterChoices} 
-                    setFilterChoices={setFilterChoices}
-                    dateRange={dateRange}
-                    setDateRange={setDateRange}
+                        filterChoices={filterChoices}
+                        setFilterChoices={setFilterChoices}
+                        dateRange={dateRange}
+                        setDateRange={setDateRange}
                 />
             </div>
             {displayedList.map((item) => (
@@ -141,4 +159,5 @@ function Feed() {
         </div>
     );
 }
+
 export default Feed;
