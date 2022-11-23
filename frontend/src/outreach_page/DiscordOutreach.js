@@ -24,37 +24,19 @@ function DiscordOutreach({webhook, publicMessage, privateMessage}) {
     return (
         <div className="outreachSettings">
 
-            <div className="outreachConnectAndSave">
-                <TextField
-                    id={"discord-textfield"}
-                    label={"Webhook URL"}
-                    size="small"
-                    variant="outlined"
-                    value={textFieldValue}
-                    onChange={(e) => setTextfieldValue(e.target.value)}
-                />
-
-                <div>
-                    <NewSaveButton
-                        givenFunc={[putSocialIntegrationMessages, putSocialIntegration]}
-                        funcArgs={[
-                            {
-                                login_token: JSON.parse(localStorage.getItem('token')).token,
-                                integration_name: "DISCORD",
-                                public_message: publicTextField,
-                                private_message: privateTextField
-                            },
-                            {
-                                login_token: JSON.parse(localStorage.getItem('token')).token,
-                                integration_name: "DISCORD",
-                                data: textFieldValue
-                            }
-                        ]}
+            <div className="postSettings">
+                <div className="connect">
+                    <TextField
+                        fullWidth
+                        id="discord-textfield"
+                        label={"Webhook URL"}
+                        size="small"
+                        variant="outlined"
+                        value={textFieldValue}
+                        onChange={(e) => setTextfieldValue(e.target.value)}
                     />
                 </div>
-            </div>
 
-            <div className="postSettings">
                 <TextField
                     fullWidth
                     margin="normal"
@@ -76,7 +58,28 @@ function DiscordOutreach({webhook, publicMessage, privateMessage}) {
                     value={privateTextField}
                     onChange={(e) => setPrivateTextField(e.target.value)}
                 />
+
+                <div className="save">
+                    <NewSaveButton
+                        givenFunc={[putSocialIntegrationMessages, putSocialIntegration]}
+                        funcArgs={[
+                            {
+                                login_token: JSON.parse(localStorage.getItem('token')).token,
+                                integration_name: "DISCORD",
+                                public_message: publicTextField,
+                                private_message: privateTextField
+                            },
+                            {
+                                login_token: JSON.parse(localStorage.getItem('token')).token,
+                                integration_name: "DISCORD",
+                                data: textFieldValue
+                            }
+                        ]}
+                    />
+                </div>
             </div>
+
+
 
             <div className="socialPlatformContainer">
                 <DiscordOutput

@@ -13,7 +13,7 @@
 .outreachSettings {
     display: flex;
     flex-direction: column;
-    gap: 25px;
+    gap: 20px;
 
     align-items: center;
 }
@@ -21,16 +21,23 @@
 .postSettings {
     display: flex;
     flex-direction: column;
+
     width: 90%;
 }
 
-.outreachConnectAndSave {
+.connect {
     display: flex;
-    justify-content: space-between;
-    width: 90%;
+    justify-content: center;
+}
+
+.save {
+    display: flex;
+    flex-direction: row-reverse;
 }
 
 .socialPlatformContainer {
+    display: flex;
+    justify-content: center;
     width: 90%;
 }
 
@@ -50,3 +57,17 @@
         padding-bottom: 100px;
     }
 }
+
+
+/* twitter specific start */
+.tweet {
+    max-width: 1080px !important;
+    width: 100% !important;
+    border-radius: 10px;
+}
+
+
+.fake-link, .txt, .metadata, .user-nickname, strong {
+    font-family: "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif !important;
+}
+/* twitter specific end */
