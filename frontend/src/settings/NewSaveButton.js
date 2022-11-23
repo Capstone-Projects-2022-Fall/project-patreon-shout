@@ -12,7 +12,7 @@ import SaveIcon from '@mui/icons-material/Save';
  * @param givenFunc function to call
  * @param funcArgs arguments for the given function
  * @param isDisabled Boolean for if this button should be disabled
- * @returns {JSX.Element}
+ * @returns the interface of a save button
  */
 function NewSaveButton({givenFunc, funcArgs, isDisabled}) {
     const [buttonColor, setButtonColor] = useState("primary");
@@ -36,12 +36,23 @@ function NewSaveButton({givenFunc, funcArgs, isDisabled}) {
                     setIsProcessing(true);
                     setButtonIcon(<PendingIcon/>);
 
-                    const retVal = await givenFunc(funcArgs);
+                    let retVals = [];
+                    for (const func of givenFunc) {
+                        const index = givenFunc.indexOf(func);
+                        retVals[index] = await func(funcArgs[index]);
+                    }
 
-                    if (retVal.status === 200) {
+                    if (retVals.length !== givenFunc.length) {
+                        setButtonColor("error");
+                        setButtonIcon(<ErrorIcon/>);
+                    }
+
+                    const allEqual = arr => arr.every( v => v.status === 200)
+                    if (allEqual(retVals)) {
                         setButtonColor("success");
                         setButtonIcon(<CheckCircleIcon/>);
-                    } else {
+                    }
+                    else {
                         setButtonColor("error");
                         setButtonIcon(<ErrorIcon/>);
                     }

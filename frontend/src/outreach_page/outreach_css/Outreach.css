@@ -12,9 +12,26 @@
 
 .outreachSettings {
     display: flex;
+    flex-direction: column;
+    gap: 25px;
 
-    justify-content: center;
     align-items: center;
+}
+
+.postSettings {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+}
+
+.outreachConnectAndSave {
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+}
+
+.socialPlatformContainer {
+    width: 90%;
 }
 
 .loading {
@@ -27,5 +44,9 @@
 @media only screen and (max-width: 1000px) {
     .outreach {
         padding: 5px;
+    }
+
+    .outreachSettings {
+        padding-bottom: 100px;
     }
 }

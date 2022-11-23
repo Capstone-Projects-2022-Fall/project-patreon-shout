@@ -11,6 +11,7 @@ import RedditOutreach from "./RedditOutreach";
 import {getSocialIntegrations} from "../services/api/webaccount/getSocialIntegration";
 import {render} from "react-dom";
 import {CircularProgress} from "@mui/material";
+import {getSocialIntegrationMessages} from "../services/api/webaccount/getSocialIntegrationMessages";
 
 
 /**
@@ -21,30 +22,46 @@ import {CircularProgress} from "@mui/material";
 function Outreach() {
 
     const [socialIntegrations, setSocialIntegrations] = useState([]);
+    const [socialIntegrationMessages, setSocialIntegrationMessages] = useState([]);
+
+    const tokenString = localStorage.getItem('token');
+    const loginToken = JSON.parse(tokenString).token;
 
     let finished = false;
     useEffect(() => {
-        const tokenString = localStorage.getItem('token');
-        const loginToken = JSON.parse(tokenString).token;
+
         getSocialIntegrations(loginToken)
             .then(items => {
                 if (!finished) {
                     setSocialIntegrations(items);
-                    render(HtmlReturn(socialIntegrations), this); // Force Rerender this function component
+                    render(HtmlReturn(socialIntegrations, socialIntegrationMessages), this); // Force Rerender this function component
                 }
             })
         return () => finished = true;
     }, []);
 
-    return HtmlReturn(socialIntegrations);
+    let mounted = false;
+    useEffect(() => {
+        if (mounted)
+            return;
+
+        getSocialIntegrationMessages(loginToken)
+            .then(items => {
+                setSocialIntegrationMessages(items);
+                render(HtmlReturn(socialIntegrations, socialIntegrationMessages), this);
+            })
+        return () => mounted = true;
+    }, []);
+
+    return HtmlReturn(socialIntegrations, socialIntegrationMessages);
 
 }
 
-function HtmlReturn(socialIntegrations) {
+function HtmlReturn(socialIntegrations, socialIntegrationMessages) {
     const [value, setValue] = React.useState(0)
 
 
-    if (socialIntegrations.length === 0) {
+    if (socialIntegrations.length === 0 || socialIntegrationMessages.length === 0) {
         return (
             <div className="loading">
                 <CircularProgress/>
@@ -98,6 +115,8 @@ function HtmlReturn(socialIntegrations) {
                 <TabPanel value={value} index={0}>
                     <DiscordOutreach
                         webhook={socialIntegrations.discord}
+                        publicMessage={socialIntegrationMessages.discord_public_message}
+                        privateMessage={socialIntegrationMessages.discord_private_message}
                     />
                 </TabPanel>
 
