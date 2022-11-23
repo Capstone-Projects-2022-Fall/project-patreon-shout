@@ -43,7 +43,7 @@ function HtmlReturn(userLists) {
     const [searchTerm, setSearchTerm] = useState([]);
     const [filterChoices, setFilterChoices] = useState([]);
     const [dateRange, setDateRange] = useState([]);
-    const [postList, setPostList] = useState([]);
+    const [postList, setPostList] = useState(["init"]);
 
     const searchedList = [];
     const avoidDefaults = ["Date(new → old)", "Date(old → new)", "Private Only", "Public Only", "Date Range"];
@@ -64,6 +64,11 @@ function HtmlReturn(userLists) {
     let shouldSkip = false;
     postList.forEach((post, index) => {
         // console.log(index);
+
+        if (post === "init") {
+            return;
+        }
+
         const postInfo = (({title, creator_name, content}) => ({title, creator_name, content}))(post);
         Object.values(postInfo).every((onlyValues) => {
             if (shouldSkip) {return;}
@@ -118,13 +123,20 @@ function HtmlReturn(userLists) {
         }
     }
 
+    if (posts === "show" && postList[0] === "init") {
+        return (
+            <div className="loading">
+                <CircularProgress/>
+            </div>
+        );
+    }
 
     return (
         <div className="listfeed">
             <div className="listfeed__header">
                 <h1 className={lists}>Lists</h1>
                 <div id="backDiv">
-                    <ArrowBackIcon id="backArrow" fontSize="large" className={posts} onClick={() => {setPosts("hide"); setLists("show"); setPostList([]);}}/>
+                    <ArrowBackIcon id="backArrow" fontSize="large" className={posts} onClick={() => {setPosts("hide"); setLists("show"); setPostList(["init"]);}}/>
                 </div>
                 <AddListModal />
             </div>
