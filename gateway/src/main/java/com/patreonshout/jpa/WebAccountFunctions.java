@@ -300,7 +300,7 @@ public class WebAccountFunctions {
 	 * @return {@link SocialIntegrationMessages} belonging to a login token's {@link WebAccount}
 	 */
 	@Transactional
-	public SocialIntegrationMessages getSocialIntegrationMessage(String loginToken) throws PSException {
+	public SocialIntegrationMessages getSocialIntegrationMessages(String loginToken) throws PSException {
 		return this.getAccount(loginToken).getSocialIntegrationMessages();
 	}
 

@@ -100,7 +100,7 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	 * {@inheritDoc}
 	 */
 	public ResponseEntity<?> GetSocialIntegrationMessages(@RequestParam(name = "login_token") String loginToken) throws PSException {
-		SocialIntegrationMessages socialIntegrationMessages = webAccountFunctions.getSocialIntegrationMessage(loginToken);
+		SocialIntegrationMessages socialIntegrationMessages = webAccountFunctions.getSocialIntegrationMessages(loginToken);
 
 		Map<String, String> response = new LinkedHashMap<>();
 
