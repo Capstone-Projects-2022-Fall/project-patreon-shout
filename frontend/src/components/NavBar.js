@@ -6,6 +6,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutIcon from "@mui/icons-material/Logout";
+import CampaignIcon from '@mui/icons-material/Campaign';
 import {useLocation, useNavigate} from "react-router-dom";
 import {logoutUser} from "../services/api/logout";
 
@@ -67,7 +68,7 @@ function NavBar() {
         <div className="navbar">
             <div onClick={goToHome} id="/home"> <SidebarOption size="large" Icon={HomeIcon} active={location.pathname === "/home"}/> </div>
 
-            <div onClick={goToOutreach} id="/outreach"> <SidebarOption size="large" Icon={SearchIcon} active={location.pathname === "/outreach"}/> </div>
+            <div onClick={goToOutreach} id="/outreach"> <SidebarOption size="large" Icon={CampaignIcon} active={location.pathname === "/outreach"}/> </div>
 
             <div onClick={goToLists} id="/lists"> <SidebarOption size="large" Icon={ListAltIcon} active={location.pathname === "/lists"}/> </div>
 

@@ -6,6 +6,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutIcon from "@mui/icons-material/Logout";
+import CampaignIcon from '@mui/icons-material/Campaign';
 import {useLocation, useNavigate} from "react-router-dom";
 import {logoutUser} from "../services/api/logout";
 
@@ -67,7 +68,7 @@ function Sidebar() {
         <div className="sidebar">
             <div onClick={goToHome} id="/home"> <SidebarOption Icon={HomeIcon} text="Home" active={location.pathname === "/home"}/> </div>
 
-            <div onClick={goToOutreach} id="/outreach"> <SidebarOption Icon={SearchIcon} text="Outreach" active={location.pathname === "/outreach"}/> </div>
+            <div onClick={goToOutreach} id="/outreach"> <SidebarOption Icon={CampaignIcon} text="Outreach" active={location.pathname === "/outreach"}/> </div>
 
             <div onClick={goToLists} id="/lists"> <SidebarOption Icon={ListAltIcon} text="Lists" active={location.pathname === "/lists"}/> </div>
 
