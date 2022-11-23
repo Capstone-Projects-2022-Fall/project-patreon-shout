@@ -19,7 +19,7 @@ import {CircularProgress} from "@mui/material";
 function Feed() {
 
     const [postList, setPostList] = useState(["init"]);
-    const [userLists, setUserLists] = useState([]);
+    const [userLists, setUserLists] = useState(["init"]);
 
     useEffect(() => {
         let mounted = true;
@@ -58,7 +58,7 @@ function HtmlReturn(postList, userLists) {
     const avoidDefaults = ["Date(new → old)", "Date(old → new)", "Private Only", "Public Only", "Date Range"];
     let displayedList = [];
 
-    if (postList[0] === "init") {
+    if (postList[0] === "init" || userLists[0] === "init") {
         return (
             <div className="loading">
                 <CircularProgress/>
