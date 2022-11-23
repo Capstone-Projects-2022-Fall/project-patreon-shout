@@ -15,6 +15,8 @@ import TwitterOutput from "../components/TwitterOutput";
 /**
  * The twitter social platform cross-posting component
  *
+ * @param publicMessage the public twitter message saved in the database
+ * @param privateMessage the private twitter message saved in the database
  * @returns Interface for the user to cross post to twitter with custom post details
  */
 function TwitterOutreach({publicMessage, privateMessage}) {
