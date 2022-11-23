@@ -57,6 +57,13 @@ public class WebAccount {
 	SocialIntegration socialIntegration;
 
 	/**
+	 * {@link com.patreonshout.beans.SocialIntegrationMessages} object linked with this WebAccount object
+	 */
+	@OneToOne(mappedBy = "webAccount", cascade = CascadeType.ALL)
+	@PrimaryKeyJoinColumn
+	SocialIntegrationMessages socialIntegrationMessages;
+
+	/**
 	 * creatorTokens is the {@link com.patreonshout.beans.PatreonTokens} object linked with this WebAccount object
 	 */
 	@OneToOne(mappedBy = "webAccount", cascade = CascadeType.ALL)

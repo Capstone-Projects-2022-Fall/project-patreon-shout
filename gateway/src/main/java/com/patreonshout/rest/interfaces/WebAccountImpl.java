@@ -2,11 +2,9 @@ package com.patreonshout.rest.interfaces;
 
 import com.patreonshout.PSException;
 import com.patreonshout.beans.SocialIntegration;
-import com.patreonshout.beans.request.ResetPasswordRequest;
-import com.patreonshout.beans.request.PutSocialIntegrationRequest;
+import com.patreonshout.beans.SocialIntegrationMessages;
+import com.patreonshout.beans.request.*;
 import com.patreonshout.beans.WebAccount;
-import com.patreonshout.beans.request.LoginRequest;
-import com.patreonshout.beans.request.RegisterRequest;
 import com.patreonshout.jpa.WebAccountFunctions;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -101,13 +99,47 @@ public interface WebAccountImpl {
 	 * @return {@link SocialIntegration} Social integration tokens and webhook URLs
 	 */
 	@GetMapping("/socialintegration")
-	@Operation(summary = "Registers WebAccounts during PatreonShout sign up")
+	@Operation(summary = "Acquires social integrations")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200",
 					description = "Integrations returned",
 					content = {@Content(mediaType = "application/json")})
 	})
 	ResponseEntity<?> GetSocialIntegration(@RequestParam(name = "login_token") String loginToken) throws PSException;
+
+	/**
+	 * Endpoint that allows updating Patreon post redirect messages for social platforms.
+	 *
+	 * @param putSocialIntegrationMessageRequest {@link PutSocialIntegrationMessageRequest} object that contains {@link WebAccountFunctions} and request details.
+	 * @return {@link HttpStatus#OK} if successful, {@link HttpStatus#CONFLICT} if the provided {@link PutSocialIntegrationRequest}
+	 * does not contain a valid {@link WebAccount} ID number.
+	 */
+	@PutMapping("/socialintegrationmessages")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200",
+					description = "Integration messages have been saved",
+					content = {@Content(mediaType = "application/json")}),
+			@ApiResponse(responseCode = "409",
+					description = "WebAccount ID does not exist",
+					content = {@Content(mediaType = "application/json")})
+	})
+	@ResponseStatus(code = HttpStatus.OK, reason = "Data saved successfully")
+	HttpStatus PutSocialIntegrationMessages(@RequestBody PutSocialIntegrationMessageRequest putSocialIntegrationMessageRequest) throws PSException;
+
+	/**
+	 * Returns the custom Patreon post redirect messages for all social platforms
+	 *
+	 * @param loginToken Login token belonging to a {@link WebAccount}
+	 * @return {@link SocialIntegrationMessages} Social integration public and private messages
+	 */
+	@GetMapping("/socialintegrationmessages")
+	@Operation(summary = "Acquires custom Patreon post redirect messages")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200",
+					description = "Custom Patreon post redirect messages",
+					content = {@Content(mediaType = "application/json")})
+	})
+	ResponseEntity<?> GetSocialIntegrationMessages(@RequestParam(name = "login_token") String loginToken) throws PSException;
 
 	/**
 	 * Endpoint that allows retrieval of Patreon access and refresh tokens for a {@link WebAccount} containing the given

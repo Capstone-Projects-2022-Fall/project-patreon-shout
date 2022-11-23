@@ -4,8 +4,9 @@ import club.minnced.discord.webhook.exception.HttpException;
 import club.minnced.discord.webhook.receive.ReadonlyMessage;
 import com.patreonshout.PSException;
 import com.patreonshout.beans.*;
-import com.patreonshout.beans.request.PutSocialIntegrationRequest;
 import com.patreonshout.beans.request.LoginRequest;
+import com.patreonshout.beans.request.PutSocialIntegrationMessageRequest;
+import com.patreonshout.beans.request.PutSocialIntegrationRequest;
 import com.patreonshout.beans.request.RegisterRequest;
 import com.patreonshout.config.SecurityConfiguration;
 import com.patreonshout.utils.DiscordWebhookUtil;
@@ -15,7 +16,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 
@@ -68,12 +68,7 @@ public class WebAccountFunctions {
 		if (id == 0)
 			throw new PSException(HttpStatus.NOT_FOUND, "WebAccount ID not provided");
 
-		WebAccount webAccount = webAccountRepository.findByWebAccountId((int) id);
-
-//		if (webAccount.isEmpty())
-//			throw new PSException(HttpStatus.NOT_FOUND, "WebAccount ID does not belong to a user");
-
-		return webAccount;
+		return webAccountRepository.findByWebAccountId((int) id);
 	}
 
 	/**
@@ -92,6 +87,26 @@ public class WebAccountFunctions {
 		webAccount.setUsername(registerRequest.getUsername());
 		webAccount.setPassword(securityConfiguration.encodePassword(registerRequest.getPassword(), salt));
 		webAccount.setPasswordSalt(salt);
+
+		// Create SocialIntegration
+		SocialIntegration socialIntegration = new SocialIntegration();
+		socialIntegration.setWebAccount(webAccount);
+		webAccount.setSocialIntegration(socialIntegration);
+
+		// Create OldPassword
+		OldPasswords oldPasswords = new OldPasswords();
+		oldPasswords.setWebAccount(webAccount);
+		webAccount.setOldPasswords(oldPasswords);
+
+		// Create PatreonTokens
+		PatreonTokens patreonTokens = new PatreonTokens();
+		patreonTokens.setWebAccount(webAccount);
+		webAccount.setCreatorTokens(patreonTokens);
+
+		// Create SocialIntegrationMessages
+		SocialIntegrationMessages socialIntegrationMessages = new SocialIntegrationMessages();
+		socialIntegrationMessages.setWebAccount(webAccount);
+		webAccount.setSocialIntegrationMessages(socialIntegrationMessages);
 
 		webAccountRepository.save(webAccount);
 	}
@@ -144,14 +159,6 @@ public class WebAccountFunctions {
 	public void putSocialIntegration(PutSocialIntegrationRequest putSocialIntegrationRequest) throws PSException {
 		WebAccount webAccount = this.getAccount(putSocialIntegrationRequest.getLoginToken());
 		SocialIntegration socialIntegration = webAccount.getSocialIntegration();
-
-		// * Create a SocialIntegration object if it doesn't exist yet, then set relationships
-		if (socialIntegration == null) {
-			socialIntegration = new SocialIntegration();
-			socialIntegration.setWebAccountId(webAccount.getWebAccountId());
-			socialIntegration.setWebAccount(webAccount);
-			webAccount.setSocialIntegration(socialIntegration);
-		}
 
 		// * Ensure integration type was given...
 		// ! This will throw an exception for us if any errors were found
@@ -216,7 +223,7 @@ public class WebAccountFunctions {
 	 * Saves social integration data from a request into a given {@link SocialIntegration} object
 	 *
 	 * @param putSocialIntegrationRequest {@link PutSocialIntegrationRequest} object generated from Spring
-	 * @param socialIntegration {@link SocialIntegration} belonging to a current {@link WebAccount}
+	 * @param socialIntegration           {@link SocialIntegration} belonging to a current {@link WebAccount}
 	 */
 	public void saveIntegration(PutSocialIntegrationRequest putSocialIntegrationRequest, SocialIntegration socialIntegration) {
 		String data = putSocialIntegrationRequest.getData();
@@ -253,19 +260,48 @@ public class WebAccountFunctions {
 	public SocialIntegration getSocialIntegration(String loginToken) throws PSException {
 		WebAccount webAccount = this.getAccount(loginToken);
 
-		SocialIntegration socialIntegration = webAccount.getSocialIntegration();
+		return webAccount.getSocialIntegration();
+	}
 
-		if (socialIntegration == null) {
-			socialIntegration = new SocialIntegration();
-			socialIntegration.setWebAccountId(webAccount.getWebAccountId());
+	/**
+	 * Saves social integration messages from a request into a {@link WebAccount}'s {@link SocialIntegrationMessages} object
+	 *
+	 * @param putSocialIntegrationMessageRequest {@link PutSocialIntegrationMessageRequest} object generated from Spring
+	 */
+	@Transactional
+	public void putSocialIntegrationMessages(PutSocialIntegrationMessageRequest putSocialIntegrationMessageRequest) throws PSException {
+		WebAccount webAccount = this.getAccount(putSocialIntegrationMessageRequest.getLoginToken());
+		SocialIntegrationMessages socialIntegrationMessages = webAccount.getSocialIntegrationMessages();
 
-			socialIntegration.setWebAccount(webAccount);
-			webAccount.setSocialIntegration(socialIntegration);
-
-			webAccountRepository.save(webAccount);
+		// * Check validity of token/webhook URL
+		switch (putSocialIntegrationMessageRequest.getSocialIntegrationName()) {
+			case DISCORD:
+				socialIntegrationMessages.setDiscordPublicMessage(putSocialIntegrationMessageRequest.getPublicMessage());
+				socialIntegrationMessages.setDiscordPrivateMessage(putSocialIntegrationMessageRequest.getPrivateMessage());
+				break;
+			case TWITTER:
+				socialIntegrationMessages.setTwitterPublicMessage(putSocialIntegrationMessageRequest.getPublicMessage());
+				socialIntegrationMessages.setTwitterPrivateMessage(putSocialIntegrationMessageRequest.getPrivateMessage());
+				break;
+			case INSTAGRAM:
+				socialIntegrationMessages.setInstagramPublicMessage(putSocialIntegrationMessageRequest.getPublicMessage());
+				socialIntegrationMessages.setInstagramPrivateMessage(putSocialIntegrationMessageRequest.getPrivateMessage());
+				break;
 		}
 
-		return webAccount.getSocialIntegration();
+		// * Save all changes to the WebAccount
+		webAccountRepository.save(webAccount);
+	}
+
+	/**
+	 * Acquires a {@link SocialIntegrationMessages} from the given login token's {@link WebAccount}
+	 *
+	 * @param loginToken {@link WebAccount}'s login token
+	 * @return {@link SocialIntegrationMessages} belonging to a login token's {@link WebAccount}
+	 */
+	@Transactional
+	public SocialIntegrationMessages getSocialIntegrationMessages(String loginToken) throws PSException {
+		return this.getAccount(loginToken).getSocialIntegrationMessages();
 	}
 
 	/**
@@ -282,21 +318,15 @@ public class WebAccountFunctions {
 	}
 
 	@Transactional
-	public void putPatreonTokens(WebAccount webAccount, String accessToken, String refreshToken) throws PSException {
+	public void putPatreonTokens(WebAccount webAccount, String accessToken, String refreshToken) {
 		PatreonTokens patreonTokens = webAccount.getCreatorTokens();
-
-		if (patreonTokens == null) {
-			patreonTokens = new PatreonTokens();
-			patreonTokens.setWebAccountId(webAccount.getWebAccountId());
-			patreonTokens.setWebAccount(webAccount);
-			webAccount.setCreatorTokens(patreonTokens);
-		}
 
 		patreonTokens.setAccessToken(accessToken);
 		patreonTokens.setRefreshToken(refreshToken);
 
 		webAccountRepository.save(webAccount);
 	}
+
 	/**
 	 * Attempts to acquire Patreon access and refresh tokens by checking for a matching {@link WebAccountFunctions} with the
 	 * given login token
@@ -308,14 +338,8 @@ public class WebAccountFunctions {
 	@Transactional
 	public PatreonTokens getPatreonTokens(String loginToken) throws PSException {
 		WebAccount webAccount = this.getAccount(loginToken);
-		PatreonTokens patreonTokens = webAccount.getCreatorTokens();
 
-		if (patreonTokens == null) {
-			patreonTokens = new PatreonTokens();
-			patreonTokens.setWebAccountId(webAccount.getWebAccountId());
-		}
-
-		return patreonTokens;
+		return webAccount.getCreatorTokens();
 	}
 
 	/**
@@ -361,10 +385,8 @@ public class WebAccountFunctions {
 
 		OldPasswords oldPasswords = webAccount.getOldPasswords();
 
-		// First time changing password
-		if (oldPasswords == null)
-			oldPasswords = new OldPasswords();
-		else // ! Desired new password matches one of the previous three passwords
+		// ! Desired new password matches one of the previous three passwords
+		if (!oldPasswords.isEmpty())
 			for (String oldPass : new String[]{oldPasswords.getOldPasswordOne(), oldPasswords.getOldPasswordTwo(), oldPasswords.getOldPasswordThree()})
 				if (oldPass != null && securityConfiguration.passwordMatches(newPassword, webAccount.getPasswordSalt(), oldPass))
 					throw new PSException(HttpStatus.CONFLICT, "New password can not be one of the last three previously used passwords");
@@ -380,13 +402,6 @@ public class WebAccountFunctions {
 		webAccount.setOldPasswords(oldPasswords);
 
 		webAccountRepository.save(webAccount);
-	}
-
-	@Transactional
-	public void testy(String loginToken) throws PSException {
-		WebAccount webAccount = this.getAccount(loginToken);
-
-
 	}
 
 	/**

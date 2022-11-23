@@ -5,6 +5,7 @@ import club.minnced.discord.webhook.exception.HttpException;
 import club.minnced.discord.webhook.receive.ReadonlyMessage;
 import club.minnced.discord.webhook.send.WebhookEmbed;
 import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
+import com.patreonshout.beans.SocialIntegrationMessages;
 import com.patreonshout.beans.patreon_api.PatreonPostV2;
 import com.vladsch.flexmark.html2md.converter.FlexmarkHtmlConverter;
 
@@ -46,8 +47,10 @@ public class DiscordWebhookUtil {
 
 		// * Blocks errors from forcefully outputting -- instead, we catch them in a traditional try/catch block
 		client.setErrorHandler((client, message, throwable) -> {
-			if (throwable instanceof HttpException)
+			if (throwable instanceof HttpException) {
+				throwable.printStackTrace();
 				client.close();
+			}
 		});
 
 		embed = new WebhookEmbedBuilder();
@@ -56,13 +59,23 @@ public class DiscordWebhookUtil {
 		// TODO: the "https://i.imgur.com/KlveixN.png" needs to be changed/fixed
 	}
 
-	public DiscordWebhookUtil(String webhookUrl, PatreonPostV2 patreonPost) {//, String title, String titleUrl, String content, Boolean isPublic) {
+	public DiscordWebhookUtil(String webhookUrl, PatreonPostV2 patreonPost, SocialIntegrationMessages socialIntegrationMessages) {
 		this(webhookUrl);
-		this.setColor(patreonPost.getIsPublic() ? 0x00FF00 : 0xFF0000);
 		this.setTitle(patreonPost.getTitle(), "https://patreon.com" + patreonPost.getUrl());
+		String outputContent;
 
-		String outputContent = patreonPost.getContent() != null ? converter.convert(patreonPost.getContent()) : "This post has no text content";
-		this.setDescription(patreonPost.getIsPublic() ? outputContent : "This post is **private**");
+		if (patreonPost.getIsPublic()) {
+			this.setColor(0x00FF00);
+			outputContent = socialIntegrationMessages.getDiscordPublicMessage();
+		} else {
+			this.setColor(0xFF0000);
+			outputContent = socialIntegrationMessages.getDiscordPrivateMessage();
+		}
+
+		// Make output adjustments
+		outputContent = outputContent.replaceAll("\\{content}", converter.convert(patreonPost.getContent()));
+
+		this.setDescription(outputContent);
 
 		// TODO: This seems to never be true as Patreon never sends us images/videos.
 //				if  (patreonPost.getEmbedUrl() != null)
