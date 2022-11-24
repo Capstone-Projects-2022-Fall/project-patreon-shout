@@ -47,6 +47,11 @@ function AddListModal() {
             return false;
         }
 
+        if (titleInput.length > 25) {
+            document.getElementById("errormsg").textContent = "Title cannot be over 25 characters";
+            return false;
+        }
+
         if (titleInput.replaceAll(" ", "") === "Favorites") {
             document.getElementById("errormsg").textContent = "Cannot Create List With Title \"Favorites\"";
             return false;
