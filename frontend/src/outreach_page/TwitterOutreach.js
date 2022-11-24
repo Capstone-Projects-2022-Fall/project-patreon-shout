@@ -11,6 +11,7 @@ import publicPost from "../img/twitter-public-post-embed.jpg";
 import privatePost from "../img/twitter-private-post-embed.jpg";
 import FakeTweet from "fake-tweet";
 import TwitterOutput from "../components/TwitterOutput";
+import reactStringReplace from "react-string-replace";
 
 /**
  * The twitter social platform cross-posting component
@@ -23,6 +24,31 @@ function TwitterOutreach({publicMessage, privateMessage}) {
 
     const [publicTextField, setPublicTextField] = useState(publicMessage);
     const [privateTextField, setPrivateTextField] = useState(privateMessage);
+
+    // Constants
+    const publicMessageExample = "This is example text for a public post!  When you create a new Patreon post and mark " +
+        "it as public, all of its text will be put here."
+    const emptyMessage = "Empty message!";
+
+    // Raw message containers
+    let rawPublicMessage = (publicTextField && publicTextField.length > 0) ? publicTextField : emptyMessage;
+    let rawPrivateMessage = (privateTextField && privateTextField.length > 0) ? privateTextField : emptyMessage;
+
+    const editDisplayMessage = (givenMessage) => {
+        givenMessage = reactStringReplace(givenMessage, '\\n', (match, i) => (
+            <br/>
+        ));
+        givenMessage = reactStringReplace(givenMessage, '{content}', (match, i) => (
+            publicMessageExample
+        ));
+        console.log("newest edited message: " + givenMessage);
+        return givenMessage;
+    }
+
+    // Edited message containers
+    let editedPublicMessage = editDisplayMessage(rawPublicMessage);
+    let editedPrivateMessage = editDisplayMessage(rawPrivateMessage);
+
 
     return (
         <div className="outreachSettings">
@@ -41,7 +67,7 @@ function TwitterOutreach({publicMessage, privateMessage}) {
                     multiline
                     rows={3}
                     value={publicTextField}
-                    onChange={(e) => setPublicTextField(e.target.value)}
+                    onChange={(e) => {setPublicTextField(e.target.value);}}
                 />
 
                 <TextField
@@ -57,27 +83,59 @@ function TwitterOutreach({publicMessage, privateMessage}) {
 
                 <div className="save">
                     <NewSaveButton
-                        // givenFunc={[putSocialIntegrationMessages, putSocialIntegration]}
-                        // funcArgs={[
-                        //     {
-                        //         login_token: JSON.parse(localStorage.getItem('token')).token,
-                        //         integration_name: "DISCORD",
-                        //         public_message: publicTextField,
-                        //         private_message: privateTextField
-                        //     },
-                        //     {
-                        //         login_token: JSON.parse(localStorage.getItem('token')).token,
-                        //         integration_name: "DISCORD",
-                        //         data: textFieldValue
-                        //     }
-                        // ]}
+                        givenFunc={[putSocialIntegrationMessages]}
+                        funcArgs={[
+                            {
+                                login_token: JSON.parse(localStorage.getItem('token')).token,
+                                integration_name: "TWITTER",
+                                public_message: publicTextField,
+                                private_message: privateTextField
+                            }
+                        ]}
                     />
                 </div>
             </div>
 
-            <div id="renderSocialOutput" className="socialPlatformContainer">
-                <TwitterOutput publicConfig={true} message={publicMessage}/>
-                <TwitterOutput publicConfig={false} message={privateMessage}/>
+            <div className="socialPlatformContainer">
+                <FakeTweet config={
+                    {
+                        user: {
+                            nickname: "your username",
+                            name: "Your name",
+                            avatar: avatarImg,
+                            verified: true,
+                            locked: false
+                        },
+                        display: "dim",
+                        text: editedPublicMessage,
+                        image: publicPost,
+                        date: "3:32 PM · Feb 14, 1997",
+                        app: "Twitter for iPhone",
+                        retweets: 3,
+                        quotedTweets: 1,
+                        likes: 1
+                    }
+                } />
+
+                <FakeTweet config={
+                    {
+                        user: {
+                            nickname: "your username",
+                            name: "Your name",
+                            avatar: avatarImg,
+                            verified: true,
+                            locked: false
+                        },
+                        display: "dim",
+                        text: editedPrivateMessage,
+                        image: privatePost,
+                        date: "3:32 PM · Feb 14, 1997",
+                        app: "Twitter for iPhone",
+                        retweets: 3,
+                        quotedTweets: 1,
+                        likes: 1
+                    }
+                } />
             </div>
         </div>
     );

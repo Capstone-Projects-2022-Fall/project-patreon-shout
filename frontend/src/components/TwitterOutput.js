@@ -35,27 +35,45 @@ function TwitterOutput(args) { // {publicConfig, message}
     let editedMessage = editDisplayMessage(rawMessage);
 
 
-    const config = {
-        user: {
-            nickname: "your username",
-            name: "Your name",
-            avatar: avatarImg,
-            verified: true,
-            locked: false
-        },
-        display: "dim",
-        text: editedMessage,
-        image: args.publicConfig ? publicPost : privatePost,
-        date: "3:32 PM · Feb 14, 1997",
-        app: "Twitter for iPhone",
-        retweets: 3,
-        quotedTweets: 1,
-        likes: 1
-    };
+    // const config = {
+    //     user: {
+    //         nickname: "your username",
+    //         name: "Your name",
+    //         avatar: avatarImg,
+    //         verified: true,
+    //         locked: false
+    //     },
+    //     display: "dim",
+    //     text: editedMessage,
+    //     image: args.publicConfig ? publicPost : privatePost,
+    //     date: "3:32 PM · Feb 14, 1997",
+    //     app: "Twitter for iPhone",
+    //     retweets: 3,
+    //     quotedTweets: 1,
+    //     likes: 1
+    // };
 
 
     return (
-        <FakeTweet config={config} />
+        <FakeTweet config={
+            {
+                user: {
+                    nickname: "your username",
+                    name: "Your name",
+                    avatar: avatarImg,
+                    verified: true,
+                    locked: false
+                },
+                display: "dim",
+                text: editedMessage,
+                image: args.publicConfig ? publicPost : privatePost,
+                date: "3:32 PM · Feb 14, 1997",
+                app: "Twitter for iPhone",
+                retweets: 3,
+                quotedTweets: 1,
+                likes: 1
+            }
+        } />
     );
 
 }

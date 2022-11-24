@@ -66,6 +66,11 @@
     max-width: 1080px !important;
     width: 100% !important;
     border-radius: 10px;
+    height: fit-content;
+}
+
+.metadata, .rt-likes {
+    display: none;
 }
 
 
