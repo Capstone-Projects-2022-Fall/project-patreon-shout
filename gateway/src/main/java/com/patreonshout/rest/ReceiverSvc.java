@@ -22,6 +22,7 @@ import com.patreonshout.patreon.CustomPatreonAPI;
 import com.patreonshout.rest.interfaces.ReceiverImpl;
 import com.patreonshout.utils.DiscordWebhookUtil;
 import com.patreonshout.utils.TwitterApiUtil;
+import com.vladsch.flexmark.html2md.converter.FlexmarkHtmlConverter;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -399,9 +400,11 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	void sendTwitterPost(PatreonPostV2 patreonPost, SocialIntegrationMessages socialIntegrationMessages, WebAccount webAccount) throws PSException {
 		SocialIntegration socialIntegration = webAccount.getSocialIntegration();
 
-		String body = (patreonPost.getIsPublic() ? socialIntegrationMessages.getTwitterPublicMessage() : socialIntegrationMessages.getTwitterPrivateMessage());
+		FlexmarkHtmlConverter converter = FlexmarkHtmlConverter.builder().build();
 
-		body += "https://www.patreon.com" + patreonPost.getUrl();
+		String body = (patreonPost.getIsPublic() ? socialIntegrationMessages.getTwitterPublicMessage() : socialIntegrationMessages.getTwitterPrivateMessage());
+		body = body.replaceAll("\\{content}", patreonPost.getContent());
+		body += "https://www.patreon.com" + converter.convert(patreonPost.getContent());
 
 		new TwitterApiUtil().sendTweet(twitterCredentials.getClientID(), twitterCredentials.getClientSecret(), socialIntegration.getTwitterAccessToken(), socialIntegration.getTwitterRefreshToken(), body);
 	}
