@@ -73,7 +73,12 @@ public class DiscordWebhookUtil {
 		}
 
 		// Make output adjustments
-		outputContent = outputContent.replaceAll("\\{content}", converter.convert(patreonPost.getContent()));
+		String postContent = converter.convert(patreonPost.getContent());
+		if (postContent.substring(postContent.length() - 2).equals("\\n")) {
+			postContent = postContent.substring(0, postContent.length() - 2);
+		}
+
+		outputContent = outputContent.replaceAll("\\{content}", postContent);
 
 		this.setDescription(outputContent);
 
