@@ -403,8 +403,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		FlexmarkHtmlConverter converter = FlexmarkHtmlConverter.builder().build();
 
 		String body = (patreonPost.getIsPublic() ? socialIntegrationMessages.getTwitterPublicMessage() : socialIntegrationMessages.getTwitterPrivateMessage());
-		body = body.replaceAll("\\{content}", converter.convert(patreonPost.getContent()));
-		body = body.replaceAll("\n", "");
+		body = body.replaceAll("\\{content}", converter.convert(patreonPost.getContent()).replaceAll("\n$", ""));
 		body += " https://www.patreon.com" + patreonPost.getUrl();
 		System.out.println("body text sent: [" + body + "]");
 
