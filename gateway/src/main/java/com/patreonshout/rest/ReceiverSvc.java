@@ -404,7 +404,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 
 		String body = (patreonPost.getIsPublic() ? socialIntegrationMessages.getTwitterPublicMessage() : socialIntegrationMessages.getTwitterPrivateMessage());
 		body = body.replaceAll("\\{content}", patreonPost.getContent());
-		body += "https://www.patreon.com" + converter.convert(patreonPost.getContent());
+		body += " https://www.patreon.com" + converter.convert(patreonPost.getContent());
 
 		new TwitterApiUtil().sendTweet(twitterCredentials.getClientID(), twitterCredentials.getClientSecret(), socialIntegration.getTwitterAccessToken(), socialIntegration.getTwitterRefreshToken(), body);
 	}
