@@ -35,9 +35,9 @@ function TwitterOutreach({publicMessage, privateMessage}) {
     let rawPrivateMessage = (privateTextField && privateTextField.length > 0) ? privateTextField : emptyMessage;
 
     const editDisplayMessage = (givenMessage) => {
-        givenMessage = reactStringReplace(givenMessage, '\\n', (match, i) => (
-            <br/>
-        ));
+        // givenMessage = reactStringReplace(givenMessage, '\\n', (match, i) => (
+        //     <br/>
+        // )); newline character does NOT show create new line on Twitter
         givenMessage = reactStringReplace(givenMessage, '{content}', (match, i) => (
             publicMessageExample
         ));
