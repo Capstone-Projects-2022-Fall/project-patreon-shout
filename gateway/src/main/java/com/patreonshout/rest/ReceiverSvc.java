@@ -410,6 +410,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		}
 
 		body = body.replaceAll("\\{content}", postContent);
+		body = body.replaceAll("\\n", "\n");
 		body += " https://www.patreon.com" + patreonPost.getUrl();
 		System.out.println("body text sent: [" + body + "]");
 
