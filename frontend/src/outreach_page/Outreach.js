@@ -121,7 +121,10 @@ function HtmlReturn(socialIntegrations, socialIntegrationMessages) {
                 </TabPanel>
 
                 <TabPanel value={value} index={1}>
-                    <TwitterOutreach/>
+                    <TwitterOutreach
+                        publicMessage={socialIntegrationMessages.twitter_public_message}
+                        privateMessage={socialIntegrationMessages.twitter_private_message}
+                    />
                 </TabPanel>
 
                 <TabPanel value={value} index={2}>

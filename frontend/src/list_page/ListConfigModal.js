@@ -42,6 +42,7 @@ function ListConfigModal({listCreators, setListCreators, listId, listTitle, list
         })
 
         console.log(message);
+        window.location.reload();
     }
 
     const editListInit = () => {
