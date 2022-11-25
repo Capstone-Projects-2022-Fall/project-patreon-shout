@@ -74,6 +74,7 @@ public class DiscordWebhookUtil {
 
 		// Make output adjustments
 		outputContent = outputContent.replaceAll("\\{content}", converter.convert(patreonPost.getContent()));
+		outputContent = outputContent.replaceAll("\n", "");
 
 		this.setDescription(outputContent);
 
