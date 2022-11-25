@@ -22,6 +22,7 @@ import com.patreonshout.patreon.CustomPatreonAPI;
 import com.patreonshout.rest.interfaces.ReceiverImpl;
 import com.patreonshout.utils.DiscordWebhookUtil;
 import com.patreonshout.utils.TwitterApiUtil;
+import com.vladsch.flexmark.html2md.converter.FlexmarkHtmlConverter;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -355,7 +356,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 				}
 
 				if (integration.getTwitterAccessToken() != null) {
-					sendTwitterPost(patreonPost, webAccount);
+					sendTwitterPost(patreonPost, socialIntegrationMessages, webAccount);
 				}
 
 				break;
@@ -376,6 +377,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	 * sends a message to Discord for a specific content creator
 	 *
 	 * @param patreonPost is the post data we want to send
+	 * @param socialIntegrationMessages are the messages we send along with a post for a particular user
 	 * @param webhookUrl is the Discord webhook url, used for sending a message to a specific Discord channel
 	 */
 	void sendDiscordMessage(String webhookUrl, PatreonPostV2 patreonPost, SocialIntegrationMessages socialIntegrationMessages) {
@@ -392,11 +394,25 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	 *
 	 * @param patreonPost is the post data we want to send
 	 * @param webAccount is the user we want to send a tweet for
+	 * @param socialIntegrationMessages are the messages we send along with a post for a particular user
 	 * @throws PSException in case of a database problem or a user mismatch
 	 */
-	void sendTwitterPost(PatreonPostV2 patreonPost, WebAccount webAccount) throws PSException {
+	void sendTwitterPost(PatreonPostV2 patreonPost, SocialIntegrationMessages socialIntegrationMessages, WebAccount webAccount) throws PSException {
 		SocialIntegration socialIntegration = webAccount.getSocialIntegration();
-		String body = "I just made a new Patreon Post!\nhttps://www.patreon.com" + patreonPost.getUrl();
+
+		FlexmarkHtmlConverter converter = FlexmarkHtmlConverter.builder().build();
+
+		String body = (patreonPost.getIsPublic() ? socialIntegrationMessages.getTwitterPublicMessage() : socialIntegrationMessages.getTwitterPrivateMessage());
+		body = body.replaceAll("\\n", "\n");
+
+		String postContent = converter.convert(patreonPost.getContent());
+		if (postContent.substring(postContent.length() - 2).equals("\\n")) {
+			postContent = postContent.substring(0, postContent.length() - 2);
+		}
+
+		body = body.replaceAll("\\{content}", postContent);
+		body += " https://www.patreon.com" + patreonPost.getUrl();
+		System.out.println("body text sent: [" + body + "]");
 
 		new TwitterApiUtil().sendTweet(twitterCredentials.getClientID(), twitterCredentials.getClientSecret(), socialIntegration.getTwitterAccessToken(), socialIntegration.getTwitterRefreshToken(), body);
 	}
