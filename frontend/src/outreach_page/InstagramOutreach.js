@@ -8,6 +8,7 @@ import TextField from "@mui/material/TextField";
 import React, {useState} from "react";
 import NewSaveButton from "../settings/NewSaveButton";
 import {putSocialIntegrationMessages} from "../services/api/webaccount/putSocialIntegrationMessages";
+import {config} from "../Constants";
 
 /**
  * The instagram social platform cross-posting component
@@ -36,7 +37,7 @@ function InstagramOutreach({publicMessage, privateMessage}) {
                 button_name="Connect Facebook Page"
                 integration_url="https://www.facebook.com/dialog/oauth"
                 client_id="824898048795218"
-                redirect_uri="https://webhook.site/cd1829bb-80f9-42eb-b298-2c70577ec6c2"
+                redirect_uri={config.url.API_URL + "/receivers/instagram/oauth"}
                 response_type="code"
                 scope="public_profile,instagram_basic,pages_read_engagement,pages_show_list,instagram_content_publish,catalog_management,instagram_shopping_tag_products"
                 state={token}
