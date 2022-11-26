@@ -51,6 +51,18 @@ public class SocialIntegration implements Serializable {
 	protected String instagramIgUserId;
 
 	/**
+	 * redditAccessToken holds the Reddit access_token needed for integration
+	 */
+	@Column(name = "reddit_access_token")
+	protected String redditAccessToken;
+
+	/**
+	 * redditRefreshToken holds the Reddit refresh_token needed for integration
+	 */
+	@Column(name = "reddit_refresh_token")
+	protected String redditRefreshToken;
+
+	/**
 	 * webAccount is the {@link com.patreonshout.beans.WebAccount} object linked with this object
 	 */
 	@OneToOne

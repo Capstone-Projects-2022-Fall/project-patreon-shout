@@ -34,28 +34,40 @@ public class SocialIntegrationMessages implements Serializable {
 	protected String discordPrivateMessage;
 
 	/**
-	 * Custom Discord message for public Patreon posts
+	 * Custom Twitter message for public Patreon posts
 	 */
 	@Column(name = "twitter_public_message")
 	protected String twitterPublicMessage;
 
 	/**
-	 * Custom Discord message for private Patreon posts
+	 * Custom Twitter message for private Patreon posts
 	 */
 	@Column(name = "twitter_private_message")
 	protected String twitterPrivateMessage;
 
 	/**
-	 * Custom Discord message for public Patreon posts
+	 * Custom Instagram message for public Patreon posts
 	 */
 	@Column(name = "instagram_public_message")
 	protected String instagramPublicMessage;
 
 	/**
-	 * Custom Discord message for private Patreon posts
+	 * Custom Instagram message for private Patreon posts
 	 */
 	@Column(name = "instagram_private_message")
 	protected String instagramPrivateMessage;
+
+	/**
+	 * Custom Reddit message for public Patreon posts
+	 */
+	@Column(name = "reddit_public_message")
+	protected String redditPublicMessage;
+
+	/**
+	 * Custom Reddit message for private Patreon posts
+	 */
+	@Column(name = "reddit_private_message")
+	protected String redditPrivateMessage;
 
 	/**
 	 * {@link com.patreonshout.beans.WebAccount} object linked with this object
