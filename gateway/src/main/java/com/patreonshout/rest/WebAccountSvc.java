@@ -83,7 +83,8 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 		response.put("discord", socialIntegration.getDiscord());
 		response.put("twitter_access_token", socialIntegration.getTwitterAccessToken());
 		response.put("twitter_refresh_token", socialIntegration.getTwitterRefreshToken());
-		response.put("instagram", socialIntegration.getInstagram());
+		response.put("instagram_access_token", socialIntegration.getInstagramAccessToken());
+		response.put("instagram_ig_user_id", socialIntegration.getInstagramIgUserId());
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}

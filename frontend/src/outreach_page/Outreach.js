@@ -12,6 +12,7 @@ import {getSocialIntegrations} from "../services/api/webaccount/getSocialIntegra
 import {render} from "react-dom";
 import {CircularProgress} from "@mui/material";
 import {getSocialIntegrationMessages} from "../services/api/webaccount/getSocialIntegrationMessages";
+import InfoOutreach from "./InfoOutreach";
 
 
 /**
@@ -103,6 +104,7 @@ function HtmlReturn(socialIntegrations, socialIntegrationMessages) {
 
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs value={value} onChange={handleChange} centered>
+                    <Tab label="Info"/>
                     <Tab label="Discord"/>
                     <Tab label="Twitter"/>
                     <Tab label="Instagram"/>
@@ -113,6 +115,10 @@ function HtmlReturn(socialIntegrations, socialIntegrationMessages) {
 
             <div className="content">
                 <TabPanel value={value} index={0}>
+                    <InfoOutreach/>
+                </TabPanel>
+
+                <TabPanel value={value} index={1}>
                     <DiscordOutreach
                         webhook={socialIntegrations.discord}
                         publicMessage={socialIntegrationMessages.discord_public_message}
@@ -120,18 +126,21 @@ function HtmlReturn(socialIntegrations, socialIntegrationMessages) {
                     />
                 </TabPanel>
 
-                <TabPanel value={value} index={1}>
+                <TabPanel value={value} index={2}>
                     <TwitterOutreach
                         publicMessage={socialIntegrationMessages.twitter_public_message}
                         privateMessage={socialIntegrationMessages.twitter_private_message}
                     />
                 </TabPanel>
 
-                <TabPanel value={value} index={2}>
-                    <InstagramOutreach/>
+                <TabPanel value={value} index={3}>
+                    <InstagramOutreach
+                        publicMessage={socialIntegrationMessages.instagram_public_message}
+                        privateMessage={socialIntegrationMessages.instagram_private_message}
+                    />
                 </TabPanel>
 
-                <TabPanel value={value} index={3}>
+                <TabPanel value={value} index={4}>
                     <RedditOutreach/>
                 </TabPanel>
             </div>
