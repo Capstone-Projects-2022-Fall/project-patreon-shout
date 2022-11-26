@@ -1,6 +1,7 @@
 package com.patreonshout.config;
 
 import com.patreon.PatreonOAuth;
+import com.patreonshout.config.credentials.InstagramCredentials;
 import com.patreonshout.config.credentials.PatreonCredentials;
 import com.patreonshout.config.credentials.TwitterCredentials;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,6 +46,21 @@ public class PSConfiguration {
 	 */
 	@Value("${twitter.client.redirecturi}") String twitterRedirectUri;
 
+	/**
+	 * twitterClientId is the client id of our Twitter app
+	 */
+	@Value("${instagram.client.id}") String instagramClientId;
+
+	/**
+	 * twitterClientSecret is the client secret of our Twitter app
+	 */
+	@Value("${instagram.client.secret}") String instagramClientSecret;
+
+	/**
+	 * twitterRedirectUri is the redirect ui of our Twitter app
+	 */
+	@Value("${instagram.client.redirecturi}") String instagramRedirectUri;
+
 
 	/**
 	 * Creates a new {@link com.patreon.PatreonOAuth} object using the clientId, clientSecret, and redirectUri
@@ -64,6 +80,16 @@ public class PSConfiguration {
 	@Bean
 	public TwitterCredentials twitterClient() {
 		return new TwitterCredentials(twitterClientId, twitterClientSecret, twitterRedirectUri);
+	}
+
+	/**
+	 * Creates a new {@link com.patreonshout.config.credentials.InstagramCredentials} object holding our Instagram application credentials
+	 *
+	 * @return {@link com.patreonshout.config.credentials.InstagramCredentials} object
+	 */
+	@Bean
+	public InstagramCredentials instagramClient() {
+		return new InstagramCredentials(instagramClientId, instagramClientSecret, instagramRedirectUri);
 	}
 
 	/**
