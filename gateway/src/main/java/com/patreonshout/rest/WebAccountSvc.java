@@ -85,6 +85,8 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 		response.put("twitter_refresh_token", socialIntegration.getTwitterRefreshToken());
 		response.put("instagram_access_token", socialIntegration.getInstagramAccessToken());
 		response.put("instagram_ig_user_id", socialIntegration.getInstagramIgUserId());
+		response.put("reddit_access_token", socialIntegration.getRedditAccessToken());
+		response.put("reddit_refresh_token", socialIntegration.getRedditRefreshToken());
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
@@ -111,6 +113,8 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 		response.put("twitter_private_message", socialIntegrationMessages.getTwitterPrivateMessage());
 		response.put("instagram_public_message", socialIntegrationMessages.getInstagramPublicMessage());
 		response.put("instagram_private_message", socialIntegrationMessages.getInstagramPrivateMessage());
+		response.put("reddit_public_message", socialIntegrationMessages.getRedditPublicMessage());
+		response.put("reddit_private_message", socialIntegrationMessages.getRedditPrivateMessage());
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
