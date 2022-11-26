@@ -41,8 +41,14 @@ public class SocialIntegration implements Serializable {
 	/**
 	 * instagram_data holds the Instagram token needed for integration
 	 */
-	@Column(name = "instagram")
-	protected String instagram;
+	@Column(name = "instagram_access_token")
+	protected String instagramAccessToken;
+
+	/**
+	 * Holds the ig-user-id that resembles an Instagram Business account's profile ID
+	 */
+	@Column(name = "instagram_ig_user_id")
+	protected String instagramIgUserId;
 
 	/**
 	 * webAccount is the {@link com.patreonshout.beans.WebAccount} object linked with this object
@@ -58,6 +64,6 @@ public class SocialIntegration implements Serializable {
 	 * @return {@link Boolean#TRUE} if any social integrations are not null, false otherwise
 	 */
 	public Boolean isEmpty() {
-		return discord == null && twitterAccessToken == null && twitterRefreshToken == null && instagram == null;
+		return discord == null && twitterAccessToken == null && twitterRefreshToken == null && instagramAccessToken == null;
 	}
 }

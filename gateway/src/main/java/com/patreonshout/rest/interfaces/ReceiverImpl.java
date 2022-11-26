@@ -39,6 +39,25 @@ public interface ReceiverImpl {
 	) throws IOException, PSException;
 
 	/**
+	 * Is called by Facebook/Instagram in order to give us information for linking a user's account via OAuth
+	 *
+	 * @param code  is used to fetch access tokens for the session that just signed in with Patreon
+	 * @param state is transparently appended from the state param provided in PatreonShout Client from Dev Portal
+	 * @return a json body telling the user that their Patreon was successfully OAuth'd
+	 * @throws PSException when there is an internal error with Patreon Shout
+	 */
+	@GetMapping("/instagram/oauth")
+	@Operation(summary = "Receives information from Facebook/Instagram after OAuth")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200",
+					description = "HTML message saying 'Facebook Page/Instagram linked!'")
+	})
+	String InstagramOAuth(
+			@RequestParam(required = false, name = "code") String code,
+			@RequestParam(required = false, name = "state") String state
+	) throws PSException;
+
+	/**
 	 * Is called by Twitter in order to give us information for linking a user's account via OAuth
 	 *
 	 * @param code is used to fetch access tokens for the session that just signed in with Patreon

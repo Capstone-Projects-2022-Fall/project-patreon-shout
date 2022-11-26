@@ -8,9 +8,13 @@ import com.patreonshout.beans.PostBean;
 import com.patreonshout.beans.SocialIntegration;
 import com.patreonshout.beans.SocialIntegrationMessages;
 import com.patreonshout.beans.WebAccount;
+import com.patreonshout.beans.facebook_api.FacebookAccessToken;
+import com.patreonshout.beans.facebook_api.FacebookUserPage;
+import com.patreonshout.beans.facebook_api.FacebookUserPages;
 import com.patreonshout.beans.patreon_api.*;
 import com.patreonshout.beans.request.PutSocialIntegrationRequest;
 import com.patreonshout.beans.request.receivers.patreon.WebhookRequest;
+import com.patreonshout.config.credentials.InstagramCredentials;
 import com.patreonshout.config.credentials.PatreonCredentials;
 import com.patreonshout.config.credentials.TwitterCredentials;
 import com.patreonshout.jpa.CreatorPageFunctions;
@@ -23,15 +27,11 @@ import com.patreonshout.rest.interfaces.ReceiverImpl;
 import com.patreonshout.utils.DiscordWebhookUtil;
 import com.patreonshout.utils.TwitterApiUtil;
 import com.vladsch.flexmark.html2md.converter.FlexmarkHtmlConverter;
-import org.json.simple.JSONObject;
+import org.json.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -89,6 +89,12 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	private PatreonCredentials patreonCredentials;
 
 	/**
+	 * Spring Bean that holds our Instagram app credentials
+	 */
+	@Autowired
+	private InstagramCredentials instagramCredentials;
+
+	/**
 	 * Jackson object mapper that allows converting Java type {@link Object} to custom POJOs.
 	 */
 	@Autowired
@@ -105,19 +111,10 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		// OAuth
 		if (code != null && loginToken != null) {
 			PatreonOAuth.TokensResponse tokens = oauthClient.getTokens(code); // Should we handle IOException?
-//					new PatreonOAuth.TokensResponse("Owt7HgouCPfQnXqcudbZes8wKj0IbG",
-//							"7cd1bd26e1fd771d002c48688acecf61b96ae392",
-//							1,
-//							"1",
-//							 "");
-
 
 			//Store the refresh TokensResponse in your data store
 			String accessToken = tokens.getAccessToken();
 			String refreshToken = tokens.getRefreshToken();
-
-			// put content creator posts in database
-//			CustomPatreonAPI client = new CustomPatreonAPI(accessToken);
 
 			// Acquire campaign data
 			PatreonDataArrayEntryV2 campaign = objectMapper.convertValue(getCampaignData(accessToken), PatreonDataArrayEntryV2.class);
@@ -149,6 +146,110 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	/**
 	 * {@inheritDoc}
 	 */
+	public String InstagramOAuth(
+			@RequestParam(required = false, name = "code") String code,
+			@RequestParam(required = false, name = "state") String loginToken) throws PSException {
+		// OAuth
+		if (code != null && loginToken != null) {
+			// Read webaccount
+			WebAccount webAccount = webAccountFunctions.getAccount(loginToken);
+
+			if (webAccount == null)
+				return "The PatreonShout account you attempted to link Instagram to was invalid!";
+
+			FacebookAccessToken accessTokenObj;
+
+			// * HTTP GET an access token with the given code
+			try {
+				accessTokenObj = WebClient
+						.create("https://graph.facebook.com/oauth/")
+						.get()
+						.uri(uriBuilder -> uriBuilder
+								.path("access_token")
+								.queryParam("client_id", instagramCredentials.getClientID())
+								.queryParam("client_secret", instagramCredentials.getClientSecret())
+								.queryParam("redirect_uri", instagramCredentials.getRedirectUri())
+								.queryParam("code", code)
+								.build())
+						.retrieve()
+						.bodyToMono(FacebookAccessToken.class)
+						.share()
+						.block();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				return "An error occurred requesting an access token from Facebook.  Is it reachable at the moment?";
+			}
+
+			if (accessTokenObj == null)
+				return "An error occurred requesting an access token from Facebook.  Is it reachable at the moment?";
+
+			// Read access token
+			String accessToken = accessTokenObj.getAccessToken();
+
+			if (accessToken == null || accessToken.isEmpty())
+				return "Access token received from Facebook is invalid.";
+
+			FacebookUserPages userPages;
+
+			// * HTTP GET Request all Facebook Pages
+			try {
+				userPages = WebClient
+						.create("https://graph.facebook.com/me/")
+						.get()
+						.uri(uriBuilder -> uriBuilder
+								.path("accounts")
+								.queryParam("access_token", accessToken)
+								.build())
+						.retrieve()
+						.bodyToMono(FacebookUserPages.class)
+						.share()
+						.block();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				return "An error occurred requesting Facebook Pages.  Is it reachable at the moment?";
+			}
+
+			if (userPages == null)
+				return "An error occurred requesting Facebook Pages.  Is it reachable at the moment?";
+
+			if (userPages.getDataObjects().length == 0 || userPages.getDataObjects()[0] == null)
+				return "No Facebook Pages were found on your account when requesting Facebook for them.";
+
+			// * HTTP GET Facebook Page's ig-user-id
+			FacebookUserPage userPage;
+			try {
+				userPage = WebClient
+						.create("https://graph.facebook.com/")
+						.get()
+						.uri(uriBuilder -> uriBuilder
+								.path(userPages.getDataObjects()[0].getId())
+								.queryParam("access_token", accessToken)
+								.queryParam("fields", "instagram_business_account")
+								.build())
+						.retrieve()
+						.bodyToMono(FacebookUserPage.class)
+						.share()
+						.block();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				return "An error occurred requesting Facebook Page.  Is it reachable at the moment?";
+			}
+
+			if (userPage == null || userPage.getInstagramBusinessAccount() == null)
+				return "An error occurred requesting the Facebook Page's Instagram Business Account.  Is it reachable at the moment?";
+
+			// Save access token to DB
+			webAccountFunctions.putSocialIntegration(loginToken, SocialIntegrationName.INSTAGRAM, accessToken + ':' + userPage.getInstagramBusinessAccount().getId());
+
+			return "Instagram linked!  Close this pop-up and refresh the PatreonShout webpage.!";
+		}
+
+		return "";
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public String TwitterOAuth(String code, String state) throws ParseException, PSException {
 
 		String basicAuth = twitterCredentials.getClientID() + ":" + twitterCredentials.getClientSecret();
@@ -158,7 +259,10 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		String response = WebClient.create("https://api.twitter.com/2/oauth2/")
 				.method(HttpMethod.POST)
 				.uri(uriBuilder -> uriBuilder.path("token").queryParam("code", code).queryParam("grant_type", "authorization_code").queryParam("redirect_uri", twitterCredentials.getRedirectUri()).queryParam("code_verifier", "challenge").build())
-				.headers(httpHeaders -> {httpHeaders.setContentType(MediaType.valueOf("application/x-www-form-urlencoded")); httpHeaders.setBasicAuth(finalBasicAuth);})
+				.headers(httpHeaders -> {
+					httpHeaders.setContentType(MediaType.valueOf("application/x-www-form-urlencoded"));
+					httpHeaders.setBasicAuth(finalBasicAuth);
+				})
 				.retrieve()
 				.bodyToMono(String.class)
 				.block();
@@ -166,10 +270,11 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		JSONParser parser = new JSONParser();
 		JSONObject objResponse = (JSONObject) parser.parse(response);
 
-		PutSocialIntegrationRequest putTwitter = new PutSocialIntegrationRequest();
-		putTwitter.setData(objResponse.get("access_token") + ":" + objResponse.get("refresh_token"));
-		putTwitter.setLoginToken(state);
-		putTwitter.setSocialIntegrationName(SocialIntegrationName.TWITTER);
+		PutSocialIntegrationRequest putTwitter = PutSocialIntegrationRequest.builder()
+				.data(objResponse.get("access_token") + ":" + objResponse.get("refresh_token"))
+				.loginToken(state)
+				.socialIntegrationName(SocialIntegrationName.TWITTER)
+				.build();
 
 		webAccountFunctions.putSocialIntegration(putTwitter);
 
@@ -179,9 +284,9 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	/**
 	 * Creates the Patreon webhook trigger needed to get post information when a post is published
 	 *
-	 * @param webAccount is the user's {@link com.patreonshout.beans.WebAccount} object
+	 * @param webAccount  is the user's {@link com.patreonshout.beans.WebAccount} object
 	 * @param accessToken is the access token of the user
-	 * @param campaignId is the Patreon campaign id of the user
+	 * @param campaignId  is the Patreon campaign id of the user
 	 */
 	private void createWebhookForPatreon(WebAccount webAccount, String accessToken, int campaignId) {
 		PatreonObjectV2 outputObject = new PatreonObjectV2();
@@ -204,7 +309,8 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		patreonData.setRelationships(patreonRelationships);
 		outputObject.setData(patreonData);
 
-		/*PatreonObjectV2 retObject = */WebClient
+		/*PatreonObjectV2 retObject = */
+		WebClient
 				.create("https://www.patreon.com/api/oauth2/v2/")
 				.post()
 				.uri("webhooks")
@@ -308,7 +414,8 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 			System.out.println("not good man");
 			return new ResponseEntity<>(HttpStatus.OK);
 			// TODO: Send a DELETE request to delete the webhook from Patreon
-		} catch (Exception ex) { // TODO: Unknown exception occurred...!  Return 200 OK so Patreon keeps using this Webhook until we fix whatever is wrong
+		} catch (
+				Exception ex) { // TODO: Unknown exception occurred...!  Return 200 OK so Patreon keeps using this Webhook until we fix whatever is wrong
 			ex.printStackTrace();
 			System.out.println("Unknown exception occurred");
 			return new ResponseEntity<>(HttpStatus.OK);
@@ -376,9 +483,9 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	/**
 	 * sends a message to Discord for a specific content creator
 	 *
-	 * @param patreonPost is the post data we want to send
+	 * @param patreonPost               is the post data we want to send
 	 * @param socialIntegrationMessages are the messages we send along with a post for a particular user
-	 * @param webhookUrl is the Discord webhook url, used for sending a message to a specific Discord channel
+	 * @param webhookUrl                is the Discord webhook url, used for sending a message to a specific Discord channel
 	 */
 	void sendDiscordMessage(String webhookUrl, PatreonPostV2 patreonPost, SocialIntegrationMessages socialIntegrationMessages) {
 		// TODO: Get user's webhook urls
@@ -392,8 +499,8 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	/**
 	 * sends a message to Twitter for a specific content creator
 	 *
-	 * @param patreonPost is the post data we want to send
-	 * @param webAccount is the user we want to send a tweet for
+	 * @param patreonPost               is the post data we want to send
+	 * @param webAccount                is the user we want to send a tweet for
 	 * @param socialIntegrationMessages are the messages we send along with a post for a particular user
 	 * @throws PSException in case of a database problem or a user mismatch
 	 */
