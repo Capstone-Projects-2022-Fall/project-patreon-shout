@@ -9,6 +9,7 @@ import com.patreonshout.beans.request.PutSocialIntegrationMessageRequest;
 import com.patreonshout.beans.request.PutSocialIntegrationRequest;
 import com.patreonshout.beans.request.RegisterRequest;
 import com.patreonshout.config.SecurityConfiguration;
+import com.patreonshout.jpa.constants.SocialIntegrationName;
 import com.patreonshout.utils.DiscordWebhookUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -172,6 +173,31 @@ public class WebAccountFunctions {
 	}
 
 	/**
+	 * Adds a social integration
+	 *
+	 */
+	@Transactional
+	public void putSocialIntegration(String loginToken, SocialIntegrationName socialIntegrationName, String data) throws PSException {
+		WebAccount webAccount = this.getAccount(loginToken);
+		SocialIntegration socialIntegration = webAccount.getSocialIntegration();
+		PutSocialIntegrationRequest createdRequest = PutSocialIntegrationRequest.builder()
+				.loginToken(loginToken)
+				.socialIntegrationName(socialIntegrationName)
+				.data(data)
+				.build();
+
+		// * Ensure integration type was given...
+		// ! This will throw an exception for us if any errors were found
+		validateSocialIntegration(createdRequest);
+
+		// * Save data into database
+		saveIntegration(createdRequest, socialIntegration);
+
+		// * Save all changes to the Web Account
+		webAccountRepository.save(webAccount);
+	}
+
+	/**
 	 * Checks the validity of a social integration's type and given data
 	 *
 	 * @param putSocialIntegrationRequest {@link PutSocialIntegrationRequest} object containing the contents of this
@@ -225,9 +251,10 @@ public class WebAccountFunctions {
 	 * @param putSocialIntegrationRequest {@link PutSocialIntegrationRequest} object generated from Spring
 	 * @param socialIntegration           {@link SocialIntegration} belonging to a current {@link WebAccount}
 	 */
-	public void saveIntegration(PutSocialIntegrationRequest putSocialIntegrationRequest, SocialIntegration socialIntegration) {
+	public void saveIntegration(PutSocialIntegrationRequest putSocialIntegrationRequest, SocialIntegration socialIntegration) throws PSException {
 		String data = putSocialIntegrationRequest.getData();
 
+		// Required for deleting a social integration, so we don't save empty strings
 		if (data != null && data.isEmpty())
 			data = null;
 
@@ -235,15 +262,29 @@ public class WebAccountFunctions {
 			case DISCORD:
 				socialIntegration.setDiscord(data);
 				break;
-			case TWITTER:
+			case TWITTER: {
 				// i didn't want to refactor everything so when you send social integration request to TWITTER, you do access_token:refresh_token in "data"
 				String[] tokens = data.split(":");
 				socialIntegration.setTwitterAccessToken(tokens[0]);
 				socialIntegration.setTwitterRefreshToken(tokens[1]);
 				break;
-			case INSTAGRAM:
-				socialIntegration.setInstagram(data);
+			}
+			case INSTAGRAM: {
+				if (data == null) {
+					socialIntegration.setInstagramAccessToken(null);
+					socialIntegration.setInstagramIgUserId(null);
+				} else {
+					// access_token:ig-user-id
+					String[] tokens = data.split(":");
+					if (tokens.length != 2)
+						throw new PSException(HttpStatus.BAD_REQUEST, "We were not able to properly save the Facebook access token and ig-user-id");
+
+					socialIntegration.setInstagramAccessToken(tokens[0]);
+					socialIntegration.setInstagramIgUserId(tokens[1]);
+				}
+
 				break;
+			}
 			default:
 				System.out.println("UNKNOWN CASE: " + putSocialIntegrationRequest.getSocialIntegrationName());
 				break;
