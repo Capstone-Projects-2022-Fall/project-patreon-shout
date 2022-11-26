@@ -242,6 +242,8 @@ public class WebAccountFunctions {
 				break;
 			case INSTAGRAM:
 				break;
+			case REDDIT:
+				break;
 		}
 	}
 
@@ -281,6 +283,22 @@ public class WebAccountFunctions {
 
 					socialIntegration.setInstagramAccessToken(tokens[0]);
 					socialIntegration.setInstagramIgUserId(tokens[1]);
+				}
+
+				break;
+			}
+			case REDDIT: {
+				if (data == null) {
+					socialIntegration.setRedditAccessToken(null);
+					socialIntegration.setRedditRefreshToken(null);
+				} else {
+					// data == "access_token:refresh_token"
+					String[] tokens = data.split(":");
+					if (tokens.length != 2) {
+						throw new PSException(HttpStatus.BAD_REQUEST, "We were not able to propertly save the Reddit access and refresh tokens");
+					}
+					socialIntegration.setRedditAccessToken(tokens[0]);
+					socialIntegration.setRedditRefreshToken(tokens[1]);
 				}
 
 				break;

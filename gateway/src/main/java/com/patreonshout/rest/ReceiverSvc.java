@@ -16,6 +16,7 @@ import com.patreonshout.beans.request.PutSocialIntegrationRequest;
 import com.patreonshout.beans.request.receivers.patreon.WebhookRequest;
 import com.patreonshout.config.credentials.InstagramCredentials;
 import com.patreonshout.config.credentials.PatreonCredentials;
+import com.patreonshout.config.credentials.RedditCredentials;
 import com.patreonshout.config.credentials.TwitterCredentials;
 import com.patreonshout.jpa.CreatorPageFunctions;
 import com.patreonshout.jpa.PatreonCampaignsFunctions;
@@ -27,7 +28,7 @@ import com.patreonshout.rest.interfaces.ReceiverImpl;
 import com.patreonshout.utils.DiscordWebhookUtil;
 import com.patreonshout.utils.TwitterApiUtil;
 import com.vladsch.flexmark.html2md.converter.FlexmarkHtmlConverter;
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,6 +94,12 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	 */
 	@Autowired
 	private InstagramCredentials instagramCredentials;
+
+	/**
+	 * Spring Bean that holds our Reddit app credentials
+	 */
+	@Autowired
+	private RedditCredentials redditCredentials;
 
 	/**
 	 * Jackson object mapper that allows converting Java type {@link Object} to custom POJOs.
@@ -284,10 +291,47 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	/**
 	 * {@inheritDoc}
 	 */
-	public String RedditOAuth(String code, String state) {
+	public String RedditOAuth(String code, String state) throws ParseException, PSException {
+
+		if (code != null && state != null) {
+
+			WebAccount webAccount = webAccountFunctions.getAccount(state);
+
+			if (webAccount == null) {
+				return "The PatreonShout account you attempted to link Reddit to was invalid!";
+			}
+
+			String basicAuth = redditCredentials.getClientID() + ":" + redditCredentials.getClientSecret();
+			String finalBasicAuth = Base64.getEncoder().encodeToString(basicAuth.getBytes());
+
+			// get the access_token and refresh_token of the user
+			String response = WebClient.create("https://www.reddit.com/api/v1/access_token")
+					.method(HttpMethod.POST)
+					.headers(httpHeaders -> {
+						httpHeaders.setContentType(MediaType.valueOf("application/x-www-form-urlencoded"));
+						httpHeaders.setBasicAuth(finalBasicAuth);
+					})
+					.body(BodyInserters.fromFormData("grant_type", "authorization_code").with("code", code).with("redirect_uri", redditCredentials.getRedirectUri()))
+					.retrieve()
+					.bodyToMono(String.class)
+					.block();
+
+			JSONParser parser = new JSONParser();
+			JSONObject objResponse = (JSONObject) parser.parse(response);
+
+			PutSocialIntegrationRequest putReddit = PutSocialIntegrationRequest.builder()
+					.data(objResponse.get("access_token") + ":" + objResponse.get("refresh_token"))
+					.loginToken(state)
+					.socialIntegrationName(SocialIntegrationName.REDDIT)
+					.build();
+
+			webAccountFunctions.putSocialIntegration(putReddit);
+
+			return "Reddit linked!  Close this pop-up and refresh the PatreonShout webpage";
+		}
 
 
-		return "Reddit linked!  Close this pop-up and refresh the PatreonShout webpage";
+		return "Invalid parameters";
 	}
 
 	/**
@@ -475,6 +519,10 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 					sendTwitterPost(patreonPost, socialIntegrationMessages, webAccount);
 				}
 
+				if (integration.getRedditAccessToken() != null) {
+					sendRedditPost();
+				}
+
 				break;
 			case "posts:update":
 				break;
@@ -531,5 +579,9 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		System.out.println("body text sent: [" + body + "]");
 
 		new TwitterApiUtil().sendTweet(twitterCredentials.getClientID(), twitterCredentials.getClientSecret(), socialIntegration.getTwitterAccessToken(), socialIntegration.getTwitterRefreshToken(), body);
+	}
+
+	void sendRedditPost() {
+
 	}
 }

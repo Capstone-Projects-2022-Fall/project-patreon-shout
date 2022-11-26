@@ -93,7 +93,7 @@ public interface ReceiverImpl {
 	String RedditOAuth(
 			@RequestParam(required = false, name = "code") String code,
 			@RequestParam(required = false, name = "state") String state
-	);
+	) throws ParseException, PSException;
 
 	/**
 	 * Receives post information from Patreon after a post is either published, updated, or deleted, initiates cross posting
