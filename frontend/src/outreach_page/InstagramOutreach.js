@@ -87,11 +87,11 @@ function InstagramOutreach({publicMessage, privateMessage}) {
                 width: "90%"
             }}>
                 <FakeInstagramPost
-                    postMaxWidth="350px"
+                    postMaxWidth="50%"
                     displayMessage={publicTextField}
                 />
                 <FakeInstagramPost
-                    postMaxWidth="350px"
+                    postMaxWidth="50%"
                     displayMessage={privateTextField}
                 />
             </div>
