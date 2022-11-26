@@ -4,6 +4,7 @@
 
 .instagram-post-container {
     max-width: 470px;
+    min-width: 275px;
     overflow: hidden;
     border: 1px solid rgb(219, 219, 219);
     border-radius: 8px;
@@ -300,7 +301,7 @@
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    min-width: 335px;
+    /*min-width: 335px;*/
     padding: 0 16px;
     position: relative;
     width: 100%;

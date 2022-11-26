@@ -1,7 +1,7 @@
 import './setting_css/FakeInstagramPost.css'
 import reactStringReplace from "react-string-replace";
 
-function FakeInstagramPost() {
+function FakeInstagramPost(args) {
     // Constants
     const publicMessageExample = "This is example text for a public post!  When you create a new Patreon post and mark " +
         "it as public, all of its text will be put here."
@@ -9,30 +9,23 @@ function FakeInstagramPost() {
 
     // Dynamics
     let profileName = "patreonshout"; // Maybe dynamic...
-    let descriptionAndCaptions = "Today and every day, we have so much to be grateful for.\n" +
-        "\n" +
-        "Happy Thanksgiving to our service members and military families whose loved ones are on duty and unable to be with their families. We hope your day is filled with joy and gratitude.";
     let profilePicUrl = "https://zeoob.com/assets/img/default-img.png"
     let postPicUrl = "https://i.imgur.com/rBX2KuR.jpg";
 
-
     const editDisplayMessage = (givenMessage) => {
-        givenMessage = reactStringReplace(givenMessage, '<br>', (match, i) => (
-            <br/>
-        ));
-        givenMessage = reactStringReplace(givenMessage, '<br\/>', (match, i) => (
-            <br/>
-        ));
-        givenMessage = reactStringReplace(givenMessage, '{content}', (match, i) => (
-            publicMessageExample
-        ));
+        givenMessage = reactStringReplace(givenMessage, /(\\n|<br>|<br\/>)/g, () => <br/>);
+        givenMessage = reactStringReplace(givenMessage, '{content}', () => publicMessageExample);
         return givenMessage;
     }
 
+    // Raw message containers
+    let displayMessage = (args.displayMessage && args.displayMessage.length > 0) ? args.displayMessage : emptyMessage;
+
+    // Edited message containers
+    let editedDisplayMessage = editDisplayMessage(displayMessage);
 
     return (
-        <div className="instagram-post-container width100">
-            {/* Instagram post header */}
+        <div className="instagram-post-container" style={{maxWidth: args.postMaxWidth}}>
             <div className="post-header width100">
                 <header className="profile-details-container">
                     <div className="profile-pic">
@@ -251,7 +244,7 @@ function FakeInstagramPost() {
                                         {/* Description and captions */}
                                         <span className="desc-caption-actual-container">
                                             <span className="desc-caption-actual-text">
-                                                {descriptionAndCaptions}
+                                                {editedDisplayMessage}
                                             </span>
                                         </span>
                                     </div>
