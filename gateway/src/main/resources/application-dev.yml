@@ -45,3 +45,10 @@ instagram:
     secret: f8b640400f3cc7486d9212326229ea38
     redirecturi: http://localhost:5000/receivers/instagram/oauth
 #    redirecturi: https://ayser.backend.outofstonk.com/receivers/instagram/oauth
+
+# Reddit
+reddit:
+  client:
+    id: HzeEs2Uwadhr9_1vF2nf5w
+    secret: upQEfHGkFVR8Zoe6VuIUpLnVfnp3JQ
+    redirecturi: http://localhost:5000/receivers/reddit/oauth

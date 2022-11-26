@@ -282,6 +282,15 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	public String RedditOAuth(String code, String state) {
+
+
+		return "Reddit linked!  Close this pop-up and refresh the PatreonShout webpage";
+	}
+
+	/**
 	 * Creates the Patreon webhook trigger needed to get post information when a post is published
 	 *
 	 * @param webAccount  is the user's {@link com.patreonshout.beans.WebAccount} object

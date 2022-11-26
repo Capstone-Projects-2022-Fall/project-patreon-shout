@@ -3,6 +3,7 @@ package com.patreonshout.config;
 import com.patreon.PatreonOAuth;
 import com.patreonshout.config.credentials.InstagramCredentials;
 import com.patreonshout.config.credentials.PatreonCredentials;
+import com.patreonshout.config.credentials.RedditCredentials;
 import com.patreonshout.config.credentials.TwitterCredentials;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -42,24 +43,39 @@ public class PSConfiguration {
 	@Value("${twitter.client.secret}") String twitterClientSecret;
 
 	/**
-	 * twitterRedirectUri is the redirect ui of our Twitter app
+	 * twitterRedirectUri is the redirect uri of our Twitter app
 	 */
 	@Value("${twitter.client.redirecturi}") String twitterRedirectUri;
 
 	/**
-	 * twitterClientId is the client id of our Twitter app
+	 * instagramClientId is the client id of our Instagram app
 	 */
 	@Value("${instagram.client.id}") String instagramClientId;
 
 	/**
-	 * twitterClientSecret is the client secret of our Twitter app
+	 * instagramClientSecret is the client secret of our Instagram app
 	 */
 	@Value("${instagram.client.secret}") String instagramClientSecret;
 
 	/**
-	 * twitterRedirectUri is the redirect ui of our Twitter app
+	 * instagramRedirectUri is the redirect uri of our Instagram app
 	 */
 	@Value("${instagram.client.redirecturi}") String instagramRedirectUri;
+
+	/**
+	 * redditClientId is the client id of our Reddit app
+	 */
+	@Value("${reddit.client.id}") String redditClientId;
+
+	/**
+	 * redditClientSecret is the client secret of our Reddit app
+	 */
+	@Value("${reddit.client.secret}") String redditClientSecret;
+
+	/**
+	 * redditRedirectUri is the redirect uri of our Reddit app
+	 */
+	@Value("${reddit.client.redirecturi}") String redditRedirectUri;
 
 
 	/**
@@ -90,6 +106,16 @@ public class PSConfiguration {
 	@Bean
 	public InstagramCredentials instagramClient() {
 		return new InstagramCredentials(instagramClientId, instagramClientSecret, instagramRedirectUri);
+	}
+
+	/**
+	 * Creates a new {@link com.patreonshout.config.credentials.RedditCredentials} object holding our Reddit application credentials
+	 *
+	 * @return {@link com.patreonshout.config.credentials.RedditCredentials} object
+	 */
+	@Bean
+	public RedditCredentials redditClient() {
+		return new RedditCredentials(redditClientId, redditClientSecret, redditRedirectUri);
 	}
 
 	/**
