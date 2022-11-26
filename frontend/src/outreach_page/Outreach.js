@@ -134,7 +134,10 @@ function HtmlReturn(socialIntegrations, socialIntegrationMessages) {
                 </TabPanel>
 
                 <TabPanel value={value} index={3}>
-                    <InstagramOutreach/>
+                    <InstagramOutreach
+                        publicMessage={socialIntegrationMessages.instagram_public_message}
+                        privateMessage={socialIntegrationMessages.instagram_private_message}
+                    />
                 </TabPanel>
 
                 <TabPanel value={value} index={4}>
