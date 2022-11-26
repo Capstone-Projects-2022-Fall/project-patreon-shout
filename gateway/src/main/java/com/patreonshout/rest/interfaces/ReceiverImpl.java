@@ -116,5 +116,5 @@ public interface ReceiverImpl {
 			@RequestHeader("x-patreon-event") String patreonEvent,
 			@RequestHeader(HttpHeaders.USER_AGENT) String userAgent,
 			@RequestBody WebhookRequest webhookRequest,
-			@PathVariable long webaccountId) throws PSException;
+			@PathVariable long webaccountId) throws PSException, ParseException;
 }
