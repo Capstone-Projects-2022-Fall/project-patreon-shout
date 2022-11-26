@@ -3,7 +3,6 @@ body {
     --background: #e6ecf0;
 }
 
-
 .App:after {
     content: "";
     display: flex;
@@ -43,5 +42,15 @@ body {
         width: 100%;
         border-left-width: 0;
         border-right-width: 0;
+    }
+}
+
+@media only screen and (max-width: 1400px) {
+    .right {
+        display: none;
+    }
+
+    .main {
+        width: 70%;
     }
 }
