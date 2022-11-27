@@ -21,6 +21,7 @@ function NewSaveButton({givenFunc, funcArgs, isDisabled}) {
 
     return (
         <Button
+            className="save-button"
             sx={{borderRadius: 10}}
             color={buttonColor}
             type="submit"
