@@ -4,10 +4,7 @@ import club.minnced.discord.webhook.exception.HttpException;
 import club.minnced.discord.webhook.receive.ReadonlyMessage;
 import com.patreonshout.PSException;
 import com.patreonshout.beans.*;
-import com.patreonshout.beans.request.LoginRequest;
-import com.patreonshout.beans.request.PutSocialIntegrationMessageRequest;
-import com.patreonshout.beans.request.PutSocialIntegrationRequest;
-import com.patreonshout.beans.request.RegisterRequest;
+import com.patreonshout.beans.request.*;
 import com.patreonshout.config.SecurityConfiguration;
 import com.patreonshout.jpa.constants.SocialIntegrationName;
 import com.patreonshout.utils.DiscordWebhookUtil;
@@ -17,6 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 
@@ -153,6 +152,20 @@ public class WebAccountFunctions {
 
 	/**
 	 * Adds a social integration
+	 */
+	@Transactional
+	public void putSocialIntegration(String loginToken, SocialIntegrationName socialIntegrationName, String data) throws PSException {
+		PutSocialIntegrationRequest createdRequest = PutSocialIntegrationRequest.builder()
+				.loginToken(loginToken)
+				.socialIntegrationName(socialIntegrationName)
+				.data(data)
+				.build();
+
+		this.putSocialIntegration(createdRequest);
+	}
+
+	/**
+	 * Adds a social integration
 	 *
 	 * @param putSocialIntegrationRequest {@link PutSocialIntegrationRequest} Integration request provided from RESTful call
 	 */
@@ -171,31 +184,34 @@ public class WebAccountFunctions {
 		// * Save all changes to the Web Account
 		webAccountRepository.save(webAccount);
 	}
-
 	/**
-	 * Adds a social integration
-	 *
+	 * Adds social integration information for Instagram
 	 */
 	@Transactional
-	public void putSocialIntegration(String loginToken, SocialIntegrationName socialIntegrationName, String data) throws PSException {
-		WebAccount webAccount = this.getAccount(loginToken);
+	public void putInstagramPostDetails(PutInstagramPostDetailsRequest putInstagramPostDetailsRequest) throws PSException {
+		WebAccount webAccount = this.getAccount(putInstagramPostDetailsRequest.getLoginToken());
 		SocialIntegration socialIntegration = webAccount.getSocialIntegration();
-		PutSocialIntegrationRequest createdRequest = PutSocialIntegrationRequest.builder()
-				.loginToken(loginToken)
-				.socialIntegrationName(socialIntegrationName)
-				.data(data)
-				.build();
 
-		// * Ensure integration type was given...
-		// ! This will throw an exception for us if any errors were found
-		validateSocialIntegration(createdRequest);
+		socialIntegration.setInstagramImageUrl(putInstagramPostDetailsRequest.getImageUrl());
+		socialIntegration.setInstagramBlurAmount(putInstagramPostDetailsRequest.getBlurAmount());
+		socialIntegration.setInstagramMessageColor(putInstagramPostDetailsRequest.getMessageColor());
 
-		// * Save data into database
-		saveIntegration(createdRequest, socialIntegration);
-
-		// * Save all changes to the Web Account
 		webAccountRepository.save(webAccount);
 	}
+
+	@Transactional
+	public Map<String, String> getInstagramPostDetails(String loginToken) throws PSException {
+		WebAccount webAccount = this.getAccount(loginToken);
+		SocialIntegration socialIntegration = webAccount.getSocialIntegration();
+		Map<String, String> response = new HashMap<>();
+
+		response.put("instagram_image_url", socialIntegration.getInstagramImageUrl());
+		response.put("instagram_blur_amount", socialIntegration.getInstagramBlurAmount());
+		response.put("instagram_message_color", socialIntegration.getInstagramMessageColor());
+
+		return response;
+	}
+
 
 	/**
 	 * Checks the validity of a social integration's type and given data

@@ -13,6 +13,7 @@ import {render} from "react-dom";
 import {CircularProgress} from "@mui/material";
 import {getSocialIntegrationMessages} from "../services/api/webaccount/getSocialIntegrationMessages";
 import InfoOutreach from "./InfoOutreach";
+import {getInstagramPostDetails} from "../services/api/webaccount/getInstagramPostDetails";
 
 
 /**
@@ -24,6 +25,7 @@ function Outreach() {
 
     const [socialIntegrations, setSocialIntegrations] = useState([]);
     const [socialIntegrationMessages, setSocialIntegrationMessages] = useState([]);
+    const [instagramPostDetails, setInstagramPostDetails] = useState([]);
 
     const tokenString = localStorage.getItem('token');
     const loginToken = JSON.parse(tokenString).token;
@@ -35,7 +37,7 @@ function Outreach() {
             .then(items => {
                 if (!finished) {
                     setSocialIntegrations(items);
-                    render(HtmlReturn(socialIntegrations, socialIntegrationMessages), this); // Force Rerender this function component
+                    render(HtmlReturn(socialIntegrations, socialIntegrationMessages, instagramPostDetails), this); // Force Rerender this function component
                 }
             })
         return () => finished = true;
@@ -49,16 +51,29 @@ function Outreach() {
         getSocialIntegrationMessages(loginToken)
             .then(items => {
                 setSocialIntegrationMessages(items);
-                render(HtmlReturn(socialIntegrations, socialIntegrationMessages), this);
+                render(HtmlReturn(socialIntegrations, socialIntegrationMessages, instagramPostDetails), this);
             })
         return () => mounted = true;
     }, []);
 
-    return HtmlReturn(socialIntegrations, socialIntegrationMessages);
+    let mountedDos = false;
+    useEffect(() => {
+        if (mountedDos)
+            return;
+
+        getInstagramPostDetails(loginToken)
+            .then(items => {
+                setInstagramPostDetails(items);
+                render(HtmlReturn(socialIntegrations, socialIntegrationMessages, instagramPostDetails), this);
+            })
+        return () => mountedDos = true;
+    }, []);
+
+    return HtmlReturn(socialIntegrations, socialIntegrationMessages, instagramPostDetails);
 
 }
 
-function HtmlReturn(socialIntegrations, socialIntegrationMessages) {
+function HtmlReturn(socialIntegrations, socialIntegrationMessages, instagramPostDetails) {
     const [value, setValue] = React.useState(0)
 
 
@@ -137,6 +152,9 @@ function HtmlReturn(socialIntegrations, socialIntegrationMessages) {
                     <InstagramOutreach
                         publicMessage={socialIntegrationMessages.instagram_public_message}
                         privateMessage={socialIntegrationMessages.instagram_private_message}
+                        storedImageUrl={instagramPostDetails.instagram_image_url}
+                        blurAmount={instagramPostDetails.instagram_blur_amount}
+                        textColor={instagramPostDetails.instagram_message_color}
                     />
                 </TabPanel>
 

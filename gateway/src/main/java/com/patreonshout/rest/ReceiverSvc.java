@@ -27,6 +27,7 @@ import com.patreonshout.rest.interfaces.ReceiverImpl;
 import com.patreonshout.utils.DiscordWebhookUtil;
 import com.patreonshout.utils.TwitterApiUtil;
 import com.vladsch.flexmark.html2md.converter.FlexmarkHtmlConverter;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -37,6 +38,7 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Base64;
 import java.util.List;
 
@@ -450,7 +452,11 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 				.url(patreonPost.getUrl())
 				.build();
 
-		postsRepository.save(postBean);
+		try {
+			postsRepository.save(postBean);
+		} catch (Exception ex) {
+			// ! TODO: Fix this!  We stop here if the post already exists, when we should be outputting......
+		}
 
 		switch (patreonEvent) {
 			case "posts:publish":
@@ -458,13 +464,15 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 
 				SocialIntegration integration = webAccountFunctions.getSocialIntegration(webAccount.getLoginToken());
 				SocialIntegrationMessages socialIntegrationMessages = webAccountFunctions.getSocialIntegrationMessages(webAccount.getLoginToken());
-				if (integration.getDiscord() != null) {
-					sendDiscordMessage(integration.getDiscord(), patreonPost, socialIntegrationMessages);
-				}
 
-				if (integration.getTwitterAccessToken() != null) {
+				if (integration.getDiscord() != null)
+					sendDiscordMessage(integration.getDiscord(), patreonPost, socialIntegrationMessages);
+
+				if (integration.getTwitterAccessToken() != null)
 					sendTwitterPost(patreonPost, socialIntegrationMessages, webAccount);
-				}
+
+				if (integration.getInstagramAccessToken() != null && integration.getInstagramIgUserId() != null)
+					sendInstagramPost(patreonPost, socialIntegrationMessages, webAccount);
 
 				break;
 			case "posts:update":
@@ -522,5 +530,70 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		System.out.println("body text sent: [" + body + "]");
 
 		new TwitterApiUtil().sendTweet(twitterCredentials.getClientID(), twitterCredentials.getClientSecret(), socialIntegration.getTwitterAccessToken(), socialIntegration.getTwitterRefreshToken(), body);
+	}
+
+	void sendInstagramPost(PatreonPostV2 patreonPost, SocialIntegrationMessages socialIntegrationMessages, WebAccount webAccount) {
+		SocialIntegration socialIntegration = webAccount.getSocialIntegration();
+
+		String body = (patreonPost.getIsPublic() ? socialIntegrationMessages.getInstagramPublicMessage() : socialIntegrationMessages.getInstagramPrivateMessage()).replaceAll("\\{content}", patreonPost.getContent());
+
+		String mediaContainer = WebClient
+				.create("https://graph.facebook.com/" + webAccount.getSocialIntegration().getInstagramIgUserId() + "/")
+				.post()
+				.uri(uriBuilder -> uriBuilder
+						.path("media")
+						.queryParam("access_token", socialIntegration.getInstagramAccessToken())
+						.queryParam("image_url", socialIntegration.getInstagramImageUrl())
+						.queryParam("caption", body)
+						.build())
+				.retrieve()
+				.bodyToMono(String.class)
+				.share()
+				.block();
+
+		if (mediaContainer == null || mediaContainer.length() < 5) {
+			System.out.println("ERROR OCCURRED");
+			return;
+		}
+
+		JSONObject mediaContainerJsonObj = null;
+		try {
+			mediaContainerJsonObj = new JSONObject(mediaContainer);
+		}catch (JSONException err) {
+			System.out.println("Error with mediacontaienrjsnoobj!");
+			return;
+		}
+
+		if (mediaContainerJsonObj == null || mediaContainerJsonObj.isEmpty() || !mediaContainerJsonObj.has("id")) {
+			System.out.println("ID not found or jsonobject null!");
+			return;
+		}
+
+		String mediaContainerId = mediaContainerJsonObj.optString("id", null);
+
+		if (mediaContainerId == null) {
+			System.out.println("container ID bad!");
+			return;
+		}
+
+		String mediaPost = WebClient
+				.create("https://graph.facebook.com/")
+				.post()
+				.uri(uriBuilder -> uriBuilder
+						.path(webAccount.getSocialIntegration().getInstagramIgUserId() + "/media_publish")
+						.queryParam("access_token", socialIntegration.getInstagramAccessToken())
+						.queryParam("creation_id", mediaContainerId)
+						.build())
+				.retrieve()
+				.bodyToMono(String.class)
+				.share()
+				.block();
+
+		if (mediaPost == null) {
+			System.out.println("An error occurred while publishing!");
+			return;
+		}
+
+		System.out.println("GOOOOOOOOOOOOOOOD WOOOOOOOOOOO");
 	}
 }
