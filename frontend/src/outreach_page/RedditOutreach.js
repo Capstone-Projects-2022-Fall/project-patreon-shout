@@ -88,10 +88,17 @@ function RedditOutreach({publicMessage, privateMessage, subreddit}) {
                 </div>
             </div>
 
-            <div className="socialPlatformContainer">
+            <div className="socialPlatformContainerReddit">
 
                 <FakeRedditPost
+                    postTitle={"Public Post Title"}
                     subreddit={subredditField.replaceAll(/[&\/\\#, +()!@^\-=$~%.'":*?<>{}]/g, '_')}
+                    textField={publicTextField}
+                />
+                <FakeRedditPost
+                    postTitle={"Private Post Title"}
+                    subreddit={subredditField.replaceAll(/[&\/\\#, +()!@^\-=$~%.'":*?<>{}]/g, '_')}
+                    textField={publicTextField}
                 />
 
 

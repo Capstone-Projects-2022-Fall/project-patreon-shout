@@ -1,8 +1,7 @@
 import React from "react";
 import "./comp_css/FakeRedditPost.css"
-import NotificationsNoneRoundedIcon from '@mui/icons-material/NotificationsNoneRounded';
 
-function FakeRedditPost({subreddit}) {
+function FakeRedditPost({postTitle, subreddit, textField}) {
 
 
     return (
@@ -11,13 +10,13 @@ function FakeRedditPost({subreddit}) {
                 <div className="vote-container">
                     <div className="vote-arrows">
                         <div className="upvote">
-                            up
+                            <i className="icon icon-upvote_fill"/>
                         </div>
                         <div className="counter">
-                            counter
+                            1
                         </div>
                         <div className="downvote">
-                            down
+                            <i className="icon icon-downvote"/>
                         </div>
                     </div>
                 </div>
@@ -48,46 +47,63 @@ function FakeRedditPost({subreddit}) {
                             </div>
                         </div>
                         <div className="bell-icon">
-                            <NotificationsNoneRoundedIcon />
+                            <i className="icon icon-notification"/>
                         </div>
                     </div>
 
                     <div className="post-title">
                         <div className="title-content">
-                            title
+                            {postTitle}
                         </div>
                     </div>
 
                     <div className="post-description">
                         <div className="post-content">
-                            <p className="post-content-p">
-                                wowowowowowowowowowo very cool content
+                            <p>
+                                {textField}
                             </p>
                         </div>
                     </div>
 
                     <div className="post-options">
-                        <div className="option-icons">
-                            <div className="option-comments">
-                                comments
+                        <div className="icons option-comments">
+                            <i className="icon icon-comment" />
+                            0
+                        </div>
+                        <div className="icons option-share">
+                            <i className="icon icon-share"/>
+                            Share
+                        </div>
+                        <div className="option-approveRemoveSpam">
+                            <div className="icons approve icon-desktop">
+                                <i className="icon icon-approve"/>
+                                Approve
                             </div>
-                            <div className="option-share">
-                                share
+                            <div className="icons remove icon-desktop">
+                                <i className="icon icon-remove"/>
+                                Remove
                             </div>
-                            <div className="option-approveRemoveSpam">
-                                <div className="approve">
-                                    approve
-                                </div>
-                                <div className="remove">
-                                    remove
-                                </div>
-                                <div className="spam">
-                                    spam
-                                </div>
+                            <div className="icons spam icon-desktop">
+                                <i className="icon icon-spam"/>
+                                Spam
                             </div>
-                            <div className="option-shield">
-                                shield icon
+
+                            {/* mobile */}
+                            <div className="icons approve icon-mobile">
+                                <i className="icon icon-approve"/>
                             </div>
+                            <div className="icons remove icon-mobile">
+                                <i className="icon icon-remove"/>
+                            </div>
+                            <div className="icons spam icon-mobile">
+                                <i className="icon icon-spam"/>
+                            </div>
+                        </div>
+                        <div className="icons option-shield">
+                            <i className="icon icon-mod"/>
+                        </div>
+                        <div className="icons option-more">
+                            <i className="icon icon-overflow_horizontal"/>
                         </div>
                     </div>
                 </div>
