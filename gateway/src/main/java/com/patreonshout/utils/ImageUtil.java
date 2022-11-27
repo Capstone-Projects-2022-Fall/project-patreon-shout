@@ -77,6 +77,8 @@ public class ImageUtil {
 			label.setSize(512, 512);
 			label.paint(graphics);
 
+			// Create filtered image into ByteArrayOutputStream obj, then return as Byte Array
+			ImageIO.write(bufferedImage, imageType, byteArrayOutputStream);
 			return byteArrayOutputStream.toByteArray();
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
