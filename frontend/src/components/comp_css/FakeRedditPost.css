@@ -1,6 +1,7 @@
 
 .post-outline {
-    --redditFont: verdana, arial, helvetica, sans-serif;
+    /*--redditFont: verdana, arial, helvetica, sans-serif;*/
+    --redditFont: Noto Sans, serif;
     min-width: 275px;
     width: 100%;
     overflow: hidden;
