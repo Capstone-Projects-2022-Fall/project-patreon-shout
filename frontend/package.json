@@ -12,6 +12,7 @@
     "@skyra/discord-components-react": "^3.4.1",
     "aws-sdk": "^2.1243.0",
     "fake-tweet": "^1.0.2",
+    "mui-color-input": "^1.0.3",
     "react": "^18.2.0",
     "react-date-range": "^1.4.0",
     "react-dom": "^18.2.0",
