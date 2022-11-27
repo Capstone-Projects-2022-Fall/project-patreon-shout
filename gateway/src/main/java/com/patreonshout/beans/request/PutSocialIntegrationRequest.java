@@ -3,9 +3,7 @@ package com.patreonshout.beans.request;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.patreonshout.beans.WebAccount;
 import com.patreonshout.jpa.constants.SocialIntegrationName;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 /**
  * POJO used in requests for the Integration endpoint.
@@ -13,6 +11,8 @@ import lombok.Setter;
 @Setter
 @Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class PutSocialIntegrationRequest {
 
 	/**
