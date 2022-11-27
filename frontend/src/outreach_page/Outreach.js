@@ -141,7 +141,11 @@ function HtmlReturn(socialIntegrations, socialIntegrationMessages) {
                 </TabPanel>
 
                 <TabPanel value={value} index={4}>
-                    <RedditOutreach/>
+                    <RedditOutreach
+                        subreddit={socialIntegrations.reddit_subreddit_location}
+                        publicMessage={socialIntegrationMessages.reddit_public_message}
+                        privateMessage={socialIntegrationMessages.reddit_private_message}
+                    />
                 </TabPanel>
             </div>
         </div>
