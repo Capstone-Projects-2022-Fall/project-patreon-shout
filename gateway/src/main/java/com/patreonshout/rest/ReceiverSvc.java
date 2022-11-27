@@ -568,7 +568,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		FlexmarkHtmlConverter converter = FlexmarkHtmlConverter.builder().build();
 
 		String body = (patreonPost.getIsPublic() ? socialIntegrationMessages.getTwitterPublicMessage() : socialIntegrationMessages.getTwitterPrivateMessage());
-		body = body.replaceAll("\\n", "\n");
+//		body = body.replaceAll("\\n", "\n");
 
 		String postContent = converter.convert(patreonPost.getContent());
 		if (postContent.substring(postContent.length() - 2).equals("\\n")) {
@@ -588,7 +588,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		FlexmarkHtmlConverter converter = FlexmarkHtmlConverter.builder().build();
 
 		String body = (patreonPost.getIsPublic() ? socialIntegrationMessages.getTwitterPublicMessage() : socialIntegrationMessages.getTwitterPrivateMessage());
-		body = body.replaceAll("\\n", "\n");
+//		body = body.replaceAll("\\n", "\n");
 
 		String postContent = converter.convert(patreonPost.getContent());
 		if (postContent.substring(postContent.length() - 2).equals("\\n")) {
@@ -598,6 +598,10 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		body = body.replaceAll("\\{content}", postContent);
 		body += " https://www.patreon.com" + patreonPost.getUrl();
 
-		new RedditApiUtil().sendPost(socialIntegration.getRedditAccessToken(), body, patreonPost.getTitle());
+		// reddit access token will expire within 24 hours, so we use the refresh token to get a new access token each time we want to send a request
+		String newAccessToken = new RedditApiUtil().refreshAccessToken();
+		// TODO: save the new access token when refreshAccessToken() has implementation
+
+		new RedditApiUtil().sendPost(socialIntegration.getRedditAccessToken(), body, patreonPost.getTitle(), socialIntegration.getRedditSubredditLocation());
 	}
 }

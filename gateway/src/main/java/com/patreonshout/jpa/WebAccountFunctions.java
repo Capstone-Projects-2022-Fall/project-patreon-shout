@@ -291,6 +291,7 @@ public class WebAccountFunctions {
 				if (data == null) {
 					socialIntegration.setRedditAccessToken(null);
 					socialIntegration.setRedditRefreshToken(null);
+					socialIntegration.setRedditSubredditLocation(null);
 				} else {
 					// data == "access_token:refresh_token:subreddit_location"
 					String[] tokens = data.split(":");
