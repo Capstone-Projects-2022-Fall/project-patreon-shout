@@ -26,6 +26,7 @@ import com.patreonshout.jpa.constants.SocialIntegrationName;
 import com.patreonshout.patreon.CustomPatreonAPI;
 import com.patreonshout.rest.interfaces.ReceiverImpl;
 import com.patreonshout.utils.DiscordWebhookUtil;
+import com.patreonshout.utils.RedditApiUtil;
 import com.patreonshout.utils.TwitterApiUtil;
 import com.vladsch.flexmark.html2md.converter.FlexmarkHtmlConverter;
 import org.json.simple.JSONObject;
@@ -445,7 +446,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 			@RequestHeader(HttpHeaders.USER_AGENT) String userAgent,
 			@RequestBody WebhookRequest webhookRequest,
 			@PathVariable long webaccountId
-	) throws PSException {
+	) throws PSException, ParseException {
 		// Ensure someone that isn't Patreon is hitting this endpoint
 		if (!userAgent.equals("Patreon HTTP Robot")) {
 			// TODO: Log the user agent for whoever hit this endpoint
@@ -520,7 +521,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 				}
 
 				if (integration.getRedditAccessToken() != null) {
-					sendRedditPost();
+					sendRedditPost(patreonPost, socialIntegrationMessages, webAccount);
 				}
 
 				break;
@@ -567,7 +568,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		FlexmarkHtmlConverter converter = FlexmarkHtmlConverter.builder().build();
 
 		String body = (patreonPost.getIsPublic() ? socialIntegrationMessages.getTwitterPublicMessage() : socialIntegrationMessages.getTwitterPrivateMessage());
-		body = body.replaceAll("\\n", "\n");
+//		body = body.replaceAll("\\n", "\n");
 
 		String postContent = converter.convert(patreonPost.getContent());
 		if (postContent.substring(postContent.length() - 2).equals("\\n")) {
@@ -576,12 +577,31 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 
 		body = body.replaceAll("\\{content}", postContent);
 		body += " https://www.patreon.com" + patreonPost.getUrl();
-		System.out.println("body text sent: [" + body + "]");
+//		System.out.println("body text sent: [" + body + "]");
 
 		new TwitterApiUtil().sendTweet(twitterCredentials.getClientID(), twitterCredentials.getClientSecret(), socialIntegration.getTwitterAccessToken(), socialIntegration.getTwitterRefreshToken(), body);
 	}
 
-	void sendRedditPost() {
+	void sendRedditPost(PatreonPostV2 patreonPost, SocialIntegrationMessages socialIntegrationMessages, WebAccount webAccount) throws ParseException {
+		SocialIntegration socialIntegration = webAccount.getSocialIntegration();
 
+		FlexmarkHtmlConverter converter = FlexmarkHtmlConverter.builder().build();
+
+		String body = (patreonPost.getIsPublic() ? socialIntegrationMessages.getTwitterPublicMessage() : socialIntegrationMessages.getTwitterPrivateMessage());
+//		body = body.replaceAll("\\n", "\n");
+
+		String postContent = converter.convert(patreonPost.getContent());
+		if (postContent.substring(postContent.length() - 2).equals("\\n")) {
+			postContent = postContent.substring(0, postContent.length() - 2);
+		}
+
+		body = body.replaceAll("\\{content}", postContent);
+		body += " https://www.patreon.com" + patreonPost.getUrl();
+
+		// reddit access token will expire within 24 hours, so we use the refresh token to get a new access token each time we want to send a request
+		String newAccessToken = new RedditApiUtil().refreshAccessToken();
+		// TODO: save the new access token when refreshAccessToken() has implementation
+
+		new RedditApiUtil().sendPost(socialIntegration.getRedditAccessToken(), body, patreonPost.getTitle(), socialIntegration.getRedditSubredditLocation());
 	}
 }
