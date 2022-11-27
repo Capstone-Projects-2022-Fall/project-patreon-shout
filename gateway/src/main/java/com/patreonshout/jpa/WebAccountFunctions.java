@@ -298,9 +298,15 @@ public class WebAccountFunctions {
 					if (tokens.length != 3) {
 						throw new PSException(HttpStatus.BAD_REQUEST, "We were not able to propertly save the Reddit access and refresh tokens");
 					}
-					socialIntegration.setRedditAccessToken(tokens[0]);
-					socialIntegration.setRedditRefreshToken(tokens[1]);
-					socialIntegration.setRedditSubredditLocation(tokens[2]);
+
+					if (tokens[0].equals("") && tokens[1].equals("") && !tokens[2].equals("")) { // when someone sends the request ::subreddit_location it will only set the subreddit_location without changing the access token or refresh token
+						socialIntegration.setRedditSubredditLocation(tokens[2]);
+					}
+					else {
+						socialIntegration.setRedditAccessToken(tokens[0]);
+						socialIntegration.setRedditRefreshToken(tokens[1]);
+						socialIntegration.setRedditSubredditLocation(tokens[2]);
+					}
 				}
 
 				break;

@@ -68,6 +68,7 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	 * {@inheritDoc}
 	 */
 	public HttpStatus PutSocialIntegration(@RequestBody PutSocialIntegrationRequest putSocialIntegrationRequest) throws PSException {
+		System.out.println("hello alex");
 		webAccountFunctions.putSocialIntegration(putSocialIntegrationRequest);
 		return HttpStatus.OK;
 	}
@@ -87,6 +88,7 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 		response.put("instagram_ig_user_id", socialIntegration.getInstagramIgUserId());
 		response.put("reddit_access_token", socialIntegration.getRedditAccessToken());
 		response.put("reddit_refresh_token", socialIntegration.getRedditRefreshToken());
+		response.put("reddit_subreddit_location", socialIntegration.getRedditSubredditLocation());
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
