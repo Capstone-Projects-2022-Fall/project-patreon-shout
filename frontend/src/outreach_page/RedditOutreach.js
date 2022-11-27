@@ -10,6 +10,7 @@ import avatarImg from "../img/cordturtle.png";
 import publicPost from "../img/twitter-public-post-embed.jpg";
 import privatePost from "../img/twitter-private-post-embed.jpg";
 import {putSocialIntegration} from "../services/api/webaccount/putSocialIntegration";
+import FakeRedditPost from "../components/FakeRedditPost";
 
 /**
  * The instagram social platform cross-posting component
@@ -23,6 +24,7 @@ function RedditOutreach({publicMessage, privateMessage, subreddit}) {
     const [privateTextField, setPrivateTextField] = useState(privateMessage);
 
     return (
+
         <div className="outreachSettings">
 
             <div className="postSettings">
@@ -31,13 +33,17 @@ function RedditOutreach({publicMessage, privateMessage, subreddit}) {
                 </div>
 
                 <TextField
-                    fullWidth
+                    sx={{width: "50%"}}
                     margin="normal"
                     id="outlined-multiline-static"
                     label="Subreddit"
                     multiline
                     value={subredditField}
-                    onChange={(e) => {setSubredditField(e.target.value);}}
+                    onChange={(e) => {
+                        if (e.target.value.length < 22) { // subreddit size must be less than 22 chars
+                            setSubredditField(e.target.value);
+                        }
+                    }}
                 />
 
                 <TextField
@@ -75,7 +81,7 @@ function RedditOutreach({publicMessage, privateMessage, subreddit}) {
                             {
                                 login_token: JSON.parse(localStorage.getItem('token')).token,
                                 integration_name: "REDDIT",
-                                data: "::" + subredditField // ONLY USE THIS NOTATION ON REDDIT - "::subredditField" will only change the subreddit field and not the access or refresh tokens
+                                data: "::" + subredditField.replaceAll(/[&\/\\#, +()!@^\-=$~%.'":*?<>{}]/g, '_') // ONLY USE THIS NOTATION ON REDDIT - "::subredditField" will only change the subreddit field and not the access or refresh tokens
                             }
                         ]}
                     />
@@ -84,6 +90,9 @@ function RedditOutreach({publicMessage, privateMessage, subreddit}) {
 
             <div className="socialPlatformContainer">
 
+                <FakeRedditPost
+                    subreddit={subredditField.replaceAll(/[&\/\\#, +()!@^\-=$~%.'":*?<>{}]/g, '_')}
+                />
 
 
             </div>

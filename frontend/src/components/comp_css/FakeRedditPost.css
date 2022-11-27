@@ -1,0 +1,102 @@
+
+.post-outline {
+    --redditFont: verdana, arial, helvetica, sans-serif;
+    min-width: 275px;
+    width: 100%;
+    overflow: hidden;
+    border: 1px solid rgb(219, 219, 219);
+    border-radius: 8px;
+}
+
+.underline:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.post-container {
+    padding: 5px;
+    display: flex;
+    flex-direction: row;
+}
+
+.post-container > .vote-container {
+    width: 50px;
+    height: 100%;
+    border-style: solid;
+}
+
+.post-container > .content-container {
+    display: flex;
+    flex-direction: column;
+    border-style: solid;
+    width: 100%;
+    height: 100%;
+}
+
+
+.content-container > .subreddit-and-user {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.subreddit-and-user > .subreddit-and-user-content {
+    display: flex;
+    flex-wrap: wrap;
+    /*flex-direction: row;*/
+    align-items: center;
+    gap: 2px;
+}
+
+.subreddit-and-user-content > .generic-subreddit-icon {
+    display: flex;
+    align-items: center;
+}
+
+.generic-subreddit-icon > .subreddit-icon {
+    border-radius: 100%;
+    border: 2px solid #fff;
+    display: inline-block;
+    height: 25px;
+    width: 25px;
+    background: #ffffff;
+    box-sizing: border-box;
+    fill: #0079d3;
+}
+.generic-subreddit-icon > .subreddit-icon:hover {
+    cursor: pointer
+}
+
+.subreddit-and-user-content > .content-subreddit-name {
+    font-family: var(--redditFont);
+    font-weight: bold;
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+.subreddit-and-user-content > .content-separator {
+    font-family: var(--redditFont);
+    color: gray;
+}
+
+.subreddit-and-user-content > .content-username {
+    font-family: var(--redditFont);
+    color: gray;
+    font-size: 11px;
+    white-space: normal;
+}
+
+.subreddit-and-user-content > .content-time-ago {
+    padding-left: 5px;
+    font-family: var(--redditFont);
+    color: gray;
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+.subreddit-and-user > .bell-icon {
+    color: gray;
+}
+.subreddit-and-user > .bell-icon:hover {
+    cursor: pointer;
+}
