@@ -117,4 +117,9 @@
     width: 15%;
     align-self: center;
 }
+
+.image-settings-container {
+    display: flex;
+    gap: 15px;
+}
 /* Instagram specific end */
