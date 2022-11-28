@@ -104,6 +104,21 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	/**
 	 * {@inheritDoc}
 	 */
+	public HttpStatus PutInstagramPostDetails(@RequestBody PutInstagramPostDetailsRequest putInstagramPostDetailsRequest) throws PSException {
+		webAccountFunctions.putInstagramPostDetails(putInstagramPostDetailsRequest);
+		return HttpStatus.OK;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public ResponseEntity<?> GetInstagramPostDetails(@RequestParam(name = "login_token") String loginToken) throws PSException {
+		return ResponseEntity.status(HttpStatus.OK).body(webAccountFunctions.getInstagramPostDetails(loginToken));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public ResponseEntity<?> GetSocialIntegrationMessages(@RequestParam(name = "login_token") String loginToken) throws PSException {
 		SocialIntegrationMessages socialIntegrationMessages = webAccountFunctions.getSocialIntegrationMessages(loginToken);
 
