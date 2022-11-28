@@ -32,3 +32,10 @@ twitter:
     id: ENC(z9gF7PIUw6A+OAIrLhyC5wZsStdhUrvbMHyoXYRAdJG92WwDtxBghPl4RiVzO2247pkt9zReUHJdyhgy8rLhOrjGNtUiDGQKFnsuj4uJrgk=)
     secret: ENC(HSrCIi/Bn8LX+hhz/RhnjMVjhMSuCROLIgZlBxZacFlMG+cn2WdK5oAOuO4Wm2FonJTUX7JzZwsJmJyjclfowngxj1Xv6DIOfS65ZPTjOOyNga4vYft3PmiqcsNR3yps)
     redirecturi: https://prodprod.backend.outofstonk.com/receivers/twitter/oauth
+
+# Reddit
+reddit:
+  client:
+    id:
+    secret:
+    redirecturi: https://prodprod.backend.outofstonk.com/receivers/reddit/oauth
