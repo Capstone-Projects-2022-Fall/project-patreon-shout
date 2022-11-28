@@ -7,6 +7,7 @@ import com.patreonshout.beans.WebAccount;
  * {@link #DISCORD}
  * {@link #TWITTER}
  * {@link #INSTAGRAM}
+ * {@link #REDDIT}
  */
 public enum SocialIntegrationName {
 	/**
@@ -22,5 +23,10 @@ public enum SocialIntegrationName {
 	/**
 	 * Instagram platform
 	 */
-	INSTAGRAM
+	INSTAGRAM,
+
+	/**
+	 * Reddit platform
+	 */
+	REDDIT
 }

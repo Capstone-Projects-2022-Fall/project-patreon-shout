@@ -81,6 +81,12 @@ public class SocialIntegration implements Serializable {
 	protected String redditRefreshToken;
 
 	/**
+	 * redditSubredditLocation hold the subreddit location that the user wants to output to
+	 */
+	@Column(name = "reddit_subreddit_location")
+	protected String redditSubredditLocation;
+
+	/**
 	 * webAccount is the {@link com.patreonshout.beans.WebAccount} object linked with this object
 	 */
 	@OneToOne
