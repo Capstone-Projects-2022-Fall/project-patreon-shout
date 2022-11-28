@@ -2,6 +2,14 @@ import React from "react";
 import "./comp_css/FakeRedditPost.css"
 import reactStringReplace from "react-string-replace";
 
+/**
+ * Creates a fake reddit post so a user can see what their output will look like
+ *
+ * @param postTitle the dynamic fake post's title
+ * @param subreddit the dynamic fake post's subreddit
+ * @param textField the dynamic fake post's textField
+ * @returns an interface for a fake reddit post
+ */
 function FakeRedditPost({postTitle, subreddit, textField}) {
 
     // Constants

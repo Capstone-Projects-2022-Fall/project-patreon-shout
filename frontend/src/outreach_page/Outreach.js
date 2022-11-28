@@ -128,7 +128,7 @@ function HtmlReturn(socialIntegrations, socialIntegrationMessages, instagramPost
             </Box>
 
 
-            <div className="content">
+            <div className="entire-content">
                 <TabPanel value={value} index={0}>
                     <InfoOutreach/>
                 </TabPanel>
