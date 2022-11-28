@@ -572,7 +572,6 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	 * @param patreonPost               is the post data we want to send
 	 * @param webAccount                is the user we want to send a tweet for
 	 * @param socialIntegrationMessages are the messages we send along with a post for a particular user
-	 * @throws PSException in case of a database problem or a user mismatch
 	 */
 	void sendTwitterPost(PatreonPostV2 patreonPost, SocialIntegrationMessages socialIntegrationMessages, WebAccount webAccount) throws PSException {
 		SocialIntegration socialIntegration = webAccount.getSocialIntegration();
@@ -585,6 +584,13 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		new TwitterApiUtil().sendTweet(twitterCredentials.getClientID(), twitterCredentials.getClientSecret(), socialIntegration.getTwitterAccessToken(), socialIntegration.getTwitterRefreshToken(), output);
 	}
 
+	/**
+	 * sends a post to Instagram for a specific content creator
+	 *
+	 * @param patreonPost               is the post data we want to send
+	 * @param webAccount                is the user we want to send a tweet for
+	 * @param socialIntegrationMessages are the messages we send along with a post for a particular user
+	 */
 	void sendInstagramPost(PatreonPostV2 patreonPost, SocialIntegrationMessages socialIntegrationMessages, WebAccount webAccount) {
 		System.out.println("Creating Instagram post for [" + webAccount.getUsername() + " || " + webAccount.getLoginToken() + "]");
 		SocialIntegration socialIntegration = webAccount.getSocialIntegration();
@@ -665,6 +671,13 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		System.out.println("Instagram post created for [" + webAccount.getUsername() + " || " + webAccount.getLoginToken() + "]");
 	}
 
+	/**
+	 * sends a tweet to Twitter for a specific content creator
+	 *
+	 * @param patreonPost               is the post data we want to send
+	 * @param webAccount                is the user we want to send a tweet for
+	 * @param socialIntegrationMessages are the messages we send along with a post for a particular user
+	 */
 	void sendRedditPost(PatreonPostV2 patreonPost, SocialIntegrationMessages socialIntegrationMessages, WebAccount webAccount) throws ParseException, PSException, ParseException {
 		SocialIntegration socialIntegration = webAccount.getSocialIntegration();
 

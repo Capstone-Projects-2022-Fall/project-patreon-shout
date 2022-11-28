@@ -48,6 +48,6 @@ instagram:
 # Reddit
 reddit:
   client:
-    id: HzeEs2Uwadhr9_1vF2nf5w
-    secret: upQEfHGkFVR8Zoe6VuIUpLnVfnp3JQ
-    redirecturi: http://localhost:5000/receivers/reddit/oauth
+    id: DEC(HzeEs2Uwadhr9_1vF2nf5w)
+    secret: DEC(upQEfHGkFVR8Zoe6VuIUpLnVfnp3JQ)
+    redirecturi: ${patreonshout.client.redirecturi}/receivers/reddit/oauth
