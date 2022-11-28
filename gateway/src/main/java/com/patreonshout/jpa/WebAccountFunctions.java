@@ -296,16 +296,24 @@ public class WebAccountFunctions {
 					// data == "access_token:refresh_token:subreddit_location"
 					String[] tokens = data.split(":");
 					if (tokens.length != 3) {
-						throw new PSException(HttpStatus.BAD_REQUEST, "We were not able to propertly save the Reddit access and refresh tokens");
+						throw new PSException(HttpStatus.BAD_REQUEST, "We were not able to properly save the Reddit access and refresh tokens");
 					}
 
-					if (tokens[0].equals("") && tokens[1].equals("") && !tokens[2].equals("")) { // when someone sends the request ::subreddit_location it will only set the subreddit_location without changing the access token or refresh token
-						socialIntegration.setRedditSubredditLocation(tokens[2]);
-					}
+//					if (tokens[0].equals("") && tokens[1].equals("") && !tokens[2].equals("")) { // when someone sends the request ::subreddit_location it will only set the subreddit_location without changing the access token or refresh token
+//						socialIntegration.setRedditSubredditLocation(tokens[2]);
+//					}
 					else {
-						socialIntegration.setRedditAccessToken(tokens[0]);
-						socialIntegration.setRedditRefreshToken(tokens[1]);
-						socialIntegration.setRedditSubredditLocation(tokens[2]);
+						if (!tokens[0].equals("")){
+							socialIntegration.setRedditAccessToken(tokens[0]);
+						}
+
+						if (!tokens[1].equals("")){
+							socialIntegration.setRedditRefreshToken(tokens[1]);
+						}
+
+						if (!tokens[2].equals("")){
+							socialIntegration.setRedditSubredditLocation(tokens[2]);
+						}
 					}
 				}
 

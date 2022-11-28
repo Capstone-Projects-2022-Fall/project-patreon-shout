@@ -1,16 +1,37 @@
 package com.patreonshout.utils;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.Base64;
+
 public class RedditApiUtil {
 
-    public String refreshAccessToken() {
-        // TODO: send request to get new access token
-        return null;
+    public String refreshAccessToken(String refreshToken, String clientId, String clientSecret) throws ParseException {
+
+        String basicAuth = clientId + ":" + clientSecret;
+        String finalBasicAuth = Base64.getEncoder().encodeToString(basicAuth.getBytes());
+
+        String response = WebClient.create("https://www.reddit.com/api/v1/access_token")
+                .method(HttpMethod.POST)
+                .headers(httpHeaders -> {
+                    httpHeaders.setContentType(MediaType.valueOf("application/x-www-form-urlencoded"));
+                    httpHeaders.setBasicAuth(finalBasicAuth);
+                })
+                .body(BodyInserters.fromFormData("grant_type", "refresh_token").with("refresh_token", refreshToken))
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+
+        JSONParser parser = new JSONParser();
+        JSONObject objResponse = (JSONObject) parser.parse(response);
+
+        return (String) objResponse.get("access_token");
     }
 
     public void sendPost(String accessToken, String body, String title, String subreddit) throws ParseException {

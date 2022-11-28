@@ -321,7 +321,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 			JSONObject objResponse = (JSONObject) parser.parse(response);
 
 			PutSocialIntegrationRequest putReddit = PutSocialIntegrationRequest.builder()
-					.data(objResponse.get("access_token") + ":" + objResponse.get("refresh_token"))
+					.data(objResponse.get("access_token") + ":" + objResponse.get("refresh_token") + ":testingpatreonshout")
 					.loginToken(state)
 					.socialIntegrationName(SocialIntegrationName.REDDIT)
 					.build();
@@ -582,13 +582,12 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		new TwitterApiUtil().sendTweet(twitterCredentials.getClientID(), twitterCredentials.getClientSecret(), socialIntegration.getTwitterAccessToken(), socialIntegration.getTwitterRefreshToken(), body);
 	}
 
-	void sendRedditPost(PatreonPostV2 patreonPost, SocialIntegrationMessages socialIntegrationMessages, WebAccount webAccount) throws ParseException {
+	void sendRedditPost(PatreonPostV2 patreonPost, SocialIntegrationMessages socialIntegrationMessages, WebAccount webAccount) throws ParseException, PSException {
 		SocialIntegration socialIntegration = webAccount.getSocialIntegration();
 
 		FlexmarkHtmlConverter converter = FlexmarkHtmlConverter.builder().build();
 
 		String body = (patreonPost.getIsPublic() ? socialIntegrationMessages.getTwitterPublicMessage() : socialIntegrationMessages.getTwitterPrivateMessage());
-//		body = body.replaceAll("\\n", "\n");
 
 		String postContent = converter.convert(patreonPost.getContent());
 		if (postContent.substring(postContent.length() - 2).equals("\\n")) {
@@ -599,9 +598,16 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		body += " https://www.patreon.com" + patreonPost.getUrl();
 
 		// reddit access token will expire within 24 hours, so we use the refresh token to get a new access token each time we want to send a request
-		String newAccessToken = new RedditApiUtil().refreshAccessToken();
-		// TODO: save the new access token when refreshAccessToken() has implementation
+		String newAccessToken = new RedditApiUtil().refreshAccessToken(socialIntegration.getRedditRefreshToken(), redditCredentials.getClientID(), redditCredentials.getClientSecret());
 
-		new RedditApiUtil().sendPost(socialIntegration.getRedditAccessToken(), body, patreonPost.getTitle(), socialIntegration.getRedditSubredditLocation());
+		PutSocialIntegrationRequest putReddit = PutSocialIntegrationRequest.builder()
+				.data(newAccessToken + "::")
+				.loginToken(webAccount.getLoginToken())
+				.socialIntegrationName(SocialIntegrationName.REDDIT)
+				.build();
+
+		webAccountFunctions.putSocialIntegration(putReddit);
+
+		new RedditApiUtil().sendPost(newAccessToken, body, patreonPost.getTitle(), socialIntegration.getRedditSubredditLocation());
 	}
 }
