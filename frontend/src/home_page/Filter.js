@@ -184,7 +184,11 @@ function Filter({filterChoices, setFilterChoices, dateRange, setDateRange}) {
                 </FormControl>
             </div>
             <div className="dateRangePopup" hidden={hideCalendar}>
+                <div className="blocker" onClick={() => {setHideCalendar(true);}} > </div>
                 <DateRangePicker
+                    className="content"
+                    showWeekNumbers={false}
+                    showISOWeekNumbers={false}
                     onChange={handleSelectDates}
                     ranges={[timePeriod]} 
                 />
