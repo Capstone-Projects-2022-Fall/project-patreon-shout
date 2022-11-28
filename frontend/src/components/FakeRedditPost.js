@@ -1,8 +1,26 @@
 import React from "react";
 import "./comp_css/FakeRedditPost.css"
+import reactStringReplace from "react-string-replace";
 
 function FakeRedditPost({postTitle, subreddit, textField}) {
 
+    // Constants
+    const publicMessageExample = "This is example text for a public post!  When you create a new Patreon post and mark " +
+        "it as public, all of its text will be put here."
+    const emptyMessage = "Empty message!";
+
+
+    const editDisplayMessage = (givenMessage) => {
+        givenMessage = reactStringReplace(givenMessage, /(\\n|<br>|<br\/>)/g, () => <br/>);
+        givenMessage = reactStringReplace(givenMessage, '{content}', () => publicMessageExample);
+        return givenMessage;
+    }
+
+    // Raw message containers
+    let displayMessage = (textField && textField.length > 0) ? textField : emptyMessage;
+
+    // Edited message containers
+    let editedDisplayMessage = editDisplayMessage(displayMessage);
 
     return (
         <div className="post-outline">
@@ -60,7 +78,7 @@ function FakeRedditPost({postTitle, subreddit, textField}) {
                     <div className="post-description">
                         <div className="post-content">
                             <p>
-                                {textField}
+                                {editedDisplayMessage}
                             </p>
                         </div>
                     </div>

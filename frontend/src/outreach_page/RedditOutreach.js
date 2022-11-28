@@ -98,7 +98,7 @@ function RedditOutreach({publicMessage, privateMessage, subreddit}) {
                 <FakeRedditPost
                     postTitle={"Private Post Title"}
                     subreddit={subredditField.replaceAll(/[&\/\\#, +()!@^\-=$~%.'":*?<>{}]/g, '_')}
-                    textField={publicTextField}
+                    textField={privateTextField}
                 />
 
 
