@@ -83,7 +83,8 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 		response.put("discord", socialIntegration.getDiscord());
 		response.put("twitter_access_token", socialIntegration.getTwitterAccessToken());
 		response.put("twitter_refresh_token", socialIntegration.getTwitterRefreshToken());
-		response.put("instagram", socialIntegration.getInstagram());
+		response.put("instagram_access_token", socialIntegration.getInstagramAccessToken());
+		response.put("instagram_ig_user_id", socialIntegration.getInstagramIgUserId());
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
@@ -94,6 +95,21 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 	public HttpStatus PutSocialIntegrationMessages(@RequestBody PutSocialIntegrationMessageRequest putSocialIntegrationMessageRequest) throws PSException {
 		webAccountFunctions.putSocialIntegrationMessages(putSocialIntegrationMessageRequest);
 		return HttpStatus.OK;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public HttpStatus PutInstagramPostDetails(@RequestBody PutInstagramPostDetailsRequest putInstagramPostDetailsRequest) throws PSException {
+		webAccountFunctions.putInstagramPostDetails(putInstagramPostDetailsRequest);
+		return HttpStatus.OK;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public ResponseEntity<?> GetInstagramPostDetails(@RequestParam(name = "login_token") String loginToken) throws PSException {
+		return ResponseEntity.status(HttpStatus.OK).body(webAccountFunctions.getInstagramPostDetails(loginToken));
 	}
 
 	/**

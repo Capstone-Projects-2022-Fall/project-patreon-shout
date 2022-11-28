@@ -42,13 +42,14 @@ public class DiscordWebhookUtil {
 	 *
 	 * @param webhookUrl is the webhook url provided to client to know where to send data to
 	 */
-	public DiscordWebhookUtil(String webhookUrl) {
+	public DiscordWebhookUtil(String webhookUrl, Boolean forceOutputErrors) {
 		client = WebhookClient.withUrl(webhookUrl);
 
 		// * Blocks errors from forcefully outputting -- instead, we catch them in a traditional try/catch block
 		client.setErrorHandler((client, message, throwable) -> {
 			if (throwable instanceof HttpException) {
-				throwable.printStackTrace();
+				if (forceOutputErrors)
+					throwable.printStackTrace();
 				client.close();
 			}
 		});
@@ -60,27 +61,23 @@ public class DiscordWebhookUtil {
 	}
 
 	public DiscordWebhookUtil(String webhookUrl, PatreonPostV2 patreonPost, SocialIntegrationMessages socialIntegrationMessages) {
-		this(webhookUrl);
+		this(webhookUrl, false);
 		this.setTitle(patreonPost.getTitle(), "https://patreon.com" + patreonPost.getUrl());
-		String outputContent;
+		String desiredPostFormat;
 
 		if (patreonPost.getIsPublic()) {
 			this.setColor(0x00FF00);
-			outputContent = socialIntegrationMessages.getDiscordPublicMessage();
+			desiredPostFormat = socialIntegrationMessages.getDiscordPublicMessage();
 		} else {
 			this.setColor(0xFF0000);
-			outputContent = socialIntegrationMessages.getDiscordPrivateMessage();
+			desiredPostFormat = socialIntegrationMessages.getDiscordPrivateMessage();
 		}
 
-		// Make output adjustments
-		String postContent = converter.convert(patreonPost.getContent());
-		if (postContent.substring(postContent.length() - 2).equals("\\n")) {
-			postContent = postContent.substring(0, postContent.length() - 2);
-		}
-
-		outputContent = outputContent.replaceAll("\\{content}", postContent);
-
-		this.setDescription(outputContent);
+		/*
+		 * We don't want real line breaks as we send data through an HTML request/link.
+		 * Real linebreaks will cause failures during creation.  We want \\n, not \n.
+		 */
+		this.setDescription(PostRedirectUtil.convertHTMLPost(patreonPost.getContent(), desiredPostFormat, false));
 
 		// TODO: This seems to never be true as Patreon never sends us images/videos.
 //				if  (patreonPost.getEmbedUrl() != null)
@@ -112,12 +109,12 @@ public class DiscordWebhookUtil {
 		this.setTitle(title, null);
 	}
 
-    /**
-     * sets the embed's title and URL
-     *
-     * @param title the title we want to set on the embed
-     * @param url the URL this title will redirect to when clicked
-     */
+	/**
+	 * sets the embed's title and URL
+	 *
+	 * @param title the title we want to set on the embed
+	 * @param url   the URL this title will redirect to when clicked
+	 */
 	public void setTitle(String title, String url) {
 		embed.setTitle(new WebhookEmbed.EmbedTitle(title, url));
 	}

@@ -13,7 +13,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PutSocialIntegrationRequest {
+public class PutInstagramPostDetailsRequest {
 
 	/**
 	 * A {@link String} login token that belongs to a {@link WebAccount}
@@ -22,14 +22,20 @@ public class PutSocialIntegrationRequest {
 	String loginToken;
 
 	/**
-	 * An {@link SocialIntegrationName} that will contain the type of social platform desired for this request
+	 * HTTP Image URL
 	 */
-	@JsonProperty("integration_name")
-	SocialIntegrationName socialIntegrationName;
+	@JsonProperty("instagram_image_url")
+	String imageUrl;
 
 	/**
-	 * A {@link String} that will contain either a webhook URL or a token
+	 * Gaussian Blur amount
 	 */
-	@JsonProperty("data")
-	String data;
+	@JsonProperty("instagram_blur_amount")
+	String blurAmount;
+
+	/**
+	 * HEX color value for the image message's color
+	 */
+	@JsonProperty("instagram_message_color")
+	String messageColor;
 }

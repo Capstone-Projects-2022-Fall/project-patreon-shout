@@ -127,6 +127,24 @@ public interface WebAccountImpl {
 	HttpStatus PutSocialIntegrationMessages(@RequestBody PutSocialIntegrationMessageRequest putSocialIntegrationMessageRequest) throws PSException;
 
 	/**
+	 * Endpoint that allows updating Instagram post redirect details
+	 *
+	 * @param putInstagramPostDetailsRequest {@link PutInstagramPostDetailsRequest} object that contains request details
+	 * @return {@link HttpStatus#OK} if successful
+	 */
+	@PutMapping("/instagrampostdetails")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200",
+					description = "Instagram details have been saved",
+					content = {@Content(mediaType = "application/json")}),
+			@ApiResponse(responseCode = "409",
+					description = "WebAccount ID does not exist",
+					content = {@Content(mediaType = "application/json")})
+	})
+	@ResponseStatus(code = HttpStatus.OK, reason = "Data saved successfully")
+	HttpStatus PutInstagramPostDetails(@RequestBody PutInstagramPostDetailsRequest putInstagramPostDetailsRequest) throws PSException;
+
+	/**
 	 * Returns the custom Patreon post redirect messages for all social platforms
 	 *
 	 * @param loginToken Login token belonging to a {@link WebAccount}
@@ -140,6 +158,21 @@ public interface WebAccountImpl {
 					content = {@Content(mediaType = "application/json")})
 	})
 	ResponseEntity<?> GetSocialIntegrationMessages(@RequestParam(name = "login_token") String loginToken) throws PSException;
+
+	/**
+	 * Returns the custom Instagram post details
+	 *
+	 * @param loginToken Login token belonging to a {@link WebAccount}
+	 * @return {@link java.util.Map} containing Instagram post details
+	 */
+	@GetMapping("/instagrampostdetails")
+	@Operation(summary = "Acquires custom Instagram post redirect details")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200",
+					description = "Instagram post details for the respective user",
+					content = {@Content(mediaType = "application/json")})
+	})
+	ResponseEntity<?> GetInstagramPostDetails(@RequestParam(name = "login_token") String loginToken) throws PSException;
 
 	/**
 	 * Endpoint that allows retrieval of Patreon access and refresh tokens for a {@link WebAccount} containing the given

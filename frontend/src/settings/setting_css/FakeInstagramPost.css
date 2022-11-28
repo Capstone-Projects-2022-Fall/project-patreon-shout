@@ -1,0 +1,805 @@
+.MuiTypography-root { /* Hacky way to force our elements to set their own line-spacing */
+    line-height: unset!important;
+}
+
+.instagram-post-container {
+    max-width: 470px;
+    min-width: 275px;
+    overflow: hidden;
+    border: 1px solid rgb(219, 219, 219);
+    border-radius: 8px;
+    height: fit-content;
+}
+
+.instagram-post-container * {
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+.instagram-post-container div {
+    position: relative;
+}
+
+.instagram-post-container img {
+    vertical-align: middle;
+    border: 0;
+}
+
+.width100 {
+    width: 100%;
+    display: inline-block;
+    position: relative;
+}
+
+.instagram-post-container .float-left {
+    float: left;
+}
+
+.instagram-post-container .circular {
+    /*border: 1px solid #c0c0c0;*/
+    overflow: hidden;
+    border-radius: 48%;
+}
+
+.instagram-post-container .post-header {
+    flex: 0 0 auto;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+    align-content: stretch;
+    display: flex;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.instagram-post-container .post-header .profile-details-container {
+    margin: 8px 4px 8px 12px;
+    padding: unset;
+    align-items: center;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    flex-shrink: 1;
+    max-width: calc(100% - 48px);
+    position: relative;
+}
+
+.instagram-post-container .post-header .profile-details-container .profile-pic {
+    height: 32px;
+    width: 32px;
+    display: block;
+    /*left: -3px;*/
+    flex: none;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.instagram-post-container .post-header .profile-details-container .profile-information-container {
+    align-items: flex-start;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    flex-shrink: 1;
+    margin-left: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+.instagram-post-container .post-header .profile-details-container .profile-information-container .profile-information {
+    align-items: baseline;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    max-width: 240px;
+}
+
+.instagram-post-container .post-header .profile-details-container .profile-information-container .profile-information .profile-name {
+    display: flex;
+    font-weight: 600;
+}
+
+.instagram-post-container .post-header .profile-details-container .profile-information-container .profile-information .profile-follow-container {
+    align-items: baseline;
+    border: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    flex-shrink: 0;
+    font: inherit;
+    font-size: 100%;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    /*top: 1px;*/
+    vertical-align: baseline;
+}
+
+.instagram-post-container .post-header .profile-details-container .profile-information-container .profile-information .profile-follow-dot-container {
+    align-items: stretch;
+    border: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    font: inherit;
+    font-size: 100%;
+    margin: 0;
+    margin-right: 2px;
+    padding: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+
+.instagram-post-container .post-header .profile-details-container .profile-information-container .profile-information .profile-follow-container .profile-follow-dot-container .profile-follow-dot {
+    margin-left: 4px;
+    margin-right: 4px;
+    display: inline;
+}
+
+.instagram-post-container .post-header .profile-details-container .profile-information-container .profile-information .profile-follow-container  .profile-follow-button {
+    border: 0;
+    color: rgb(0, 149, 246);
+    display: inline-block;
+    padding: 0!important;
+    position: relative;
+
+    -webkit-appearance: none;
+    background: none;
+    box-sizing: border-box;
+    cursor: pointer;
+    /*font-family: var(--font-family-system);*/
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    text-overflow: ellipsis;
+    text-transform: inherit;
+    -webkit-user-select: none;
+    width: auto;
+}
+
+.instagram-post-container .post-header .profile-details-container .profile-information-container .profile-information .profile-follow-container  .profile-follow-button .profile-follow-button-text-container {
+    height: 100%;
+    flex: 0 0 auto;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    align-content: stretch;
+    display: flex;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.instagram-post-container .post-header .profile-details-container .profile-information-container .profile-information .profile-follow-container  .profile-follow-button .profile-follow-button-text-container .profile-follow-button-text {
+    display: block;
+    font-weight: 600;
+    margin: 0;
+    font-size: 14px;
+    line-height: 18px;
+}
+
+.instagram-post-container .post-header .options-button-container {
+    justify-content: center;
+    padding-right: 4px;
+    display: block;
+}
+
+.instagram-post-container .post-header .options-button-container .options-button {
+    align-items: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    padding: 8px;
+}
+
+.instagram-post-container .post-header .options-button-container .options-button .options-button-internal {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.instagram-post-container .post-header .options-button-container .options-button .options-button-internal .options-button-svg-container {
+    height: 24px;
+    width: 24px;
+    flex: 0 0 auto;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    align-content: stretch;
+    display: flex;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.instagram-post-container .post-header .options-button-container .options-button .options-button-internal .options-button-svg-container .options-button-svg {
+    display: block;
+    position: relative;
+    color: rgb(38, 38, 38);
+    fill: rgb(38, 38, 38);
+    height: 24px;
+    width: 24px;
+    overflow: hidden;
+}
+
+/* Instagram post container CSS */
+.instagram-post-container .post-image-primary-container {
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    flex-direction: column;
+    pointer-events: auto;
+    position: relative;
+}
+
+.instagram-post-container .post-image-primary-container .post-image-button-container {
+    align-items: stretch;
+    border: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    font: inherit;
+    font-size: 100%;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    touch-action: manipulation;
+    vertical-align: baseline;
+}
+
+.instagram-post-container .post-image-primary-container .post-image-button-container .post-image-button-internal {
+    max-height: inherit;
+    background-color: rgb(239, 239, 239);
+    display: block;
+    width: 100%;
+    position: relative;
+}
+
+.instagram-post-container .post-image-primary-container .post-image-button-container .post-image-button-internal .post-image-button-internal-picture-container {
+    padding-bottom: 100%;
+    display: block;
+    overflow: hidden;
+    position: relative;
+}
+
+.instagram-post-container .post-image-primary-container .post-image-button-container .post-image-button-internal .post-image-button-internal-picture-container .post-image-button-internal-picture {
+    object-fit: cover;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    position: absolute;
+    -webkit-user-select: none;
+    border: 0;
+}
+
+/* Instagram post text and caption CSS */
+
+.instagram-post-container .text-caption-container {
+    flex: 0 0 auto;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: stretch;
+    display: flex;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container {
+    display: flex;
+    flex-direction: column;
+    pointer-events: auto;
+    position: relative;
+    border-radius: 8px;
+    background-color: rgb(255, 255, 255);
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    /*min-width: 335px;*/
+    padding: 0 16px;
+    position: relative;
+    width: 100%;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .section-primary-container {
+    margin-top: 4px;
+    display: flex;
+    flex-direction: row;
+    /*padding-left: 12px;*/
+    /*padding-right: 12px;*/
+    padding-bottom: 6px;
+    padding-top: 0;
+    max-height: 46px;
+}
+
+/* Like button */
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .section-primary-container .heart-container {
+    display: inline-block;
+    margin-left: -8px;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .section-primary-container .heart-container .heart-button {
+    align-items: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    padding: 8px;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .section-primary-container .heart-container .heart-button .heart-internal-light {
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .section-primary-container .heart-container .heart-button .heart-internal-light .light-heart {
+    display: block;
+    position: relative;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .section-primary-container .heart-container .heart-button .heart-internal-dark {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .section-primary-container .heart-container .heart-button .heart-internal-dark .dark-heart {
+    display: block;
+    position: relative;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .section-primary-container .heart-container .heart-button:hover > .heart-internal-dark {
+    display: none;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .section-primary-container .heart-container .heart-button:hover > .heart-internal-light {
+    display: block;
+}
+
+
+/* Comments button */
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .section-primary-container .comments-container {
+    display: inline-block;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .section-primary-container .comments-container .comments-button {
+    align-items: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    padding: 8px;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .section-primary-container .comments-container .comments-button .comments-internal-light {
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .section-primary-container .comments-container .comments-button .comments-internal-light .light-comments {
+    display: block;
+    position: relative;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .section-primary-container .comments-container .comments-button .comments-internal-dark {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .section-primary-container .comments-container .comments-button .comments-internal-dark .dark-comments {
+    display: block;
+    position: relative;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .section-primary-container .comments-container .comments-button:hover > .comments-internal-dark {
+    display: none;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .section-primary-container .comments-container .comments-button:hover > .comments-internal-light {
+    display: block;
+}
+
+/* Share button */
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .section-primary-container .share-container {
+    display: inline-block;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .section-primary-container .share-container .share-button {
+    align-items: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    padding: 8px;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .section-primary-container .share-container .share-button .share-internal-light {
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .section-primary-container .share-container .share-button .share-internal-light .light-share {
+    display: block;
+    position: relative;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .section-primary-container .share-container .share-button .share-internal-dark {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .section-primary-container .share-container .share-button .share-internal-dark .dark-share {
+    display: block;
+    position: relative;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .section-primary-container .share-container .share-button:hover > .share-internal-dark {
+    display: none;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .section-primary-container .share-container .share-button:hover > .share-internal-light {
+    display: block;
+}
+
+/* Favorites button */
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .section-primary-container .favorite-container {
+    border: 0;
+    display: inline-block;
+    font: inherit;
+    font-size: 100%;
+    margin: 0;
+    margin-left: auto;
+    margin-right: -10px;
+    padding: 0;
+    vertical-align: baseline;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .section-primary-container .favorite-container .favorite-button {
+    align-items: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    padding: 8px;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .section-primary-container .favorite-container .favorite-button .favorite-internal-light {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    max-height: 100%;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .section-primary-container .favorite-container .favorite-button .favorite-internal-light .light-favorite {
+    display: block;
+    position: relative;
+    overflow: hidden;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .section-primary-container .favorite-container .favorite-button .favorite-internal-dark {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .section-primary-container .favorite-container .favorite-button .favorite-internal-dark .dark-favorite {
+    display: block;
+    position: relative;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .section-primary-container .favorite-container .favorite-button:hover > .favorite-internal-dark {
+    display: none;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .section-primary-container .favorite-container .favorite-button:hover > .favorite-internal-light {
+    display: block;
+}
+
+/* Like counter section */
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .like-counter-section {
+    margin-bottom: 8px;
+    display: block;
+    font: inherit;
+    font-size: 100%;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .like-counter-section .like-counter-container {
+    flex: 1 1 auto;
+    min-height: 0;
+    min-width: 0;
+    justify-content: flex-start;
+    flex-direction: row;
+    align-items: stretch;
+    align-content: stretch;
+    display: flex;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .like-counter-section .like-counter-container .like-counter-internal {
+    margin-top: auto;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: auto;
+    flex-wrap: wrap;
+    flex: 1 1 auto;
+    min-height: 0;
+    min-width: 0;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: stretch;
+    display: flex;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .like-counter-section .like-counter-container .like-counter-internal .like-counter-final {
+    display: block;
+    color: rgb(38, 38, 38);
+    font-weight: 400;
+    margin: 0;
+    font-size: 14px;
+    line-height: 18px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .like-counter-section .like-counter-container .like-counter-internal .like-counter-final .like-counter-text-container {
+    text-decoration: none;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    background-color: transparent;
+    margin-bottom: 0;
+    margin-top: 0;
+    margin-left: 0;
+    margin-right: 0;
+    box-sizing: border-box;
+    cursor: pointer;
+    outline: none;
+    border-left: 0;
+    border-bottom: 0;
+    border-top: 0;
+    border-right: 0;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    list-style: none;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .like-counter-section .like-counter-container .like-counter-internal .like-counter-final .like-counter-text-container .like-counter-text {
+    display: inline!important;
+    margin: 0!important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: rgb(38, 38, 38);
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 18px;
+}
+
+/* Description and Captions div */
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .desc-caption-div {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    flex-shrink: 1;
+    margin-bottom: 4px;
+    min-height: 0;
+    overflow: auto;
+    position: relative;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .desc-caption-div .desc-caption-container {
+    flex: 0 0 auto;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: stretch;
+    display: flex;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .desc-caption-div .desc-caption-container .desc-caption-internal {
+    margin-bottom: calc(4px * 2);
+    flex: 0 0 auto;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: stretch;
+    display: flex;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .desc-caption-div .desc-caption-container .desc-caption-internal .desc-caption-final {
+    flex: 1 1 auto;
+    min-height: 0;
+    min-width: 0;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: stretch;
+    display: block;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .desc-caption-div .desc-caption-container .desc-caption-internal .desc-caption-final .profile-name-container {
+    display: inline;
+    position: relative;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .desc-caption-div .desc-caption-container .desc-caption-internal .desc-caption-final .profile-name-container .profile-name-final {
+    text-decoration: none;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    background-color: transparent;
+    margin-bottom: 0;
+    margin-top: 0;
+    margin-left: 0;
+    margin-right: 0;
+    box-sizing: border-box;
+    cursor: pointer;
+    outline: none;
+    border-left: 0;
+    border-bottom: 0;
+    border-top: 0;
+    border-right: 0;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    list-style: none;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .desc-caption-div .desc-caption-container .desc-caption-internal .desc-caption-final .profile-name-container .profile-name-final .profile-name-text-container {
+    display: inline!important;
+    margin: 0!important;
+    color: rgb(38, 38, 38);
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 18px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .desc-caption-div .desc-caption-container .desc-caption-internal .desc-caption-final .profile-name-container .profile-name-final .profile-name-text-container .profile-name-text-actual {
+    flex: 0 0 auto;
+    justify-content: flex-start;
+    flex-direction: row;
+    align-items: center;
+    align-content: stretch;
+    display: inline-block;
+    box-sizing: border-box;
+    position: relative;
+    color: rgb(38, 38, 38);
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 18px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .desc-caption-div .desc-caption-container .desc-caption-internal .desc-caption-final .profile-name-splitter {
+    display: inline!important;
+    margin: 0!important;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .desc-caption-div .desc-caption-container .desc-caption-internal .desc-caption-final .desc-caption-actual-container {
+    display: inline!important;
+    margin: 0!important;
+    color: rgb(38, 38, 38);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .desc-caption-div .desc-caption-container .desc-caption-internal .desc-caption-final .desc-caption-actual-container .desc-caption-actual-text {
+    display: inline!important;
+    margin: 0!important;
+    color: rgb(38, 38, 38);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Days ago div */
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .days-ago-div {
+    margin-bottom: 16px;
+    display: block;
+    font: inherit;
+    color: rgb(38, 38, 38);
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .days-ago-div .days-ago-container {
+    flex: 0 0 auto;
+    justify-content: flex-start;
+    flex-direction: row;
+    align-items: center;
+    align-content: stretch;
+    display: flex;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .days-ago-div .days-ago-container .days-ago-final {
+    text-transform: uppercase;
+    display: block;
+    color: rgb(38, 38, 38);
+    font-weight: 400;
+    margin: 0;
+    font-size: 14px;
+    line-height: 18px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .days-ago-div .days-ago-container .days-ago-final .days-ago-text-container {
+    text-decoration: none;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    background-color: transparent;
+    margin-bottom: 0;
+    margin-top: 0;
+    margin-left: 0;
+    margin-right: 0;
+    box-sizing: border-box;
+    cursor: pointer;
+    outline: none;
+    border-left: 0;
+    border-bottom: 0;
+    border-top: 0;
+    border-right: 0;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    list-style: none;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+.instagram-post-container .text-caption-container .text-caption-internal-container .text-caption-internal-container-final .days-ago-div .days-ago-container .days-ago-final .days-ago-text-container .days-ago-text {
+    display: inline!important;
+    margin: 0!important;
+    color: rgb(142, 142, 142);
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 12px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}

@@ -41,8 +41,44 @@ public class SocialIntegration implements Serializable {
 	/**
 	 * instagram_data holds the Instagram token needed for integration
 	 */
-	@Column(name = "instagram")
-	protected String instagram;
+	@Column(name = "instagram_access_token")
+	protected String instagramAccessToken;
+
+	/**
+	 * Holds the ig-user-id that resembles an Instagram Business account's profile ID
+	 */
+	@Column(name = "instagram_ig_user_id")
+	protected String instagramIgUserId;
+
+	/**
+	 * Holds the image URL that will be posted to Instagram
+	 */
+	@Column(name = "instagram_image_url")
+	protected String instagramImageUrl;
+
+	/**
+	 * Percentage number for how much blur to apply to the Instagram image
+	 */
+	@Column(name = "instagram_blur_amount")
+	protected String instagramBlurAmount;
+
+	/**
+	 * HEX color code for the text overlaid on top of the image
+	 */
+	@Column(name = "instagram_message_color")
+	protected String instagramMessageColor;
+
+	/**
+	 * redditAccessToken holds the Reddit access_token needed for integration
+	 */
+	@Column(name = "reddit_access_token")
+	protected String redditAccessToken;
+
+	/**
+	 * redditRefreshToken holds the Reddit refresh_token needed for integration
+	 */
+	@Column(name = "reddit_refresh_token")
+	protected String redditRefreshToken;
 
 	/**
 	 * webAccount is the {@link com.patreonshout.beans.WebAccount} object linked with this object
@@ -58,6 +94,6 @@ public class SocialIntegration implements Serializable {
 	 * @return {@link Boolean#TRUE} if any social integrations are not null, false otherwise
 	 */
 	public Boolean isEmpty() {
-		return discord == null && twitterAccessToken == null && twitterRefreshToken == null && instagram == null;
+		return discord == null && twitterAccessToken == null && twitterRefreshToken == null && instagramAccessToken == null;
 	}
 }
