@@ -4,6 +4,11 @@ import Login from "../login_page/LoginPage";
 import {Button} from "@mui/material";
 import {config} from "../Constants";
 
+/**
+ * Sends a request to reddit for OAuth
+ *
+ * @returns a button that will allow a user to OAuth to reddit
+ */
 function RedditConnect() {
     const { token, setToken } = useToken();
 
