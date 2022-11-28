@@ -315,13 +315,16 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 						httpHeaders.setContentType(MediaType.valueOf("application/x-www-form-urlencoded"));
 						httpHeaders.setBasicAuth(finalBasicAuth);
 					})
-					.body(BodyInserters.fromFormData("grant_type", "authorization_code").with("code", code).with("redirect_uri", redditCredentials.getRedirectUri()))
+					.body(BodyInserters.
+							fromFormData("grant_type", "authorization_code")
+							.with("code", code)
+							.with("redirect_uri", redditCredentials.getRedirectUri())
+					)
 					.retrieve()
 					.bodyToMono(String.class)
 					.block();
 
-			JSONParser parser = new JSONParser();
-			JSONObject objResponse = (JSONObject) parser.parse(response);
+			JSONObject objResponse = new JSONObject(response);
 
 			PutSocialIntegrationRequest putReddit = PutSocialIntegrationRequest.builder()
 					.data(objResponse.get("access_token") + ":" + objResponse.get("refresh_token") + ":testingpatreonshout")
@@ -665,17 +668,9 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	void sendRedditPost(PatreonPostV2 patreonPost, SocialIntegrationMessages socialIntegrationMessages, WebAccount webAccount) throws ParseException, PSException, ParseException {
 		SocialIntegration socialIntegration = webAccount.getSocialIntegration();
 
-		FlexmarkHtmlConverter converter = FlexmarkHtmlConverter.builder().build();
+		String desiredPostFormat = (patreonPost.getIsPublic() ? socialIntegrationMessages.getInstagramPublicMessage() : socialIntegrationMessages.getInstagramPrivateMessage());
 
-		String body = (patreonPost.getIsPublic() ? socialIntegrationMessages.getTwitterPublicMessage() : socialIntegrationMessages.getTwitterPrivateMessage());
-
-		String postContent = converter.convert(patreonPost.getContent());
-		if (postContent.substring(postContent.length() - 2).equals("\\n")) {
-			postContent = postContent.substring(0, postContent.length() - 2);
-		}
-
-		body = body.replaceAll("\\{content}", postContent);
-		body += " https://www.patreon.com" + patreonPost.getUrl();
+		String output = PostRedirectUtil.convertHTMLPost(patreonPost.getContent(), desiredPostFormat, true);
 
 		// reddit access token will expire within 24 hours, so we use the refresh token to get a new access token each time we want to send a request
 		String newAccessToken = new RedditApiUtil().refreshAccessToken(socialIntegration.getRedditRefreshToken(), redditCredentials.getClientID(), redditCredentials.getClientSecret());
@@ -688,6 +683,6 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 
 		webAccountFunctions.putSocialIntegration(putReddit);
 
-		new RedditApiUtil().sendPost(newAccessToken, body, patreonPost.getTitle(), socialIntegration.getRedditSubredditLocation());
+		new RedditApiUtil().sendPost(newAccessToken, output, patreonPost.getTitle(), socialIntegration.getRedditSubredditLocation());
 	}
 }
