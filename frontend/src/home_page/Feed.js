@@ -36,6 +36,7 @@ function Feed() {
 
     useEffect(() => {
         let mounted = true;
+        // change this
         getPosts("8432541")
             .then(items => {
                 if (mounted) {
