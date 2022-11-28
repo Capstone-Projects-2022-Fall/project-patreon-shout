@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+/**
+ * Interface for endpoints relating to image activities
+ */
 @RequestMapping(value = "/images")
 @Tag(name = "Image Service",
 		description = "Handles all image related functions.")

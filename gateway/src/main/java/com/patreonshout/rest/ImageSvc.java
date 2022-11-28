@@ -9,9 +9,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Image RESTful Endpoint Interface
+ *
+ * <p>
+ * Responsible for generating and serving gaussian blur filtered images with desired parameters
+ * </p>
+ */
 @RestController
 public class ImageSvc extends BaseSvc implements ImageImpl {
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public ResponseEntity<?> blurImage(
 			@RequestParam("image_url") String imageUrl,
 			@RequestParam("radius") int radius,

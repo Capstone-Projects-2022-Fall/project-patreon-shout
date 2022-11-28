@@ -21,12 +21,21 @@ public class PutInstagramPostDetailsRequest {
 	@JsonProperty("login_token")
 	String loginToken;
 
+	/**
+	 * HTTP Image URL
+	 */
 	@JsonProperty("instagram_image_url")
 	String imageUrl;
 
+	/**
+	 * Gaussian Blur amount
+	 */
 	@JsonProperty("instagram_blur_amount")
 	String blurAmount;
 
+	/**
+	 * HEX color value for the image message's color
+	 */
 	@JsonProperty("instagram_message_color")
 	String messageColor;
 }

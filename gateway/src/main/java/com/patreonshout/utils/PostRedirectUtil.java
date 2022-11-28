@@ -2,7 +2,19 @@ package com.patreonshout.utils;
 
 import com.vladsch.flexmark.html2md.converter.FlexmarkHtmlConverter;
 
+/**
+ * Contains Post Redirect related functions
+ */
 public class PostRedirectUtil {
+
+	/**
+	 * Creates a {@link String} containing text that is formulated into social integration redirect-able text
+	 *
+	 * @param postContent {@link com.patreonshout.beans.patreon_api.PatreonPostV2} post content
+	 * @param desiredPostFormat {@link String} public or private message belonging to a {@link com.patreonshout.beans.SocialIntegrationMessages}
+	 * @param realLineBreaks {@link Boolean} if real line breaks are desired
+	 * @return {@link String} social integration formatted text
+	 */
 	public static String convertHTMLPost(String postContent, String desiredPostFormat, Boolean realLineBreaks) {
 
 		FlexmarkHtmlConverter converter = FlexmarkHtmlConverter.builder().build();

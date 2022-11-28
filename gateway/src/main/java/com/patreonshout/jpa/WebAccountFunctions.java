@@ -199,6 +199,12 @@ public class WebAccountFunctions {
 		webAccountRepository.save(webAccount);
 	}
 
+	/**
+	 * Gets the Instagram post details belonging to a specific {@link WebAccount}
+	 *
+	 * @param loginToken {@link String} login token belonging to a {@link WebAccount}
+	 * @return {@link Map} containing Instagram post details
+	 */
 	@Transactional
 	public Map<String, String> getInstagramPostDetails(String loginToken) throws PSException {
 		WebAccount webAccount = this.getAccount(loginToken);

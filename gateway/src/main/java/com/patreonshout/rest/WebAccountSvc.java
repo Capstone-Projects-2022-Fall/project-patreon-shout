@@ -105,6 +105,9 @@ public class WebAccountSvc extends BaseSvc implements WebAccountImpl {
 		return HttpStatus.OK;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public ResponseEntity<?> GetInstagramPostDetails(@RequestParam(name = "login_token") String loginToken) throws PSException {
 		return ResponseEntity.status(HttpStatus.OK).body(webAccountFunctions.getInstagramPostDetails(loginToken));
 	}
