@@ -26,7 +26,7 @@ patreonshout:
   client: # Client Configuration
     id: Aymjq1-b_ZkmaeejretFStklrikzMGcG-LEtCkt3GvOeiuOO2MY0_hluLoUzC4ce
     secret: PgFjamxT-DlenUKEqlf2px49QgYFd3a-MlSzoYzuuUxQepgDK_ajCYs8xbqrsLLB
-    redirecturi: https://ayser.backend.outofstonk.com:5000
+    redirecturi: http://localhost:5000
   db: # Database Configuration
     webaccount:
       pepper: ENC(BLaHIgDKQVzb0giPFe+TXRCuUkKd/rwfraIpagzIyChf6fA+A/btX2xrPihjfQwo)
@@ -34,14 +34,13 @@ patreonshout:
 # Twitter
 twitter:
   client: #Client Configuration
-    id: NWhrMFdaeE9Bd3diVXlTY19oYUg6MTpjaQ
-    secret: i6j1ui6NPylovtTnxho9EcRkVwESJ4DHHdS3RR7Ic334ehFt02
-    redirecturi: https://alex.backend.outofstonk.com/receivers/twitter/oauth
+    id: ENC(jO5qy6HDhQK0COh8IhiwbGpig8XkdoMyNWC+62BsQNitT2eFOT4DMnpu4hVpsO3WNwzJAUzyD74G8TfzzWHTmjXdDk8rJKP9QKTOFlSjgDc=)
+    secret: ENC(/4d4clyxR5qUNV17KqYAtUZETLzwrdMbbr6prFJAvfdjXJhsUDQ1ZqBwCE+IBua/23Ve5B7H//VuyKpooa06+5ZXLMVG/iLyTvdZCAA+92Gjomo7KGDp2nF7NaEv6kM3)
+    redirecturi: ${patreonshout.client.redirecturi}/receivers/twitter/oauth
 
 # Instagram
 instagram:
   client:
-    id: 824898048795218
-    secret: f8b640400f3cc7486d9212326229ea38
-    redirecturi: http://localhost:5000/receivers/instagram/oauth
-#    redirecturi: https://ayser.backend.outofstonk.com/receivers/instagram/oauth
+    id: ENC(M5W+h39khivgs+aiSMRy52jITx/1XI+xMIz8f9xIA2wyXqfa8zCIPDEDAvMA4zoL)
+    secret: ENC(tGddH5ds1aRWgI04ocs6XHFQnrI+gWTRuFQqWqX2RkkaCPGNeYpFunkgQyR4TfOIMrjoI8d/CYEj769NhttXBtolfYfd+nd3121pXqaEnJw=)
+    redirecturi: ${patreonshout.client.redirecturi}/receivers/instagram/oauth
