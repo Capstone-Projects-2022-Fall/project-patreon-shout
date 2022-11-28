@@ -113,7 +113,7 @@ function HtmlReturn(socialIntegrations, socialIntegrationMessages) {
             </Box>
 
 
-            <div className="content">
+            <div className="entire-content">
                 <TabPanel value={value} index={0}>
                     <InfoOutreach/>
                 </TabPanel>
