@@ -6,7 +6,7 @@ import {
     DiscordMessages
 } from "@skyra/discord-components-react";
 import './setting_css/DiscordMessages.css';
-import reactStringReplace from 'react-string-replace';
+import EditDisplayMessage from "../outreach_page/EditDisplayMessage";
 
 /**
  * Function component that displays text given in a Discord-like fashion for users to understand how their text
@@ -16,20 +16,7 @@ import reactStringReplace from 'react-string-replace';
  * @returns {JSX.Element}
  */
 function DiscordOutput(args) {
-    // Utility functions
-    const editDisplayMessage = (givenMessage) => {
-        givenMessage = reactStringReplace(givenMessage, '\\n', (match, i) => (
-            <br/>
-        ));
-        givenMessage = reactStringReplace(givenMessage, '{content}', (match, i) => (
-            publicMessageExample
-        ));
-        return givenMessage;
-    }
-
     // Constants
-    const publicMessageExample = "This is example text for a public post!  When you create a new Patreon post and mark " +
-        "it as public, all of its text will be put here."
     const emptyMessage = "Empty message!";
 
     // Raw message containers
@@ -37,8 +24,8 @@ function DiscordOutput(args) {
     let privateMessage = (args.privateMessage && args.privateMessage.length > 0) ? args.privateMessage : emptyMessage;
 
     // Edited message containers
-    let editedPublicMessage = editDisplayMessage(publicMessage);
-    let editedPrivateMessage = editDisplayMessage(privateMessage);
+    let editedPublicMessage = EditDisplayMessage(publicMessage, true, "#01AFF4");
+    let editedPrivateMessage = EditDisplayMessage(privateMessage, true, "#01AFF4");
 
     return (
         <DiscordMessages className="discord-messages">

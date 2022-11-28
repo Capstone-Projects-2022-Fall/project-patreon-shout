@@ -10,7 +10,7 @@ function FakeInstagramPost(args) {
     let displayMessage = (args.displayMessage && args.displayMessage.length > 0) ? args.displayMessage : "Empty message!";
 
     // Edited message containers
-    let editedDisplayMessage = EditDisplayMessage(displayMessage, true);
+    let editedDisplayMessage = EditDisplayMessage(displayMessage, true, "#0000EE");
 
     return (
         <div className="instagram-post-container" style={{maxWidth: args.postMaxWidth}}>
