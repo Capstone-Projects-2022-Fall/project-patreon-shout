@@ -1,27 +1,16 @@
 import './setting_css/FakeInstagramPost.css'
-import reactStringReplace from "react-string-replace";
+import EditDisplayMessage from "../outreach_page/EditDisplayMessage";
 
 function FakeInstagramPost(args) {
-    // Constants
-    const publicMessageExample = "This is example text for a public post!  When you create a new Patreon post and mark " +
-        "it as public, all of its text will be put here."
-    const emptyMessage = "Empty message!";
-
     // Dynamics
     let profileName = "patreonshout"; // Maybe dynamic...
     let profilePicUrl = "https://zeoob.com/assets/img/default-img.png"
 
-    const editDisplayMessage = (givenMessage) => {
-        givenMessage = reactStringReplace(givenMessage, /(\\n|<br>|<br\/>)/g, () => <br/>);
-        givenMessage = reactStringReplace(givenMessage, '{content}', () => publicMessageExample);
-        return givenMessage;
-    }
-
     // Raw message containers
-    let displayMessage = (args.displayMessage && args.displayMessage.length > 0) ? args.displayMessage : emptyMessage;
+    let displayMessage = (args.displayMessage && args.displayMessage.length > 0) ? args.displayMessage : "Empty message!";
 
     // Edited message containers
-    let editedDisplayMessage = editDisplayMessage(displayMessage);
+    let editedDisplayMessage = EditDisplayMessage(displayMessage, true);
 
     return (
         <div className="instagram-post-container" style={{maxWidth: args.postMaxWidth}}>
