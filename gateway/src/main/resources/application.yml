@@ -33,16 +33,16 @@ twitter:
     secret: ENC(HSrCIi/Bn8LX+hhz/RhnjMVjhMSuCROLIgZlBxZacFlMG+cn2WdK5oAOuO4Wm2FonJTUX7JzZwsJmJyjclfowngxj1Xv6DIOfS65ZPTjOOyNga4vYft3PmiqcsNR3yps)
     redirecturi: ${patreonshout.client.redirecturi}/receivers/twitter/oauth
 
-# Reddit
-reddit:
-  client:
-    id:
-    secret:
-    redirecturi: ${patreonshout.client.redirecturi}/receivers/reddit/oauth
-
 # Instagram
 instagram:
   client:
     id: ENC(01vSN4FUFtTiHZD79N348B9W0AmpJGkW/PsJcHY6ByVAsk07QfRWdTMK9n9bzwuF)
     secret: ENC(lSy7J7gy0vUdwIrXNZIAYaBGCw2DQUQ+ae1xNkeUZZIWUCOmKVIVbtwzki37hhN2MBx3420HeLXUd5wcXfyp0oVkxCwbobGx3nTitkMsAGk=)
     redirecturi: ${patreonshout.client.redirecturi}/receivers/instagram/oauth
+
+# Reddit
+reddit:
+  client:
+    id: ENC(Sm54LqH4MZTz6mpGM/TDttDMzLa3pzxl3shbsoJWNp6nNKe1y4vP1JsDYzDX/cNbw0tkDrvRCB8g4s3yySzqgA==)
+    secret: ENC(6rQru6maAWWQCq0/NtAdMkD6BW22iEbBBKLPrQRApycDi0D6etf0kvmf7PfjompTZ7Gy3rcrz7aixuvj1esRUQ==)
+    redirecturi: ${patreonshout.client.redirecturi}/receivers/reddit/oauth
