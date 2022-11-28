@@ -10,8 +10,19 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.Base64;
 
+/**
+ * Used to send posts to reddit and refresh the user's access token
+ */
 public class RedditApiUtil {
 
+    /**
+     * Refreshes a user's access token
+     *
+     * @param refreshToken is the token used to generate a new access token for the user
+     * @param clientId is our reddit client's id
+     * @param clientSecret is our reddit client's secret
+     * @return the new access token
+     */
     public String refreshAccessToken(String refreshToken, String clientId, String clientSecret) throws ParseException {
 
         String basicAuth = clientId + ":" + clientSecret;
@@ -34,6 +45,14 @@ public class RedditApiUtil {
         return (String) objResponse.get("access_token");
     }
 
+    /**
+     * Sends a reddit post
+     *
+     * @param accessToken the authorization token to send a post on a user's behalf
+     * @param body the body text of the post
+     * @param title the title of the post
+     * @param subreddit the subreddit to output the post to
+     */
     public void sendPost(String accessToken, String body, String title, String subreddit) throws ParseException {
 
         if (subreddit.startsWith("r/")) {
