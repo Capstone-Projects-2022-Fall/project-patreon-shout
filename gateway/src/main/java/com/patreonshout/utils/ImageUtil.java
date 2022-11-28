@@ -24,7 +24,7 @@ public class ImageUtil {
 	 * @param radius    blur amount (1 to 100)
 	 * @param text      message to display on image
 	 * @param textColor HEX string color the message should take
-	 * @return {@link Byte[]} bytes of the image
+	 * @return array of bytes representing the image
 	 */
 	public static byte[] GenerateBlurredImage(String imageUrl, int radius, String text, String textColor) throws PSException {
 		try {
