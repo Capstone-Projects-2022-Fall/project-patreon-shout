@@ -1,7 +1,7 @@
 import React from "react";
 import {Routes, Route, useLocation} from "react-router-dom";
 import './App.css';
-// import "@fontsource/ibm-plex-sans";
+import "@fontsource/ibm-plex-sans";
 import Home from "./home_page/Home";
 import Outreach from "./outreach_page/Outreach";
 import LoginPage from "./login_page/LoginPage";
