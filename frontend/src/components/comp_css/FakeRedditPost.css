@@ -1,0 +1,298 @@
+/*@import "node_modules/@ibm/plex/css/ibm-plex-sans-jp.css";*/
+/*@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@100;500&display=swap");*/
+
+@font-face{font-family:redesignFont2020;src:url(https://www.redditstatic.com/desktop2x/fonts/redesignIcon2020/redesignFont2020.96a3bf0be9916e052477b4686c59b94d.eot),url(https://www.redditstatic.com/desktop2x/fonts/redesignIcon2020/redesignFont2020.96a3bf0be9916e052477b4686c59b94d.woff),url(https://www.redditstatic.com/desktop2x/fonts/redesignIcon2020/redesignFont2020.96a3bf0be9916e052477b4686c59b94d.ttf),url(https://www.redditstatic.com/desktop2x/fonts/redesignIcon2020/redesignFont2020.96a3bf0be9916e052477b4686c59b94d.svg)}.icon:before{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;font-family:redesignFont2020}.icon-activity:before{content:"\f101"}.icon-activity_fill:before{content:"\f102"}.icon-ad_group:before{content:"\f103"}.icon-ad_group_fill:before{content:"\f104"}.icon-add:before{content:"\f105"}.icon-add_emoji:before{content:"\f106"}.icon-add_emoji_fill:before{content:"\f107"}.icon-add_fill:before{content:"\f108"}.icon-add_media:before{content:"\f109"}.icon-add_media_fill:before{content:"\f10a"}.icon-add_to_feed:before{content:"\f10b"}.icon-add_to_feed_fill:before{content:"\f10c"}.icon-admin:before{content:"\f10d"}.icon-admin_fill:before{content:"\f10e"}.icon-all:before{content:"\f10f"}.icon-all_fill:before{content:"\f110"}.icon-appearance:before{content:"\f111"}.icon-appearance_fill:before{content:"\f112"}.icon-approve:before{content:"\f113"}.icon-approve_fill:before{content:"\f114"}.icon-archived:before{content:"\f115"}.icon-archived_fill:before{content:"\f116"}.icon-aspect_ratio:before{content:"\f117"}.icon-aspect_ratio_fill:before{content:"\f118"}.icon-aspect_rectangle:before{content:"\f119"}.icon-aspect_rectangle_fill:before{content:"\f11a"}.icon-attach:before{content:"\f11b"}.icon-attach_fill:before{content:"\f11c"}.icon-audio:before{content:"\f11d"}.icon-audio_fill:before{content:"\f11e"}.icon-author:before{content:"\f11f"}.icon-author_fill:before{content:"\f120"}.icon-avatar_style:before{content:"\f121"}.icon-avatar_style_fill:before{content:"\f122"}.icon-award:before{content:"\f123"}.icon-award_fill:before{content:"\f124"}.icon-back:before{content:"\f125"}.icon-back_fill:before{content:"\f126"}.icon-ban:before{content:"\f127"}.icon-ban_fill:before{content:"\f128"}.icon-best:before{content:"\f129"}.icon-best_fill:before{content:"\f12a"}.icon-block:before{content:"\f12b"}.icon-block_fill:before{content:"\f12c"}.icon-bold:before{content:"\f12d"}.icon-bold_fill:before{content:"\f12e"}.icon-bot:before{content:"\f12f"}.icon-bot_fill:before{content:"\f130"}.icon-bounce:before{content:"\f131"}.icon-bounce_fill:before{content:"\f132"}.icon-browse:before{content:"\f133"}.icon-browse_fill:before{content:"\f134"}.icon-browser:before{content:"\f135"}.icon-browser_fill:before{content:"\f136"}.icon-cake:before{content:"\f137"}.icon-cake_fill:before{content:"\f138"}.icon-calendar:before{content:"\f139"}.icon-camera:before{content:"\f13a"}.icon-camera_fill:before{content:"\f13b"}.icon-campaign:before{content:"\f13c"}.icon-campaign_fill:before{content:"\f13d"}.icon-caret_down:before{content:"\f13e"}.icon-caret_down_fill:before{content:"\f13f"}.icon-caret_left:before{content:"\f140"}.icon-caret_left_fill:before{content:"\f141"}.icon-caret_right:before{content:"\f142"}.icon-caret_right_fill:before{content:"\f143"}.icon-caret_up:before{content:"\f144"}.icon-caret_up_fill:before{content:"\f145"}.icon-chat:before{content:"\f146"}.icon-chat_fill:before{content:"\f147"}.icon-chat_group:before{content:"\f148"}.icon-chat_group_fill:before{content:"\f149"}.icon-chat_new:before{content:"\f14a"}.icon-chat_new_fill:before{content:"\f14b"}.icon-checkbox:before{content:"\f14c"}.icon-checkbox_dismiss:before{content:"\f14d"}.icon-checkbox_dismiss_fill:before{content:"\f14e"}.icon-checkbox_fill:before{content:"\f14f"}.icon-checkmark:before{content:"\f150"}.icon-checkmark_fill:before{content:"\f151"}.icon-chrome:before{content:"\f152"}.icon-chrome_fill:before{content:"\f153"}.icon-clear:before{content:"\f154"}.icon-clear_fill:before{content:"\f155"}.icon-close:before{content:"\f156"}.icon-close_fill:before{content:"\f157"}.icon-closed_captioning:before{content:"\f158"}.icon-closed_captioning_fill:before{content:"\f159"}.icon-closet_1:before{content:"\f15a"}.icon-closet_1_fill:before{content:"\f15b"}.icon-closet_2:before{content:"\f15c"}.icon-closet_2_fill:before{content:"\f15d"}.icon-closet_3:before{content:"\f15e"}.icon-closet_3_fill:before{content:"\f15f"}.icon-code_block:before{content:"\f160"}.icon-code_block_fill:before{content:"\f161"}.icon-code_inline:before{content:"\f162"}.icon-code_inline_fill:before{content:"\f163"}.icon-coins:before{content:"\f164"}.icon-coins_fill:before{content:"\f165"}.icon-coins_outline_color:before{content:"\f166"}.icon-collapse:before{content:"\f167"}.icon-collapse_fill:before{content:"\f168"}.icon-collapse_left:before{content:"\f169"}.icon-collapse_left_fill:before{content:"\f16a"}.icon-collapse_right:before{content:"\f16b"}.icon-collapse_right_fill:before{content:"\f16c"}.icon-collection:before{content:"\f16d"}.icon-collection_fill:before{content:"\f16e"}.icon-comment:before{content:"\f16f"}.icon-comment_fill:before{content:"\f170"}.icon-comments:before{content:"\f171"}.icon-comments_fill:before{content:"\f172"}.icon-community:before{content:"\f173"}.icon-community_fill:before{content:"\f174"}.icon-controversial:before{content:"\f175"}.icon-controversial_fill:before{content:"\f176"}.icon-conversion_1:before{content:"\f177"}.icon-conversion_1_fill:before{content:"\f178"}.icon-conversion_2:before{content:"\f179"}.icon-conversion_2_fill:before{content:"\f17a"}.icon-copyid:before{content:"\f17b"}.icon-copyid_fill:before{content:"\f17c"}.icon-crop:before{content:"\f17d"}.icon-crop_fill:before{content:"\f17e"}.icon-crosspost:before{content:"\f17f"}.icon-crosspost_fill:before{content:"\f180"}.icon-crowd_control:before{content:"\f181"}.icon-crowd_control_fill:before{content:"\f182"}.icon-csv:before{content:"\f183"}.icon-csv_fill:before{content:"\f184"}.icon-custom_feed:before{content:"\f185"}.icon-custom_feed_fill:before{content:"\f186"}.icon-customize:before{content:"\f187"}.icon-customize_fill:before{content:"\f188"}.icon-day:before{content:"\f189"}.icon-day_fill:before{content:"\f18a"}.icon-delete:before{content:"\f18b"}.icon-delete_fill:before{content:"\f18c"}.icon-discover:before{content:"\f18d"}.icon-discover_fill:before{content:"\f18e"}.icon-dismiss_all:before{content:"\f18f"}.icon-dismiss_all_fill:before{content:"\f190"}.icon-distinguish:before{content:"\f191"}.icon-distinguish_fill:before{content:"\f192"}.icon-down:before{content:"\f193"}.icon-down_fill:before{content:"\f194"}.icon-download:before{content:"\f195"}.icon-download_fill:before{content:"\f196"}.icon-downvote:before{content:"\f197"}.icon-downvote_fill:before{content:"\f198"}.icon-downvotes:before{content:"\f199"}.icon-downvotes_fill:before{content:"\f19a"}.icon-drag:before{content:"\f19b"}.icon-duplicate:before{content:"\f19c"}.icon-duplicate_fill:before{content:"\f19d"}.icon-edit:before{content:"\f19e"}.icon-edit_fill:before{content:"\f19f"}.icon-effect:before{content:"\f1a0"}.icon-effect_fill:before{content:"\f1a1"}.icon-embed:before{content:"\f1a2"}.icon-embed_fill:before{content:"\f1a3"}.icon-emoji:before{content:"\f1a4"}.icon-emoji_fill:before{content:"\f1a5"}.icon-expand:before{content:"\f1a6"}.icon-expand_fill:before{content:"\f1a7"}.icon-expand_left:before{content:"\f1a8"}.icon-expand_left_fill:before{content:"\f1a9"}.icon-expand_right:before{content:"\f1aa"}.icon-expand_right_fill:before{content:"\f1ab"}.icon-external_link:before{content:"\f1ac"}.icon-external_link_fill:before{content:"\f1ad"}.icon-faceplate:before{content:"\f1ae"}.icon-faceplate_fill:before{content:"\f1af"}.icon-feed_posts:before{content:"\f1b0"}.icon-feed_posts_fill:before{content:"\f1b1"}.icon-feed_video:before{content:"\f1b2"}.icon-feed_video_fill:before{content:"\f1b3"}.icon-filter:before{content:"\f1b4"}.icon-filter_fill:before{content:"\f1b5"}.icon-format:before{content:"\f1b6"}.icon-format_fill:before{content:"\f1b7"}.icon-forward:before{content:"\f1b8"}.icon-forward_fill:before{content:"\f1b9"}.icon-gif_post:before{content:"\f1ba"}.icon-gif_post_fill:before{content:"\f1bb"}.icon-heart:before{content:"\f1bc"}.icon-heart_fill:before{content:"\f1bd"}.icon-help:before{content:"\f1be"}.icon-help_fill:before{content:"\f1bf"}.icon-hide:before{content:"\f1c0"}.icon-hide_fill:before{content:"\f1c1"}.icon-history:before{content:"\f1c2"}.icon-history_fill:before{content:"\f1c3"}.icon-home:before{content:"\f1c4"}.icon-home_fill:before{content:"\f1c5"}.icon-hot:before{content:"\f1c6"}.icon-hot_fill:before{content:"\f1c7"}.icon-icon_vault:before{content:"\f1c8"}.icon-icon_vault_fill:before{content:"\f1c9"}.icon-ignore_reports:before{content:"\f1ca"}.icon-ignore_reports_fill:before{content:"\f1cb"}.icon-image_post:before{content:"\f1cc"}.icon-image_post_fill:before{content:"\f1cd"}.icon-info:before{content:"\f1ce"}.icon-info_fill:before{content:"\f1cf"}.icon-invite:before{content:"\f1d0"}.icon-invite_fill:before{content:"\f1d1"}.icon-italic:before{content:"\f1d2"}.icon-italic_fill:before{content:"\f1d3"}.icon-join:before{content:"\f1d4"}.icon-join_fill:before{content:"\f1d5"}.icon-joined:before{content:"\f1d6"}.icon-joined_fill:before{content:"\f1d7"}.icon-jump_down:before{content:"\f1d8"}.icon-jump_down_fill:before{content:"\f1d9"}.icon-jump_up:before{content:"\f1da"}.icon-jump_up_fill:before{content:"\f1db"}.icon-karma:before{content:"\f1dc"}.icon-karma_fill:before{content:"\f1dd"}.icon-keyboard:before{content:"\f1de"}.icon-keyboard_fill:before{content:"\f1df"}.icon-kick:before{content:"\f1e0"}.icon-kick_fill:before{content:"\f1e1"}.icon-leave:before{content:"\f1e2"}.icon-leave_fill:before{content:"\f1e3"}.icon-left:before{content:"\f1e4"}.icon-left_fill:before{content:"\f1e5"}.icon-link_post:before{content:"\f1e6"}.icon-link_post_fill:before{content:"\f1e7"}.icon-list_bulleted:before{content:"\f1e8"}
+
+.post-outline {
+    /*--redditFont: verdana, arial, helvetica, sans-serif;*/
+    --redditFont: Noto Sans, serif;
+    min-width: 275px;
+    width: 100%;
+    overflow: hidden;
+    border: 1px solid rgb(219, 219, 219);
+    border-radius: 8px;
+}
+
+.underline:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.post-container {
+    padding: 5px;
+    display: flex;
+    flex-direction: row;
+}
+
+.post-container > .vote-container {
+    width: fit-content;
+    height: 100%;
+    padding-right: 15px;
+    /*border-style: solid;*/
+}
+
+.post-container > .content-container {
+    display: flex;
+    flex-direction: column;
+    /*border-style: solid;*/
+    width: 100%;
+    height: 100%;
+}
+
+
+.content-container > .subreddit-and-user {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.subreddit-and-user > .subreddit-and-user-content {
+    display: flex;
+    flex-wrap: wrap;
+    /*flex-direction: row;*/
+    align-items: center;
+    gap: 2px;
+}
+
+.subreddit-and-user-content > .generic-subreddit-icon {
+    display: flex;
+    align-items: center;
+}
+
+.generic-subreddit-icon > .subreddit-icon {
+    border-radius: 100%;
+    border: 2px solid #fff;
+    display: inline-block;
+    height: 25px;
+    width: 25px;
+    background: #ffffff;
+    box-sizing: border-box;
+    fill: #0079d3;
+}
+.generic-subreddit-icon > .subreddit-icon:hover {
+    cursor: pointer
+}
+
+.subreddit-and-user-content > .content-subreddit-name {
+    font-family: var(--redditFont);
+    font-weight: 700;
+    font-size: 12px;
+    white-space: nowrap;
+    color: #1C1C1C;
+}
+
+.subreddit-and-user-content > .content-separator {
+    font-family: var(--redditFont);
+    color: #7C7C7C;
+}
+
+.subreddit-and-user-content > .content-username {
+    font-family: var(--redditFont);
+    font-weight: 400;
+    color: #787C7E;
+    font-size: 12px;
+    white-space: normal;
+}
+
+.subreddit-and-user-content > .content-time-ago {
+    padding-left: 3px;
+    font-family: var(--redditFont);
+    font-weight: 400;
+    color: #787C7E;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.subreddit-and-user > .bell-icon {
+    color: gray;
+}
+.subreddit-and-user > .bell-icon:hover {
+    cursor: pointer;
+}
+
+
+.content-container > .post-title {
+    padding-top: 3px;
+    padding-bottom: 12px;
+}
+
+.post-title > .title-content {
+    /*font-family: "IBM Plex Sans", serif;*/
+    font-family: var(--redditFont);
+    font-weight: bold;
+    font-size: 16px;
+    color: #1A1A1B;
+}
+
+.content-container > .post-description {
+    padding-bottom: 16px;
+}
+
+.post-description > .post-content > p{
+    font-family: var(--redditFont);
+    font-size: 14px;
+    color: #1C1C1C;
+}
+
+
+.content-container > .post-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.post-options > .option-comments {
+    display: flex;
+    align-items: center;
+    font-family: "IBM Plex Sans", serif;
+    font-size: 12px;
+    color: #878A8C;
+}
+
+.icons {
+    display: flex;
+    align-items: center;
+    font-family: "IBM Plex Sans", serif;
+    color: #878A8C;
+    font-size: 12px;
+    gap: 5px;
+    font-weight: bold;
+}
+.icons:hover {
+    cursor: pointer;
+    color: #d0d1d2;
+}
+
+.post-options > .option-share {
+
+}
+
+
+.post-options > .option-approveRemoveSpam {
+    display: flex;
+    align-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.option-approveRemoveSpam > .approve {
+
+}
+.option-approveRemoveSpam > .remove {
+
+}
+.option-approveRemoveSpam > .spam {
+
+}
+
+.post-options > .option-shield {
+
+}
+
+.post-options > .option-more {
+
+}
+
+.icon-comment:before {
+    content: "\f16f";
+}
+
+.icon-share:before {
+    content: "\f280";
+}
+
+.icon-approve:before {
+    content: "\f113";
+}
+
+.icon-remove:before {
+    content: "\f25c";
+}
+
+.icon-spam:before {
+    content: "\f290";
+}
+
+.icon-mod:before {
+    content: "\f207";
+}
+
+.icon-overflow_horizontal:before {
+    content: "\f229";
+}
+
+.icon-upvote_fill:before {
+    content: "\f34d";
+    color: rgb(255, 69, 0);
+}
+.icon-upvote_fill {
+    margin: 0 !important;
+}
+
+.icon-downvote:before {
+    content: "\f197";
+    color: #878a8c;
+}
+.icon-downvote {
+    margin: 0 !important;
+}
+
+.icon-notification:before {
+    content: "\f219";
+}
+.icon-notification:hover {
+    cursor: pointer;
+    color: #d0d1d2;
+}
+
+.icon:before {
+    font-family: redesignFont2020;
+    font-style: normal;
+    font-size: 20px;
+    font-weight: normal;
+}
+
+
+.counter {
+    display: flex;
+    font-family: "IBM Plex Sans";
+    color: rgb(255, 69, 0);
+    font-size: 12px;
+    font-weight: bold;
+    align-content: center;
+    justify-content: center;
+    padding-top: 2px;
+    /*padding-bottom: 1px;*/
+}
+
+.upvote {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+}
+
+.vote-arrows {
+    display: flex;
+    flex-direction: column;
+}
+
+.icon-mobile {
+    display: none;
+}
+
+.icon-desktop {
+
+}
+
+@media only screen and (max-width: 1000px) {
+    .icon-mobile {
+        display: flex;
+    }
+
+    .icon-desktop {
+        display: none;
+    }
+}
+
+
+
