@@ -16,6 +16,7 @@ import com.patreonshout.beans.request.PutSocialIntegrationRequest;
 import com.patreonshout.beans.request.receivers.patreon.WebhookRequest;
 import com.patreonshout.config.credentials.InstagramCredentials;
 import com.patreonshout.config.credentials.PatreonCredentials;
+import com.patreonshout.config.credentials.RedditCredentials;
 import com.patreonshout.config.credentials.TwitterCredentials;
 import com.patreonshout.jpa.CreatorPageFunctions;
 import com.patreonshout.jpa.PatreonCampaignsFunctions;
@@ -26,9 +27,11 @@ import com.patreonshout.patreon.CustomPatreonAPI;
 import com.patreonshout.rest.interfaces.ReceiverImpl;
 import com.patreonshout.utils.DiscordWebhookUtil;
 import com.patreonshout.utils.PostRedirectUtil;
+import com.patreonshout.utils.RedditApiUtil;
 import com.patreonshout.utils.TwitterApiUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -92,6 +95,12 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	 */
 	@Autowired
 	private InstagramCredentials instagramCredentials;
+
+	/**
+	 * Spring Bean that holds our Reddit app credentials
+	 */
+	@Autowired
+	private RedditCredentials redditCredentials;
 
 	/**
 	 * Jackson object mapper that allows converting Java type {@link Object} to custom POJOs.
@@ -284,6 +293,55 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	public String RedditOAuth(String code, String state) throws ParseException, PSException {
+
+		if (code != null && state != null) {
+
+			WebAccount webAccount = webAccountFunctions.getAccount(state);
+
+			if (webAccount == null) {
+				return "The PatreonShout account you attempted to link Reddit to was invalid!";
+			}
+
+			String basicAuth = redditCredentials.getClientID() + ":" + redditCredentials.getClientSecret();
+			String finalBasicAuth = Base64.getEncoder().encodeToString(basicAuth.getBytes());
+
+			// get the access_token and refresh_token of the user
+			String response = WebClient.create("https://www.reddit.com/api/v1/access_token")
+					.method(HttpMethod.POST)
+					.headers(httpHeaders -> {
+						httpHeaders.setContentType(MediaType.valueOf("application/x-www-form-urlencoded"));
+						httpHeaders.setBasicAuth(finalBasicAuth);
+					})
+					.body(BodyInserters.
+							fromFormData("grant_type", "authorization_code")
+							.with("code", code)
+							.with("redirect_uri", redditCredentials.getRedirectUri())
+					)
+					.retrieve()
+					.bodyToMono(String.class)
+					.block();
+
+			JSONObject objResponse = new JSONObject(response);
+
+			PutSocialIntegrationRequest putReddit = PutSocialIntegrationRequest.builder()
+					.data(objResponse.get("access_token") + ":" + objResponse.get("refresh_token") + ":testingpatreonshout")
+					.loginToken(state)
+					.socialIntegrationName(SocialIntegrationName.REDDIT)
+					.build();
+
+			webAccountFunctions.putSocialIntegration(putReddit);
+
+			return "Reddit linked!  Close this pop-up and refresh the PatreonShout webpage";
+		}
+
+
+		return "Invalid parameters";
+	}
+
+	/**
 	 * Creates the Patreon webhook trigger needed to get post information when a post is published
 	 *
 	 * @param webAccount  is the user's {@link com.patreonshout.beans.WebAccount} object
@@ -394,7 +452,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 			@RequestHeader(HttpHeaders.USER_AGENT) String userAgent,
 			@RequestBody WebhookRequest webhookRequest,
 			@PathVariable long webaccountId
-	) throws PSException {
+	) throws PSException, ParseException {
 		// Ensure someone that isn't Patreon is hitting this endpoint
 		if (!userAgent.equals("Patreon HTTP Robot")) {
 			// TODO: Log the user agent for whoever hit this endpoint
@@ -474,6 +532,10 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 				if (integration.getInstagramAccessToken() != null && integration.getInstagramIgUserId() != null)
 					sendInstagramPost(patreonPost, socialIntegrationMessages, webAccount);
 
+				if (integration.getRedditAccessToken() != null) {
+					sendRedditPost(patreonPost, socialIntegrationMessages, webAccount);
+				}
+
 				break;
 			case "posts:update":
 				break;
@@ -510,7 +572,6 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	 * @param patreonPost               is the post data we want to send
 	 * @param webAccount                is the user we want to send a tweet for
 	 * @param socialIntegrationMessages are the messages we send along with a post for a particular user
-	 * @throws PSException in case of a database problem or a user mismatch
 	 */
 	void sendTwitterPost(PatreonPostV2 patreonPost, SocialIntegrationMessages socialIntegrationMessages, WebAccount webAccount) throws PSException {
 		SocialIntegration socialIntegration = webAccount.getSocialIntegration();
@@ -523,6 +584,13 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		new TwitterApiUtil().sendTweet(twitterCredentials.getClientID(), twitterCredentials.getClientSecret(), socialIntegration.getTwitterAccessToken(), socialIntegration.getTwitterRefreshToken(), output);
 	}
 
+	/**
+	 * sends a post to Instagram for a specific content creator
+	 *
+	 * @param patreonPost               is the post data we want to send
+	 * @param webAccount                is the user we want to send a tweet for
+	 * @param socialIntegrationMessages are the messages we send along with a post for a particular user
+	 */
 	void sendInstagramPost(PatreonPostV2 patreonPost, SocialIntegrationMessages socialIntegrationMessages, WebAccount webAccount) {
 		System.out.println("Creating Instagram post for [" + webAccount.getUsername() + " || " + webAccount.getLoginToken() + "]");
 		SocialIntegration socialIntegration = webAccount.getSocialIntegration();
@@ -601,5 +669,33 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		}
 
 		System.out.println("Instagram post created for [" + webAccount.getUsername() + " || " + webAccount.getLoginToken() + "]");
+	}
+
+	/**
+	 * sends a tweet to Twitter for a specific content creator
+	 *
+	 * @param patreonPost               is the post data we want to send
+	 * @param webAccount                is the user we want to send a tweet for
+	 * @param socialIntegrationMessages are the messages we send along with a post for a particular user
+	 */
+	void sendRedditPost(PatreonPostV2 patreonPost, SocialIntegrationMessages socialIntegrationMessages, WebAccount webAccount) throws ParseException, PSException, ParseException {
+		SocialIntegration socialIntegration = webAccount.getSocialIntegration();
+
+		String desiredPostFormat = (patreonPost.getIsPublic() ? socialIntegrationMessages.getInstagramPublicMessage() : socialIntegrationMessages.getInstagramPrivateMessage());
+
+		String output = PostRedirectUtil.convertHTMLPost(patreonPost.getContent(), desiredPostFormat, true);
+
+		// reddit access token will expire within 24 hours, so we use the refresh token to get a new access token each time we want to send a request
+		String newAccessToken = new RedditApiUtil().refreshAccessToken(socialIntegration.getRedditRefreshToken(), redditCredentials.getClientID(), redditCredentials.getClientSecret());
+
+		PutSocialIntegrationRequest putReddit = PutSocialIntegrationRequest.builder()
+				.data(newAccessToken + "::")
+				.loginToken(webAccount.getLoginToken())
+				.socialIntegrationName(SocialIntegrationName.REDDIT)
+				.build();
+
+		webAccountFunctions.putSocialIntegration(putReddit);
+
+		new RedditApiUtil().sendPost(newAccessToken, output, patreonPost.getTitle(), socialIntegration.getRedditSubredditLocation());
 	}
 }

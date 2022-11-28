@@ -44,3 +44,10 @@ instagram:
     id: ENC(M5W+h39khivgs+aiSMRy52jITx/1XI+xMIz8f9xIA2wyXqfa8zCIPDEDAvMA4zoL)
     secret: ENC(tGddH5ds1aRWgI04ocs6XHFQnrI+gWTRuFQqWqX2RkkaCPGNeYpFunkgQyR4TfOIMrjoI8d/CYEj769NhttXBtolfYfd+nd3121pXqaEnJw=)
     redirecturi: ${patreonshout.client.redirecturi}/receivers/instagram/oauth
+
+# Reddit
+reddit:
+  client:
+    id: DEC(HzeEs2Uwadhr9_1vF2nf5w)
+    secret: DEC(upQEfHGkFVR8Zoe6VuIUpLnVfnp3JQ)
+    redirecturi: ${patreonshout.client.redirecturi}/receivers/reddit/oauth

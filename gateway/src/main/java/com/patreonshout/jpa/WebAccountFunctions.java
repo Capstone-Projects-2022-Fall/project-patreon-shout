@@ -264,6 +264,8 @@ public class WebAccountFunctions {
 				break;
 			case INSTAGRAM:
 				break;
+			case REDDIT:
+				break;
 		}
 	}
 
@@ -303,6 +305,38 @@ public class WebAccountFunctions {
 
 					socialIntegration.setInstagramAccessToken(tokens[0]);
 					socialIntegration.setInstagramIgUserId(tokens[1]);
+				}
+
+				break;
+			}
+			case REDDIT: {
+				if (data == null) {
+					socialIntegration.setRedditAccessToken(null);
+					socialIntegration.setRedditRefreshToken(null);
+					socialIntegration.setRedditSubredditLocation(null);
+				} else {
+					// data == "access_token:refresh_token:subreddit_location"
+					String[] tokens = data.split(":");
+					if (tokens.length != 3) {
+						throw new PSException(HttpStatus.BAD_REQUEST, "We were not able to properly save the Reddit access and refresh tokens");
+					}
+
+//					if (tokens[0].equals("") && tokens[1].equals("") && !tokens[2].equals("")) { // when someone sends the request ::subreddit_location it will only set the subreddit_location without changing the access token or refresh token
+//						socialIntegration.setRedditSubredditLocation(tokens[2]);
+//					}
+					else {
+						if (!tokens[0].equals("")){
+							socialIntegration.setRedditAccessToken(tokens[0]);
+						}
+
+						if (!tokens[1].equals("")){
+							socialIntegration.setRedditRefreshToken(tokens[1]);
+						}
+
+						if (!tokens[2].equals("")){
+							socialIntegration.setRedditSubredditLocation(tokens[2]);
+						}
+					}
 				}
 
 				break;
@@ -349,6 +383,10 @@ public class WebAccountFunctions {
 			case INSTAGRAM:
 				socialIntegrationMessages.setInstagramPublicMessage(putSocialIntegrationMessageRequest.getPublicMessage());
 				socialIntegrationMessages.setInstagramPrivateMessage(putSocialIntegrationMessageRequest.getPrivateMessage());
+				break;
+			case REDDIT:
+				socialIntegrationMessages.setRedditPublicMessage(putSocialIntegrationMessageRequest.getPublicMessage());
+				socialIntegrationMessages.setRedditPrivateMessage(putSocialIntegrationMessageRequest.getPrivateMessage());
 				break;
 		}
 

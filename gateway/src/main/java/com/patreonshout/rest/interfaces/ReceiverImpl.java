@@ -77,6 +77,25 @@ public interface ReceiverImpl {
 	) throws ParseException, PSException;
 
 	/**
+	 * Is called by Reddit in order to give us information for linking a user's account via OAuth
+	 *
+	 * @param code is used to fetch access tokens for the session that just signed in with Reddit
+	 * @param state is transparently appended from the state param provided in PatreonShout Client from Reddit dev page
+	 * @return a json body telling the user that their Reddit was succesfully OAuth'd
+	 */
+	@GetMapping("reddit/oauth")
+	@Operation(summary = "Receives information from Twitter after OAuth")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200",
+					description = "HTML message telling the user that Reddit is linked"
+			)
+	})
+	String RedditOAuth(
+			@RequestParam(required = false, name = "code") String code,
+			@RequestParam(required = false, name = "state") String state
+	) throws ParseException, PSException;
+
+	/**
 	 * Receives post information from Patreon after a post is either published, updated, or deleted, initiates cross posting
 	 *
 	 * @param patreonSignature is the HEX digest of the message body HMAC signed (with MD5) using your webhook's secret
@@ -97,5 +116,5 @@ public interface ReceiverImpl {
 			@RequestHeader("x-patreon-event") String patreonEvent,
 			@RequestHeader(HttpHeaders.USER_AGENT) String userAgent,
 			@RequestBody WebhookRequest webhookRequest,
-			@PathVariable long webaccountId) throws PSException;
+			@PathVariable long webaccountId) throws PSException, ParseException;
 }

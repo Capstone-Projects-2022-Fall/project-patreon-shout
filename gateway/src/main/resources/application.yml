@@ -33,6 +33,13 @@ twitter:
     secret: ENC(HSrCIi/Bn8LX+hhz/RhnjMVjhMSuCROLIgZlBxZacFlMG+cn2WdK5oAOuO4Wm2FonJTUX7JzZwsJmJyjclfowngxj1Xv6DIOfS65ZPTjOOyNga4vYft3PmiqcsNR3yps)
     redirecturi: ${patreonshout.client.redirecturi}/receivers/twitter/oauth
 
+# Reddit
+reddit:
+  client:
+    id:
+    secret:
+    redirecturi: ${patreonshout.client.redirecturi}/receivers/reddit/oauth
+
 # Instagram
 instagram:
   client:
