@@ -27,7 +27,7 @@ public interface ImageImpl {
 	 * @param textColor {@link String} HEX color value (including # symbol)
 	 * @return Array of bytes containing the raw Image data
 	 */
-	@GetMapping(path = "/images/blur", produces = "image/png")
+	@GetMapping(path = "/blur", produces = "image/png")
 	@Operation(summary = "Generates an image with the Gaussian Blur filter")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200",
