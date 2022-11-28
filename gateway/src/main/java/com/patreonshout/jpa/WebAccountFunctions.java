@@ -237,7 +237,7 @@ public class WebAccountFunctions {
 
 				// * Create a new Discord Webhook to ensure the given Webhook URL is in a valid format
 				try {
-					testMsg = new DiscordWebhookUtil(putSocialIntegrationRequest.getData());
+					testMsg = new DiscordWebhookUtil(putSocialIntegrationRequest.getData(), false);
 				} catch (Exception ex) {
 					throw new PSException(HttpStatus.BAD_REQUEST, "The webhook URL is invalid");
 				}

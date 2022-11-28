@@ -25,12 +25,10 @@ import com.patreonshout.jpa.constants.SocialIntegrationName;
 import com.patreonshout.patreon.CustomPatreonAPI;
 import com.patreonshout.rest.interfaces.ReceiverImpl;
 import com.patreonshout.utils.DiscordWebhookUtil;
+import com.patreonshout.utils.PostRedirectUtil;
 import com.patreonshout.utils.TwitterApiUtil;
-import com.vladsch.flexmark.html2md.converter.FlexmarkHtmlConverter;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +36,6 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Base64;
 import java.util.List;
 
@@ -252,7 +249,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	/**
 	 * {@inheritDoc}
 	 */
-	public String TwitterOAuth(String code, String state) throws ParseException, PSException {
+	public String TwitterOAuth(String code, String state) throws PSException {
 
 		String basicAuth = twitterCredentials.getClientID() + ":" + twitterCredentials.getClientSecret();
 		String finalBasicAuth = Base64.getEncoder().encodeToString(basicAuth.getBytes());
@@ -260,7 +257,11 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		// get the access_token and refresh_token of the user
 		String response = WebClient.create("https://api.twitter.com/2/oauth2/")
 				.method(HttpMethod.POST)
-				.uri(uriBuilder -> uriBuilder.path("token").queryParam("code", code).queryParam("grant_type", "authorization_code").queryParam("redirect_uri", twitterCredentials.getRedirectUri()).queryParam("code_verifier", "challenge").build())
+				.uri(uriBuilder -> uriBuilder
+						.path("token")
+						.queryParam("code", code)
+						.queryParam("grant_type", "authorization_code")
+						.queryParam("redirect_uri", twitterCredentials.getRedirectUri()).queryParam("code_verifier", "challenge").build())
 				.headers(httpHeaders -> {
 					httpHeaders.setContentType(MediaType.valueOf("application/x-www-form-urlencoded"));
 					httpHeaders.setBasicAuth(finalBasicAuth);
@@ -269,8 +270,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 				.bodyToMono(String.class)
 				.block();
 
-		JSONParser parser = new JSONParser();
-		JSONObject objResponse = (JSONObject) parser.parse(response);
+		JSONObject objResponse = new JSONObject(response);
 
 		PutSocialIntegrationRequest putTwitter = PutSocialIntegrationRequest.builder()
 				.data(objResponse.get("access_token") + ":" + objResponse.get("refresh_token"))
@@ -515,36 +515,35 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	void sendTwitterPost(PatreonPostV2 patreonPost, SocialIntegrationMessages socialIntegrationMessages, WebAccount webAccount) throws PSException {
 		SocialIntegration socialIntegration = webAccount.getSocialIntegration();
 
-		FlexmarkHtmlConverter converter = FlexmarkHtmlConverter.builder().build();
+		String desiredPostFormat = (patreonPost.getIsPublic() ? socialIntegrationMessages.getTwitterPublicMessage() : socialIntegrationMessages.getTwitterPrivateMessage());
 
-		String body = (patreonPost.getIsPublic() ? socialIntegrationMessages.getTwitterPublicMessage() : socialIntegrationMessages.getTwitterPrivateMessage());
-		body = body.replaceAll("\\n", "\n");
+		String output = PostRedirectUtil.convertHTMLPost(patreonPost.getContent(), desiredPostFormat, true);
+		output += " https://www.patreon.com" + patreonPost.getUrl();
 
-		String postContent = converter.convert(patreonPost.getContent());
-		if (postContent.substring(postContent.length() - 2).equals("\\n")) {
-			postContent = postContent.substring(0, postContent.length() - 2);
-		}
-
-		body = body.replaceAll("\\{content}", postContent);
-		body += " https://www.patreon.com" + patreonPost.getUrl();
-		System.out.println("body text sent: [" + body + "]");
-
-		new TwitterApiUtil().sendTweet(twitterCredentials.getClientID(), twitterCredentials.getClientSecret(), socialIntegration.getTwitterAccessToken(), socialIntegration.getTwitterRefreshToken(), body);
+		new TwitterApiUtil().sendTweet(twitterCredentials.getClientID(), twitterCredentials.getClientSecret(), socialIntegration.getTwitterAccessToken(), socialIntegration.getTwitterRefreshToken(), output);
 	}
 
 	void sendInstagramPost(PatreonPostV2 patreonPost, SocialIntegrationMessages socialIntegrationMessages, WebAccount webAccount) {
+		System.out.println("Creating Instagram post for [" + webAccount.getUsername() + " || " + webAccount.getLoginToken() + "]");
 		SocialIntegration socialIntegration = webAccount.getSocialIntegration();
 
-		String body = (patreonPost.getIsPublic() ? socialIntegrationMessages.getInstagramPublicMessage() : socialIntegrationMessages.getInstagramPrivateMessage()).replaceAll("\\{content}", patreonPost.getContent());
+		String desiredPostFormat = (patreonPost.getIsPublic() ? socialIntegrationMessages.getInstagramPublicMessage() : socialIntegrationMessages.getInstagramPrivateMessage());
 
+		System.out.println("Creating media container...");
 		String mediaContainer = WebClient
 				.create("https://graph.facebook.com/" + webAccount.getSocialIntegration().getInstagramIgUserId() + "/")
 				.post()
 				.uri(uriBuilder -> uriBuilder
 						.path("media")
 						.queryParam("access_token", socialIntegration.getInstagramAccessToken())
-						.queryParam("image_url", socialIntegration.getInstagramImageUrl())
-						.queryParam("caption", body)
+						.queryParam("image_url",
+								patreonCredentials.getRedirectUri() +
+								"/images/blur" +
+								"?image_url=" + socialIntegration.getInstagramImageUrl() +
+								"&radius=" + socialIntegration.getInstagramBlurAmount() +
+								"&text=" + patreonPost.getTitle() +
+								"&text_color=" + socialIntegration.getInstagramMessageColor().replace("#", "%23"))
+						.queryParam("caption", PostRedirectUtil.convertHTMLPost(patreonPost.getContent(), desiredPostFormat, true))
 						.build())
 				.retrieve()
 				.bodyToMono(String.class)
@@ -556,18 +555,24 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 			return;
 		}
 
-		JSONObject mediaContainerJsonObj = null;
+		JSONObject mediaContainerJsonObj;
 		try {
 			mediaContainerJsonObj = new JSONObject(mediaContainer);
 		}catch (JSONException err) {
-			System.out.println("Error with mediacontaienrjsnoobj!");
+			System.out.println("Error with mediaContainerJSONObj!");
 			return;
 		}
 
-		if (mediaContainerJsonObj == null || mediaContainerJsonObj.isEmpty() || !mediaContainerJsonObj.has("id")) {
+		if (mediaContainerJsonObj.isEmpty()) {
+			System.out.println("JSONObject turned out to be empty!");
+			return;
+		}
+
+		if (!mediaContainerJsonObj.has("id")) {
 			System.out.println("ID not found or jsonobject null!");
 			return;
 		}
+
 
 		String mediaContainerId = mediaContainerJsonObj.optString("id", null);
 
@@ -576,6 +581,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 			return;
 		}
 
+		System.out.println("Sending Instagram media container...");
 		String mediaPost = WebClient
 				.create("https://graph.facebook.com/")
 				.post()
@@ -594,6 +600,6 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 			return;
 		}
 
-		System.out.println("GOOOOOOOOOOOOOOOD WOOOOOOOOOOO");
+		System.out.println("Instagram post created for [" + webAccount.getUsername() + " || " + webAccount.getLoginToken() + "]");
 	}
 }

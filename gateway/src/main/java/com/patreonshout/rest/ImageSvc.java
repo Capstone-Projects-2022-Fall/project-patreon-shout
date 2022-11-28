@@ -1,18 +1,17 @@
 package com.patreonshout.rest;
 
 import com.patreonshout.PSException;
+import com.patreonshout.rest.interfaces.ImageImpl;
 import com.patreonshout.utils.ImageUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class ImageSvc extends BaseSvc {
+public class ImageSvc extends BaseSvc implements ImageImpl {
 
-	@GetMapping(path = "/images/blur", produces = "image/png")
 	public ResponseEntity<?> blurImage(
 			@RequestParam("image_url") String imageUrl,
 			@RequestParam("radius") int radius,
