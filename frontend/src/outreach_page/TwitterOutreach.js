@@ -5,13 +5,11 @@ import './outreach_css/Outreach.css';
 import TextField from "@mui/material/TextField";
 import NewSaveButton from "../settings/NewSaveButton";
 import {putSocialIntegrationMessages} from "../services/api/webaccount/putSocialIntegrationMessages";
-import {putSocialIntegration} from "../services/api/webaccount/putSocialIntegration";
 import avatarImg from "../img/cordturtle.png";
 import publicPost from "../img/twitter-public-post-embed.jpg";
 import privatePost from "../img/twitter-private-post-embed.jpg";
 import FakeTweet from "fake-tweet";
-import TwitterOutput from "../components/TwitterOutput";
-import reactStringReplace from "react-string-replace";
+import EditDisplayMessage from "./EditDisplayMessage";
 
 /**
  * The twitter social platform cross-posting component
@@ -26,29 +24,15 @@ function TwitterOutreach({publicMessage, privateMessage}) {
     const [privateTextField, setPrivateTextField] = useState(privateMessage);
 
     // Constants
-    const publicMessageExample = "This is example text for a public post!  When you create a new Patreon post and mark " +
-        "it as public, all of its text will be put here."
     const emptyMessage = "Empty message!";
 
     // Raw message containers
     let rawPublicMessage = (publicTextField && publicTextField.length > 0) ? publicTextField : emptyMessage;
     let rawPrivateMessage = (privateTextField && privateTextField.length > 0) ? privateTextField : emptyMessage;
 
-    const editDisplayMessage = (givenMessage) => {
-        // givenMessage = reactStringReplace(givenMessage, '\\n', (match, i) => (
-        //     <br/>
-        // )); newline character does NOT show create new line on Twitter
-        givenMessage = reactStringReplace(givenMessage, '{content}', (match, i) => (
-            publicMessageExample
-        ));
-        console.log("newest edited message: " + givenMessage);
-        return givenMessage;
-    }
-
     // Edited message containers
-    let editedPublicMessage = editDisplayMessage(rawPublicMessage);
-    let editedPrivateMessage = editDisplayMessage(rawPrivateMessage);
-
+    let editedPublicMessage = EditDisplayMessage(rawPublicMessage, false);
+    let editedPrivateMessage = EditDisplayMessage(rawPrivateMessage, false);
 
     return (
         <div className="outreachSettings">
@@ -108,7 +92,7 @@ function TwitterOutreach({publicMessage, privateMessage}) {
                         },
                         display: "dim",
                         text: editedPublicMessage,
-                        image: publicPost,
+                        image: rawPublicMessage.includes("{link}") ? publicPost : null,
                         date: "3:32 PM · Feb 14, 1997",
                         app: "Twitter for iPhone",
                         retweets: 3,
@@ -128,7 +112,7 @@ function TwitterOutreach({publicMessage, privateMessage}) {
                         },
                         display: "dim",
                         text: editedPrivateMessage,
-                        image: privatePost,
+                        image: rawPrivateMessage.includes("{link}") ? privatePost : null,
                         date: "3:32 PM · Feb 14, 1997",
                         app: "Twitter for iPhone",
                         retweets: 3,

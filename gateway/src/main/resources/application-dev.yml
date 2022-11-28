@@ -48,6 +48,6 @@ instagram:
 # Reddit
 reddit:
   client:
-    id: DEC(HzeEs2Uwadhr9_1vF2nf5w)
-    secret: DEC(upQEfHGkFVR8Zoe6VuIUpLnVfnp3JQ)
+    id: ENC(3LzHZ5WOYu8H0oswIy1Siy8Ts6l+rOlUm8ElRLxuho32FmMer9V1t+LhkEngDCAJidsY69h+2sSifoBQNOejDw==)
+    secret: ENC(Ov88GuEjjW2YkMxNVzIcgdXgKrZ/4zmnOn4KuOa7jO16wiL/YmkM1dZBA91hROHmBjDfkTI7urAeHSavyzwClQ==)
     redirecturi: ${patreonshout.client.redirecturi}/receivers/reddit/oauth
