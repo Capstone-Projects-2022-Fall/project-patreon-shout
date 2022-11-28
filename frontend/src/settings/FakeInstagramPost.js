@@ -10,7 +10,6 @@ function FakeInstagramPost(args) {
     // Dynamics
     let profileName = "patreonshout"; // Maybe dynamic...
     let profilePicUrl = "https://zeoob.com/assets/img/default-img.png"
-    let postPicUrl = "https://i.imgur.com/rBX2KuR.jpg";
 
     const editDisplayMessage = (givenMessage) => {
         givenMessage = reactStringReplace(givenMessage, /(\\n|<br>|<br\/>)/g, () => <br/>);
@@ -89,7 +88,7 @@ function FakeInstagramPost(args) {
                         <div className="post-image-button-internal-picture-container">
                             <img className="post-image-button-internal-picture"
                                  crossOrigin="anonymous"
-                                 src={postPicUrl}
+                                 src={args.imageUrl}
                                  alt="Example picture"/>
                         </div>
                     </div>

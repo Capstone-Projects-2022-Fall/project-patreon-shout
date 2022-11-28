@@ -8,6 +8,7 @@
     overflow: hidden;
     border: 1px solid rgb(219, 219, 219);
     border-radius: 8px;
+    height: fit-content;
 }
 
 .instagram-post-container * {
@@ -38,7 +39,7 @@
 .instagram-post-container .circular {
     /*border: 1px solid #c0c0c0;*/
     overflow: hidden;
-    border-radius: 50%;
+    border-radius: 48%;
 }
 
 .instagram-post-container .post-header {

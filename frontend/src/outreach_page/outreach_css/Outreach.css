@@ -94,3 +94,35 @@
     font-family: "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif !important;
 }
 /* twitter specific end */
+
+/* Instagram specific start */
+.outreachSettings .image-settings-container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.outreachSettings .image-settings-container div {
+    align-content: center;
+}
+
+.outreachSettings .image-settings-container .radius-slider-container {
+    width: 60%
+}
+
+.outreachSettings .image-settings-container .radius-slider-container .radius-slider {
+    padding-right: -100px;
+    width: 100%;
+}
+
+.outreachSettings .image-settings-container .color-picker-container {
+    width: 25%;
+}
+
+.outreachSettings .image-settings-container .save-button-container {
+    width: 15%;
+    align-self: center;
+}
+/* Instagram specific end */

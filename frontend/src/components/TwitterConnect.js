@@ -2,6 +2,7 @@ import React from "react";
 import useToken from "../services/useToken";
 import Login from "../login_page/LoginPage";
 import {Button} from "@mui/material";
+import {config} from "../Constants";
 
 function TwitterConnect() {
     // const patreonUrl = "https://www.patreon.com/oauth2/authorize" +
@@ -17,19 +18,19 @@ function TwitterConnect() {
         return <Login setToken={setToken}/>
     }
 
-    const twitterUrlDev = "https://twitter.com/i/oauth2/authorize" +
-        "?response_type=code" +
-        "&client_id=NWhrMFdaeE9Bd3diVXlTY19oYUg6MTpjaQ" +
-        "&redirect_uri=http://127.0.0.1:5000/receivers/twitter/oauth " +
-        "&scope=tweet.read%20tweet.write%20users.read%20offline.access" +
-        "&state=" + token +
-        "&code_challenge=challenge" +
-        "&code_challenge_method=plain";
+    // const twitterUrlDev = "https://twitter.com/i/oauth2/authorize" +
+    //     "?response_type=code" +
+    //     "&client_id=NWhrMFdaeE9Bd3diVXlTY19oYUg6MTpjaQ" +
+    //     "&redirect_uri=http://127.0.0.1:5000/receivers/twitter/oauth " +
+    //     "&scope=tweet.read%20tweet.write%20users.read%20offline.access" +
+    //     "&state=" + token +
+    //     "&code_challenge=challenge" +
+    //     "&code_challenge_method=plain";
 
     const twitterUrl = "https://twitter.com/i/oauth2/authorize" +
         "?response_type=code" +
         "&client_id=NWhrMFdaeE9Bd3diVXlTY19oYUg6MTpjaQ" +
-        "&redirect_uri=https://prodprod.backend.outofstonk.com/receivers/twitter/oauth " +
+        "&redirect_uri=" + config.url.API_URL + "/receivers/twitter/oauth" +
         "&scope=tweet.read%20tweet.write%20users.read%20offline.access" +
         "&state=" + token +
         "&code_challenge=challenge" +
