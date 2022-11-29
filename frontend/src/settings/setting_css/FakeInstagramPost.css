@@ -3,8 +3,8 @@
 }
 
 .instagram-post-container {
-    /*max-width: 470px;*/
-    /*min-width: 275px;*/
+    max-width: 470px;
+    min-width: 275px;
     overflow: hidden;
     border: 1px solid rgb(219, 219, 219);
     border-radius: 8px;
@@ -68,7 +68,7 @@
 
 .instagram-post-container .post-header .profile-details-container .profile-pic {
     height: 32px;
-    /*width: 32px;*/
+    width: 32px;
     display: block;
     /*left: -3px;*/
     flex: none;
