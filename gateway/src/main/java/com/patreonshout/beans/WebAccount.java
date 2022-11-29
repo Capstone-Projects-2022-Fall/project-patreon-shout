@@ -80,7 +80,7 @@ public class WebAccount {
 	/**
 	 * followingCreators is the {@link com.patreonshout.beans.FollowingCreators} object linked with this WebAccount object
 	 */
-	@OneToOne(mappedBy = "webAccount", cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "webAccount", cascade = CascadeType.MERGE)
 	@PrimaryKeyJoinColumn
 	FollowingCreators followingCreators;
 

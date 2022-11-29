@@ -24,4 +24,49 @@
     .feed {
         padding-bottom: 100px;
     }
+
+    PatreonConnect {
+        justify-content: center;
+    }
+
+    .patreonConnectPopup {
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: fit-content;
+        height: fit-content;
+        display: flex;
+        gap: 20px;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: #FFF;
+        position: fixed;
+        top: 50vh;
+        left: 50vw;
+        transform: translate(-50%, -50%);
+    }
+}
+
+.patreonConnectPopup {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #FFF;
+    position: fixed;
+    top: 50vh;
+    left: 50vw;
+    text-align: center;
+    transform: translate(-50%, -50%);
+}
+
+.patreonConnectPopupContent {
+    text-align: center;
 }

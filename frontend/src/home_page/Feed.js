@@ -9,6 +9,11 @@ import {getLists} from "../services/api/lists/getLists";
 import { v4 } from 'uuid';
 import {getPosts} from "../services/api/posts";
 import {CircularProgress} from "@mui/material";
+import PatreonConnect from "../components/PatreonConnect";
+import {DateRangePicker} from "react-date-range";
+import {getSocialIntegrations} from "../services/api/webaccount/getSocialIntegration";
+import {render} from "react-dom";
+import {getPatreonTokens} from "../services/api/patreonTokens";
 import {getFollowingPosts} from "../services/api/followingPosts";
 
 /**
@@ -21,6 +26,7 @@ function Feed() {
 
     const [postList, setPostList] = useState(["init"]);
     const [userLists, setUserLists] = useState(["init"]);
+    const [connectHide, setConnectHide] = useState("init");
 
     useEffect(() => {
         let mounted = true;
@@ -48,11 +54,25 @@ function Feed() {
         return () => mounted = false;
     }, [])
 
+    let finished = false;
+    useEffect(() => {
+        const tokenString = localStorage.getItem('token');
+        const loginToken = JSON.parse(tokenString).token;
+        getPatreonTokens(loginToken)
+            .then(items => {
+                if (!finished) {
+                    (items.access && items.refresh) ? setConnectHide("true") : setConnectHide("false");
+                    console.log(connectHide);
+                }
+            })
+        return () => finished = true;
+    }, []);
 
-    return HtmlReturn(postList, userLists);
+
+    return HtmlReturn(postList, userLists, connectHide);
 }
 
-function HtmlReturn(postList, userLists) {
+function HtmlReturn(postList, userLists, connectHide) {
 
     const [searchTerm, setSearchTerm] = useState([]);
     const [filterChoices, setFilterChoices] = useState([]);
@@ -61,7 +81,7 @@ function HtmlReturn(postList, userLists) {
     const avoidDefaults = ["Date(new → old)", "Date(old → new)", "Private Only", "Public Only", "Date Range"];
     let displayedList = [];
 
-    if (postList[0] === "init" || userLists[0] === "init") {
+    if (postList[0] === "init" || userLists[0] === "init" || connectHide === "init") {
         return (
             <div className="loading">
                 <CircularProgress/>
@@ -127,7 +147,7 @@ function HtmlReturn(postList, userLists) {
     }
 
 
-
+    console.log(connectHide);
     return (
         <div className="feed">
             <div className="feed__header">
@@ -159,6 +179,16 @@ function HtmlReturn(postList, userLists) {
                     lists = {userLists}
                 />
             ))}
+            <div  hidden={(connectHide === "true")}>
+                <div className="blocker" onClick={() => {connectHide = "true"; console.log("hello");}} > </div>
+                <div className="patreonConnectPopup" >
+                    <div className="patreonConnectPopupContent">
+                        Connect your Patreon account to continue
+                    </div>
+                    <PatreonConnect />
+                </div>
+
+            </div>
         </div>
     );
 }
