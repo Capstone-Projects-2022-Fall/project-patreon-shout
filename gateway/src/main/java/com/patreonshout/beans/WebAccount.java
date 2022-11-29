@@ -78,6 +78,13 @@ public class WebAccount {
 	OldPasswords oldPasswords;
 
 	/**
+	 * followingCreators is the {@link com.patreonshout.beans.FollowingCreators} object linked with this WebAccount object
+	 */
+	@OneToOne(mappedBy = "webAccount", cascade = CascadeType.ALL)
+	@PrimaryKeyJoinColumn
+	FollowingCreators followingCreators;
+
+	/**
 	 * tags is the list of {@link com.patreonshout.beans.Tag} objects linked with this WebAccount object
 	 */
 	@LazyCollection(LazyCollectionOption.FALSE)
