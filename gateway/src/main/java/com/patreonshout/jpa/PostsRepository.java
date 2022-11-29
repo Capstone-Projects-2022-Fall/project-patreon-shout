@@ -3,6 +3,7 @@ package com.patreonshout.jpa;
 import com.patreonshout.beans.PostBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -25,6 +26,17 @@ public interface PostsRepository extends JpaRepository<PostBean, Integer> {
     countQuery = "SELECT count(*) FROM posts WHERE campaign_id in ?1",
     nativeQuery = true)
     Page<PostBean> getMultipleCreatorPosts(List<String> campaignList, Pageable pageable);
+
+    /**
+     * Returns the posts from multiple creators
+     *
+     * @param campaignList is the list of creators we want to get posts from
+     * @return is the list of {@link com.patreonshout.beans.PostBean} objects holding posts from specified creators
+     */
+    @Query(value = "SELECT * FROM posts WHERE campaign_id in ?1 ORDER BY published_at DESC",
+            countQuery = "SELECT count(*) FROM posts WHERE campaign_id in ?1",
+            nativeQuery = true)
+    List<PostBean> getMultipleCreatorPosts(List<String> campaignList);
 
     /**
      * Returns a list of posts by the creator

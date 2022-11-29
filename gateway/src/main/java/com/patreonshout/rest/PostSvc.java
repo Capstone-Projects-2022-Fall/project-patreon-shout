@@ -2,6 +2,7 @@ package com.patreonshout.rest;
 
 import com.patreonshout.PSException;
 import com.patreonshout.beans.CreatorPage;
+import com.patreonshout.beans.FollowingCreators;
 import com.patreonshout.beans.PostBean;
 import com.patreonshout.beans.WebAccount;
 import com.patreonshout.beans.request.PostGetMultipleRequest;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +50,8 @@ public class PostSvc extends BaseSvc implements PostImpl {
      */
     @Autowired
     private WebAccountFunctions webAccountFunctions;
+
+
 
     /**
      * {@inheritDoc}
@@ -116,6 +120,48 @@ public class PostSvc extends BaseSvc implements PostImpl {
         }
 
         return new ResponseEntity<>(campaign, HttpStatus.FOUND);
+    }
+
+    public ResponseEntity<?> GetFollowingPosts(String loginToken) throws PSException {
+        WebAccount userAccount = webAccountFunctions.getAccount(loginToken);
+
+        if (userAccount == null) {
+            return ResponseUtil.Generic(HttpStatus.BAD_REQUEST, "Invalid login token.");
+        }
+
+        FollowingCreators followingCreators = userAccount.getFollowingCreators();
+
+        if (followingCreators == null) {
+            return new ResponseEntity<>("[]", HttpStatus.FOUND);
+        }
+
+        String[] followingCampaigns = followingCreators.getCampaignIds().replaceAll("\\[|]|\\s", "").split(",");
+
+        HashMap<Integer, String> campaignToCreatorPageUrl = new HashMap<>();
+        for (String campaignId : followingCampaigns) {
+            CreatorPage campaign = creatorPageFunctions.getCreatorPage(Integer.parseInt(campaignId));
+            campaignToCreatorPageUrl.put(Integer.parseInt(campaignId), (campaign != null ? campaign.getPageName() : "null"));
+        }
+
+        List<Map<String, String>> response = new ArrayList<>();
+        for (PostBean pb : postsRepository.getMultipleCreatorPosts(Arrays.asList(followingCampaigns))) {
+            if (!pb.getIsPublic()) {
+                pb.setContent("This post is private");
+            }
+
+            Map<String, String> listResponse = new HashMap<>();
+            listResponse.put("title", pb.getTitle());
+            listResponse.put("campaign_id", String.valueOf(pb.getCampaignId()));
+            listResponse.put("url", pb.getUrl());
+            listResponse.put("content", pb.getContent());
+            listResponse.put("published_at", pb.getPublishedAt());
+            listResponse.put("is_public", String.valueOf(pb.getIsPublic()));
+            listResponse.put("creator_name", campaignToCreatorPageUrl.get(pb.getCampaignId()));
+
+            response.add(listResponse);
+        }
+
+        return new ResponseEntity<>(response, HttpStatus.FOUND);
     }
 
 }

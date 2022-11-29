@@ -96,11 +96,11 @@ public class PostBean extends BaseResource {
     @Column(name="url")
     protected String url;
 
-    /**
-     * tags is the list of {@link com.patreonshout.beans.Tag} objects linked with this PostBean object
-     */
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "postBean")
-    List<Tag> tags;
+//    /**
+//     * tags is the list of {@link com.patreonshout.beans.Tag} objects linked with this PostBean object
+//     */
+//    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "postBean")
+//    List<Tag> tags;
 
     /**
      * Used to check if a {@link com.patreonshout.beans.PostBean} is equal to another PostBean object
