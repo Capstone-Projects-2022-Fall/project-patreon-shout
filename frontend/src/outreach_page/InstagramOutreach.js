@@ -66,11 +66,11 @@ function InstagramOutreach({publicMessage, privateMessage, storedImageUrl, blurA
             <Alert severity="warning" sx={{width: "100%"}}>Instagram functions <b>only for certified PatreonShout
                 developers</b>!</Alert>
             <Alert severity="info" sx={{width: "100%"}}>
-                Instagram account <b>must</b> be a
+                Instagram account <b>must</b> be a&nbsp;
                 <a href="https://help.instagram.com/502981923235522">business</a> account. <br/>
 
-                Facebook account <b>must</b> contain a
-                <a href="https://www.facebook.com/pages/?category=your_pages">Page</a> and
+                Facebook account <b>must</b> contain a&nbsp;
+                <a href="https://www.facebook.com/pages/?category=your_pages">Page</a> and&nbsp;
                 <a href="https://help.instagram.com/399237934150902">connected with your Instagram Business account</a>!
             </Alert>
 
