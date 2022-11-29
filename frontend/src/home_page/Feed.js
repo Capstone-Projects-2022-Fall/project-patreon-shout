@@ -9,6 +9,7 @@ import {getLists} from "../services/api/lists/getLists";
 import { v4 } from 'uuid';
 import {getPosts} from "../services/api/posts";
 import {CircularProgress} from "@mui/material";
+import {getFollowingPosts} from "../services/api/followingPosts";
 
 /**
  * This is the Main Feed function which will appear on the home page
@@ -36,8 +37,9 @@ function Feed() {
 
     useEffect(() => {
         let mounted = true;
-        // change this
-        getPosts("8432541")
+        const tokenString = localStorage.getItem('token');
+        const userToken = JSON.parse(tokenString).token;
+        getFollowingPosts(userToken)
             .then(items => {
                 if (mounted) {
                     setPostList(items)
