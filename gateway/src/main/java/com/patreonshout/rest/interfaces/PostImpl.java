@@ -82,5 +82,14 @@ public interface PostImpl {
      * @return a json body of post information
      */
     @GetMapping("/following")
+    @Operation(summary = "Gets the saved Patreon posts of creators that the user follows")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "302",
+                    description = "Creator posts returned",
+                    content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "400",
+                    description = "Invalid login token.",
+                    content = {@Content(mediaType = "application/json")})
+    })
     ResponseEntity<?> GetFollowingPosts(@RequestParam(name = "loginToken") String loginToken) throws PSException;
 }
