@@ -14,6 +14,7 @@ import Typography from "@mui/material/Typography";
 import {MuiColorInput} from "mui-color-input";
 import useDebounce from "./UseDebounce";
 import {putInstagramPostDetails} from "../services/api/webaccount/putInstagramPostDetails";
+import FakeRedditPost from "../components/FakeRedditPost";
 
 /**
  * The instagram social platform cross-posting component
@@ -115,7 +116,6 @@ function InstagramOutreach({publicMessage, privateMessage, storedImageUrl, blurA
                 id="outlined-multiline-static"
                 label="Image URL"
                 multiline
-                rows={1}
                 value={imageTextField}
                 onChange={(e) => setImageTextField(e.target.value)}
                 disabled={isProcessing}
@@ -165,22 +165,19 @@ function InstagramOutreach({publicMessage, privateMessage, storedImageUrl, blurA
                 </div>
             </div>
 
-            <div style={{
-                display: "flex",
-                gap: "20px",
-                justifyContent: "center",
-                width: "90%"
-            }}>
-                <FakeInstagramPost
-                    postMaxWidth="50%"
-                    displayMessage={publicTextField}
-                    imageUrl={displayedImageTextField}
-                />
-                <FakeInstagramPost
-                    postMaxWidth="50%"
-                    displayMessage={privateTextField}
-                    imageUrl={displayedImageTextField}
-                />
+            <div className="socialPlatformContainerInstagram">
+                <div className="socialPlatformContainerItemInstagram">
+                    <FakeInstagramPost
+                        displayMessage={publicTextField}
+                        imageUrl={displayedImageTextField}
+                    />
+                </div>
+                <div className="socialPlatformContainerItemInstagram">
+                    <FakeInstagramPost
+                        displayMessage={privateTextField}
+                        imageUrl={displayedImageTextField}
+                    />
+                </div>
             </div>
         </div>
     );

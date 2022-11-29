@@ -37,10 +37,23 @@
 
 .socialPlatformContainer {
     display: flex;
-    /*flex-direction: column;*/
     gap: 20px;
-    justify-content: center;
+    justify-content: space-between;
     width: 90%;
+}
+
+.socialPlatformContainerInstagram {
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+    width: 100%;
+}
+
+
+.socialPlatformContainerItemInstagram {
+    display: flex;
+    flex: 1;
+    width: 100%;
 }
 
 .socialPlatformContainerReddit {
@@ -74,6 +87,15 @@
         justify-content: center;
         width: 90%;
     }
+
+    .socialPlatformContainerInstagram {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        justify-content: center;
+        width: 100%;
+    }
+
 }
 
 
@@ -108,21 +130,21 @@
     align-content: center;
 }
 
-.outreachSettings .image-settings-container .radius-slider-container {
-    width: 60%
+.radius-slider-container {
+    width: 40%
 }
 
 .outreachSettings .image-settings-container .radius-slider-container .radius-slider {
-    padding-right: -100px;
-    width: 100%;
+    /*padding-right: -100px;*/
+    /*width: 100%;*/
 }
 
 .outreachSettings .image-settings-container .color-picker-container {
-    width: 25%;
+    /*width: 25%;*/
 }
 
 .outreachSettings .image-settings-container .save-button-container {
-    width: 15%;
+    /*width: 15%;*/
     align-self: center;
 }
 
@@ -130,4 +152,5 @@
     display: flex;
     gap: 30px;
 }
+
 /* Instagram specific end */
