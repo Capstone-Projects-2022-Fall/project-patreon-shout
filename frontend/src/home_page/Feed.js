@@ -14,6 +14,7 @@ import {DateRangePicker} from "react-date-range";
 import {getSocialIntegrations} from "../services/api/webaccount/getSocialIntegration";
 import {render} from "react-dom";
 import {getPatreonTokens} from "../services/api/patreonTokens";
+import {getFollowingPosts} from "../services/api/followingPosts";
 
 /**
  * This is the Main Feed function which will appear on the home page
@@ -42,7 +43,9 @@ function Feed() {
 
     useEffect(() => {
         let mounted = true;
-        getPosts("8432541")
+        const tokenString = localStorage.getItem('token');
+        const userToken = JSON.parse(tokenString).token;
+        getFollowingPosts(userToken)
             .then(items => {
                 if (mounted) {
                     setPostList(items)
