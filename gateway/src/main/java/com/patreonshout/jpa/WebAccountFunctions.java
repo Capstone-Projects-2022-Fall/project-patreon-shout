@@ -57,7 +57,15 @@ public class WebAccountFunctions {
 		// we want to overwrite the previous following creators to get the most updated list of following creators
 //		followingCreators.setWebAccount(webAccount);
 //		webAccount.setFollowingCreators(followingCreators);
-		webAccount.getFollowingCreators().setCampaignIds(campaignIds.toString().replaceAll("\\s", ""));
+		FollowingCreators followingCreators = webAccount.getFollowingCreators();
+		if (followingCreators == null) {
+			followingCreators = new FollowingCreators();
+			followingCreators.setCampaignIds("[]");
+
+			followingCreators.setWebAccount(webAccount);
+			webAccount.setFollowingCreators(followingCreators);
+		}
+		followingCreators.setCampaignIds(campaignIds.toString().replaceAll("\\s", ""));
 		webAccountRepository.save(webAccount);
 	}
 
