@@ -26,11 +26,11 @@
     border: 0;
 }
 
-.width100 {
-    width: 100%;
-    display: inline-block;
-    position: relative;
-}
+/*.width100 {*/
+/*    !*width: 100%;*!*/
+/*    display: inline-block;*/
+/*    position: relative;*/
+/*}*/
 
 .instagram-post-container .float-left {
     float: left;
@@ -62,7 +62,7 @@
     flex-direction: row;
     flex-grow: 1;
     flex-shrink: 1;
-    max-width: calc(100% - 48px);
+    /*max-width: calc(100% - 48px);*/
     position: relative;
 }
 
