@@ -29,7 +29,6 @@ import com.patreonshout.utils.DiscordWebhookUtil;
 import com.patreonshout.utils.PostRedirectUtil;
 import com.patreonshout.utils.RedditApiUtil;
 import com.patreonshout.utils.TwitterApiUtil;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.parser.ParseException;
@@ -40,7 +39,6 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
@@ -130,13 +128,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 			PatreonDataArrayEntryV2 campaign = objectMapper.convertValue(getCampaignData(accessToken), PatreonDataArrayEntryV2.class);
 			PatreonCampaignV2 campaignData = objectMapper.convertValue(campaign.getAttributes(), PatreonCampaignV2.class);
 
-			// Acquire user following data
-			List<Integer> followingCampaigns = followingCampaigns(accessToken);
-
 			WebAccount webAccount = webAccountFunctions.getAccount(loginToken);
-
-			// Store user following information
-			webAccountFunctions.putFollowingCreators(followingCampaigns, webAccount);
 
 			// Store their creator page information
 			patreonCampaignsFunctions.putCampaign(webAccount, campaign);
@@ -157,46 +149,6 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 
 		// Unknown case, but required for compilation
 		return "";
-	}
-
-	/**
-	 * Gets the list of creator's that the user follows
-	 *
-	 * @param accessToken is the Patreon access token we use to get the user's Patreon info
-	 * @return a List of campaign id's that correspond to a Patreon creator
-	 */
-	private List<Integer> followingCampaigns(String accessToken) {
-		List<Integer> ret = new ArrayList<>();
-
-		String response = WebClient.create("https://www.patreon.com/api/oauth2/v2/")
-				.method(HttpMethod.GET)
-				.uri(uriBuilder -> uriBuilder
-						.path("identity")
-						.queryParam("include", "memberships.campaign")
-						.queryParam("fields[member]", "is_follower,patron_status")
-						.build()
-				)
-				.headers(httpHeaders -> {
-					httpHeaders.setBearerAuth(accessToken);
-				})
-				.retrieve()
-				.bodyToMono(String.class)
-				.block();
-
-		JSONObject objResponse = new JSONObject(response);
-
-		JSONArray incl = (JSONArray) objResponse.get("included");
-
-		if (incl.length() >= 2) {
-			System.out.println(incl.length() / 2);
-
-			for (int i = (incl.length() / 2); i < incl.length(); i++) {
-				JSONObject campaignInfo = (JSONObject) incl.get(i);
-				ret.add(Integer.valueOf((String) campaignInfo.get("id")));
-			}
-		}
-
-		return ret;
 	}
 
 	/**

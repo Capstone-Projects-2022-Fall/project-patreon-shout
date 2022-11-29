@@ -14,7 +14,6 @@ import Typography from "@mui/material/Typography";
 import {MuiColorInput} from "mui-color-input";
 import useDebounce from "./UseDebounce";
 import {putInstagramPostDetails} from "../services/api/webaccount/putInstagramPostDetails";
-import FakeRedditPost from "../components/FakeRedditPost";
 
 /**
  * The instagram social platform cross-posting component
@@ -67,11 +66,11 @@ function InstagramOutreach({publicMessage, privateMessage, storedImageUrl, blurA
             <Alert severity="warning" sx={{width: "100%"}}>Instagram functions <b>only for certified PatreonShout
                 developers</b>!</Alert>
             <Alert severity="info" sx={{width: "100%"}}>
-                Instagram account <b>must</b> be a
+                Instagram account <b>must</b> be a&nbsp;
                 <a href="https://help.instagram.com/502981923235522">business</a> account. <br/>
 
-                Facebook account <b>must</b> contain a
-                <a href="https://www.facebook.com/pages/?category=your_pages">Page</a> and
+                Facebook account <b>must</b> contain a&nbsp;
+                <a href="https://www.facebook.com/pages/?category=your_pages">Page</a> and&nbsp;
                 <a href="https://help.instagram.com/399237934150902">connected with your Instagram Business account</a>!
             </Alert>
 
@@ -116,6 +115,7 @@ function InstagramOutreach({publicMessage, privateMessage, storedImageUrl, blurA
                 id="outlined-multiline-static"
                 label="Image URL"
                 multiline
+                rows={1}
                 value={imageTextField}
                 onChange={(e) => setImageTextField(e.target.value)}
                 disabled={isProcessing}
@@ -165,19 +165,22 @@ function InstagramOutreach({publicMessage, privateMessage, storedImageUrl, blurA
                 </div>
             </div>
 
-            <div className="socialPlatformContainerInstagram">
-                <div className="socialPlatformContainerItemInstagram">
-                    <FakeInstagramPost
-                        displayMessage={publicTextField}
-                        imageUrl={displayedImageTextField}
-                    />
-                </div>
-                <div className="socialPlatformContainerItemInstagram">
-                    <FakeInstagramPost
-                        displayMessage={privateTextField}
-                        imageUrl={displayedImageTextField}
-                    />
-                </div>
+            <div style={{
+                display: "flex",
+                gap: "20px",
+                justifyContent: "center",
+                width: "90%"
+            }}>
+                <FakeInstagramPost
+                    postMaxWidth="50%"
+                    displayMessage={publicTextField}
+                    imageUrl={displayedImageTextField}
+                />
+                <FakeInstagramPost
+                    postMaxWidth="50%"
+                    displayMessage={privateTextField}
+                    imageUrl={displayedImageTextField}
+                />
             </div>
         </div>
     );
