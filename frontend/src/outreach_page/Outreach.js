@@ -117,13 +117,13 @@ function HtmlReturn(socialIntegrations, socialIntegrationMessages, instagramPost
     return (
         <div className="outreach">
 
-            <Box sx={{ borderBottom: 1, borderColor: 'divider'}}>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs value={value} onChange={handleChange} centered>
-                    <Tab label="Info" sx={{fontFamily: 'Helvetica'}}/>
-                    <Tab label="Discord" sx={{fontFamily: 'Helvetica'}}/>
-                    <Tab label="Twitter" sx={{fontFamily: 'Helvetica'}}/>
-                    <Tab label="Instagram" sx={{fontFamily: 'Helvetica'}}/>
-                    <Tab label="Reddit" sx={{fontFamily: 'Helvetica'}}/>
+                    <Tab label="Info"/>
+                    <Tab label="Discord"/>
+                    <Tab label="Twitter"/>
+                    <Tab label="Instagram"/>
+                    <Tab label="Reddit"/>
                 </Tabs>
             </Box>
 

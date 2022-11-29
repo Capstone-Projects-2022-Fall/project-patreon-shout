@@ -100,6 +100,8 @@ function RedditOutreach({publicMessage, privateMessage, subreddit}) {
                     subreddit={subredditField.replaceAll(/[&\/\\#, +()!@^\-=$~%.'":*?<>{}]/g, '_')}
                     textField={privateTextField}
                 />
+
+
             </div>
         </div>
     );
