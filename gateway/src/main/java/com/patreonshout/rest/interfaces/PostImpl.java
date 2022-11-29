@@ -58,7 +58,7 @@ public interface PostImpl {
      * Endpoint that will return the campaign info given a campaign_id
      *
      * @param campaignId the campaign id that we want to get the info of
-     * @return a json body of campaign info
+     * @return a json body of posts
      */
     @GetMapping("/campaign")
     @Operation(summary = "Gets the saved Patreon posts of a specified creator")
@@ -74,4 +74,13 @@ public interface PostImpl {
                     content = {@Content(mediaType = "application/json")})
     })
     ResponseEntity<?> GetCampaignInfoFromId(@RequestParam(required = true, name = "campaignId") int campaignId, @RequestParam(required = true, name = "loginToken") String loginToken) throws PSException;
+
+    /**
+     * Endpoint that will return the post information of each creator that the user follows
+     *
+     * @param loginToken the user's login token
+     * @return a json body of post information
+     */
+    @GetMapping("/following")
+    ResponseEntity<?> GetFollowingPosts(@RequestParam(name = "loginToken") String loginToken) throws PSException;
 }

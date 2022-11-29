@@ -8,6 +8,7 @@ import com.patreonshout.beans.request.*;
 import com.patreonshout.config.SecurityConfiguration;
 import com.patreonshout.jpa.constants.SocialIntegrationName;
 import com.patreonshout.utils.DiscordWebhookUtil;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
@@ -37,6 +39,24 @@ public class WebAccountFunctions {
 	 */
 	@Autowired
 	SecurityConfiguration securityConfiguration;
+
+	/**
+	 * Puts the user's list of following creators into the database
+	 *
+	 * @param campaignIds the list of following creators
+	 * @param webAccount the user's {@link com.patreonshout.beans.WebAccount}
+	 */
+	@Transactional
+	public void putFollowingCreators(List<Integer> campaignIds, WebAccount webAccount) {
+
+		// this is kinda scuffed implementation but i wanna get it done fast
+		FollowingCreators followingCreators = new FollowingCreators();
+		followingCreators.setCampaignIds(campaignIds.toString().replaceAll("\\s", ""));
+
+		// we want to overwrite the previous following creators to get the most updated list of following creators
+		webAccount.setFollowingCreators(followingCreators);
+		webAccountRepository.save(webAccount);
+	}
 
 	/**
 	 * Gets a {@link WebAccount} object from a specified login token
