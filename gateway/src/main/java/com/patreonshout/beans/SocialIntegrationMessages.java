@@ -25,49 +25,54 @@ public class SocialIntegrationMessages implements Serializable {
 	 * Custom Discord message for public Patreon posts
 	 */
 	@Column(name = "discord_public_message")
-	protected String discordPublicMessage;
+	protected String discordPublicMessage = "{content}";
 
 	/**
 	 * Custom Discord message for private Patreon posts
 	 */
 	@Column(name = "discord_private_message")
-	protected String discordPrivateMessage;
+	protected String discordPrivateMessage = "This Patreon post is exclusive to my patrons!  Visit the link above to see the post.";
 
 	/**
 	 * Custom Twitter message for public Patreon posts
 	 */
 	@Column(name = "twitter_public_message")
-	protected String twitterPublicMessage;
+	protected String twitterPublicMessage = "{content}\\n\n" +
+			"{link}";
 
 	/**
 	 * Custom Twitter message for private Patreon posts
 	 */
 	@Column(name = "twitter_private_message")
-	protected String twitterPrivateMessage;
+	protected String twitterPrivateMessage = "This Patreon post is exclusive to my patrons!  View the post below.\\n\n" +
+			"{link}";
 
 	/**
 	 * Custom Instagram message for public Patreon posts
 	 */
 	@Column(name = "instagram_public_message")
-	protected String instagramPublicMessage;
+	protected String instagramPublicMessage = "{content}\\n\\n\n" +
+			"{link}\\n\\n\n" +
+			"#PatreonShout";
 
 	/**
 	 * Custom Instagram message for private Patreon posts
 	 */
 	@Column(name = "instagram_private_message")
-	protected String instagramPrivateMessage;
+	protected String instagramPrivateMessage = "This Patreon post is exclusive to my patrons!  Visit the link to see the post.\\n\\n\n" +
+			"{link}";
 
 	/**
 	 * Custom Reddit message for public Patreon posts
 	 */
 	@Column(name = "reddit_public_message")
-	protected String redditPublicMessage;
+	protected String redditPublicMessage = "{content}";
 
 	/**
 	 * Custom Reddit message for private Patreon posts
 	 */
 	@Column(name = "reddit_private_message")
-	protected String redditPrivateMessage;
+	protected String redditPrivateMessage = "This Patreon post is exclusive to my patrons!  Visit the link above to see the post.";
 
 	/**
 	 * {@link com.patreonshout.beans.WebAccount} object linked with this object

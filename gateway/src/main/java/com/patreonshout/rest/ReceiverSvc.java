@@ -132,6 +132,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 
 			// Acquire user following data
 			List<Integer> followingCampaigns = followingCampaigns(accessToken);
+			followingCampaigns.add(campaign.getId());
 
 			WebAccount webAccount = webAccountFunctions.getAccount(loginToken);
 
