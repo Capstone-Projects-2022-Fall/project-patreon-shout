@@ -18,10 +18,10 @@ import { deleteFilter } from "../services/api/filters/deleteFilter";
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
+    PaperProps: {
+        style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 200,
     },
   },
 };
@@ -150,10 +150,10 @@ function Filter({filterChoices, setFilterChoices, dateRange, setDateRange}) {
     return (
         <div>
             <div className="filterContainer">
-                <FormControl sx={{ m: 1}}>
-                    <InputLabel id="filter">Filters</InputLabel>
-                    <Select sx={{ }}
-                        className = "filter-chip-dropdown"
+                <FormControl className="filterDropdown">
+                    <InputLabel className="filter" id="filter">Filters</InputLabel>
+                    <Select
+                        className="filter-chip-dropdown"
                         labelId="filter-chip-dropdown"
                         id="filter-chip"
                         multiple

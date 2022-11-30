@@ -117,8 +117,8 @@ function HtmlReturn(socialIntegrations, socialIntegrationMessages, instagramPost
     return (
         <div className="outreach">
 
-            <Box sx={{ borderBottom: 1, borderColor: 'divider'}}>
-                <Tabs value={value} onChange={handleChange} centered>
+            <Box className='outreach__tabs' sx={{ borderBottom: 1, borderColor: 'divider'}}>
+                <Tabs variant="scrollable" scrollButtons allowScrollButtonsMobile value={value} onChange={handleChange} centered>
                     <Tab label="Info" sx={{fontFamily: 'Helvetica'}}/>
                     <Tab label="Discord" sx={{fontFamily: 'Helvetica'}}/>
                     <Tab label="Twitter" sx={{fontFamily: 'Helvetica'}}/>

@@ -5,13 +5,18 @@
 
 .Searchbar__input {
     display: flex;
-    padding: 20px;
-    align-items: center;
+    padding: 10px;
+    justify-content: center;
     gap: 8px;
+}
+
+.Searchbar__input_field {
+    font-family: Helvetica, Arial, sans-serif;
 }
 
 input[type=text] {
     font-size: 18px;
+    font-family: Helvetica, Arial, sans-serif;
     border: none;
 }
 
@@ -34,6 +39,7 @@ input[type=text] {
 .Addfilter__button {
     border-radius: 50px;
     align-content: center;
+    font-family: Helvetica, Arial, sans-serif;
 }
 
 .Addfilter__button_content {
@@ -42,6 +48,7 @@ input[type=text] {
     align-content: center;
     padding-left: 10px;
     border-radius: 50px;
+    font-family: Helvetica, Arial, sans-serif;
 }
 
 @media only screen and (max-width: 1700px) {

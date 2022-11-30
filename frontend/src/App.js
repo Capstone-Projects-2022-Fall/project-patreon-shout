@@ -18,7 +18,6 @@ import NavBar from "./components/NavBar";
  */
 function App() {
 
-
     // session token
     const {token, setToken} = useToken();
 

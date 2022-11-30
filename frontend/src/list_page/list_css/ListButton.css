@@ -19,6 +19,7 @@
     width: 35px;
     border-width: 20px;
     border-radius: 20px;
+    font-family: Helvetica, Arial, sans-serif;
 }
 
 #listSetting:hover {
@@ -29,8 +30,15 @@
 
 #listTitle {
     font-size: 25px;
+    font-family: Helvetica, Arial, sans-serif;
     font-weight: bold;
     width: fit-content;
+}
+
+#listDescription {
+    padding-left: 5px;
+    padding-top: 5px;
+    font-family: Helvetica, Arial, sans-serif;
 }
 
 #listTitle:hover {
@@ -40,4 +48,5 @@
 
 #listUsername {
     font-size: 10px;
+    font-family: Helvetica, Arial, sans-serif;
 }

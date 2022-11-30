@@ -1,7 +1,9 @@
 /* entire feed component css*/
 .listfeed {
     /*border-style: solid;*/
-
+    padding: 20px 20px 20px 20px;
+    border-radius: 1em;
+    box-shadow: 0 0.188em 1.550em rgb(44, 42, 42);
     /* padding at bottom in case there is a bottom nav bar that would otherwise overlap on top of a post*/
 
 }
@@ -15,6 +17,9 @@
     border-bottom: var(--background) 2px solid;
 }
 
+#listfeed__title {
+    font-family: Helvetica, Arial, sans-serif;
+}
 
 @media only screen and (max-width: 1000px) {
     .listfeed {
@@ -35,12 +40,8 @@
     cursor: pointer;
 }
 
-
-.listfeed__lists {
-
-}
-
 .listfeed__posts {
+    font-family: Helvetica, Arial, sans-serif;
     display: none;
 }
 

@@ -1,6 +1,6 @@
 .sidebar {
 
-    position: fixed;
+    position:fixed;
     top: 20%;
     right: 61%;
     transform: translateX(-85%);

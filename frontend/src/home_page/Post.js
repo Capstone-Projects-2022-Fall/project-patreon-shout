@@ -239,7 +239,7 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
                 <div className="post__header">
                     <div className="post__headerText">
                         <h3>
-                            <span id="postPage" onClick={() => {handleRedirect(url)}}>
+                            <span className="postPage" id="postPage" onClick={() => {handleRedirect(url)}}>
                                 {title}
                             </span>
                             {" "}
@@ -261,33 +261,31 @@ function Post({title, creator_page_url, url, content, published_at, is_public, l
                     <div className="post__footerDateTime">
                         {month + "/" + day + "/" + year + "  " + hour + ":" + minute + ":" + second}
                     </div>
-                    {/*<div className="post__footerRedirect">*/}
-                    {/*    <Language fontSize="small" type="button" onClick={handleRedirect} hover="true"/>*/}
-                    {/*</div>*/}
-                    <div className="post__footerFavorite">
-                        <div onClick={() => {handleFavoriteClick();}}>
-                            {favorite ? <Favorite sx={{ color: pink[500] }} fontSize="small"/> : <FavoriteBorder sx={{ color: pink[500] }} fontSize="small"/>}
+                    <div className="post_footerWidgets">
+                        <div className="post__footerFavorite">
+                            <div onClick={() => {handleFavoriteClick();}}>
+                                {favorite ? <Favorite sx={{ color: pink[500] }} fontSize="small"/> : <FavoriteBorder sx={{ color: pink[500] }} fontSize="small"/>}
+                            </div>
+
                         </div>
-
-                    </div>
-
-                    <div className="post__footerList">  {/*TODO*/}
-                        <Popup trigger={<ListAlt fontSize="small"/>} modal>
-                            {close => (
-                                <div className="modalBox">
-                                    <button className="close" onClick={close}>
-                                        &times;
-                                    </button>
-                                    <div className="header">
-                                        Lists
+                        <div className="post__footerList">  {/*TODO*/}
+                            <Popup trigger={<ListAlt fontSize="small"/>} modal>
+                                {close => (
+                                    <div className="modalBox">
+                                        <button className="close" onClick={close}>
+                                            &times;
+                                        </button>
+                                        <div className="header">
+                                            Lists
+                                        </div>
+                                        <br/>
+                                        <div id="popup">
+                                            {popup}
+                                        </div>
                                     </div>
-                                    <br/>
-                                    <div id="popup">
-                                        {popup}
-                                    </div>
-                                </div>
-                            )}
-                        </Popup>
+                                )}
+                            </Popup>
+                        </div>
                     </div>
                 </div>
             </div>
