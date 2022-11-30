@@ -1,15 +1,17 @@
 /* entire feed component css*/
 .feed {
     /*border-style: solid;*/
-
+    padding: 20px 20px 20px 20px;
+    border-radius: 1em;
+    box-shadow: 0 0.188em 1.550em rgb(44, 42, 42);
     /* padding at bottom in case there is a bottom nav bar that would otherwise overlap on top of a post*/
 
 }
 
 /* header css */
 .feed__header {
-    /*border: 2px solid var(--background);*/
-    padding: 15px 20px;
+    display: flex;
+    justify-content: center;
 }
 
 /* filter css */
@@ -18,6 +20,17 @@
     border-bottom: 2px solid var(--background);
     align-items: center;
     justify-content: space-between;
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+.feed_posts {
+    padding-top: 14px;
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+.feed__noposts {
+    text-align: center;
+    font-family: Helvetica, Arial, sans-serif;
 }
 
 @media only screen and (max-width: 1000px) {

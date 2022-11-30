@@ -6,38 +6,44 @@
 .post {
     display: flex;
     align-items: flex-start;
+    font-family: Helvetica, Arial, sans-serif;
     border-bottom: 1px solid var(--background);
 }
 
 .post__footer {
     display: flex;
-    justify-content: space-between;
+    flex-direction: row;
+    justify-content: center;
     margin-top: 10px;
 }
 
 .post__footerDateTime {
     display: flex;
-    font-size: 16px;
+    font-size: 14px;
     color: gray;
     margin-top: 10px;
+    margin-right: auto;
+    font-family: Helvetica, Arial, sans-serif;
 }
 
-.post__footerRedirect {
+.post_footerWidgets {
     display: flex;
-    cursor: pointer;
-    margin-top: 10px;
+    margin:auto;
+    padding-left: 40%;
 }
 
 .post__footerFavorite {
     display: flex;
     cursor: pointer;
     margin-top: 10px;
+    padding-right: 40px;
 }
 
 .post__footerList {
     display: flex;
     cursor: pointer;
     margin-top: 10px;
+    padding-right: 40%;
 }
 
 .post__footerTag {
@@ -48,23 +54,37 @@
 
 .post__badge {
     font-size: 14px !important;
-    color: var(--main-color);
+    color: #ff7f27;
 }
 
 .post__headerSpecial {
     font-weight: 600;
-    font-size: 18px;
+    font-size: 16px;
+    font-family: Helvetica, Arial, sans-serif;
     color: gray;
+}
+
+#creatorPage {
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+.post__headerSpecial:hover {
+    color:#ff7f27;
 }
 
 .post__headerText > h3 {
     text-align: left;
-    font-size: 20px;
+    font-size: 18px;
     margin-bottom: 5px;
+}
+
+.postPage {
+    font-family: Helvetica, Arial, sans-serif;
 }
 
 .post__headerDescription {
     font-size: 18px;
+    font-family: Helvetica, Arial, sans-serif;
     margin-bottom: 20px;
     padding-left: 20px;
 }
@@ -97,4 +117,5 @@
 #postPage:hover {
     text-decoration: underline;
     cursor: pointer;
+    color:#ff7f27;
 }

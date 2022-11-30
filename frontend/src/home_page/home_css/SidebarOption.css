@@ -14,15 +14,16 @@
 
 .sidebarOption:hover {
     background-color: #b1cffc73;
-    color: var(--main-color);
+    color: #ff7f27;
     transition: color 100ms ease-out;
 }
 
 .sidebarOption > h2 {
     font-weight: 700;
     font-size: 26px;
+    font-family: Helvetica, Arial, sans-serif;
 }
 
 .sidebarOption--active {
-    color: var(--main-color);
+    color: #ff7f27;
 }

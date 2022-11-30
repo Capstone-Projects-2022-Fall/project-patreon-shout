@@ -1,6 +1,8 @@
 .outreach {
     display: flex;
-
+    padding: 20px 20px 20px 20px;
+    border-radius: 1em;
+    box-shadow: 0 0.188em 1.550em rgb(44, 42, 42);
     /* make sure tabs are shown at top and content follows below */
     flex-direction: column;
 
@@ -8,6 +10,12 @@
     gap: 30px;
 
     padding-top: 20px;
+    padding-bottom: 60px;
+}
+
+.outreach__tabs {
+    display: flex;
+    justify-content: center;
 }
 
 .outreachSettings {

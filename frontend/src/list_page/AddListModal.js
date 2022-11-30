@@ -47,8 +47,8 @@ function AddListModal() {
             return false;
         }
 
-        if (titleInput.length > 25) {
-            document.getElementById("errormsg").textContent = "Title cannot be over 25 characters";
+        if (titleInput.length > 20) {
+            document.getElementById("errormsg").textContent = "Title cannot be over 20 characters";
             return false;
         }
 
@@ -71,9 +71,9 @@ function AddListModal() {
                     <button className="close" onClick={close}>
                         &times;
                     </button>
-                    <div className="header">
+                    <h2 className="header">
                         Create a new List
-                    </div>
+                    </h2>
                     <div className="fields">
                         <TextField id="outlined-basic" label={"Title"} size={"small"} variant="outlined" value={titleInput} onChange={(e) => setTitle(e.target.value)}/>
                         <TextField id="outlined-basic" label={"Description"} size={"small"} variant="outlined" value={descInput} onChange={(e) => setDesc(e.target.value)}/>

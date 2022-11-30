@@ -15,6 +15,7 @@ import {getSocialIntegrations} from "../services/api/webaccount/getSocialIntegra
 import {render} from "react-dom";
 import {getPatreonTokens} from "../services/api/patreonTokens";
 import {getFollowingPosts} from "../services/api/followingPosts";
+import shoutlogo from "../img/PatreonShout-modified(1).png"
 
 /**
  * This is the Main Feed function which will appear on the home page
@@ -151,7 +152,7 @@ function HtmlReturn(postList, userLists, connectHide) {
     return (
         <div className="feed">
             <div className="feed__header">
-                <h1>Patreon Shout</h1>
+                <img src={shoutlogo} width="220" height="100" />
             </div>
             <div className="feed__filters">
                 <Searchbar
@@ -165,20 +166,23 @@ function HtmlReturn(postList, userLists, connectHide) {
                         setDateRange={setDateRange}
                 />
             </div>
-            {displayedList.map((item) => (
-                <Post
-                    key={v4()}
-                    title={item.title}
-                    creator_page_url={item.creator_page_url}
-                    is_public={(item.is_public === "true")}
-                    content={item.content}
-                    published_at={item.published_at}
-                    url = {item.url}
-                    campaignId = {item.campaign_id}
-                    creatorName = {item.creator_name}
-                    lists = {userLists}
-                />
-            ))}
+            <div className="feed_posts">
+                {displayedList.length == 0 && <h2 className="feed__noposts">No posts to be shown.<br/>Try a different search term or follow more creators!</h2> ||
+                displayedList.map((item) => (
+                    <Post
+                        key={v4()}
+                        title={item.title}
+                        creator_page_url={item.creator_page_url}
+                        is_public={(item.is_public === "true")}
+                        content={item.content}
+                        published_at={item.published_at}
+                        url = {item.url}
+                        campaignId = {item.campaign_id}
+                        creatorName = {item.creator_name}
+                        lists = {userLists}
+                    />
+                ))}
+            </div>
             <div  hidden={(connectHide === "true")}>
                 <div className="blocker" onClick={() => {connectHide = "true"; console.log("hello");}} > </div>
                 <div className="patreonConnectPopup" >

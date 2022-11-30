@@ -1,5 +1,5 @@
 body {
-    --main-color: #e7aa38;
+    --main-color: #ff7f27;
     --background: #e6ecf0;
 }
 
@@ -16,20 +16,12 @@ body {
 }
 
 .main {
-    width: 40%;
+    width: 50%;
 }
 
 .left, .right {
     width: 30%;
     /*border-style: solid;*/
-}
-
-.left {
-    /*border-right: 2px solid var(--background);*/
-}
-
-.right {
-    /*border-left: 2px solid var(--background);*/
 }
 
 @media only screen and (max-width: 1400px) {
