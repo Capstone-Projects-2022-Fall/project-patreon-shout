@@ -18,6 +18,41 @@
 
 .navbar {
     display: none;
+}
+
+.topNavSettings {
+    display: flex;
+    padding: 2px;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    border: 2px solid var(--background);
+    border-radius: 10px;
+}
+.topNavSettings:hover {
+    background-color: #D3D3D3;
+    cursor: pointer;
+}
+
+.userSettingsPopup {
+    font-family: Helvetica, serif;
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: fit-content;
+    height: fit-content;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #FFF;
+    position: fixed;
+    top: 50vh;
+    left: 50vw;
+    text-align: center;
+    transform: translate(-50%, -50%);
 
 }
 
