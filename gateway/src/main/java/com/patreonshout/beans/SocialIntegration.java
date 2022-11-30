@@ -54,19 +54,19 @@ public class SocialIntegration implements Serializable {
 	 * Holds the image URL that will be posted to Instagram
 	 */
 	@Column(name = "instagram_image_url")
-	protected String instagramImageUrl;
+	protected String instagramImageUrl = "https://upload.wikimedia.org/wikipedia/commons/8/85/Picksed-1024x1024.png";
 
 	/**
 	 * Percentage number for how much blur to apply to the Instagram image
 	 */
 	@Column(name = "instagram_blur_amount")
-	protected String instagramBlurAmount;
+	protected String instagramBlurAmount = "40";
 
 	/**
 	 * HEX color code for the text overlaid on top of the image
 	 */
 	@Column(name = "instagram_message_color")
-	protected String instagramMessageColor;
+	protected String instagramMessageColor = "#383838";
 
 	/**
 	 * redditAccessToken holds the Reddit access_token needed for integration
