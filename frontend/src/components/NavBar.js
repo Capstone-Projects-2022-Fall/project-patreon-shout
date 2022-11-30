@@ -9,6 +9,9 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import CampaignIcon from '@mui/icons-material/Campaign';
 import {useLocation, useNavigate} from "react-router-dom";
 import {logoutUser} from "../services/api/logout";
+import ResetPassModal from "../settings/ResetPassModal";
+import PatreonConnect from "./PatreonConnect";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 
 /**
@@ -20,6 +23,7 @@ function NavBar() {
     const location = useLocation();
     const navigate = useNavigate();
     const [logout, setLogoutValue] = useState([]);
+    const [showSettings, setShowSettings] = useState("hide");
 
     const request = useCallback(() => {
         const tokenString = localStorage.getItem('token');
@@ -65,17 +69,30 @@ function NavBar() {
 
 
     return (
-        <div className="navbar">
-            <div onClick={goToHome} id="/home"> <SidebarOption size="large" Icon={HomeIcon} active={location.pathname === "/home"}/> </div>
+        <div>
+            <div className="navbar">
+                <div onClick={goToHome} id="/home"> <SidebarOption size="large" Icon={HomeIcon} active={location.pathname === "/home" && showSettings !== "show"}/> </div>
 
-            <div onClick={goToOutreach} id="/outreach"> <SidebarOption size="large" Icon={CampaignIcon} active={location.pathname === "/outreach"}/> </div>
+                <div onClick={goToOutreach} id="/outreach"> <SidebarOption size="large" Icon={CampaignIcon} active={location.pathname === "/outreach" && showSettings !== "show"}/> </div>
 
-            <div onClick={goToLists} id="/lists"> <SidebarOption size="large" Icon={ListAltIcon} active={location.pathname === "/lists"}/> </div>
+                <div onClick={goToLists} id="/lists"> <SidebarOption size="large" Icon={ListAltIcon} active={location.pathname === "/lists" && showSettings !== "show"}/> </div>
 
-            <div onClick={goToSettings} id="/settings"> <SidebarOption size="large" Icon={SettingsIcon} active={location.pathname === "/settings"}/> </div>
+                <div onClick={() => {setShowSettings("show");}} id="/settings"> <SidebarOption size="large" Icon={AccountCircleIcon} active={showSettings === "show"}/> </div>
 
-            <div onClick={logOut} id="/logout"> <SidebarOption size="large" Icon={LogoutIcon} active={location.pathname === "/logout"}/> </div>
+                <div onClick={logOut} id="/logout"> <SidebarOption size="large" Icon={LogoutIcon} active={location.pathname === "/logout"}/> </div>
+
+            </div>
+            <div className={showSettings}>
+                <div className="blocker" onClick={() => {setShowSettings("hide");}} > </div>
+                <div className="userSettingsPopup">
+                    Profile Settings
+
+                    <ResetPassModal />
+                    <PatreonConnect />
+                </div>
+            </div>
         </div>
+
     );
 }
 

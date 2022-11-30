@@ -63,7 +63,7 @@ function ResetPassModal() {
     return (
         <div>
             <Typography m={2} align="center">
-                <Button variant="contained" onClick={handleOpen}>Reset Password</Button>
+                <Button variant="contained" sx={ { borderRadius: 28 } } onClick={handleOpen}>Reset Password</Button>
             </Typography>
 
             <Modal
