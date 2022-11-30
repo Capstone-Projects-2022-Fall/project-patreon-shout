@@ -131,7 +131,7 @@ public class PostSvc extends BaseSvc implements PostImpl {
 
         FollowingCreators followingCreators = userAccount.getFollowingCreators();
 
-        if (followingCreators == null) {
+        if (followingCreators == null || followingCreators.getCampaignIds().equals("[]")) {
             return new ResponseEntity<>("[]", HttpStatus.FOUND);
         }
 

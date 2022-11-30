@@ -50,11 +50,22 @@ public class WebAccountFunctions {
 	public void putFollowingCreators(List<Integer> campaignIds, WebAccount webAccount) {
 
 		// this is kinda scuffed implementation but i wanna get it done fast
-		FollowingCreators followingCreators = new FollowingCreators();
-		followingCreators.setCampaignIds(campaignIds.toString().replaceAll("\\s", ""));
+//		FollowingCreators followingCreators = new FollowingCreators();
+//		followingCreators.setCampaignIds(campaignIds.toString().replaceAll("\\s", ""));
+
 
 		// we want to overwrite the previous following creators to get the most updated list of following creators
-		webAccount.setFollowingCreators(followingCreators);
+//		followingCreators.setWebAccount(webAccount);
+//		webAccount.setFollowingCreators(followingCreators);
+		FollowingCreators followingCreators = webAccount.getFollowingCreators();
+		if (followingCreators == null) {
+			followingCreators = new FollowingCreators();
+			followingCreators.setCampaignIds("[]");
+
+			followingCreators.setWebAccount(webAccount);
+			webAccount.setFollowingCreators(followingCreators);
+		}
+		followingCreators.setCampaignIds(campaignIds.toString().replaceAll("\\s", ""));
 		webAccountRepository.save(webAccount);
 	}
 
