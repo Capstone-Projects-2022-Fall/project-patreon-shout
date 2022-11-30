@@ -21,7 +21,7 @@ function RedditOutreach({publicMessage, privateMessage, subreddit}) {
 
     const [subredditField, setSubredditField] = useState(subreddit || "testingpatreonshout");
     const [publicTextField, setPublicTextField] = useState(publicMessage || "");
-    const [privateTextField, setPrivateTextField] = useState(privateMessage  || "");
+    const [privateTextField, setPrivateTextField] = useState(privateMessage || "");
 
     return (
 
