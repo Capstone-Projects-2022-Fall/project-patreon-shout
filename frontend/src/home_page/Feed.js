@@ -167,7 +167,7 @@ function HtmlReturn(postList, userLists, connectHide) {
                 />
             </div>
             <div className="feed_posts">
-                {displayedList.length == 0 && <h2 className="feed__noposts">No posts to be shown.<br/>Try a different search term or follow more creators!</h2> ||
+                {displayedList.length === 0 && <h2 className="feed__noposts">No posts to be shown.<br/>Try a different search term or follow more creators!</h2> ||
                 displayedList.map((item) => (
                     <Post
                         key={v4()}

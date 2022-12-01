@@ -362,11 +362,11 @@ public class WebAccountFunctions {
 							socialIntegration.setRedditAccessToken(tokens[0]);
 						}
 
-						if (!tokens[1].equals("") && !tokens[0].equals(" ")){
+						if (!tokens[1].equals("") && !tokens[1].equals(" ")){
 							socialIntegration.setRedditRefreshToken(tokens[1]);
 						}
 
-						if (!tokens[2].equals("") && !tokens[0].equals(" ")){
+						if (!tokens[2].equals("") && !tokens[2].equals(" ")){
 							socialIntegration.setRedditSubredditLocation(tokens[2]);
 						}
 					}
