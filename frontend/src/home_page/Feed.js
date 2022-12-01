@@ -133,10 +133,11 @@ function HtmlReturn(postList, userLists, connectHide) {
             let afterFiltersList = [];
             shouldSkip=false;
             displayedList.forEach((post) => {
-                const postInfo = (({title, creator_name, content}) => ({title, creator_name, content}))(post);
+                let postInfo = (({title, creator_name, content}) => ({title, creator_name, content}))(post);
+                console.log(postInfo);
                 Object.values(postInfo).every((onlyValues) => {
                     if (shouldSkip) {return;}
-                    if (onlyValues.toLowerCase().includes(element)) {
+                    if (onlyValues && onlyValues.toLowerCase().includes(element)) {
                         afterFiltersList.push(post);
                         displayedList = afterFiltersList;
                         shouldSkip = true;
