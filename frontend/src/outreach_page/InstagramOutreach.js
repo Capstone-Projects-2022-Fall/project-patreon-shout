@@ -14,7 +14,6 @@ import Typography from "@mui/material/Typography";
 import {MuiColorInput} from "mui-color-input";
 import useDebounce from "./UseDebounce";
 import {putInstagramPostDetails} from "../services/api/webaccount/putInstagramPostDetails";
-import FakeRedditPost from "../components/FakeRedditPost";
 
 /**
  * The instagram social platform cross-posting component
@@ -56,7 +55,7 @@ function InstagramOutreach({publicMessage, privateMessage, storedImageUrl, blurA
         getImage().catch(console.error);
 
         setIsProcessing(false);
-    }, [blurAmountValueActual, debouncedTextColor])
+    }, [blurAmountValueActual, debouncedTextColor, imageTextField])
 
     if (!token) { // TODO: check if session token is also valid via http request to database
         return <Login setToken={setToken}/>
