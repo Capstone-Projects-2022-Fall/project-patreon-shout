@@ -15,11 +15,11 @@ public class PostRedirectUtil {
 	 * @param realLineBreaks {@link Boolean} if real line breaks are desired
 	 * @return {@link String} social integration formatted text
 	 */
-	public static String convertHTMLPost(String postContent, String postUrl, String desiredPostFormat, Boolean realLineBreaks, Boolean reddit) {
+	public static String convertHTMLPost(String postContent, String postUrl, String desiredPostFormat, Boolean realLineBreaks, Boolean isReddit) {
 
 		FlexmarkHtmlConverter converter = FlexmarkHtmlConverter.builder().build();
 
-		String desiredLineBreak = realLineBreaks ? "\n" : "\\\n";
+		String desiredLineBreak = (isReddit ? "  " : "") + (realLineBreaks ? "\n" : "\\\n");
 
 		// * Post content modifications
 		String modifiedPostContent = converter.convert(postContent);
@@ -29,7 +29,7 @@ public class PostRedirectUtil {
 		String finalOutput = desiredPostFormat.replaceAll("\\{link}", "https://www.patreon.com" + postUrl); // * Replace {link} with the post's url
 		finalOutput = finalOutput.replaceAll("\\{content}", modifiedPostContent); // * Replace {content} with the converted post contents
 		// * Do NOT remove \\\\n, read https://stackoverflow.com/questions/1701839/string-replaceall-single-backslashes-with-double-backslashes
-		finalOutput = finalOutput.replaceAll("(\\\\n|\\n|<br>|<br/>)", reddit ? "  \n" : desiredLineBreak); // * Replace all text linebreaks with desiredLineBreak
+		finalOutput = finalOutput.replaceAll("(\\\\n|\\n|<br>|<br/>)", desiredLineBreak); // * Replace all text linebreaks with desiredLineBreak
 
 		return finalOutput;
 	}
