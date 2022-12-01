@@ -14,7 +14,6 @@ import Typography from "@mui/material/Typography";
 import {MuiColorInput} from "mui-color-input";
 import useDebounce from "./UseDebounce";
 import {putInstagramPostDetails} from "../services/api/webaccount/putInstagramPostDetails";
-import FakeRedditPost from "../components/FakeRedditPost";
 
 /**
  * The instagram social platform cross-posting component
@@ -56,7 +55,7 @@ function InstagramOutreach({publicMessage, privateMessage, storedImageUrl, blurA
         getImage().catch(console.error);
 
         setIsProcessing(false);
-    }, [blurAmountValueActual, debouncedTextColor])
+    }, [blurAmountValueActual, debouncedTextColor, imageTextField])
 
     if (!token) { // TODO: check if session token is also valid via http request to database
         return <Login setToken={setToken}/>
@@ -82,40 +81,42 @@ function InstagramOutreach({publicMessage, privateMessage, storedImageUrl, blurA
                 state={token}
             />
 
-            <TextField
-                fullWidth
-                margin="normal"
-                id="outlined-multiline-static"
-                label="Public"
-                multiline
-                rows={3}
-                value={publicTextField}
-                onChange={(e) => setPublicTextField(e.target.value)}
-            />
+            <div className="instaPostSettings">
+                <TextField
+                    fullWidth
+                    margin="normal"
+                    id="outlined-multiline-static"
+                    label="Public"
+                    multiline
+                    rows={3}
+                    value={publicTextField}
+                    onChange={(e) => setPublicTextField(e.target.value)}
+                />
 
-            <TextField
-                fullWidth
-                margin="normal"
-                id="outlined-multiline-static"
-                label="Private"
-                multiline
-                rows={3}
-                value={privateTextField}
-                onChange={(e) => setPrivateTextField(e.target.value)}
-            />
+                <TextField
+                    fullWidth
+                    margin="normal"
+                    id="outlined-multiline-static"
+                    label="Private"
+                    multiline
+                    rows={3}
+                    value={privateTextField}
+                    onChange={(e) => setPrivateTextField(e.target.value)}
+                />
 
-            {/* Image-related fields */}
-            <TextField
-                className="image-url-textfield"
-                fullWidth
-                margin="normal"
-                id="outlined-multiline-static"
-                label="Image URL"
-                multiline
-                value={imageTextField}
-                onChange={(e) => setImageTextField(e.target.value)}
-                disabled={isProcessing}
-            />
+                {/* Image-related fields */}
+                <TextField
+                    className="image-url-textfield"
+                    fullWidth
+                    margin="normal"
+                    id="outlined-multiline-static"
+                    label="Image URL"
+                    multiline
+                    value={imageTextField}
+                    onChange={(e) => setImageTextField(e.target.value)}
+                    disabled={isProcessing}
+                />
+            </div>
 
             <div className="image-settings-container">
                 <div className="radius-slider-container">
