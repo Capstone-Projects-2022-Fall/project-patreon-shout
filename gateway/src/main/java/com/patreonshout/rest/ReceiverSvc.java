@@ -581,7 +581,9 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 				if (integration.getInstagramAccessToken() != null && integration.getInstagramIgUserId() != null)
 					sendInstagramPost(patreonPost, socialIntegrationMessages, webAccount);
 
+				System.out.println("before initiate reddit cross posting");
 				if (integration.getRedditAccessToken() != null) {
+					System.out.println("inside initiate reddit cross posting");
 					sendRedditPost(patreonPost, socialIntegrationMessages, webAccount);
 				}
 
@@ -623,14 +625,20 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	 * @param socialIntegrationMessages are the messages we send along with a post for a particular user
 	 */
 	void sendTwitterPost(PatreonPostV2 patreonPost, SocialIntegrationMessages socialIntegrationMessages, WebAccount webAccount) throws PSException {
-		SocialIntegration socialIntegration = webAccount.getSocialIntegration();
+		try {
+			SocialIntegration socialIntegration = webAccount.getSocialIntegration();
 
-		String desiredPostFormat = (patreonPost.getIsPublic() ? socialIntegrationMessages.getTwitterPublicMessage() : socialIntegrationMessages.getTwitterPrivateMessage());
+			String desiredPostFormat = (patreonPost.getIsPublic() ? socialIntegrationMessages.getTwitterPublicMessage() : socialIntegrationMessages.getTwitterPrivateMessage());
 
-		String output = PostRedirectUtil.convertHTMLPost(patreonPost.getContent(), desiredPostFormat, true);
-		output += " https://www.patreon.com" + patreonPost.getUrl();
+			String output = PostRedirectUtil.convertHTMLPost(patreonPost.getContent(), desiredPostFormat, true);
+			output += " https://www.patreon.com" + patreonPost.getUrl();
 
-		new TwitterApiUtil().sendTweet(twitterCredentials.getClientID(), twitterCredentials.getClientSecret(), socialIntegration.getTwitterAccessToken(), socialIntegration.getTwitterRefreshToken(), output);
+			new TwitterApiUtil().sendTweet(twitterCredentials.getClientID(), twitterCredentials.getClientSecret(), socialIntegration.getTwitterAccessToken(), socialIntegration.getTwitterRefreshToken(), output);
+
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -728,23 +736,35 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	 * @param socialIntegrationMessages are the messages we send along with a post for a particular user
 	 */
 	void sendRedditPost(PatreonPostV2 patreonPost, SocialIntegrationMessages socialIntegrationMessages, WebAccount webAccount) throws ParseException, PSException, ParseException {
-		SocialIntegration socialIntegration = webAccount.getSocialIntegration();
 
-		String desiredPostFormat = (patreonPost.getIsPublic() ? socialIntegrationMessages.getInstagramPublicMessage() : socialIntegrationMessages.getInstagramPrivateMessage());
+		try {
+			SocialIntegration socialIntegration = webAccount.getSocialIntegration();
 
-		String output = PostRedirectUtil.convertHTMLPost(patreonPost.getContent(), desiredPostFormat, true);
+			String desiredPostFormat = (patreonPost.getIsPublic() ? socialIntegrationMessages.getInstagramPublicMessage() : socialIntegrationMessages.getInstagramPrivateMessage());
 
-		// reddit access token will expire within 24 hours, so we use the refresh token to get a new access token each time we want to send a request
-		String newAccessToken = new RedditApiUtil().refreshAccessToken(socialIntegration.getRedditRefreshToken(), redditCredentials.getClientID(), redditCredentials.getClientSecret());
+			String output = PostRedirectUtil.convertHTMLPost(patreonPost.getContent(), desiredPostFormat, true);
 
-		PutSocialIntegrationRequest putReddit = PutSocialIntegrationRequest.builder()
-				.data(newAccessToken + "::")
-				.loginToken(webAccount.getLoginToken())
-				.socialIntegrationName(SocialIntegrationName.REDDIT)
-				.build();
+			System.out.println("before refresh reddit token");
+			// reddit access token will expire within 24 hours, so we use the refresh token to get a new access token each time we want to send a request
+			String newAccessToken = new RedditApiUtil().refreshAccessToken(socialIntegration.getRedditRefreshToken(), redditCredentials.getClientID(), redditCredentials.getClientSecret());
+			System.out.println("after refresh reddit token");
 
-		webAccountFunctions.putSocialIntegration(putReddit);
+			PutSocialIntegrationRequest putReddit = PutSocialIntegrationRequest.builder()
+					.data(newAccessToken + "::")
+					.loginToken(webAccount.getLoginToken())
+					.socialIntegrationName(SocialIntegrationName.REDDIT)
+					.build();
 
-		new RedditApiUtil().sendPost(newAccessToken, output, patreonPost.getTitle(), socialIntegration.getRedditSubredditLocation());
+			webAccountFunctions.putSocialIntegration(putReddit);
+			System.out.println("after save new social integrations + before send post");
+
+			System.out.println("accessToken: " + newAccessToken + "\noutput: " + output);
+			new RedditApiUtil().sendPost(newAccessToken, output, patreonPost.getTitle(), socialIntegration.getRedditSubredditLocation());
+			System.out.println("after send post");
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 }
