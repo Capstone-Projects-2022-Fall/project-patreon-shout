@@ -33,6 +33,13 @@
     width: 90%;
 }
 
+.instaPostSettings {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+}
+
 .connect {
     display: flex;
     justify-content: center;
