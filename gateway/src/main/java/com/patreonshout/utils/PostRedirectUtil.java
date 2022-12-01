@@ -15,11 +15,11 @@ public class PostRedirectUtil {
 	 * @param realLineBreaks {@link Boolean} if real line breaks are desired
 	 * @return {@link String} social integration formatted text
 	 */
-	public static String convertHTMLPost(String postContent, String postUrl, String desiredPostFormat, Boolean realLineBreaks) {
+	public static String convertHTMLPost(String postContent, String postUrl, String desiredPostFormat, Boolean realLineBreaks, Boolean isReddit) {
 
 		FlexmarkHtmlConverter converter = FlexmarkHtmlConverter.builder().build();
 
-		String desiredLineBreak = realLineBreaks ? "\n" : "\\\n";
+		String desiredLineBreak = (isReddit ? "  " : "") + (realLineBreaks ? "\n" : "\\\n");
 
 		// * Post content modifications
 		String modifiedPostContent = converter.convert(postContent);
