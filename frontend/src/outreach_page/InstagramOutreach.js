@@ -30,8 +30,8 @@ function InstagramOutreach({publicMessage, privateMessage, storedImageUrl, blurA
     const {token, setToken} = useToken();
 
     // Image
-    const [blurAmountValueActual, setBlurAmountValueActual] = useState(blurAmount);
-    const [textColorValueActual, setTextColorValueActual] = useState(textColor);
+    const [blurAmountValueActual, setBlurAmountValueActual] = useState(blurAmount || 40);
+    const [textColorValueActual, setTextColorValueActual] = useState(textColor || "#383838");
     // This debounced var will ignore all changes on textColor until 100ms has passed, then execute it will change its own value
     const debouncedTextColor = useDebounce(textColorValueActual, 100)
 
