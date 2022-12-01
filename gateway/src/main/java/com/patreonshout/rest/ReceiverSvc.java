@@ -573,15 +573,19 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 				SocialIntegrationMessages socialIntegrationMessages = webAccountFunctions.getSocialIntegrationMessages(webAccount.getLoginToken());
 
 				if (integration.getDiscord() != null)
+					System.out.println("Discord Posting Initiated");
 					sendDiscordMessage(integration.getDiscord(), patreonPost, socialIntegrationMessages);
 
 				if (integration.getTwitterAccessToken() != null)
+					System.out.println("Twitter Posting Initiated");
 					sendTwitterPost(patreonPost, socialIntegrationMessages, webAccount);
 
 				if (integration.getInstagramAccessToken() != null && integration.getInstagramIgUserId() != null)
+					System.out.println("Instagram Posting Initiated");
 					sendInstagramPost(patreonPost, socialIntegrationMessages, webAccount);
 
 				if (integration.getRedditAccessToken() != null) {
+					System.out.println("Reddit Posting Initiated");
 					sendRedditPost(patreonPost, socialIntegrationMessages, webAccount);
 				}
 
@@ -623,14 +627,19 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	 * @param socialIntegrationMessages are the messages we send along with a post for a particular user
 	 */
 	void sendTwitterPost(PatreonPostV2 patreonPost, SocialIntegrationMessages socialIntegrationMessages, WebAccount webAccount) throws PSException {
-		SocialIntegration socialIntegration = webAccount.getSocialIntegration();
+		try {
+			SocialIntegration socialIntegration = webAccount.getSocialIntegration();
 
-		String desiredPostFormat = (patreonPost.getIsPublic() ? socialIntegrationMessages.getTwitterPublicMessage() : socialIntegrationMessages.getTwitterPrivateMessage());
+			String desiredPostFormat = (patreonPost.getIsPublic() ? socialIntegrationMessages.getTwitterPublicMessage() : socialIntegrationMessages.getTwitterPrivateMessage());
 
-		String output = PostRedirectUtil.convertHTMLPost(patreonPost.getContent(), desiredPostFormat, true);
-		output += " https://www.patreon.com" + patreonPost.getUrl();
+			String output = PostRedirectUtil.convertHTMLPost(patreonPost.getContent(), patreonPost.getUrl(), desiredPostFormat, true);
 
-		new TwitterApiUtil().sendTweet(twitterCredentials.getClientID(), twitterCredentials.getClientSecret(), socialIntegration.getTwitterAccessToken(), socialIntegration.getTwitterRefreshToken(), output);
+			new TwitterApiUtil().sendTweet(twitterCredentials.getClientID(), twitterCredentials.getClientSecret(), socialIntegration.getTwitterAccessToken(), socialIntegration.getTwitterRefreshToken(), output);
+
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -660,7 +669,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 								"&radius=" + socialIntegration.getInstagramBlurAmount() +
 								"&text=" + patreonPost.getTitle() +
 								"&text_color=" + socialIntegration.getInstagramMessageColor().replace("#", "%23"))
-						.queryParam("caption", PostRedirectUtil.convertHTMLPost(patreonPost.getContent(), desiredPostFormat, true))
+						.queryParam("caption", PostRedirectUtil.convertHTMLPost(patreonPost.getContent(), patreonPost.getUrl(), desiredPostFormat, true))
 						.build())
 				.retrieve()
 				.bodyToMono(String.class)
@@ -728,23 +737,30 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 	 * @param socialIntegrationMessages are the messages we send along with a post for a particular user
 	 */
 	void sendRedditPost(PatreonPostV2 patreonPost, SocialIntegrationMessages socialIntegrationMessages, WebAccount webAccount) throws ParseException, PSException, ParseException {
-		SocialIntegration socialIntegration = webAccount.getSocialIntegration();
 
-		String desiredPostFormat = (patreonPost.getIsPublic() ? socialIntegrationMessages.getInstagramPublicMessage() : socialIntegrationMessages.getInstagramPrivateMessage());
+		try {
+			SocialIntegration socialIntegration = webAccount.getSocialIntegration();
 
-		String output = PostRedirectUtil.convertHTMLPost(patreonPost.getContent(), desiredPostFormat, true);
+			String desiredPostFormat = (patreonPost.getIsPublic() ? socialIntegrationMessages.getInstagramPublicMessage() : socialIntegrationMessages.getInstagramPrivateMessage());
 
-		// reddit access token will expire within 24 hours, so we use the refresh token to get a new access token each time we want to send a request
-		String newAccessToken = new RedditApiUtil().refreshAccessToken(socialIntegration.getRedditRefreshToken(), redditCredentials.getClientID(), redditCredentials.getClientSecret());
+			String output = PostRedirectUtil.convertHTMLPost(patreonPost.getContent(), patreonPost.getUrl(),desiredPostFormat, true);
 
-		PutSocialIntegrationRequest putReddit = PutSocialIntegrationRequest.builder()
-				.data(newAccessToken + "::")
-				.loginToken(webAccount.getLoginToken())
-				.socialIntegrationName(SocialIntegrationName.REDDIT)
-				.build();
+			// reddit access token will expire within 24 hours, so we use the refresh token to get a new access token each time we want to send a request
+			String newAccessToken = new RedditApiUtil().refreshAccessToken(socialIntegration.getRedditRefreshToken(), redditCredentials.getClientID(), redditCredentials.getClientSecret());
 
-		webAccountFunctions.putSocialIntegration(putReddit);
+			PutSocialIntegrationRequest putReddit = PutSocialIntegrationRequest.builder()
+					.data(newAccessToken + ": : ")
+					.loginToken(webAccount.getLoginToken())
+					.socialIntegrationName(SocialIntegrationName.REDDIT)
+					.build();
 
-		new RedditApiUtil().sendPost(newAccessToken, output, patreonPost.getTitle(), socialIntegration.getRedditSubredditLocation());
+			webAccountFunctions.putSocialIntegration(putReddit);
+
+			new RedditApiUtil().sendPost(newAccessToken, output, patreonPost.getTitle(), socialIntegration.getRedditSubredditLocation());
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 }
