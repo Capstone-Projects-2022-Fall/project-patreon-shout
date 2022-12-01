@@ -572,17 +572,20 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 				SocialIntegration integration = webAccountFunctions.getSocialIntegration(webAccount.getLoginToken());
 				SocialIntegrationMessages socialIntegrationMessages = webAccountFunctions.getSocialIntegrationMessages(webAccount.getLoginToken());
 
-				if (integration.getDiscord() != null)
+				if (integration.getDiscord() != null){
 					System.out.println("Discord Posting Initiated");
 					sendDiscordMessage(integration.getDiscord(), patreonPost, socialIntegrationMessages);
+				}
 
-				if (integration.getTwitterAccessToken() != null)
+				if (integration.getTwitterAccessToken() != null){
 					System.out.println("Twitter Posting Initiated");
 					sendTwitterPost(patreonPost, socialIntegrationMessages, webAccount);
+				}
 
-				if (integration.getInstagramAccessToken() != null && integration.getInstagramIgUserId() != null)
+				if (integration.getInstagramAccessToken() != null && integration.getInstagramIgUserId() != null){
 					System.out.println("Instagram Posting Initiated");
 					sendInstagramPost(patreonPost, socialIntegrationMessages, webAccount);
+				}
 
 				if (integration.getRedditAccessToken() != null) {
 					System.out.println("Reddit Posting Initiated");
