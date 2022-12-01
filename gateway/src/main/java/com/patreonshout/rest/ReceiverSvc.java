@@ -635,7 +635,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 
 			String desiredPostFormat = (patreonPost.getIsPublic() ? socialIntegrationMessages.getTwitterPublicMessage() : socialIntegrationMessages.getTwitterPrivateMessage());
 
-			String output = PostRedirectUtil.convertHTMLPost(patreonPost.getContent(), patreonPost.getUrl(), desiredPostFormat, true);
+			String output = PostRedirectUtil.convertHTMLPost(patreonPost.getContent(), patreonPost.getUrl(), desiredPostFormat, true, false);
 
 			new TwitterApiUtil().sendTweet(twitterCredentials.getClientID(), twitterCredentials.getClientSecret(), socialIntegration.getTwitterAccessToken(), socialIntegration.getTwitterRefreshToken(), output);
 
@@ -672,7 +672,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 								"&radius=" + socialIntegration.getInstagramBlurAmount() +
 								"&text=" + patreonPost.getTitle() +
 								"&text_color=" + socialIntegration.getInstagramMessageColor().replace("#", "%23"))
-						.queryParam("caption", PostRedirectUtil.convertHTMLPost(patreonPost.getContent(), patreonPost.getUrl(), desiredPostFormat, true))
+						.queryParam("caption", PostRedirectUtil.convertHTMLPost(patreonPost.getContent(), patreonPost.getUrl(), desiredPostFormat, true, false))
 						.build())
 				.retrieve()
 				.bodyToMono(String.class)
@@ -746,7 +746,8 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 
 			String desiredPostFormat = (patreonPost.getIsPublic() ? socialIntegrationMessages.getRedditPublicMessage() : socialIntegrationMessages.getRedditPrivateMessage());
 
-			String output = PostRedirectUtil.convertHTMLPost(patreonPost.getContent(), patreonPost.getUrl(),desiredPostFormat, true);
+			String output = PostRedirectUtil.convertHTMLPost(patreonPost.getContent(), patreonPost.getUrl(), desiredPostFormat, false, true);
+			output = output.replaceAll("\\n", "  \n");
 
 			// reddit access token will expire within 24 hours, so we use the refresh token to get a new access token each time we want to send a request
 			String newAccessToken = new RedditApiUtil().refreshAccessToken(socialIntegration.getRedditRefreshToken(), redditCredentials.getClientID(), redditCredentials.getClientSecret());
