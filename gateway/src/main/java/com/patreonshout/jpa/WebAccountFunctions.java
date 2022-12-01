@@ -8,13 +8,13 @@ import com.patreonshout.beans.request.*;
 import com.patreonshout.config.SecurityConfiguration;
 import com.patreonshout.jpa.constants.SocialIntegrationName;
 import com.patreonshout.utils.DiscordWebhookUtil;
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -349,6 +349,8 @@ public class WebAccountFunctions {
 					// data == "access_token:refresh_token:subreddit_location"
 					String[] tokens = data.split(":");
 					if (tokens.length != 3) {
+						System.out.println(tokens.length);
+						System.out.println(Arrays.toString(tokens));
 						throw new PSException(HttpStatus.BAD_REQUEST, "We were not able to properly save the Reddit access and refresh tokens");
 					}
 
@@ -356,15 +358,15 @@ public class WebAccountFunctions {
 //						socialIntegration.setRedditSubredditLocation(tokens[2]);
 //					}
 					else {
-						if (!tokens[0].equals("")){
+						if (!tokens[0].equals("") && !tokens[0].equals(" ")){
 							socialIntegration.setRedditAccessToken(tokens[0]);
 						}
 
-						if (!tokens[1].equals("")){
+						if (!tokens[1].equals("") && !tokens[0].equals(" ")){
 							socialIntegration.setRedditRefreshToken(tokens[1]);
 						}
 
-						if (!tokens[2].equals("")){
+						if (!tokens[2].equals("") && !tokens[0].equals(" ")){
 							socialIntegration.setRedditSubredditLocation(tokens[2]);
 						}
 					}
