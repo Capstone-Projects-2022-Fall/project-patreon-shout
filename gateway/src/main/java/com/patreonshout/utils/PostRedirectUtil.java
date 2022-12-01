@@ -15,7 +15,7 @@ public class PostRedirectUtil {
 	 * @param realLineBreaks {@link Boolean} if real line breaks are desired
 	 * @return {@link String} social integration formatted text
 	 */
-	public static String convertHTMLPost(String postContent, String postUrl, String desiredPostFormat, Boolean realLineBreaks) {
+	public static String convertHTMLPost(String postContent, String desiredPostFormat, Boolean realLineBreaks) {
 
 		FlexmarkHtmlConverter converter = FlexmarkHtmlConverter.builder().build();
 
@@ -26,8 +26,7 @@ public class PostRedirectUtil {
 		modifiedPostContent = modifiedPostContent.replaceAll("\n\n", desiredLineBreak); // * <p></p> ends with double line breaks, replace that to one
 		modifiedPostContent = modifiedPostContent.replaceAll("\n$", ""); // * If the post content ends in a line break, remove it
 
-		String finalOutput = desiredPostFormat.replaceAll("\\{link}", "https://www.patreon.com" + postUrl); // * Replace {link} with the post's url
-		finalOutput = finalOutput.replaceAll("\\{content}", modifiedPostContent); // * Replace {content} with the converted post contents
+		String finalOutput = desiredPostFormat.replaceAll("\\{content}", modifiedPostContent); // * Replace {content} with the converted post contents
 		// * Do NOT remove \\\\n, read https://stackoverflow.com/questions/1701839/string-replaceall-single-backslashes-with-double-backslashes
 		finalOutput = finalOutput.replaceAll("(\\\\n|\\n|<br>|<br/>)", desiredLineBreak); // * Replace all text linebreaks with desiredLineBreak
 

@@ -573,19 +573,17 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 				SocialIntegrationMessages socialIntegrationMessages = webAccountFunctions.getSocialIntegrationMessages(webAccount.getLoginToken());
 
 				if (integration.getDiscord() != null)
-					System.out.println("Discord Posting Initiated");
 					sendDiscordMessage(integration.getDiscord(), patreonPost, socialIntegrationMessages);
 
 				if (integration.getTwitterAccessToken() != null)
-					System.out.println("Twitter Posting Initiated");
 					sendTwitterPost(patreonPost, socialIntegrationMessages, webAccount);
 
 				if (integration.getInstagramAccessToken() != null && integration.getInstagramIgUserId() != null)
-					System.out.println("Instagram Posting Initiated");
 					sendInstagramPost(patreonPost, socialIntegrationMessages, webAccount);
 
+				System.out.println("before initiate reddit cross posting");
 				if (integration.getRedditAccessToken() != null) {
-					System.out.println("Reddit Posting Initiated");
+					System.out.println("inside initiate reddit cross posting");
 					sendRedditPost(patreonPost, socialIntegrationMessages, webAccount);
 				}
 
@@ -632,7 +630,8 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 
 			String desiredPostFormat = (patreonPost.getIsPublic() ? socialIntegrationMessages.getTwitterPublicMessage() : socialIntegrationMessages.getTwitterPrivateMessage());
 
-			String output = PostRedirectUtil.convertHTMLPost(patreonPost.getContent(), patreonPost.getUrl(), desiredPostFormat, true);
+			String output = PostRedirectUtil.convertHTMLPost(patreonPost.getContent(), desiredPostFormat, true);
+			output += " https://www.patreon.com" + patreonPost.getUrl();
 
 			new TwitterApiUtil().sendTweet(twitterCredentials.getClientID(), twitterCredentials.getClientSecret(), socialIntegration.getTwitterAccessToken(), socialIntegration.getTwitterRefreshToken(), output);
 
@@ -669,7 +668,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 								"&radius=" + socialIntegration.getInstagramBlurAmount() +
 								"&text=" + patreonPost.getTitle() +
 								"&text_color=" + socialIntegration.getInstagramMessageColor().replace("#", "%23"))
-						.queryParam("caption", PostRedirectUtil.convertHTMLPost(patreonPost.getContent(), patreonPost.getUrl(), desiredPostFormat, true))
+						.queryParam("caption", PostRedirectUtil.convertHTMLPost(patreonPost.getContent(), desiredPostFormat, true))
 						.build())
 				.retrieve()
 				.bodyToMono(String.class)
@@ -743,10 +742,12 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 
 			String desiredPostFormat = (patreonPost.getIsPublic() ? socialIntegrationMessages.getInstagramPublicMessage() : socialIntegrationMessages.getInstagramPrivateMessage());
 
-			String output = PostRedirectUtil.convertHTMLPost(patreonPost.getContent(), patreonPost.getUrl(),desiredPostFormat, true);
+			String output = PostRedirectUtil.convertHTMLPost(patreonPost.getContent(), desiredPostFormat, true);
 
+			System.out.println("before refresh reddit token");
 			// reddit access token will expire within 24 hours, so we use the refresh token to get a new access token each time we want to send a request
 			String newAccessToken = new RedditApiUtil().refreshAccessToken(socialIntegration.getRedditRefreshToken(), redditCredentials.getClientID(), redditCredentials.getClientSecret());
+			System.out.println("after refresh reddit token");
 
 			PutSocialIntegrationRequest putReddit = PutSocialIntegrationRequest.builder()
 					.data(newAccessToken + ": : ")
@@ -755,8 +756,11 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 					.build();
 
 			webAccountFunctions.putSocialIntegration(putReddit);
+			System.out.println("after save new social integrations + before send post");
 
+			System.out.println("accessToken: " + newAccessToken + "\noutput: " + output);
 			new RedditApiUtil().sendPost(newAccessToken, output, patreonPost.getTitle(), socialIntegration.getRedditSubredditLocation());
+			System.out.println("after send post");
 		}
 		catch (Exception e) {
 			e.printStackTrace();

@@ -77,7 +77,7 @@ public class DiscordWebhookUtil {
 		 * We don't want real line breaks as we send data through an HTML request/link.
 		 * Real linebreaks will cause failures during creation.  We want \\n, not \n.
 		 */
-		this.setDescription(PostRedirectUtil.convertHTMLPost(patreonPost.getContent(), patreonPost.getUrl(), desiredPostFormat, false));
+		this.setDescription(PostRedirectUtil.convertHTMLPost(patreonPost.getContent(), desiredPostFormat, false));
 
 		// TODO: This seems to never be true as Patreon never sends us images/videos.
 //				if  (patreonPost.getEmbedUrl() != null)
