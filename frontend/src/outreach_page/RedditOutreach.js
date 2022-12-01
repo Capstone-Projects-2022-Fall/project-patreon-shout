@@ -19,7 +19,7 @@ import FakeRedditPost from "../components/FakeRedditPost";
  */
 function RedditOutreach({publicMessage, privateMessage, subreddit}) {
 
-    const [subredditField, setSubredditField] = useState(subreddit || "testingpatreonshout");
+    const [subredditField, setSubredditField] = useState(subreddit || "");
     const [publicTextField, setPublicTextField] = useState(publicMessage || "");
     const [privateTextField, setPrivateTextField] = useState(privateMessage || "");
 
