@@ -81,40 +81,42 @@ function InstagramOutreach({publicMessage, privateMessage, storedImageUrl, blurA
                 state={token}
             />
 
-            <TextField
-                fullWidth
-                margin="normal"
-                id="outlined-multiline-static"
-                label="Public"
-                multiline
-                rows={3}
-                value={publicTextField}
-                onChange={(e) => setPublicTextField(e.target.value)}
-            />
+            <div className="instaPostSettings">
+                <TextField
+                    fullWidth
+                    margin="normal"
+                    id="outlined-multiline-static"
+                    label="Public"
+                    multiline
+                    rows={3}
+                    value={publicTextField}
+                    onChange={(e) => setPublicTextField(e.target.value)}
+                />
 
-            <TextField
-                fullWidth
-                margin="normal"
-                id="outlined-multiline-static"
-                label="Private"
-                multiline
-                rows={3}
-                value={privateTextField}
-                onChange={(e) => setPrivateTextField(e.target.value)}
-            />
+                <TextField
+                    fullWidth
+                    margin="normal"
+                    id="outlined-multiline-static"
+                    label="Private"
+                    multiline
+                    rows={3}
+                    value={privateTextField}
+                    onChange={(e) => setPrivateTextField(e.target.value)}
+                />
 
-            {/* Image-related fields */}
-            <TextField
-                className="image-url-textfield"
-                fullWidth
-                margin="normal"
-                id="outlined-multiline-static"
-                label="Image URL"
-                multiline
-                value={imageTextField}
-                onChange={(e) => setImageTextField(e.target.value)}
-                disabled={isProcessing}
-            />
+                {/* Image-related fields */}
+                <TextField
+                    className="image-url-textfield"
+                    fullWidth
+                    margin="normal"
+                    id="outlined-multiline-static"
+                    label="Image URL"
+                    multiline
+                    value={imageTextField}
+                    onChange={(e) => setImageTextField(e.target.value)}
+                    disabled={isProcessing}
+                />
+            </div>
 
             <div className="image-settings-container">
                 <div className="radius-slider-container">
