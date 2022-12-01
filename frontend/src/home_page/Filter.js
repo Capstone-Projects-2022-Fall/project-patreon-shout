@@ -30,7 +30,7 @@ const MenuProps = {
  * This is the Filters function which will appear on the home page
  * @param {array[]} filterChoices - The name of current filters
  * @param {array[]} dateRange - The range of dates including start and end
- * 
+ *
  *
  * @returns Visual representation of the filters component
  */
@@ -38,6 +38,7 @@ const MenuProps = {
 function Filter({filterChoices, setFilterChoices, dateRange, setDateRange}) {
     const [filterName, setFilterName] = React.useState([]);
     const [addedFilterNames, setAddedFilterNames] = useState([]);
+    const [filterSize, setFilterSize] = useState(0);
 
     const selectionRange = {
         startDate: new Date(),
@@ -95,10 +96,18 @@ function Filter({filterChoices, setFilterChoices, dateRange, setDateRange}) {
     const handleAddChip = (e) => {
         const { target: { value }, } = e;
 
+
         // Handles Date Range Component
-        if (value.includes("Date Range")) {
+
+        if (value[value.length - 1] === "Date Range" && filterSize < value.length) {
             setHideCalendar(false);
-        } else {setHideCalendar(true); };
+        }
+
+        if (!value.includes("Date Range")) {
+            setHideCalendar(true);
+        }
+
+        setFilterSize(value.length);
 
         // Handles letting user select conflicting chronological order
         if ((value.includes("Date(new → old)")) && (value.includes("Date(old → new)"))) {
@@ -190,7 +199,7 @@ function Filter({filterChoices, setFilterChoices, dateRange, setDateRange}) {
                     showWeekNumbers={false}
                     showISOWeekNumbers={false}
                     onChange={handleSelectDates}
-                    ranges={[timePeriod]} 
+                    ranges={[timePeriod]}
                 />
             </div>
         </div>
