@@ -746,7 +746,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 
 			String desiredPostFormat = (patreonPost.getIsPublic() ? socialIntegrationMessages.getRedditPublicMessage() : socialIntegrationMessages.getRedditPrivateMessage());
 
-			String output = PostRedirectUtil.convertHTMLPost(patreonPost.getContent(), patreonPost.getUrl(), desiredPostFormat, false, true);
+			String output = PostRedirectUtil.convertHTMLPost(patreonPost.getContent(), patreonPost.getUrl(), desiredPostFormat, true, true);
 
 			// reddit access token will expire within 24 hours, so we use the refresh token to get a new access token each time we want to send a request
 			String newAccessToken = new RedditApiUtil().refreshAccessToken(socialIntegration.getRedditRefreshToken(), redditCredentials.getClientID(), redditCredentials.getClientSecret());
