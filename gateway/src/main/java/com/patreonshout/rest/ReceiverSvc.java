@@ -744,7 +744,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 		try {
 			SocialIntegration socialIntegration = webAccount.getSocialIntegration();
 
-			String desiredPostFormat = (patreonPost.getIsPublic() ? socialIntegrationMessages.getInstagramPublicMessage() : socialIntegrationMessages.getInstagramPrivateMessage());
+			String desiredPostFormat = (patreonPost.getIsPublic() ? socialIntegrationMessages.getRedditPublicMessage() : socialIntegrationMessages.getRedditPrivateMessage());
 
 			String output = PostRedirectUtil.convertHTMLPost(patreonPost.getContent(), patreonPost.getUrl(),desiredPostFormat, true);
 
