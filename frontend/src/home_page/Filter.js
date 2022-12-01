@@ -113,14 +113,14 @@ function Filter({filterChoices, setFilterChoices, dateRange, setDateRange}) {
         if ((value.includes("Date(new → old)")) && (value.includes("Date(old → new)"))) {
             const ind1 = value.indexOf("Date(new → old)");
             const ind2 = value.indexOf("Date(old → new)");
-            if (ind1 < ind2) {value.splice(ind1, 1)} else {value.splice(ind2, 1)};
+            if (ind1 < ind2) {value.splice(ind1, 1)} else {value.splice(ind2, 1)}
         }
 
         // Handles letting user select conflicting level of privacy
         if ((value.includes("Private Only")) && (value.includes("Public Only"))) {
             const ind1 = value.indexOf("Private Only");
             const ind2 = value.indexOf("Public Only");
-            if (ind1 < ind2) {value.splice(ind1, 1)} else {value.splice(ind2, 1)};
+            if (ind1 < ind2) {value.splice(ind1, 1)} else {value.splice(ind2, 1)}
         }
 
         // Sets and sends filter name to feed
@@ -171,9 +171,11 @@ function Filter({filterChoices, setFilterChoices, dateRange, setDateRange}) {
                         input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
                         renderValue={(selected) => (
                             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                            {selected.map((value) => (
+                            {
+                                selected.map((value) => (
                                 <Chip key={value} label={value} />
-                            ))}
+                            ))
+                            }
                             </Box>
                         )}
                         MenuProps={MenuProps}

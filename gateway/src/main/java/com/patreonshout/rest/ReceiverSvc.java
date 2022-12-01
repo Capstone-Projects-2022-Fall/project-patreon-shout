@@ -186,7 +186,13 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 
 		JSONObject objResponse = new JSONObject(response);
 
-		JSONArray incl = (JSONArray) objResponse.get("included");
+		JSONArray incl;
+		try {
+			incl = (JSONArray) objResponse.get("included");
+		} catch (JSONException ex) {
+			System.out.println("No posts found!");
+			return ret;
+		}
 
 		if (incl.length() >= 2) {
 			System.out.println(incl.length() / 2);

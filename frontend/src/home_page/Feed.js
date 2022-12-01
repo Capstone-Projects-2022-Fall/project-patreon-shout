@@ -95,7 +95,8 @@ function HtmlReturn(postList, userLists, connectHide) {
     postList.forEach((post, index) => {
         const postInfo = (({title, creator_name, content}) => ({title, creator_name, content}))(post);
         Object.values(postInfo).every((onlyValues, valIndex) => {
-            if (shouldSkip) {return;}
+            if (shouldSkip || !onlyValues) {return;}
+
             if (onlyValues.toLowerCase().includes(searchTerm)) {
                 searchedList.push(post)
                 shouldSkip = true;
