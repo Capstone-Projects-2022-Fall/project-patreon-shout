@@ -750,7 +750,7 @@ public class ReceiverSvc extends BaseSvc implements ReceiverImpl {
 			System.out.println("after refresh reddit token");
 
 			PutSocialIntegrationRequest putReddit = PutSocialIntegrationRequest.builder()
-					.data(newAccessToken + "::")
+					.data(newAccessToken + ": : ")
 					.loginToken(webAccount.getLoginToken())
 					.socialIntegrationName(SocialIntegrationName.REDDIT)
 					.build();
