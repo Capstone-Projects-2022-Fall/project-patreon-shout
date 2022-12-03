@@ -8,7 +8,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
  * The URL or reference to your projects logo!
  * @type {string}
  */
-const logo = 'https://github.com/Capstone-Projects-2022-Fall/project-patreon-shout/blob/Jsmalriat-doc-patches/documentation/megaphone.svg';
+const logo = 'https://raw.githubusercontent.com/Capstone-Projects-2022-Fall/project-patreon-shout/f64c014da7c74a75731621813f5455199016bb31/documentation/static/img/PatreonShout.png';
 
 const main_template_jira_scripts = () => {
   if (process.env.ORG_NAME === 'ApplebaumIan'){
