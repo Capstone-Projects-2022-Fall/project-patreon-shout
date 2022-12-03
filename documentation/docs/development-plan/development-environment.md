@@ -7,6 +7,7 @@ sidebar_position: 4
 #### Editors and IDEs
 
 * JetBrains IntelliJ IDEA
+* Jetbrains PhpStorm
 
 #### Languages, Frameworks, and Management Systems
 
@@ -16,7 +17,6 @@ sidebar_position: 4
 * CSS
 * Javascript
 * React
-* Bootstrap
 
 #### Compilers and Interpreters
 
