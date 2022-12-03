@@ -4,9 +4,7 @@ sidebar_position: 2
    
 # System Block Diagram  
 
-![PatreonShout_SystemBlockDiagram_drawio](https://github.com/Capstone-Projects-2022-Fall/project-patreon-shout/blob/b387928eaffe5ffa323aab8e2d21398bbf666cdb/documentation/static/img/PatreonShout_SystemBlockDiagram.png)
-
-![PatreonShout_SystemBlockDiagram_drawio](https://github.com/Capstone-Projects-2022-Fall/project-patreon-shout/blob/doca-changes/documentation/static/img/PatreonShout_SystemBlockDiagram.png)
+![PatreonShout_SystemBlockDiagram_drawio](https://raw.githubusercontent.com/Capstone-Projects-2022-Fall/project-patreon-shout/a25c278f9a87dc3139cb37b3baf9ea6e7385a601/documentation/static/img/PatreonShout_SystemBlockDiagram.png)
    
 **Figure 1.** *High level design of the Patreon Shout application*  
 
