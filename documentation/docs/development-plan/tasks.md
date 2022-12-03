@@ -11,66 +11,65 @@ accurate as possible.
 
 1. **Create backend & database communication**
     - Create database on AWS (~2)
-    - Implement CRUD operations to talk with Database(~2)
-2. **Create pipeline between Patreon and a social platform**
-    - Get Patreon posts using Patreon API(~2)
-    - Figure out how to output to Discord using a webhook(~1)
-    - Output a Patreon post to Discord(~2)
-3. **Create a web server and layout for UI**
-    - Create a domain name on hostinger.com (~1)
-    - Host a web server on hostinger.com (~1)
-    - Create a development environment to interact with the webserver (~1)
-    - Create Home page prototype (~2)
-    - Create Main feed component prototype (~2)
-    - Create user settings component prototype (~2)
-    - Add creator settings section (~1)
-    - Add creator setting - link Patreon (~1)
-    - Add creator setting - link Discord (~1)
-    - Add creator setting - link Twitter (~1)
-    - Add creator setting - link Instagram (~1)
-    - Add patron settings section (~1)
-    - Add patron setting - Change password (~1)
-    - Add patron setting - Change main feed (~1)
-    - Add patron setting - Change profile (~1)
-4. Add creator guide
-    - Create guide page prototype (~2)
-    - Create guide - linking Patreon (~1)
-    - Create guide - linking Discord (~1)
-    - Create guide - create Discord webhook (~1)
-    - Create guide - linking Instagram (~1)
-    - Create guide - linking Twitter (~1)
-5. Integrate Patreon
-    - Create OAuth login (~3)
-    - Save creator token to database (~1)
-    - Save creator posts to database when published (~1)
-    - Populate main feed for user (~1)
-    - Make sure patrons who haven’t paid for a creator can’t see their private posts(~3)
-6. Integrate Discord
-    - Save discord webhook URL to database (~1)
-    - Send creator post to given webhook URL when a post is created (~2)
-7. Integrate Twitter
-    - Create OAuth login (~3)
-    - Save and get Twitter message template from creator (~2)
-    - Send creator post to Twitter when published (~1)
-8. Integrate Instagram
-    - Create OAuth login (~3)
-    - Save and get Instagram post template from creator(~2)
-    - Send creator post to Instagram when published (~2)
-9. Create contact page
-    - Create contact page prototype (~2)
-    - Create a contact form that asks for the user's name, contact email, and a description of why they are contacting
-      us. (~1)
-    - Implement email redirecting to help@patreonshout.com for contact form (~2)
-10. Implement user feed tools
-    - Create layout for filter section on main feed (~2)
-    - Implement category post filtering (~2)
-    - Implement filtering through search (~2)
-    - Create button for “Lists” section (~1)
-    - Create Lists page prototype (~2)
-    - Implement List creation layout (~1)
-    - Implement List creation functionality (~2)
-    - Implements List swap for main feed -- must work with filtering (~3)
-11. Create recommendation tool
-    - Collect user patron campaigns and followers (~1)
-    - Utilize user data (from above) to create at most 5 categories of interest (~2)
-    - Return top creators from previously created categories (~1)
+    - Implement CRUD operations to talk with Database (~2)
+    - Secure database user creation (~2)
+    - DB communication to validate login credentials (~2)
+    - Secure storage of passwords (~2)
+    - Encrypting application properties data (~1)
+2. **User Interface creation & deployment**
+    - Login & Register Page
+        - UI prototype (~1)
+        - Save registration details to database (~3)
+        - Check login credentials (~1)
+        - Logout functionality (~1)
+        - Weak passwords unacceptable (~3)
+    - Main Feed (Home) Page
+        - Home page prototype (~2)
+        - Main feed prototype (~2)
+        - Populate main feed (~3)
+        - Search bar prototype (~1)
+        - Search bar implementation (~3)
+        - Filter prototype (~1)
+        - Implement filtering (~5)
+        - Mobile compatibility (~3)
+        - Cleanup ui (~6)
+        - Oauth popup (~1)
+    - Outreach Page
+        - Create outreach page (~3)
+        - Allow creators to preview posts (~5)
+    - Lists Page
+        - List page prototype (~2)
+        - List functionality (~6)
+        - Favorites functionality (~2)
+    - User Settings
+        - Reset Password (~2)
+    - Deployment
+        - Hostinger deployment frontend (~4)
+3. **Backend Service creation & deployment**
+    - Save posts to database (~1)
+    - Save Oauth Tokens to database (~3)
+    - AWS EB deployment backend (~3)
+    - API work (~8)
+4. **Patreon Integration**
+    - Get Patreon posts using Patreon API (~1)
+    - Allow users to Oauth with Patreon (~4)
+    - Protect private posts (~1)
+    - Collect Patreon campaigns and followers (~3)
+    - Handle duplicate posts (~2)
+    - Allow posts to be cross-posted (~3)
+5. **Discord Integration**
+    - Output to Discord using webhook (~1)
+    - Output a Patreon post to Discord (~1)
+    - Save a Discord webhook URL to database (~1)
+    - Save Discord webhook information per user (~5)
+    - Allow custom user Discord output (~2)
+6. **Instagram Integration**
+    - Instagram OAuth(~2)
+    - Instagram custom user output (~3)
+7. **Twitter Integration**
+    - Twitter Oauth (~3)
+    - Twitter custom user output (~3)
+8. **Reddit Integrations**
+    - Reddit Oauth (~2)
+    - Reddit custom user output (~2)
+

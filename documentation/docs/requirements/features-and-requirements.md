@@ -12,9 +12,9 @@ sidebar_position: 4
   - The main feed will contain posts from creators in chronological order
   - Patrons can search for creators through the search bar at the top of the webpage
   - Patrons can filter their posts by different parameters after clicking the filter button
-- Patreon Creator Lists
-  - These lists of creators can replace the original creator feed with the feed of creator posts specifically from the list
-  - Any creator, following and non-following, can be added to a list
+- Patreon Post Lists
+  - These lists of Patreon posts can replace the original creator feed with the feed of Patreon posts specifically from the list
+  - Any post can be added to any number of lists
 - Patreon Link
   - Linking a user’s Patreon account will let Patreon Shout automatically add their currently following creators to their Patreon Shout account
   - Linking a user’s Patreon account will let Patreon Shout get information on the user’s creator posts
@@ -32,6 +32,4 @@ sidebar_position: 4
   - There are user friendly messages when the user interacts with buttons
     - Users will be able to easily link their account with Patreon in a user friendly way
     - Users will be able to easily output their Patreon posts to other social platforms in a user friendly way
-- To increase performance, the posts on the Patreon Post Feed will be using lazy loading and pagination.
 - To increase performance, posts will be stored per Patreon creator, so that we can send the same post data to multiple different users
-- Contact page will provide a way to contact developers, as well as leave bug reports as the website grows
