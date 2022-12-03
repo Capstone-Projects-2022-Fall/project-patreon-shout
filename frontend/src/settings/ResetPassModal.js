@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Stack, Box, Typography, Button, Modal, TextField } from '@mui/material';
-import PasswordChecklist from "react-password-checklist";
+// import PasswordChecklist from "react-password-checklist";
 import {resetPassword} from "../services/api/resetpass";
 
 const style = {

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import './login_css/RegistrationForm.css'
 import { registerUser } from '../services/api/register';
-import PasswordChecklist from "react-password-checklist"
+// import PasswordChecklist from "react-password-checklist"
 
 /**
  * The Registration Form, where users can register an account
