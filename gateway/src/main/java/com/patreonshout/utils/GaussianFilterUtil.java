@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.*;
+import java.security.SecureRandom;
 import java.util.Random;
 
 /**
@@ -1120,7 +1121,7 @@ class PixelUtils {
 	public final static int ALPHA = 19;
 	public final static int ALPHA_TO_GRAY = 20;
 
-	private static Random randomGenerator = new Random();
+	private static Random randomGenerator = new SecureRandom();
 
 	/**
 	 * Clamp a value to the range 0..255
